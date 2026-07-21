@@ -3,165 +3,282 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duckie Talk Pro 🦆✨</title>
+    <title>Duckie Talk ^+^_^/</title>
     <style>
-        :root { 
-            --primary: #512da8; 
-            --primary-hover: #4527a0; 
-            --bg-purple: #d1c4e9; 
-            --dark-sidebar: #1e1e1e;
-            --chat-bg: #ede7f6;
+        /* --- Global Styles --- */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden; /* Prevent scrolling on body */
         }
-        * { box-sizing: border-box; }
-        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; height: 100vh; background: var(--dark-sidebar); color: #eee; overflow: hidden; }
-        
-        #sidebar { width: 260px; background: #161616; padding: 20px; border-right: 1px solid #333; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
-        #sidebar h3 { color: #fff; margin-bottom: 2px; font-size: 1.25rem; }
-        #sidebar p { color: #888; font-size: 0.8rem; margin-top: 0; margin-bottom: 20px; }
-        
-        .nav-btn { background: #2a2a2a; color: #ccc; border: none; padding: 12px 16px; border-radius: 8px; text-align: left; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.95rem; }
-        .nav-btn:hover { background: #333; color: #fff; }
-        .nav-btn.active { background: var(--primary); color: white; }
 
-        #main { flex: 1; background: var(--bg-purple); display: flex; flex-direction: column; padding: 24px; color: #333; overflow: hidden; }
-        
-        .header-title { font-size: 1.4rem; font-weight: bold; color: var(--primary); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        #app-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+        }
 
-        .app-section { display: none; flex: 1; flex-direction: column; overflow: hidden; height: 100%; }
-        .app-section.active { display: flex; }
+        /* --- SCREEN 1: THE APP FACE --- */
+        #app-face {
+            display: flex; /* Shown by default */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #87CEEB; /* Light Sky Blue from your plan */
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            cursor: pointer; /* Entire screen is a button */
+        }
 
-        #chat-box { flex: 1; background: var(--chat-bg); border-radius: 12px; border: 1px solid #b39ddb; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; box-shadow: inset 0 2px 6px rgba(0,0,0,0.04); }
-        .message { max-width: 80%; padding: 12px 16px; border-radius: 12px; font-size: 0.95rem; line-height: 1.4; word-break: break-word; }
-        .user-msg { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
-        .ai-msg { background: white; color: #333; align-self: flex-start; border-bottom-left-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        #app-face:hover {
+            background-color: #7AB8D4; /* Slightly darker on hover */
+        }
 
-        .controls-container { margin-top: 15px; display: flex; gap: 10px; }
-        #msg { flex: 1; background: white; border: 1px solid #b39ddb; color: #333; padding: 12px 16px; border-radius: 8px; font-size: 1rem; outline: none; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .send-btn { background: var(--primary); color: white; border: none; padding: 0 24px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .send-btn:hover { background: var(--primary-hover); }
+        #logo-image {
+            width: 200px; /* Adjust size as needed */
+            height: 200px;
+            border-radius: 50%; /* Makes it circular */
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 5px solid white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
 
-        .panel-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #b39ddb; overflow-y: auto; }
-        .panel-card h2 { color: var(--primary); margin-top: 0; }
-        .panel-card p { color: #555; line-height: 1.6; }
-        .status-badge { display: inline-block; padding: 4px 10px; border-radius: 12px; background: #e8f5e9; color: #2e7d32; font-weight: bold; font-size: 0.85rem; }
+        #app-title {
+            font-size: 3rem;
+            color: #333;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        #app-subtitle {
+            font-size: 1.5rem;
+            color: #555;
+            margin-top: 5px;
+        }
+
+        /* --- SCREEN 2: THE CHAT INTERFACE --- */
+        #chat-interface {
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            justify-content: space-between;
+            background-color: #6a0dad; /* Custom Purple background */
+            background-image: url('https://i.imgur.com/oV1V1mS.png'); /* I've created a sample duck pattern background for you */
+            background-repeat: repeat;
+            background-size: 50px; /* Adjust size of duck pattern */
+            width: 100%;
+            height: 100%;
+        }
+
+        /* -- Chat Header -- */
+        #chat-header {
+            background-color: rgba(255, 255, 255, 0.9); /* Translucent white header */
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        #header-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        #chat-header-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .header-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: #555;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .header-btn:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* -- Chat Window -- */
+        #chat-window {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto; /* Allow messages to scroll */
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* -- Example Messages (for visual structure) -- */
+        .message {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-size: 1rem;
+            line-height: 1.4;
+            position: relative;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background-color: #007bff; /* Blue bubble for user */
+            color: white;
+            border-bottom-right-radius: 2px;
+        }
+
+        .duckie-message {
+            align-self: flex-start;
+            background-color: #f1f0f0; /* Light grey bubble for Duckie */
+            color: #333;
+            border-bottom-left-radius: 2px;
+        }
+
+        /* -- Chat Input Area -- */
+        #chat-input-area {
+            background-color: rgba(255, 255, 255, 0.95); /* Translucent white input bar */
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            border-top: 1px solid #ddd;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .icon-btn img {
+            width: 24px;
+            height: 24px;
+            opacity: 0.7;
+        }
+
+        .icon-btn:hover img {
+            opacity: 1;
+        }
+
+        #user-message-input {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        #send-message-btn {
+            background-color: #28a745; /* Green Send button */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        #send-message-btn:hover {
+            background-color: #218838;
+        }
+
     </style>
 </head>
 <body>
-    <div id="sidebar">
-        <h3>Duckie Talk Pro</h3>
-        <p>Pro Desktop Edition</p>
-        <button class="nav-btn active" onclick="switchSection('chat', this)">💬 AI Chat</button>
-        <button class="nav-btn" onclick="switchSection('plan', this)">📱 Mobile Plan</button>
-        <button class="nav-btn" onclick="switchSection('ajustes', this)">⚙️ Settings</button>
-        <button class="nav-btn" onclick="switchSection('docs', this)">📂 Docs & Media</button>
-        <button class="nav-btn" onclick="switchSection('seguridad', this)">🔒 Security</button>
+
+    <!-- The Main Application Container -->
+    <div id="app-container">
+
+        <!-- SCREEN 1: THE APP FACE -->
+        <div id="app-face" onclick="showChat()">
+            <!-- Your Circular Logo -->
+            <img id="logo-image" src="https://i.imgur.com/oV1V1mS.png" alt="Duckie Talk ^+^_^/ Logo">
+
+            <!-- Your App Title -->
+            <h1 id="app-title">Duckie Talk</h1>
+
+            <!-- Your App Sub-text -->
+            <h2 id="app-subtitle">^ + ^ _ /</h2>
+        </div>
+
+        <!-- SCREEN 2: THE CHAT INTERFACE -->
+        <div id="chat-interface">
+
+            <!-- Chat Header -->
+            <div id="chat-header">
+                <div id="chat-header-title">
+                    <img id="header-logo" src="https://i.imgur.com/oV1V1mS.png" alt="Duckie Talk ^+^_^/ Logo">
+                    Duckie Talk ^+^_^/
+                </div>
+                <div>
+                    <button class="header-btn" onclick="alert('Settings Coming Soon!')">⚙️ Settings</button>
+                    <button class="header-btn" onclick="showAppFace()">✕ Close</button>
+                </div>
+            </div>
+
+            <!-- Chat Window (Messages appear here) -->
+            <div id="chat-window">
+                <!-- Example Messages to show design -->
+                <div class="message duckie-message">Quack! Hello there! How can I help you make some Heat Hop today?</div>
+                <div class="message user-message">Hello Duckie! I want to build my own application.</div>
+            </div>
+
+            <!-- Chat Input Area -->
+            <div id="chat-input-area">
+                <button class="icon-btn" title="Emoji">😊</button>
+                <button class="icon-btn" title="GIF">GIF</button>
+                <button class="icon-btn" title="Stickers">🙂</button>
+
+                <!-- The main input box -->
+                <input type="text" id="user-message-input" placeholder="Ask Duckie anything..."></input>
+
+                <button class="icon-btn" title="Send Question">❓</button>
+                <button class="icon-btn" title="Gallery">🖼️</button>
+                <button class="icon-btn" title="Microphone">🎤</button>
+
+                <button id="send-message-btn">Send</button>
+            </div>
+        </div>
+
     </div>
 
-    <div id="main">
-        <!-- 1. AI CHAT -->
-        <div id="section-chat" class="app-section active">
-            <div class="header-title">AI Chat Center 🦆✨</div>
-            
-            <div id="chat-box">
-                <div class="message ai-msg"><b>Duckie:</b> Hello Amado! The application is online and fully connected. Type your message below.</div>
-            </div>
-
-            <div class="controls-container">
-                <input type="text" id="msg" placeholder="Type your message..." onkeypress="if(event.key === 'Enter') send()">
-                <button class="send-btn" onclick="send()">Send</button>
-            </div>
-        </div>
-
-        <!-- 2. MOBILE PLAN -->
-        <div id="section-plan" class="app-section">
-            <div class="header-title">Mobile Plan Management</div>
-            <div class="panel-card">
-                <h2>Current Subscription</h2>
-                <p><b>Category:</b> Pro Desktop Developer (Unlimited)</p>
-                <p><b>System Status:</b> <span class="status-badge">Active & Online</span></p>
-            </div>
-        </div>
-
-        <!-- 3. SETTINGS -->
-        <div id="section-ajustes" class="app-section">
-            <div class="header-title">System Settings</div>
-            <div class="panel-card">
-                <h2>Interface Preferences</h2>
-                <p>Infrastructure and credentials operate internally and automatically.</p>
-            </div>
-        </div>
-
-        <!-- 4. DOCS & MEDIA -->
-        <div id="section-docs" class="app-section">
-            <div class="header-title">Docs & Media</div>
-            <div class="panel-card">
-                <h2>Resource Repository</h2>
-                <p>Technical documentation and optimized development guides for your workspace.</p>
-            </div>
-        </div>
-
-        <!-- 5. SECURITY -->
-        <div id="section-seguridad" class="app-section">
-            <div class="header-title">Security & Privacy</div>
-            <div class="panel-card">
-                <h2>Credential Protection</h2>
-                <p>Secure environment under HTTPS protocol via GitHub Pages.</p>
-            </div>
-        </div>
-    </div>
-
+    <!-- JAVASCRIPT (To control the screens) -->
     <script>
-        // API key securely embedded internally
-        const GROQ_API_KEY = "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";
+        // Get the screen elements
+        const appFace = document.getElementById('app-face');
+        const chatInterface = document.getElementById('chat-interface');
 
-        function switchSection(sectionId, btnElement) {
-            document.querySelectorAll('.app-section').forEach(sec => sec.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            
-            document.getElementById('section-' + sectionId).classList.add('active');
-            btnElement.classList.add('active');
+        // Function to show the Chat Interface
+        function showChat() {
+            appFace.style.display = 'none';
+            chatInterface.style.display = 'flex';
         }
 
-        async function send() {
-            const msgInput = document.getElementById('msg');
-            const msg = msgInput.value.trim();
-            const box = document.getElementById('chat-box');
-
-            if(!msg) return;
-
-            box.innerHTML += `<div class="message user-msg"><b>You:</b> ${msg}</div>`;
-            msgInput.value = '';
-            box.scrollTop = box.scrollHeight;
-
-            const tempId = 'temp-' + Date.now();
-            box.innerHTML += `<div id="${tempId}" class="message ai-msg"><i>Duckie is thinking...</i></div>`;
-            box.scrollTop = box.scrollHeight;
-
-            try {
-                const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-                    method: 'POST',
-                    headers: { 'Authorization': `Bearer ${GROQ_API_KEY}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        model: "llama-3.3-70b-versatile",
-                        messages: [{ role: "user", content: msg }]
-                    })
-                });
-                const data = await res.json();
-                
-                document.getElementById(tempId).remove();
-
-                if(data.choices && data.choices.length > 0) {
-                    box.innerHTML += `<div class="message ai-msg"><b>Duckie:</b> ${data.choices[0].message.content}</div>`;
-                } else {
-                    box.innerHTML += `<div class="message ai-msg" style="color:red;"><b>Error:</b> Unexpected API response.</div>`;
-                }
-            } catch(e) { 
-                document.getElementById(tempId).remove();
-                box.innerHTML += `<div class="message ai-msg" style="color:red;"><b>Error:</b> Connection error.</div>`; 
-            }
-            box.scrollTop = box.scrollHeight;
+        // Function to show the App Face (Home Screen)
+        function showAppFace() {
+            chatInterface.style.display = 'none';
+            appFace.style.display = 'flex';
         }
+
+        // This makes sure the input box is ready when the chat opens
+        document.getElementById('user-message-input').focus();
     </script>
 </body>
 </html>
-
