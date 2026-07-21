@@ -15,7 +15,7 @@
         * { box-sizing: border-box; }
         body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; height: 100vh; background: var(--dark-sidebar); color: #eee; overflow: hidden; }
         
-        /* Sidebar lateral con pestañas interactivas */
+        /* Menú lateral profesional */
         #sidebar { width: 260px; background: #161616; padding: 20px; border-right: 1px solid #333; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
         #sidebar h3 { color: #fff; margin-bottom: 2px; font-size: 1.25rem; }
         #sidebar p { color: #888; font-size: 0.8rem; margin-top: 0; margin-bottom: 20px; }
@@ -24,12 +24,19 @@
         .nav-btn:hover { background: #333; color: #fff; }
         .nav-btn.active { background: var(--primary); color: white; }
 
-        /* Contenedor principal de la app */
+        /* Contenedor principal */
         #main { flex: 1; background: var(--bg-purple); display: flex; flex-direction: column; padding: 24px; color: #333; overflow: hidden; }
         
-        .header-title { font-size: 1.4rem; font-weight: bold; color: var(--primary); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        /* Cabecera con título a la izquierda y llave a la derecha */
+        .header-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 15px; }
+        .header-title { font-size: 1.4rem; font-weight: bold; color: var(--primary); display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+        
+        /* Campo de llave en la parte superior derecha */
+        .key-container { display: flex; align-items: center; gap: 8px; background: white; padding: 6px 12px; border-radius: 8px; border: 1px solid #b39ddb; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .key-container label { font-size: 0.8rem; color: #666; font-weight: bold; }
+        #key { border: none; outline: none; font-size: 0.85rem; width: 180px; background: transparent; color: #333; }
 
-        /* Secciones de la aplicación */
+        /* Secciones de la app */
         .app-section { display: none; flex: 1; flex-direction: column; overflow: hidden; height: 100%; }
         .app-section.active { display: flex; }
 
@@ -39,113 +46,95 @@
         .user-msg { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
         .ai-msg { background: white; color: #333; align-self: flex-start; border-bottom-left-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
 
-        /* Controles inferiores */
-        .controls-container { margin-top: 15px; display: flex; flex-direction: column; gap: 10px; }
-        #key { background: white; border: 1px solid #b39ddb; color: #333; padding: 10px 14px; border-radius: 6px; font-size: 0.85rem; width: 100%; outline: none; }
-        .input-group { display: flex; gap: 10px; }
-        #msg { flex: 1; background: white; border: 1px solid #b39ddb; color: #333; padding: 12px 16px; border-radius: 8px; font-size: 1rem; outline: none; }
+        /* Controles inferiores limpios (Solo mensaje y enviar) */
+        .controls-container { margin-top: 15px; display: flex; gap: 10px; }
+        #msg { flex: 1; background: white; border: 1px solid #b39ddb; color: #333; padding: 12px 16px; border-radius: 8px; font-size: 1rem; outline: none; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .send-btn { background: var(--primary); color: white; border: none; padding: 0 24px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .send-btn:hover { background: var(--primary-hover); }
 
-        /* Paneles dinámicos */
+        /* Paneles informativos limpios */
         .panel-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #b39ddb; overflow-y: auto; }
         .panel-card h2 { color: var(--primary); margin-top: 0; }
         .panel-card p { color: #555; line-height: 1.6; }
-        
-        .action-btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .action-btn:hover { background: var(--primary-hover); }
-        
         .status-badge { display: inline-block; padding: 4px 10px; border-radius: 12px; background: #e8f5e9; color: #2e7d32; font-weight: bold; font-size: 0.85rem; }
     </style>
 </head>
 <body>
-    <!-- Menú lateral interactivo -->
+    <!-- Menú lateral -->
     <div id="sidebar">
         <h3>Duckie Talk Pro</h3>
-        <p>Aplicación de Escritorio Viva</p>
+        <p>Aplicación de Escritorio Pro</p>
         <button class="nav-btn active" onclick="cambiarSeccion('chat', this)">💬 Chat IA</button>
-        <button class="nav-btn" onclick="cambiarSeccion('llamadas', this)">📞 Llamadas</button>
         <button class="nav-btn" onclick="cambiarSeccion('plan', this)">📱 Tu Plan Móvil</button>
         <button class="nav-btn" onclick="cambiarSeccion('ajustes', this)">⚙️ Ajustes</button>
         <button class="nav-btn" onclick="cambiarSeccion('docs', this)">📂 Docs & Media</button>
         <button class="nav-btn" onclick="cambiarSeccion('seguridad', this)">🔒 Seguridad</button>
     </div>
 
-    <!-- Área principal dinámica -->
+    <!-- Contenido principal -->
     <div id="main">
-        <!-- 1. CHAT IA -->
+        <!-- 1. CHAT IA (Principal) -->
         <div id="section-chat" class="app-section active">
-            <div class="header-title">Centro de Chat IA 🦆✨</div>
-            <div id="chat-box">
-                <div class="message ai-msg"><b>Duckie:</b> ¡Hola Amado! Los botones ya tienen vida propia y la app está sincronizada al 100%. ¿Qué hacemos hoy?</div>
-            </div>
-            <div class="controls-container">
-                <input type="password" id="key" placeholder="Llave
-                    
-                    
-                    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(gsk_...) - Se guarda automáticamente">
-                <div class="input-group">
-                    <input type="text" id="msg" placeholder="Escribe tu mensaje..." onkeypress="if(event.key === 'Enter') enviar()">
-                    <button class="send-btn" onclick="enviar()">Enviar</button>
+            <!-- Cabecera con la llave a la derecha -->
+            <div class="header-container">
+                <div class="header-title">Centro de Chat IA 🦆✨</div>
+                <div class="key-container" title="Tu llave de Groq se guarda automáticamente en este dispositivo">
+                    <label for="key">🔑 API Key:</label>
+                    <input type="password" id="key" placeholder="gsk_...">
                 </div>
             </div>
-        </div>
 
-        <!-- 2. LLAMADAS -->
-        <div id="section-llamadas" class="app-section">
-            <div class="header-title">Módulo de Llamadas Activas</div>
-            <div class="panel-card">
-                <h2>Canal de Voz IA</h2>
-                <p>Establece una conexión de audio simulada en tiempo real con el asistente inteligente.</p>
-                <div id="call-status" style="margin: 15px 0; font-weight: bold; color: #d32f2f;">Estado: Desconectado</div>
-                <button class="action-btn" id="call-btn" onclick="toggleLlamada()">Iniciar Llamada</button>
+            <div id="chat-box">
+                <div class="message ai-msg"><b>Duckie:</b> ¡Hola Amado! La aplicación está lista y conectada. Escribe tu mensaje abajo.</div>
+            </div>
+
+            <div class="controls-container">
+                <input type="text" id="msg" placeholder="Escribe tu mensaje..." onkeypress="if(event.key === 'Enter') enviar()">
+                <button class="send-btn" onclick="enviar()">Enviar</button>
             </div>
         </div>
 
-        <!-- 3. TU PLAN MÓVIL -->
+        <!-- 2. TU PLAN MÓVIL -->
         <div id="section-plan" class="app-section">
             <div class="header-title">Gestión de Plan Móvil</div>
             <div class="panel-card">
                 <h2>Suscripción Actual</h2>
                 <p><b>Categoría:</b> Pro Desktop Developer (Ilimitado)</p>
                 <p><b>Estado del sistema:</b> <span class="status-badge">Activo y En línea</span></p>
-                <button class="action-btn" onclick="alert('Tu plan opera sin restricciones con motor Llama 3.3 vía Groq.')">Verificar Estado</button>
+                <p>Tu infraestructura opera de manera independiente y conectada al motor de alta velocidad.</p>
             </div>
         </div>
 
-        <!-- 4. AJUSTES -->
+        <!-- 3. AJUSTES -->
         <div id="section-ajustes" class="app-section">
             <div class="header-title">Ajustes del Sistema</div>
             <div class="panel-card">
-                <h2>Preferencias Locales</h2>
-                <p>Gestiona los datos almacenados en tu navegador o restablece la configuración de la interfaz.</p>
-                <button class="action-btn" style="background: #c62828;" onclick="borrarDatos()">Borrar Llave Guardada</button>
+                <h2>Preferencias de la Interfaz</h2>
+                <p>La aplicación está configurada para recordar tus credenciales de forma automática en este dispositivo mediante almacenamiento local seguro.</p>
             </div>
         </div>
 
-        <!-- 5. DOCS & MEDIA -->
+        <!-- 4. DOCS & MEDIA -->
         <div id="section-docs" class="app-section">
             <div class="header-title">Docs & Media</div>
             <div class="panel-card">
                 <h2>Repositorio de Recursos</h2>
-                <p>Accede rápidamente a guías de desarrollo, registros de actividad y componentes multimedia optimizados para tu iPad.</p>
-                <button class="action-btn" onclick="alert('Cargando registros de archivos multimedia...')">Explorar Archivos</button>
+                <p>Acceso directo a la documentación del proyecto, guías de arquitectura y optimización para iPad y dispositivos de escritorio.</p>
             </div>
         </div>
 
-        <!-- 6. SEGURIDAD -->
+        <!-- 5. SEGURIDAD -->
         <div id="section-seguridad" class="app-section">
             <div class="header-title">Seguridad y Privacidad</div>
             <div class="panel-card">
                 <h2>Protección de Credenciales</h2>
-                <p>Tus llaves de acceso se procesan de forma estricta en el entorno local de tu navegador mediante <code>localStorage</code>, asegurando total privacidad.</p>
+                <p>Tus llaves de acceso se procesan de forma estricta en el entorno local de tu navegador mediante <code>localStorage</code>.</p>
                 <p style="color: #2e7d32; font-weight: bold;">Nivel de cifrado: Seguro (HTTPS / GitHub Pages)</p>
             </div>
         </div>
     </div>
 
     <script>
-        // Cargar llave automática al abrir
         window.onload = function() {
             const savedKey = localStorage.getItem('groq_key');
             if (savedKey) {
@@ -153,7 +142,6 @@
             }
         };
 
-        // Cambiar entre pestañas con vida activa
         function cambiarSeccion(seccionId, btnElement) {
             document.querySelectorAll('.app-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
@@ -162,36 +150,6 @@
             btnElement.classList.add('active');
         }
 
-        // Lógica interactiva para Llamadas
-        let enLlamada = false;
-        function toggleLlamada() {
-            const statusDiv = document.getElementById('call-status');
-            const callBtn = document.getElementById('call-btn');
-            
-            enLlamada = !enLlamada;
-            if(enLlamada) {
-                statusDiv.innerText = "Estado: Conectado (Audio en curso...)";
-                statusDiv.style.color = "#2e7d32";
-                callBtn.innerText = "Colgar Llamada";
-                callBtn.style.background = "#c62828";
-            } else {
-                statusDiv.innerText = "Estado: Desconectado";
-                statusDiv.style.color = "#d32f2f";
-                callBtn.innerText = "Iniciar Llamada";
-                callBtn.style.background = "var(--primary)";
-            }
-        }
-
-        // Borrar datos almacenados
-        function borrarDatos() {
-            if(confirm("¿Estás seguro de querer borrar la llave guardada en este dispositivo?")) {
-                localStorage.removeItem('groq_key');
-                document.getElementById('key').value = '';
-                alert("¡Llave eliminada correctamente!");
-            }
-        }
-
-        // Envío de mensajes por IA
         async function enviar() {
             const keyInput = document.getElementById('key');
             const key = keyInput.value.trim();
@@ -200,7 +158,7 @@
             const box = document.getElementById('chat-box');
 
             if(!key) { 
-                alert("¡Pega tu llave de Groq primero en el campo inferior!"); 
+                alert("¡Pega tu llave de Groq en el campo superior derecho primero!"); 
                 return; 
             }
 
