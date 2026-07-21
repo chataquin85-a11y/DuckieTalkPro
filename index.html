@@ -18,21 +18,42 @@
 <body>
     <div id="sidebar">
         <h3>Duckie Talk Pro</h3>
-        <p style="color: #aaa; font-size: 14px;">Estado: Proyecto Nuevo</p>
+        <p style="color: #aaa; font-size: 14px;">Estado: Listo y Guardado</p>
     </div>
     <div id="main">
         <div id="chat-box"></div>
-        <input type="password" id="key" placeholder="Pega tu llave Groq (gsk_...)">
+        <input type="password" id="key" placeholder="Pega tu llave Groq (gsk_...) - Se guardará sola">
         <input type="text" id="msg" placeholder="Escribe tu mensaje...">
         <button onclick="enviar()">Enviar mensaje</button>
     </div>
     <script>
+        // Cargar la llave guardada automáticamente al abrir la página
+        window.onload = function() {
+            const savedKey = localStorage.getItem('groq_key');
+            if (savedKey) {
+                document.getElementById('key').value = savedKey;
+            }
+        };
+
         async function enviar() {
-            const key = document.getElementById('key').value.trim();
+            const keyInput = document.getElementById('key');
+            const key = keyInput.value.trim();
             const msg = document.getElementById('msg').value;
             const box = document.getElementById('chat-box');
-            if(!key) { alert("¡Pega tu llave de Groq primero!"); return; }
+
+            if(!key) { 
+                alert("¡Pega tu llave de Groq primero!"); 
+                return; 
+            }
+
+            // Guardar la llave en el navegador para futuras visitas
+            localStorage.setItem('groq_key', key);
+
+            if(!msg) return;
+
             box.innerHTML += `<div><b>Tú:</b> ${msg}</div>`;
+            document.getElementById('msg').value = '';
+
             try {
                 const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
                     method: 'POST',
@@ -48,7 +69,9 @@
                 } else {
                     box.innerHTML += `<div style="color:red">Error en la respuesta.</div>`;
                 }
-            } catch(e) { box.innerHTML += `<div style="color:red">Error de conexión.</div>`; }
+            } catch(e) { 
+                box.innerHTML += `<div style="color:red">Error de conexión.</div>`; 
+            }
             box.scrollTop = box.scrollHeight;
         }
     </script>
