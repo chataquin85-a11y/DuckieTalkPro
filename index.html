@@ -15,7 +15,6 @@
         * { box-sizing: border-box; }
         body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; height: 100vh; background: var(--dark-sidebar); color: #eee; overflow: hidden; }
         
-        /* Menú lateral profesional */
         #sidebar { width: 260px; background: #161616; padding: 20px; border-right: 1px solid #333; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
         #sidebar h3 { color: #fff; margin-bottom: 2px; font-size: 1.25rem; }
         #sidebar p { color: #888; font-size: 0.8rem; margin-top: 0; margin-bottom: 20px; }
@@ -24,35 +23,28 @@
         .nav-btn:hover { background: #333; color: #fff; }
         .nav-btn.active { background: var(--primary); color: white; }
 
-        /* Contenedor principal */
         #main { flex: 1; background: var(--bg-purple); display: flex; flex-direction: column; padding: 24px; color: #333; overflow: hidden; }
         
-        /* Cabecera con título a la izquierda y llave a la derecha */
         .header-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 15px; }
         .header-title { font-size: 1.4rem; font-weight: bold; color: var(--primary); display: flex; align-items: center; gap: 10px; white-space: nowrap; }
         
-        /* Campo de llave en la parte superior derecha */
         .key-container { display: flex; align-items: center; gap: 8px; background: white; padding: 6px 12px; border-radius: 8px; border: 1px solid #b39ddb; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .key-container label { font-size: 0.8rem; color: #666; font-weight: bold; }
         #key { border: none; outline: none; font-size: 0.85rem; width: 180px; background: transparent; color: #333; }
 
-        /* Secciones de la app */
         .app-section { display: none; flex: 1; flex-direction: column; overflow: hidden; height: 100%; }
         .app-section.active { display: flex; }
 
-        /* Chat IA */
         #chat-box { flex: 1; background: var(--chat-bg); border-radius: 12px; border: 1px solid #b39ddb; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; box-shadow: inset 0 2px 6px rgba(0,0,0,0.04); }
         .message { max-width: 80%; padding: 12px 16px; border-radius: 12px; font-size: 0.95rem; line-height: 1.4; word-break: break-word; }
         .user-msg { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
         .ai-msg { background: white; color: #333; align-self: flex-start; border-bottom-left-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
 
-        /* Controles inferiores limpios (Solo mensaje y enviar) */
         .controls-container { margin-top: 15px; display: flex; gap: 10px; }
         #msg { flex: 1; background: white; border: 1px solid #b39ddb; color: #333; padding: 12px 16px; border-radius: 8px; font-size: 1rem; outline: none; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .send-btn { background: var(--primary); color: white; border: none; padding: 0 24px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .send-btn:hover { background: var(--primary-hover); }
 
-        /* Paneles informativos limpios */
         .panel-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #b39ddb; overflow-y: auto; }
         .panel-card h2 { color: var(--primary); margin-top: 0; }
         .panel-card p { color: #555; line-height: 1.6; }
@@ -60,7 +52,6 @@
     </style>
 </head>
 <body>
-    <!-- Menú lateral -->
     <div id="sidebar">
         <h3>Duckie Talk Pro</h3>
         <p>Aplicación de Escritorio Pro</p>
@@ -71,21 +62,19 @@
         <button class="nav-btn" onclick="cambiarSeccion('seguridad', this)">🔒 Seguridad</button>
     </div>
 
-    <!-- Contenido principal -->
     <div id="main">
-        <!-- 1. CHAT IA (Principal) -->
         <div id="section-chat" class="app-section active">
-            <!-- Cabecera con la llave a la derecha -->
             <div class="header-container">
                 <div class="header-title">Centro de Chat IA 🦆✨</div>
-                <div class="key-container" title="Tu llave de Groq se guarda automáticamente en este dispositivo">
+                <div class="key-container">
                     <label for="key">🔑 API Key:</label>
-                    <input type="password" id="key" placeholder="gsk_...">
+                    <!-- Aquí dentro de value="" ya va tu llave fija -->
+                    <input type="password" id="key" value="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">
                 </div>
             </div>
 
             <div id="chat-box">
-                <div class="message ai-msg"><b>Duckie:</b> ¡Hola Amado! La aplicación está lista y conectada. Escribe tu mensaje abajo.</div>
+                <div class="message ai-msg"><b>Duckie:</b> ¡Hola Amado! Aplicación conectada y lista. Escribe tu mensaje abajo.</div>
             </div>
 
             <div class="controls-container">
@@ -94,54 +83,41 @@
             </div>
         </div>
 
-        <!-- 2. TU PLAN MÓVIL -->
         <div id="section-plan" class="app-section">
             <div class="header-title">Gestión de Plan Móvil</div>
             <div class="panel-card">
                 <h2>Suscripción Actual</h2>
                 <p><b>Categoría:</b> Pro Desktop Developer (Ilimitado)</p>
                 <p><b>Estado del sistema:</b> <span class="status-badge">Activo y En línea</span></p>
-                <p>Tu infraestructura opera de manera independiente y conectada al motor de alta velocidad.</p>
             </div>
         </div>
 
-        <!-- 3. AJUSTES -->
         <div id="section-ajustes" class="app-section">
             <div class="header-title">Ajustes del Sistema</div>
             <div class="panel-card">
                 <h2>Preferencias de la Interfaz</h2>
-                <p>La aplicación está configurada para recordar tus credenciales de forma automática en este dispositivo mediante almacenamiento local seguro.</p>
+                <p>Llave de acceso integrada directamente en el núcleo del sistema.</p>
             </div>
         </div>
 
-        <!-- 4. DOCS & MEDIA -->
         <div id="section-docs" class="app-section">
             <div class="header-title">Docs & Media</div>
             <div class="panel-card">
                 <h2>Repositorio de Recursos</h2>
-                <p>Acceso directo a la documentación del proyecto, guías de arquitectura y optimización para iPad y dispositivos de escritorio.</p>
+                <p>Documentación técnica y guías de desarrollo optimizadas.</p>
             </div>
         </div>
 
-        <!-- 5. SEGURIDAD -->
         <div id="section-seguridad" class="app-section">
             <div class="header-title">Seguridad y Privacidad</div>
             <div class="panel-card">
                 <h2>Protección de Credenciales</h2>
-                <p>Tus llaves de acceso se procesan de forma estricta en el entorno local de tu navegador mediante <code>localStorage</code>.</p>
-                <p style="color: #2e7d32; font-weight: bold;">Nivel de cifrado: Seguro (HTTPS / GitHub Pages)</p>
+                <p>Entorno seguro bajo protocolo HTTPS en GitHub Pages.</p>
             </div>
         </div>
     </div>
 
     <script>
-        window.onload = function() {
-            const savedKey = localStorage.getItem('groq_key');
-            if (savedKey) {
-                document.getElementById('key').value = savedKey;
-            }
-        };
-
         function cambiarSeccion(seccionId, btnElement) {
             document.querySelectorAll('.app-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
@@ -158,11 +134,10 @@
             const box = document.getElementById('chat-box');
 
             if(!key) { 
-                alert("¡Pega tu llave de Groq en el campo superior derecho primero!"); 
+                alert("¡Falta configurar la llave!"); 
                 return; 
             }
 
-            localStorage.setItem('groq_key', key);
             if(!msg) return;
 
             box.innerHTML += `<div class="message user-msg"><b>Tú:</b> ${msg}</div>`;
