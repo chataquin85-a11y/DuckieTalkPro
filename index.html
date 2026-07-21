@@ -25,12 +25,7 @@
 
         #main { flex: 1; background: var(--bg-purple); display: flex; flex-direction: column; padding: 24px; color: #333; overflow: hidden; }
         
-        .header-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 15px; }
-        .header-title { font-size: 1.4rem; font-weight: bold; color: var(--primary); display: flex; align-items: center; gap: 10px; white-space: nowrap; }
-        
-        .key-container { display: flex; align-items: center; gap: 8px; background: white; padding: 6px 12px; border-radius: 8px; border: 1px solid #b39ddb; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .key-container label { font-size: 0.8rem; color: #666; font-weight: bold; }
-        #key { border: none; outline: none; font-size: 0.85rem; width: 180px; background: transparent; color: #333; }
+        .header-title { font-size: 1.4rem; font-weight: bold; color: var(--primary); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
 
         .app-section { display: none; flex: 1; flex-direction: column; overflow: hidden; height: 100%; }
         .app-section.active { display: flex; }
@@ -54,7 +49,7 @@
 <body>
     <div id="sidebar">
         <h3>Duckie Talk Pro</h3>
-        <p>Aplicación de Escritorio Pro</p>
+        <p>Versión de Escritorio Pro</p>
         <button class="nav-btn active" onclick="cambiarSeccion('chat', this)">💬 Chat IA</button>
         <button class="nav-btn" onclick="cambiarSeccion('plan', this)">📱 Tu Plan Móvil</button>
         <button class="nav-btn" onclick="cambiarSeccion('ajustes', this)">⚙️ Ajustes</button>
@@ -63,18 +58,12 @@
     </div>
 
     <div id="main">
+        <!-- 1. CHAT IA -->
         <div id="section-chat" class="app-section active">
-            <div class="header-container">
-                <div class="header-title">Centro de Chat IA 🦆✨</div>
-                <div class="key-container">
-                    <label for="key">🔑 API Key:</label>
-                    <!-- Aquí dentro de value="" ya va tu llave fija -->
-                    <input type="password" id="key" value="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">
-                </div>
-            </div>
-
+            <div class="header-title">Centro de Chat IA 🦆✨</div>
+            
             <div id="chat-box">
-                <div class="message ai-msg"><b>Duckie:</b> ¡Hola Amado! Aplicación conectada y lista. Escribe tu mensaje abajo.</div>
+                <div class="message ai-msg"><b>Duckie:</b> ¡Hola Amado! La aplicación está en línea y lista para trabajar. Escribe tu mensaje abajo.</div>
             </div>
 
             <div class="controls-container">
@@ -83,6 +72,7 @@
             </div>
         </div>
 
+        <!-- 2. TU PLAN MÓVIL -->
         <div id="section-plan" class="app-section">
             <div class="header-title">Gestión de Plan Móvil</div>
             <div class="panel-card">
@@ -92,22 +82,25 @@
             </div>
         </div>
 
+        <!-- 3. AJUSTES -->
         <div id="section-ajustes" class="app-section">
             <div class="header-title">Ajustes del Sistema</div>
             <div class="panel-card">
                 <h2>Preferencias de la Interfaz</h2>
-                <p>Llave de acceso integrada directamente en el núcleo del sistema.</p>
+                <p>La infraestructura y las credenciales operan de manera interna y automática.</p>
             </div>
         </div>
 
+        <!-- 4. DOCS & MEDIA -->
         <div id="section-docs" class="app-section">
             <div class="header-title">Docs & Media</div>
             <div class="panel-card">
                 <h2>Repositorio de Recursos</h2>
-                <p>Documentación técnica y guías de desarrollo optimizadas.</p>
+                <p>Documentación técnica y guías de desarrollo optimizadas para tu entorno.</p>
             </div>
         </div>
 
+        <!-- 5. SEGURIDAD -->
         <div id="section-seguridad" class="app-section">
             <div class="header-title">Seguridad y Privacidad</div>
             <div class="panel-card">
@@ -118,6 +111,9 @@
     </div>
 
     <script>
+        // Llave integrada internamente de forma fija y segura
+        const GROQ_API_KEY = "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";
+
         function cambiarSeccion(seccionId, btnElement) {
             document.querySelectorAll('.app-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
@@ -127,16 +123,9 @@
         }
 
         async function enviar() {
-            const keyInput = document.getElementById('key');
-            const key = keyInput.value.trim();
             const msgInput = document.getElementById('msg');
             const msg = msgInput.value.trim();
             const box = document.getElementById('chat-box');
-
-            if(!key) { 
-                alert("¡Falta configurar la llave!"); 
-                return; 
-            }
 
             if(!msg) return;
 
@@ -151,7 +140,7 @@
             try {
                 const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
                     method: 'POST',
-                    headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
+                    headers: { 'Authorization': `Bearer ${GROQ_API_KEY}`, 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         model: "llama-3.3-70b-versatile",
                         messages: [{ role: "user", content: msg }]
@@ -164,7 +153,7 @@
                 if(data.choices && data.choices.length > 0) {
                     box.innerHTML += `<div class="message ai-msg"><b>Duckie:</b> ${data.choices[0].message.content}</div>`;
                 } else {
-                    box.innerHTML += `<div class="message ai-msg" style="color:red;"><b>Error:</b> Verifica tu llave de Groq.</div>`;
+                    box.innerHTML += `<div class="message ai-msg" style="color:red;"><b>Error:</b> Respuesta inesperada de la API.</div>`;
                 }
             } catch(e) { 
                 document.getElementById(tempId).remove();
