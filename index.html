@@ -3,29 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duckie Talk Pro</title>
+    <title>Duckie Talk Pro 🦆✨</title>
     <style>
-        :root { --primary: #6a1b9a; --bg: #121212; }
-        body { margin: 0; font-family: sans-serif; display: flex; height: 100vh; background: var(--bg); color: #eee; }
-        #sidebar { width: 250px; background: #1e1e1e; padding: 20px; border-right: 1px solid #333; }
-        #main { flex: 1; padding: 20px; display: flex; flex-direction: column; }
-        #chat-box { flex: 1; background: #1a1a1a; border-radius: 8px; border: 1px solid #333; padding: 20px; overflow-y: auto; margin-bottom: 10px; }
-        input, button { width: 100%; padding: 12px; margin-top: 10px; border-radius: 4px; border: 1px solid #444; }
-        input { background: #222; color: white; }
-        button { background: var(--primary); color: white; border: none; cursor: pointer; font-weight: bold; }
+        :root { 
+            --primary: #512da8; 
+            --primary-hover: #4527a0; 
+            --bg-purple: #d1c4e9; 
+            --dark-sidebar: #1e1e1e;
+            --chat-bg: #ede7f6;
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; height: 100vh; background: var(--dark-sidebar); color: #eee; overflow: hidden; }
+        
+        /* Sidebar lateral con pestañas */
+        #sidebar { width: 260px; background: #161616; padding: 20px; border-right: 1px solid #333; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
+        #sidebar h3 { color: #fff; margin-bottom: 2px; font-size: 1.25rem; }
+        #sidebar p { color: #888; font-size: 0.8rem; margin-top: 0; margin-bottom: 20px; }
+        
+        .nav-btn { background: #2a2a2a; color: #ccc; border: none; padding: 12px 16px; border-radius: 8px; text-align: left; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.95rem; }
+        .nav-btn:hover { background: #333; color: #fff; }
+        .nav-btn.active { background: var(--primary); color: white; }
+
+        /* Contenedor principal de la app */
+        #main { flex: 1; background: var(--bg-purple); display: flex; flex-direction: column; padding: 24px; color: #333; overflow: hidden; }
+        
+        .header-title { font-size: 1.4rem; font-weight: bold; color: var(--primary); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+
+        /* Secciones de la aplicación */
+        .app-section { display: none; flex: 1; flex-direction: column; overflow: hidden; height: 100%; }
+        .app-section.active { display: flex; }
+
+        /* Estilo para la sección de Chat IA */
+        #chat-box { flex: 1; background: var(--chat-bg); border-radius: 12px; border: 1px solid #b39ddb; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; box-shadow: inset 0 2px 6px rgba(0,0,0,0.04); }
+        
+        .message { max-width: 80%; padding: 12px 16px; border-radius: 12px; font-size: 0.95rem; line-height: 1.4; word-break: break-word; }
+        .user-msg { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .ai-msg { background: white; color: #333; align-self: flex-start; border-bottom-left-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+        /* Controles inferiores del chat */
+        .controls-container { margin-top: 15px; display: flex; flex-direction: column; gap: 10px; }
+        #key { background: white; border: 1px solid #b39ddb; color: #333; padding: 10px 14px; border-radius: 6px; font-size: 0.85rem; width: 100%; outline: none; }
+        .input-group { display: flex; gap: 10px; }
+        #msg { flex: 1; background: white; border: 1px solid #b39ddb; color: #333; padding: 12px 16px; border-radius: 8px; font-size: 1rem; outline: none; }
+        .send-btn { background: var(--primary); color: white; border: none; padding: 0 24px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .send-btn:hover { background: var(--primary-hover); }
+
+        /* Paneles para las otras secciones de la app */
+        .panel-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #b39ddb; }
+        .panel-card h2 { color: var(--primary); margin-top: 0; }
+        .panel-card p { color: #555; line-height: 1.6; }
     </style>
 </head>
 <body>
+    <!-- Menú lateral de navegación completa -->
     <div id="sidebar">
         <h3>Duckie Talk Pro</h3>
-        <p style="color: #aaa; font-size: 14px;">Estado: Listo y Guardado</p>
+        <p>Versión de Escritorio App</p>
+        <button class="nav-btn active" onclick="cambiarSeccion('chat', this)">Chat IA</button>
+        <button class="nav-btn" onclick="cambiarSeccion('llamadas', this)">Llamadas</button>
+        <button class="nav-btn" onclick="cambiarSeccion('plan', this)">Tu Plan Móvil</button>
+        <button class="nav-btn" onclick="cambiarSeccion('ajustes', this)">Ajustes</button>
+        <button class="nav-btn" onclick="cambiarSeccion('docs', this)">Docs & Media</button>
+        <button class="nav-btn" onclick="cambiarSeccion('seguridad', this)">Seguridad</button>
     </div>
+
+    <!-- Área de contenido principal -->
     <div id="main">
-        <div id="chat-box"></div>
-        <input type="password" id="key" placeholder="Pega tu llave Groq (gsk_...) - Se guardará sola">
-        <input type="text" id="msg" placeholder="Escribe tu mensaje...">
-        <button onclick="enviar()">Enviar mensaje</button>
+        <!-- 1. SECCIÓN DE CHAT IA -->
+        <div id="section-chat" class="app-section active">
+            <div class="header-title">Centro de Chat IA 🦆✨</div>
+            <div id="chat-box">
+                <div class="message ai-msg"><b>Duckie:</b> ¡Hola Amado! Tu aplicación completa está lista y en línea. ¿En qué trabajamos hoy?</div>
+            </div>
+            <div class="controls-container">
+                <input type="password" id="key" placeholder="Llave Groq (gsk_...) - Se guarda automáticamente en este dispositivo">
+                <div class="input-group">
+                    <input type="text" id="msg" placeholder="Escribe tu mensaje..." onkeypress="if(event.key === 'Enter') enviar()">
+                    <button class="send-btn" onclick="enviar()">Enviar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. SECCIÓN DE LLAMADAS -->
+        <div id="section-llamadas" class="app-section">
+            <div class="header-title">Módulo de Llamadas de Voz</div>
+            <div class="panel-card">
+                <h2>Comunicaciones en Vivo</h2>
+                <p>Aquí podrás gestionar llamadas de audio con la inteligencia artificial o conectar dispositivos de voz externos.</p>
+                <button class="send-btn" style="padding: 10px 20px; margin-top: 10px;" onclick="alert('Módulo de llamadas listo para enlazar.')">Iniciar llamada simulada</button>
+            </div>
+        </div>
+
+        <!-- 3. SECCIÓN TU PLAN MÓVIL -->
+        <div id="section-plan" class="app-section">
+            <div class="header-title">Gestión de Plan Móvil</div>
+            <div class="panel-card">
+                <h2>Estado de tu Suscripción</h2>
+                <p><b>Plan actual:</b> Pro Desktop Developer (Ilimitado)</p>
+                <p><b>Estado de sincronización:</b> Conectado a GitHub Pages y API de Groq.</p>
+            </div>
+        </div>
+
+        <!-- 4. SECCIÓN AJUSTES -->
+        <div id="section-ajustes" class="app-section">
+            <div class="header-title">Ajustes del Sistema</div>
+            <div class="panel-card">
+                <h2>Configuración General</h2>
+                <p>Personaliza las preferencias de la aplicación, temas de color y comportamiento de la interfaz.</p>
+                <p style="color: #666; font-size: 0.9rem;">La llave de API se gestiona de forma segura mediante almacenamiento local.</p>
+            </div>
+        </div>
+
+        <!-- 5. SECCIÓN DOCS & MEDIA -->
+        <div id="section-docs" class="app-section">
+            <div class="header-title">Docs & Media</div>
+            <div class="panel-card">
+                <h2>Archivos y Recursos</h2>
+                <p>Explora la documentación del proyecto, guías rápidas y archivos multimedia integrados en tu aplicación.</p>
+            </div>
+        </div>
+
+        <!-- 6. SECCIÓN SEGURIDAD -->
+        <div id="section-seguridad" class="app-section">
+            <div class="header-title">Seguridad y Privacidad</div>
+            <div class="panel-card">
+                <h2>Protección de Datos</h2>
+                <p>Tus credenciales y claves privadas se almacenan exclusivamente en el navegador local (`localStorage`) y nunca se exponen en servidores públicos.</p>
+            </div>
+        </div>
     </div>
+
     <script>
         // Cargar la llave guardada automáticamente al abrir la página
         window.onload = function() {
@@ -35,24 +142,42 @@
             }
         };
 
+        // Función para cambiar entre las pestañas del menú lateral
+        function cambiarSeccion(seccionId, btnElement) {
+            document.querySelectorAll('.app-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById('section-' + seccionId).classList.add('active');
+            btnElement.classList.add('active');
+        }
+
+        // Función principal de envío de mensajes con IA
         async function enviar() {
             const keyInput = document.getElementById('key');
             const key = keyInput.value.trim();
-            const msg = document.getElementById('msg').value;
+            const msgInput = document.getElementById('msg');
+            const msg = msgInput.value.trim();
             const box = document.getElementById('chat-box');
 
             if(!key) { 
-                alert("¡Pega tu llave de Groq primero!"); 
+                alert("¡Pega tu llave de Groq primero en el campo inferior!"); 
                 return; 
             }
 
-            // Guardar la llave en el navegador para futuras visitas
+            // Guardar la llave automáticamente
             localStorage.setItem('groq_key', key);
 
             if(!msg) return;
 
-            box.innerHTML += `<div><b>Tú:</b> ${msg}</div>`;
-            document.getElementById('msg').value = '';
+            // Mostrar mensaje del usuario
+            box.innerHTML += `<div class="message user-msg"><b>Tú:</b> ${msg}</div>`;
+            msgInput.value = '';
+            box.scrollTop = box.scrollHeight;
+
+            // Indicador de carga
+            const tempId = 'temp-' + Date.now();
+            box.innerHTML += `<div id="${tempId}" class="message ai-msg"><i>Duckie está pensando...</i></div>`;
+            box.scrollTop = box.scrollHeight;
 
             try {
                 const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -64,13 +189,17 @@
                     })
                 });
                 const data = await res.json();
-                if(data.choices) {
-                    box.innerHTML += `<div><b>Duckie:</b> ${data.choices[0].message.content}</div>`;
+                
+                document.getElementById(tempId).remove();
+
+                if(data.choices && data.choices.length > 0) {
+                    box.innerHTML += `<div class="message ai-msg"><b>Duckie:</b> ${data.choices[0].message.content}</div>`;
                 } else {
-                    box.innerHTML += `<div style="color:red">Error en la respuesta.</div>`;
+                    box.innerHTML += `<div class="message ai-msg" style="color:red;"><b>Error:</b> Verifica tu llave de Groq.</div>`;
                 }
             } catch(e) { 
-                box.innerHTML += `<div style="color:red">Error de conexión.</div>`; 
+                document.getElementById(tempId).remove();
+                box.innerHTML += `<div class="message ai-msg" style="color:red;"><b>Error:</b> Error de conexión.</div>`; 
             }
             box.scrollTop = box.scrollHeight;
         }
