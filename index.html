@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -49,45 +49,45 @@
 <body>
     <div id="sidebar">
         <h3>Duckie Talk Pro</h3>
-        <p>Versión de Escritorio Pro</p>
-        <button class="nav-btn active" onclick="cambiarSeccion('chat', this)">💬 Chat IA</button>
-        <button class="nav-btn" onclick="cambiarSeccion('plan', this)">📱 Tu Plan Móvil</button>
-        <button class="nav-btn" onclick="cambiarSeccion('ajustes', this)">⚙️ Ajustes</button>
-        <button class="nav-btn" onclick="cambiarSeccion('docs', this)">📂 Docs & Media</button>
-        <button class="nav-btn" onclick="cambiarSeccion('seguridad', this)">🔒 Seguridad</button>
+        <p>Pro Desktop Edition</p>
+        <button class="nav-btn active" onclick="switchSection('chat', this)">💬 AI Chat</button>
+        <button class="nav-btn" onclick="switchSection('plan', this)">📱 Mobile Plan</button>
+        <button class="nav-btn" onclick="switchSection('ajustes', this)">⚙️ Settings</button>
+        <button class="nav-btn" onclick="switchSection('docs', this)">📂 Docs & Media</button>
+        <button class="nav-btn" onclick="switchSection('seguridad', this)">🔒 Security</button>
     </div>
 
     <div id="main">
-        <!-- 1. CHAT IA -->
+        <!-- 1. AI CHAT -->
         <div id="section-chat" class="app-section active">
-            <div class="header-title">Centro de Chat IA 🦆✨</div>
+            <div class="header-title">AI Chat Center 🦆✨</div>
             
             <div id="chat-box">
-                <div class="message ai-msg"><b>Duckie:</b> ¡Hola Amado! La aplicación está en línea y lista para trabajar. Escribe tu mensaje abajo.</div>
+                <div class="message ai-msg"><b>Duckie:</b> Hello Amado! The application is online and fully connected. Type your message below.</div>
             </div>
 
             <div class="controls-container">
-                <input type="text" id="msg" placeholder="Escribe tu mensaje..." onkeypress="if(event.key === 'Enter') enviar()">
-                <button class="send-btn" onclick="enviar()">Enviar</button>
+                <input type="text" id="msg" placeholder="Type your message..." onkeypress="if(event.key === 'Enter') send()">
+                <button class="send-btn" onclick="send()">Send</button>
             </div>
         </div>
 
-        <!-- 2. TU PLAN MÓVIL -->
+        <!-- 2. MOBILE PLAN -->
         <div id="section-plan" class="app-section">
-            <div class="header-title">Gestión de Plan Móvil</div>
+            <div class="header-title">Mobile Plan Management</div>
             <div class="panel-card">
-                <h2>Suscripción Actual</h2>
-                <p><b>Categoría:</b> Pro Desktop Developer (Ilimitado)</p>
-                <p><b>Estado del sistema:</b> <span class="status-badge">Activo y En línea</span></p>
+                <h2>Current Subscription</h2>
+                <p><b>Category:</b> Pro Desktop Developer (Unlimited)</p>
+                <p><b>System Status:</b> <span class="status-badge">Active & Online</span></p>
             </div>
         </div>
 
-        <!-- 3. AJUSTES -->
+        <!-- 3. SETTINGS -->
         <div id="section-ajustes" class="app-section">
-            <div class="header-title">Ajustes del Sistema</div>
+            <div class="header-title">System Settings</div>
             <div class="panel-card">
-                <h2>Preferencias de la Interfaz</h2>
-                <p>La infraestructura y las credenciales operan de manera interna y automática.</p>
+                <h2>Interface Preferences</h2>
+                <p>Infrastructure and credentials operate internally and automatically.</p>
             </div>
         </div>
 
@@ -95,46 +95,46 @@
         <div id="section-docs" class="app-section">
             <div class="header-title">Docs & Media</div>
             <div class="panel-card">
-                <h2>Repositorio de Recursos</h2>
-                <p>Documentación técnica y guías de desarrollo optimizadas para tu entorno.</p>
+                <h2>Resource Repository</h2>
+                <p>Technical documentation and optimized development guides for your workspace.</p>
             </div>
         </div>
 
-        <!-- 5. SEGURIDAD -->
+        <!-- 5. SECURITY -->
         <div id="section-seguridad" class="app-section">
-            <div class="header-title">Seguridad y Privacidad</div>
+            <div class="header-title">Security & Privacy</div>
             <div class="panel-card">
-                <h2>Protección de Credenciales</h2>
-                <p>Entorno seguro bajo protocolo HTTPS en GitHub Pages.</p>
+                <h2>Credential Protection</h2>
+                <p>Secure environment under HTTPS protocol via GitHub Pages.</p>
             </div>
         </div>
     </div>
 
     <script>
-        // Llave integrada internamente de forma fija y segura
+        // API key securely embedded internally
         const GROQ_API_KEY = "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";
 
-        function cambiarSeccion(seccionId, btnElement) {
+        function switchSection(sectionId, btnElement) {
             document.querySelectorAll('.app-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             
-            document.getElementById('section-' + seccionId).classList.add('active');
+            document.getElementById('section-' + sectionId).classList.add('active');
             btnElement.classList.add('active');
         }
 
-        async function enviar() {
+        async function send() {
             const msgInput = document.getElementById('msg');
             const msg = msgInput.value.trim();
             const box = document.getElementById('chat-box');
 
             if(!msg) return;
 
-            box.innerHTML += `<div class="message user-msg"><b>Tú:</b> ${msg}</div>`;
+            box.innerHTML += `<div class="message user-msg"><b>You:</b> ${msg}</div>`;
             msgInput.value = '';
             box.scrollTop = box.scrollHeight;
 
             const tempId = 'temp-' + Date.now();
-            box.innerHTML += `<div id="${tempId}" class="message ai-msg"><i>Duckie está pensando...</i></div>`;
+            box.innerHTML += `<div id="${tempId}" class="message ai-msg"><i>Duckie is thinking...</i></div>`;
             box.scrollTop = box.scrollHeight;
 
             try {
@@ -153,11 +153,11 @@
                 if(data.choices && data.choices.length > 0) {
                     box.innerHTML += `<div class="message ai-msg"><b>Duckie:</b> ${data.choices[0].message.content}</div>`;
                 } else {
-                    box.innerHTML += `<div class="message ai-msg" style="color:red;"><b>Error:</b> Respuesta inesperada de la API.</div>`;
+                    box.innerHTML += `<div class="message ai-msg" style="color:red;"><b>Error:</b> Unexpected API response.</div>`;
                 }
             } catch(e) { 
                 document.getElementById(tempId).remove();
-                box.innerHTML += `<div class="message ai-msg" style="color:red;"><b>Error:</b> Error de conexión.</div>`; 
+                box.innerHTML += `<div class="message ai-msg" style="color:red;"><b>Error:</b> Connection error.</div>`; 
             }
             box.scrollTop = box.scrollHeight;
         }
