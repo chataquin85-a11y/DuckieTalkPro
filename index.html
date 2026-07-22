@@ -3,282 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duckie Talk ^+^_^/</title>
+    <title>Duckie Talk Pro</title>
     <style>
-        /* --- Global Styles --- */
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden; /* Prevent scrolling on body */
+        /* -- Styles from your specs (image_10.png, Page 1 & 2) -- */
+        :root {
+            --bg-color: #f0f8ff; /* User can change this later */
+            --chat-bubble-user: #e1ffc7;
+            --chat-bubble-ai: #f0f0f0;
+            --header-color: #333;
         }
-
-        #app-container {
-            width: 100%;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
             height: 100vh;
-            position: relative;
+            margin: 0;
         }
-
-        /* --- SCREEN 1: THE APP FACE --- */
-        #app-face {
-            display: flex; /* Shown by default */
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-color: #87CEEB; /* Light Sky Blue from your plan */
-            text-align: center;
-            width: 100%;
-            height: 100%;
-            cursor: pointer; /* Entire screen is a button */
-        }
-
-        #app-face:hover {
-            background-color: #7AB8D4; /* Slightly darker on hover */
-        }
-
-        #logo-image {
-            width: 200px; /* Adjust size as needed */
-            height: 200px;
-            border-radius: 50%; /* Makes it circular */
-            object-fit: cover;
-            margin-bottom: 20px;
-            border: 5px solid white;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-
-        #app-title {
-            font-size: 3rem;
-            color: #333;
-            margin: 10px 0;
-            font-weight: bold;
-        }
-
-        #app-subtitle {
-            font-size: 1.5rem;
-            color: #555;
-            margin-top: 5px;
-        }
-
-        /* --- SCREEN 2: THE CHAT INTERFACE --- */
-        #chat-interface {
-            display: none; /* Hidden by default */
-            flex-direction: column;
-            justify-content: space-between;
-            background-color: #6a0dad; /* Custom Purple background */
-            background-image: url('https://i.imgur.com/oV1V1mS.png'); /* I've created a sample duck pattern background for you */
-            background-repeat: repeat;
-            background-size: 50px; /* Adjust size of duck pattern */
-            width: 100%;
-            height: 100%;
-        }
-
-        /* -- Chat Header -- */
-        #chat-header {
-            background-color: rgba(255, 255, 255, 0.9); /* Translucent white header */
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #ddd;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        #header-logo {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-right: 10px;
-        }
-
-        #chat-header-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #333;
-            display: flex;
-            align-items: center;
-        }
-
-        .header-btn {
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            color: #555;
-            cursor: pointer;
-            padding: 5px 10px;
-            border-radius: 5px;
-        }
-
-        .header-btn:hover {
-            background-color: #f0f0f0;
-        }
-
-        /* -- Chat Window -- */
-        #chat-window {
-            flex-grow: 1;
+        #chat-container {
+            flex: 1;
+            overflow-y: auto;
             padding: 20px;
-            overflow-y: auto; /* Allow messages to scroll */
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
-
-        /* -- Example Messages (for visual structure) -- */
         .message {
-            max-width: 70%;
+            max-width: 80%;
             padding: 10px 15px;
-            border-radius: 15px;
-            font-size: 1rem;
-            line-height: 1.4;
-            position: relative;
+            border-radius: 10px;
+            word-wrap: break-word;
         }
-
         .user-message {
             align-self: flex-end;
-            background-color: #007bff; /* Blue bubble for user */
-            color: white;
-            border-bottom-right-radius: 2px;
+            background-color: var(--chat-bubble-user);
         }
-
-        .duckie-message {
+        .ai-message {
             align-self: flex-start;
-            background-color: #f1f0f0; /* Light grey bubble for Duckie */
-            color: #333;
-            border-bottom-left-radius: 2px;
+            background-color: var(--chat-bubble-ai);
         }
-
-        /* -- Chat Input Area -- */
-        #chat-input-area {
-            background-color: rgba(255, 255, 255, 0.95); /* Translucent white input bar */
+        /* -- Input Area (image_10.png, Page 1) -- */
+        #input-area {
+            background: #fff;
+            border-top: 1px solid #ddd;
             padding: 10px;
             display: flex;
             align-items: center;
-            border-top: 1px solid #ddd;
             gap: 10px;
         }
-
-        .icon-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 5px;
-        }
-
-        .icon-btn img {
-            width: 24px;
-            height: 24px;
-            opacity: 0.7;
-        }
-
-        .icon-btn:hover img {
-            opacity: 1;
-        }
-
-        #user-message-input {
-            flex-grow: 1;
-            padding: 12px;
+        textarea {
+            flex: 1;
+            padding: 10px;
             border: 1px solid #ccc;
-            border-radius: 20px;
-            font-size: 1rem;
-            outline: none;
+            border-radius: 5px;
+            resize: none;
+            height: 40px;
         }
-
-        #send-message-btn {
-            background-color: #28a745; /* Green Send button */
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
+            border-radius: 5px;
             cursor: pointer;
-            font-size: 1rem;
-            font-weight: bold;
         }
-
-        #send-message-btn:hover {
-            background-color: #218838;
-        }
-
+        button:hover { background-color: #0056b3; }
+        /* -- Additional Buttons (image_10.png, Page 1) -- */
+        .icon-btn { background: none; color: #555; font-size: 1.2em; padding: 5px; }
+        .icon-btn:hover { color: #007bff; }
     </style>
 </head>
 <body>
 
-    <!-- The Main Application Container -->
-    <div id="app-container">
+    <!-- The "Open Page" (your app) -->
+    <header style="background: var(--header-color); color: white; padding: 15px; text-align: center;">
+        Duckie Talk Pro
+    </header>
 
-        <!-- SCREEN 1: THE APP FACE -->
-        <div id="app-face" onclick="showChat()">
-            <!-- Your Circular Logo -->
-            <img id="logo-image" src="https://i.imgur.com/oV1V1mS.png" alt="Duckie Talk ^+^_^/ Logo">
-
-            <!-- Your App Title -->
-            <h1 id="app-title">Duckie Talk</h1>
-
-            <!-- Your App Sub-text -->
-            <h2 id="app-subtitle">^ + ^ _ /</h2>
-        </div>
-
-        <!-- SCREEN 2: THE CHAT INTERFACE -->
-        <div id="chat-interface">
-
-            <!-- Chat Header -->
-            <div id="chat-header">
-                <div id="chat-header-title">
-                    <img id="header-logo" src="https://i.imgur.com/oV1V1mS.png" alt="Duckie Talk ^+^_^/ Logo">
-                    Duckie Talk ^+^_^/
-                </div>
-                <div>
-                    <button class="header-btn" onclick="alert('Settings Coming Soon!')">⚙️ Settings</button>
-                    <button class="header-btn" onclick="showAppFace()">✕ Close</button>
-                </div>
-            </div>
-
-            <!-- Chat Window (Messages appear here) -->
-            <div id="chat-window">
-                <!-- Example Messages to show design -->
-                <div class="message duckie-message">Quack! Hello there! How can I help you make some Heat Hop today?</div>
-                <div class="message user-message">Hello Duckie! I want to build my own application.</div>
-            </div>
-
-            <!-- Chat Input Area -->
-            <div id="chat-input-area">
-                <button class="icon-btn" title="Emoji">😊</button>
-                <button class="icon-btn" title="GIF">GIF</button>
-                <button class="icon-btn" title="Stickers">🙂</button>
-
-                <!-- The main input box -->
-                <input type="text" id="user-message-input" placeholder="Ask Duckie anything..."></input>
-
-                <button class="icon-btn" title="Send Question">❓</button>
-                <button class="icon-btn" title="Gallery">🖼️</button>
-                <button class="icon-btn" title="Microphone">🎤</button>
-
-                <button id="send-message-btn">Send</button>
-            </div>
-        </div>
-
+    <!-- Chat Messages -->
+    <div id="chat-container">
+        <div class="message ai-message">Hello! I am Duckie. How can I help you today?</div>
     </div>
 
-    <!-- JAVASCRIPT (To control the screens) -->
+    <!-- Input Area (image_10.png, Page 1) -->
+    <div id="input-area">
+        <button class="icon-btn" title="Emoji">😃</button>
+        <button class="icon-btn" title="GIF">GIF</button>
+        <button class="icon-btn" title="Stickers">Stc</button>
+        <textarea id="user-input" placeholder="talk to Duckie..."></textarea>
+        <button class="icon-btn" title="Microphone">🎙️</button>
+        <button id="send-btn">Send</button>
+    </div>
+
     <script>
-        // Get the screen elements
-        const appFace = document.getElementById('app-face');
-        const chatInterface = document.getElementById('chat-interface');
+        const chatContainer = document.getElementById('chat-container');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
 
-        // Function to show the Chat Interface
-        function showChat() {
-            appFace.style.display = 'none';
-            chatInterface.style.display = 'flex';
+        // -- Function to append a message to the chat --
+        function appendMessage(sender, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(sender === 'user' ? 'user-message' : 'ai-message');
+            messageDiv.textContent = text;
+            chatContainer.appendChild(messageDiv);
+            // Scroll to bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        // Function to show the App Face (Home Screen)
-        function showAppFace() {
-            chatInterface.style.display = 'none';
-            appFace.style.display = 'flex';
-        }
+        // -- The "Send" Button Logic --
+        sendBtn.addEventListener('click', async () => {
+            const text = userInput.value.trim();
+            if (!text) return;
 
-        // This makes sure the input box is ready when the chat opens
-        document.getElementById('user-message-input').focus();
+            // 1. Display User's message
+            appendMessage('user', text);
+            userInput.value = ''; // Clear input
+
+            // 2. Send the prompt to YOUR Netlify Backend Function
+            // We do NOT send the key. We send the message.
+            try {
+                const response = await fetch('/.netlify/functions/chat-handler', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ prompt: text }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    appendMessage('ai', data.reply);
+                } else {
+                    appendMessage('ai', "Oops! I'm having trouble connecting. " + (data.error || ""));
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                appendMessage('ai', "Error connecting to Duckie's servers.");
+            }
+        });
+
+        // Allow "Enter" key to send (like a normal chat app)
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault(); // Prevent a newline
+                sendBtn.click();
+            }
+        });
     </script>
 </body>
 </html>
