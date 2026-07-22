@@ -7,7 +7,7 @@
     <style>
         /* -- Styles from your specs (image_10.png, Page 1 & 2) -- */
         :root {
-            --bg-color: #f0f8ff; /* User can change this later */
+            --bg-color: #f0f8ff; /* User changeable */
             --chat-bubble-user: #e1ffc7;
             --chat-bubble-ai: #f0f0f0;
             --header-color: #333;
@@ -75,17 +75,14 @@
 </head>
 <body>
 
-    <!-- The "Open Page" (your app) -->
     <header style="background: var(--header-color); color: white; padding: 15px; text-align: center;">
         Duckie Talk Pro
     </header>
 
-    <!-- Chat Messages -->
     <div id="chat-container">
         <div class="message ai-message">Hello! I am Duckie. How can I help you today?</div>
     </div>
 
-    <!-- Input Area (image_10.png, Page 1) -->
     <div id="input-area">
         <button class="icon-btn" title="Emoji">😃</button>
         <button class="icon-btn" title="GIF">GIF</button>
@@ -100,29 +97,24 @@
         const userInput = document.getElementById('user-input');
         const sendBtn = document.getElementById('send-btn');
 
-        // -- Function to append a message to the chat --
         function appendMessage(sender, text) {
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('message');
             messageDiv.classList.add(sender === 'user' ? 'user-message' : 'ai-message');
             messageDiv.textContent = text;
             chatContainer.appendChild(messageDiv);
-            // Scroll to bottom
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        // -- The "Send" Button Logic --
         sendBtn.addEventListener('click', async () => {
             const text = userInput.value.trim();
             if (!text) return;
 
-            // 1. Display User's message
             appendMessage('user', text);
-            userInput.value = ''; // Clear input
+            userInput.value = '';
 
-            // 2. Send the prompt to YOUR Netlify Backend Function
-            // We do NOT send the key. We send the message.
             try {
+                // SECURE CALL: This talks ONLY to your Netlify Function.
                 const response = await fetch('/.netlify/functions/chat-handler', {
                     method: 'POST',
                     headers: {
@@ -145,10 +137,9 @@
             }
         });
 
-        // Allow "Enter" key to send (like a normal chat app)
         userInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault(); // Prevent a newline
+                e.preventDefault();
                 sendBtn.click();
             }
         });
