@@ -3,23 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duckie Talk Pro</title>
+    <title>Duckie Talk Pro - Customizer</title>
     <style>
-        /* -- Styles from your specs (image_10.png, Page 1 & 2) -- */
+        /* -- CORE CSS VARIABLES (Dynamic Themes) -- */
         :root {
-            --bg-color: #f0f8ff; /* User changeable */
+            --bg-color: #f0f8ff; /* Default: AliceBlue */
             --chat-bubble-user: #e1ffc7;
             --chat-bubble-ai: #f0f0f0;
             --header-color: #333;
+            --text-color: #000;
+            /* -- Typography (From Specs: Monospace Default) -- */
+            --font-stack: "Courier New", Courier, monospace;
         }
+
+        /* -- General Page Layout -- */
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: var(--font-stack);
+            color: var(--text-color);
             background-color: var(--bg-color);
             display: flex;
             flex-direction: column;
             height: 100vh;
             margin: 0;
+            transition: background-color 0.3s ease, color 0.3s ease, font-family 0.3s ease;
         }
+
+        /* -- Header Area (Logo Support) -- */
+        header {
+            background: var(--header-color);
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ddd;
+            height: 60px;
+        }
+        #header-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 0 auto;
+        }
+        #custom-logo-display {
+            max-height: 50px;
+            max-width: 150px;
+            object-fit: contain;
+            display: none; /* Hidden by default */
+            margin-right: 10px;
+        }
+
+        /* -- Chat Container -- */
         #chat-container {
             flex: 1;
             overflow-y: auto;
@@ -33,6 +66,7 @@
             padding: 10px 15px;
             border-radius: 10px;
             word-wrap: break-word;
+            font-size: 1.1em;
         }
         .user-message {
             align-self: flex-end;
@@ -42,7 +76,8 @@
             align-self: flex-start;
             background-color: var(--chat-bubble-ai);
         }
-        /* -- Input Area (image_10.png, Page 1) -- */
+
+        /* -- Input Area -- */
         #input-area {
             background: #fff;
             border-top: 1px solid #ddd;
@@ -58,6 +93,7 @@
             border-radius: 5px;
             resize: none;
             height: 40px;
+            font-family: inherit;
         }
         button {
             padding: 10px 15px;
@@ -66,21 +102,90 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-family: inherit;
         }
         button:hover { background-color: #0056b3; }
-        /* -- Additional Buttons (image_10.png, Page 1) -- */
         .icon-btn { background: none; color: #555; font-size: 1.2em; padding: 5px; }
         .icon-btn:hover { color: #007bff; }
+
+        /* -- Customization Panel (Sidebar) -- */
+        #customizer-panel {
+            position: fixed;
+            top: 70px;
+            right: -250px; /* Hidden by default */
+            width: 240px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: -2px 2px 10px rgba(0,0,0,0.2);
+            transition: right 0.3s ease-in-out;
+            z-index: 1000;
+        }
+        #customizer-panel.open { right: 10px; }
+        #toggle-customizer {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #333;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .control-group { margin-bottom: 15px; }
+        .control-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="color"] { width: 100%; height: 40px; border: none; cursor: pointer; }
+        select, input[type="file"] { width: 100%; padding: 5px; }
+
     </style>
 </head>
 <body>
 
-    <header style="background: var(--header-color); color: white; padding: 15px; text-align: center;">
-        Duckie Talk Pro
+    <header>
+        <img id="custom-logo-display" src="" alt="Custom Logo">
+        <div id="header-title">Duckie Talk Pro</div>
+        <button id="toggle-customizer">⚙️ Customize</button>
     </header>
 
+    <!-- -- CUSTOMIZATION PANEL (Theme Picker) -- -->
+    <div id="customizer-panel">
+        <h3>Theme Settings</h3>
+
+        <!-- 1. Background Color Picker -->
+        <div class="control-group">
+            <label for="bg-color-picker">Background Color:</label>
+            <input type="color" id="bg-color-picker" value="#f0f8ff">
+        </div>
+
+        <!-- 2. Text Color Picker -->
+        <div class="control-group">
+            <label for="text-color-picker">Text Color:</label>
+            <input type="color" id="text-color-picker" value="#000000">
+        </div>
+
+        <!-- 3. Font Selector (From Specs) -->
+        <div class="control-group">
+            <label for="font-selector">Typography:</label>
+            <select id="font-selector">
+                <option value='"Courier New", Courier, monospace'>Monospace (Default)</option>
+                <option value="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">San Francisco (Clean)</option>
+                <option value="Georgia, serif">Georgia (Classic)</option>
+                <option value="'Comic Sans MS', cursive, sans-serif">Comic Sans</option>
+            </select>
+        </div>
+
+        <!-- 4. Logo Upload (From Specs) -->
+        <div class="control-group">
+            <label for="logo-upload">Custom Logo:</label>
+            <input type="file" id="logo-upload" accept="image/*">
+        </div>
+        
+        <button id="reset-theme">Reset Defaults</button>
+    </div>
+
     <div id="chat-container">
-        <div class="message ai-message">Hello! I am Duckie. How can I help you today?</div>
+        <div class="message ai-message">Hello! I am the new Duckie Talk Pro. Use the Customize menu to change my look!</div>
     </div>
 
     <div id="input-area">
@@ -93,10 +198,102 @@
     </div>
 
     <script>
+        // --- STATE MANAGEMENT ---
+        const root = document.documentElement;
+        const customizerPanel = document.getElementById('customizer-panel');
+        const toggleCustomizerBtn = document.getElementById('toggle-customizer');
+        
         const chatContainer = document.getElementById('chat-container');
         const userInput = document.getElementById('user-input');
         const sendBtn = document.getElementById('send-btn');
+        
+        const logoUpload = document.getElementById('logo-upload');
+        const customLogoDisplay = document.getElementById('custom-logo-display');
 
+        // --- FEATURE 1: Theme Panel Toggle ---
+        toggleCustomizerBtn.addEventListener('click', () => {
+            customizerPanel.classList.toggle('open');
+            toggleCustomizerBtn.textContent = customizerPanel.classList.contains('open') ? 'Close' : '⚙️ Customize';
+        });
+
+        // --- FEATURE 2: Color Pickers ---
+        const bgColorPicker = document.getElementById('bg-color-picker');
+        const textColorPicker = document.getElementById('text-color-picker');
+
+        bgColorPicker.addEventListener('input', (e) => {
+            root.style.setProperty('--bg-color', e.target.value);
+            saveSettings();
+        });
+
+        textColorPicker.addEventListener('input', (e) => {
+            root.style.setProperty('--text-color', e.target.value);
+            saveSettings();
+        });
+
+        // --- FEATURE 3: Font Selector ---
+        const fontSelector = document.getElementById('font-selector');
+        fontSelector.addEventListener('change', (e) => {
+            root.style.setProperty('--font-stack', e.target.value);
+            saveSettings();
+        });
+
+        // --- FEATURE 4: Logo Upload ---
+        logoUpload.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const base64String = event.target.result;
+                    customLogoDisplay.src = base64String;
+                    customLogoDisplay.style.display = 'block'; // Show the logo
+                    saveSettings();
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // --- FEATURE 5: Reset Theme ---
+        const resetBtn = document.getElementById('reset-theme');
+        resetBtn.addEventListener('click', () => {
+            localStorage.removeItem('duckieTalkSettings');
+            location.reload(); // Reload to defaults
+        });
+
+        // --- Persistence: Save/Load Settings (using LocalStorage) ---
+        function saveSettings() {
+            const settings = {
+                bgColor: bgColorPicker.value,
+                textColor: textColorPicker.value,
+                fontFamily: fontSelector.value,
+                logoSrc: customLogoDisplay.src
+            };
+            localStorage.setItem('duckieTalkSettings', JSON.stringify(settings));
+        }
+
+        function loadSettings() {
+            const savedSettings = JSON.parse(localStorage.getItem('duckieTalkSettings'));
+            if (savedSettings) {
+                bgColorPicker.value = savedSettings.bgColor;
+                root.style.setProperty('--bg-color', savedSettings.bgColor);
+
+                textColorPicker.value = savedSettings.textColor;
+                root.style.setProperty('--text-color', savedSettings.textColor);
+                
+                fontSelector.value = savedSettings.fontFamily;
+                root.style.setProperty('--font-stack', savedSettings.fontFamily);
+                
+                if (savedSettings.logoSrc) {
+                    customLogoDisplay.src = savedSettings.logoSrc;
+                    customLogoDisplay.style.display = 'block';
+                }
+            }
+        }
+        
+        // Load settings on page load
+        loadSettings();
+
+
+        // --- CHAT FUNCTIONALITY (Unchanged & Secure) ---
         function appendMessage(sender, text) {
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('message');
