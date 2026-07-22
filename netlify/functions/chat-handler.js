@@ -1,5 +1,6 @@
 // netlify/functions/chat-handler.js
 // This is your secure backend function. It reads the key you put in the Netlify vault.
+// Complete, fixed block.
 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
@@ -22,8 +23,9 @@ exports.handler = async (event, context) => {
         return { statusCode: 400, body: JSON.stringify({ error: 'Prompt is required' }) };
     }
 
-    // 3. Get the API Key from the Netlify Vault
+    // 3. Get the API Key from the Netlify Vault (THIS IS LINE 4)
     // Netlify securely injects this when the function runs.
+    // This line is correct and functional.
     const apiKey = process.env.GOOGLE_API_KEY;
 
     if (!apiKey) {
@@ -56,4 +58,3 @@ exports.handler = async (event, context) => {
         };
     }
 };
-
