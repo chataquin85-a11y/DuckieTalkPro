@@ -1,14 +1,10 @@
-<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-  <p>Aquí tienes de nuevo el bloque completo, unificado y listo para copiar y pegar directamente en tu archivo <code>index.html</code> de tu repositorio <strong>Duckie Talk Pro</strong>:</p>
-
-  <pre style="background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 13px;">
-<code>&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;es&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
-    &lt;title&gt;Duckie Talk Pro - DuckieDuck AI&lt;/title&gt;
-    &lt;style&gt;
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duckie Talk Pro - DuckieDuck AI</title>
+    <style>
         :root {
             --bg-color: #f0f8ff;
             --chat-bubble-user: #e1ffc7;
@@ -106,50 +102,50 @@
             border-radius: 5px;
             cursor: pointer;
         }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div id=&quot;sidebar&quot;&gt;
-        &lt;h3&gt;Duckie Talk Pro&lt;/h3&gt;
-        &lt;button onclick=&quot;switchTab('chat')&quot;&gt;Chat IA&lt;/button&gt;
-        &lt;button onclick=&quot;switchTab('calls')&quot;&gt;Llamadas&lt;/button&gt;
-        &lt;button onclick=&quot;switchTab('plan')&quot;&gt;Tu Plan Móvil&lt;/button&gt;
-        &lt;button onclick=&quot;switchTab('settings')&quot;&gt;Ajustes&lt;/button&gt;
-    &lt;/div&gt;
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <h3>Duckie Talk Pro</h3>
+        <button onclick="switchTab('chat')">Chat IA</button>
+        <button onclick="switchTab('calls')">Llamadas</button>
+        <button onclick="switchTab('plan')">Tu Plan Móvil</button>
+        <button onclick="switchTab('settings')">Ajustes</button>
+    </div>
 
-    &lt;div id=&quot;main&quot;&gt;
-        &lt;header&gt;
-            &lt;span id=&quot;header-title&quot;&gt;Centro de Chat IA&lt;/span&gt;
-        &lt;/header&gt;
+    <div id="main">
+        <header>
+            <span id="header-title">Centro de Chat IA</span>
+        </header>
 
-        &lt;div id=&quot;chat-view&quot; class=&quot;view-section&quot;&gt;
-            &lt;div id=&quot;chat-container&quot;&gt;
-                &lt;div class=&quot;message ai-message&quot;&gt;Hello! I am DuckieDuck, your personal AI assistant. How can I help you today?&lt;/div&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;input-area&quot;&gt;
-                &lt;input type=&quot;password&quot; id=&quot;apiKeyInput&quot; placeholder=&quot;Llave API (AIza...)&quot; style=&quot;max-width: 200px;&quot;&gt;
-                &lt;input type=&quot;text&quot; id=&quot;userInput&quot; placeholder=&quot;Escribe tu mensaje...&quot;&gt;
-                &lt;button onclick=&quot;sendMessage()&quot;&gt;Send&lt;/button&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
+        <div id="chat-view" class="view-section">
+            <div id="chat-container">
+                <div class="message ai-message">Hello! I am DuckieDuck, your personal AI assistant. How can I help you today?</div>
+            </div>
+            <div class="input-area">
+                <input type="password" id="apiKeyInput" placeholder="Llave API (AIza...)" style="max-width: 200px;">
+                <input type="text" id="userInput" placeholder="Escribe tu mensaje...">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
 
-        &lt;div id=&quot;calls-view&quot; class=&quot;view-section&quot; style=&quot;display:none;&quot;&gt;
-            &lt;h2&gt;Sección de Llamadas&lt;/h2&gt;
-            &lt;p&gt;Próximamente disponible.&lt;/p&gt;
-        &lt;/div&gt;
+        <div id="calls-view" class="view-section" style="display:none;">
+            <h2>Sección de Llamadas</h2>
+            <p>Próximamente disponible.</p>
+        </div>
 
-        &lt;div id=&quot;plan-view&quot; class=&quot;view-section&quot; style=&quot;display:none;&quot;&gt;
-            &lt;h2&gt;Tu Plan Móvil&lt;/h2&gt;
-            &lt;p&gt;Información de tu línea y negocio.&lt;/p&gt;
-        &lt;/div&gt;
+        <div id="plan-view" class="view-section" style="display:none;">
+            <h2>Tu Plan Móvil</h2>
+            <p>Información de tu línea y negocio.</p>
+        </div>
 
-        &lt;div id=&quot;settings-view&quot; class=&quot;view-section&quot; style=&quot;display:none;&quot;&gt;
-            &lt;h2&gt;Ajustes&lt;/h2&gt;
-            &lt;p&gt;Configuración general.&lt;/p&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
+        <div id="settings-view" class="view-section" style="display:none;">
+            <h2>Ajustes</h2>
+            <p>Configuración general.</p>
+        </div>
+    </div>
 
-    &lt;script&gt;
+    <script>
         function switchTab(tabName) {
             document.getElementById('chat-view').style.display = 'none';
             document.getElementById('calls-view').style.display = 'none';
@@ -197,7 +193,6 @@
                 chatContainer.scrollTop = chatContainer.scrollHeight;
             }, 500);
         }
-    &lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-</div>
+    </script>
+</body>
+</html>
