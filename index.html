@@ -40,12 +40,12 @@
             font-weight: bold;
             margin: 0 auto;
         }
-        #custom-logo-display {
+        #permanent-brand-logo {
             max-height: 50px;
             max-width: 150px;
             object-fit: contain;
-            display: none;
             margin-right: 10px;
+            display: block;
         }
 
         #chat-container {
@@ -103,7 +103,7 @@
         .icon-btn { background: none; color: #555; font-size: 1.2em; padding: 5px; }
         .icon-btn:hover { color: #007bff; }
 
-        /* Popup Drawers for Emoji, GIF, Stickers, Gallery, Mic */
+        /* Popup Drawers for Keyboard Actions */
         .drawer-popup {
             position: absolute;
             bottom: 70px;
@@ -149,13 +149,14 @@
         .control-group { margin-bottom: 15px; }
         .control-group label { display: block; margin-bottom: 5px; font-weight: bold; }
         input[type="color"] { width: 100%; height: 40px; border: none; cursor: pointer; }
-        select, input[type="file"] { width: 100%; padding: 5px; }
+        select { width: 100%; padding: 5px; }
     </style>
 </head>
 <body>
 
     <header>
-        <img id="custom-logo-display" src="" alt="Custom Logo">
+        <!-- Permanent Brand Logo -->
+        <div id="permanent-brand-logo" style="font-weight: bold; font-size: 1.1em; color: #ffd700;">🦆 Duckie</div>
         <div id="header-title">Duckie Talk Pro</div>
         <button id="toggle-customizer">⚙️ Customize</button>
     </header>
@@ -178,10 +179,6 @@
                 <option value="Georgia, serif">Georgia (Classic)</option>
                 <option value="'Comic Sans MS', cursive, sans-serif">Comic Sans</option>
             </select>
-        </div>
-        <div class="control-group">
-            <label for="logo-upload">Custom Logo (Brand):</label>
-            <input type="file" id="logo-upload" accept="image/*">
         </div>
         <button id="reset-theme">Reset Defaults</button>
     </div>
@@ -231,8 +228,6 @@
         const chatContainer = document.getElementById('chat-container');
         const userInput = document.getElementById('user-input');
         const sendBtn = document.getElementById('send-btn');
-        const logoUpload = document.getElementById('logo-upload');
-        const customLogoDisplay = document.getElementById('custom-logo-display');
 
         // Drawers toggle logic
         const drawers = document.querySelectorAll('.drawer-popup');
@@ -256,12 +251,8 @@
         document.getElementById('gallery-upload').addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    appendMessage('user', '[Uploaded Image]');
-                    closeAllDrawers();
-                }
-                reader.readAsDataURL(file);
+                appendMessage('user', '[Uploaded Image]');
+                closeAllDrawers();
             }
         });
 
@@ -297,19 +288,6 @@
             root.style.setProperty('--font-stack', e.target.value);
             saveSettings();
         });
-
-        logoUpload.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    customLogoDisplay.src = event.target.result;
-                    customLogoDisplay.style.display = 'block';
-                    saveSettings();
-                }
-                reader.readAsDataURL(file);
-            }
-        });
         
         document.getElementById('reset-theme').addEventListener('click', () => {
             localStorage.removeItem('duckieTalkSettings');
@@ -320,8 +298,7 @@
             const settings = {
                 bgColor: bgColorPicker.value,
                 textColor: textColorPicker.value,
-                fontFamily: fontSelector.value,
-                logoSrc: customLogoDisplay.src
+                fontFamily: fontSelector.value
             };
             localStorage.setItem('duckieTalkSettings', JSON.stringify(settings));
         }
@@ -335,10 +312,6 @@
                 root.style.setProperty('--text-color', savedSettings.textColor);
                 fontSelector.value = savedSettings.fontFamily;
                 root.style.setProperty('--font-stack', savedSettings.fontFamily);
-                if (savedSettings.logoSrc) {
-                    customLogoDisplay.src = savedSettings.logoSrc;
-                    customLogoDisplay.style.display = 'block';
-                }
             }
         }
         
