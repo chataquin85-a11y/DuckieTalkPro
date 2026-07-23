@@ -123,10 +123,11 @@
                 <div class="message ai-message">Hello! I am DuckieDuck, your personal AI assistant. How can I help you today?</div>
             </div>
             <div class="input-area">
-                <input type="password" id="apiKeyInput" placeholder="AQ Key / API Key" value=""AQ.Ab8RN6IAzcnDMUN8CHlByxtDeQEvcHJ4JdGnUBqPy2DWk9H5TA style="max-width: 200px;">
+                <input type="password" id="apiKeyInput" placeholder="AQ Key / API Key" value="TU_AQ_KEY_AQUI" style="max-width: 200px;">
                 <input type="text" id="userInput" placeholder="Escribe tu mensaje...">
                 <button onclick="sendMessage()">Send</button>
             </div>
+            <p style="margin-top: 15px;">Aplicación corriendo en: <a href="https://www.duckiethemus.com" target="_blank">https://www.duckiethemus.com</a></p>
         </div>
 
         <div id="calls-view" class="view-section" style="display:none;">
@@ -186,7 +187,7 @@
                 if(!apiKeyInput.value.trim()) {
                     aiMsg.textContent = "Por favor ingresa tu llave en el campo correspondiente.";
                 } else {
-                    aiMsg.textContent = "Conectado correctamente con tu llave. Recibido: " + text;
+                    aiMsg.textContent = "¡Ey, estoy bien! Recibido correctamente: " + text;
                 }
                 
                 chatContainer.appendChild(aiMsg);
