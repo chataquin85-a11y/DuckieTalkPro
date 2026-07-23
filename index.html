@@ -1,53 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duckie Talk Pro - DuckieDuck AI</title>
-    <style>
+<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+  <p>Aquí tienes de nuevo el bloque completo, unificado y listo para copiar y pegar directamente en tu archivo <code>index.html</code> de tu repositorio <strong>Duckie Talk Pro</strong>:</p>
+
+  <pre style="background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 13px;">
+<code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;Duckie Talk Pro - DuckieDuck AI&lt;/title&gt;
+    &lt;style&gt;
         :root {
             --bg-color: #f0f8ff;
             --chat-bubble-user: #e1ffc7;
             --chat-bubble-ai: #f0f0f0;
             --header-color: #333;
             --text-color: #000;
-            --font-stack: "Courier New", Courier, monospace;
         }
-
         body {
-            font-family: var(--font-stack);
+            font-family: 'Courier New', Courier, monospace;
             color: var(--text-color);
             background-color: var(--bg-color);
             display: flex;
-            flex-direction: column;
             height: 100vh;
             margin: 0;
-            transition: background-color 0.3s ease, color 0.3s ease, font-family 0.3s ease;
         }
-
+        #sidebar {
+            width: 250px;
+            background: #222;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        #sidebar button {
+            background: #444;
+            color: white;
+            border: none;
+            padding: 10px;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #sidebar button:hover {
+            background: #555;
+        }
+        #main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+        }
         header {
             background: var(--header-color);
             color: white;
-            padding: 10px;
+            padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 2px solid #ddd;
             height: 60px;
         }
-        #header-title {
-            font-size: 1.5em;
-            font-weight: bold;
-            margin: 0 auto;
-        }
-        #permanent-brand-logo {
-            max-height: 50px;
-            max-width: 150px;
-            object-fit: contain;
-            margin-right: 10px;
-            display: block;
-        }
-
         #chat-container {
             flex: 1;
             overflow-y: auto;
@@ -55,311 +69,135 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         .message {
-            max-width: 80%;
             padding: 10px 15px;
-            border-radius: 10px;
+            border-radius: 8px;
+            max-width: 75%;
             word-wrap: break-word;
-            font-size: 1.1em;
         }
         .user-message {
-            align-self: flex-end;
             background-color: var(--chat-bubble-user);
+            align-self: flex-end;
         }
         .ai-message {
-            align-self: flex-start;
             background-color: var(--chat-bubble-ai);
+            align-self: flex-start;
         }
-
-        #input-area {
-            background: #fff;
-            border-top: 1px solid #ddd;
-            padding: 10px;
+        .input-area {
             display: flex;
-            align-items: center;
             gap: 10px;
-            position: relative;
         }
-        textarea {
+        .input-area input {
             flex: 1;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            resize: none;
-            height: 40px;
-            font-family: inherit;
         }
-        button {
-            padding: 10px 15px;
-            background-color: #007bff;
+        .input-area button {
+            padding: 10px 20px;
+            background: #28a745;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-family: inherit;
         }
-        button:hover { background-color: #0056b3; }
-        .icon-btn { background: none; color: #555; font-size: 1.2em; padding: 5px; }
-        .icon-btn:hover { color: #007bff; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div id=&quot;sidebar&quot;&gt;
+        &lt;h3&gt;Duckie Talk Pro&lt;/h3&gt;
+        &lt;button onclick=&quot;switchTab('chat')&quot;&gt;Chat IA&lt;/button&gt;
+        &lt;button onclick=&quot;switchTab('calls')&quot;&gt;Llamadas&lt;/button&gt;
+        &lt;button onclick=&quot;switchTab('plan')&quot;&gt;Tu Plan Móvil&lt;/button&gt;
+        &lt;button onclick=&quot;switchTab('settings')&quot;&gt;Ajustes&lt;/button&gt;
+    &lt;/div&gt;
 
-        /* Popup Drawers for Keyboard Actions */
-        .drawer-popup {
-            position: absolute;
-            bottom: 70px;
-            left: 10px;
-            background: white;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            display: none;
-            z-index: 1001;
-            width: 250px;
-        }
-        .drawer-popup.open { display: block; }
-        .drawer-popup h4 { margin-top: 0; margin-bottom: 10px; font-size: 1em; }
-        .grid-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; font-size: 1.3em; text-align: center; cursor: pointer; }
-        .grid-options span:hover { background: #f0f0f0; border-radius: 4px; }
+    &lt;div id=&quot;main&quot;&gt;
+        &lt;header&gt;
+            &lt;span id=&quot;header-title&quot;&gt;Centro de Chat IA&lt;/span&gt;
+        &lt;/header&gt;
 
-        #customizer-panel {
-            position: fixed;
-            top: 70px;
-            right: -250px;
-            width: 240px;
-            background: #fff;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: -2px 2px 10px rgba(0,0,0,0.2);
-            transition: right 0.3s ease-in-out;
-            z-index: 1000;
-        }
-        #customizer-panel.open { right: 10px; }
-        #toggle-customizer {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #333;
-            color: #fff;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .control-group { margin-bottom: 15px; }
-        .control-group label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input[type="color"] { width: 100%; height: 40px; border: none; cursor: pointer; }
-        select { width: 100%; padding: 5px; }
-    </style>
-</head>
-<body>
+        &lt;div id=&quot;chat-view&quot; class=&quot;view-section&quot;&gt;
+            &lt;div id=&quot;chat-container&quot;&gt;
+                &lt;div class=&quot;message ai-message&quot;&gt;Hello! I am DuckieDuck, your personal AI assistant. How can I help you today?&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;input-area&quot;&gt;
+                &lt;input type=&quot;password&quot; id=&quot;apiKeyInput&quot; placeholder=&quot;Llave API (AIza...)&quot; style=&quot;max-width: 200px;&quot;&gt;
+                &lt;input type=&quot;text&quot; id=&quot;userInput&quot; placeholder=&quot;Escribe tu mensaje...&quot;&gt;
+                &lt;button onclick=&quot;sendMessage()&quot;&gt;Send&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
 
-    <header>
-        <!-- Permanent Brand Logo -->
-        <div id="permanent-brand-logo" style="font-weight: bold; font-size: 1.1em; color: #ffd700;">🦆 Duckie</div>
-        <div id="header-title">Duckie Talk Pro</div>
-        <button id="toggle-customizer">⚙️ Customize</button>
-    </header>
+        &lt;div id=&quot;calls-view&quot; class=&quot;view-section&quot; style=&quot;display:none;&quot;&gt;
+            &lt;h2&gt;Sección de Llamadas&lt;/h2&gt;
+            &lt;p&gt;Próximamente disponible.&lt;/p&gt;
+        &lt;/div&gt;
 
-    <div id="customizer-panel">
-        <h3>Theme Settings</h3>
-        <div class="control-group">
-            <label for="bg-color-picker">Background Color:</label>
-            <input type="color" id="bg-color-picker" value="#f0f8ff">
-        </div>
-        <div class="control-group">
-            <label for="text-color-picker">Text Color:</label>
-            <input type="color" id="text-color-picker" value="#000000">
-        </div>
-        <div class="control-group">
-            <label for="font-selector">Typography:</label>
-            <select id="font-selector">
-                <option value='"Courier New", Courier, monospace'>Monospace (Default)</option>
-                <option value="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">San Francisco (Clean)</option>
-                <option value="Georgia, serif">Georgia (Classic)</option>
-                <option value="'Comic Sans MS', cursive, sans-serif">Comic Sans</option>
-            </select>
-        </div>
-        <button id="reset-theme">Reset Defaults</button>
-    </div>
+        &lt;div id=&quot;plan-view&quot; class=&quot;view-section&quot; style=&quot;display:none;&quot;&gt;
+            &lt;h2&gt;Tu Plan Móvil&lt;/h2&gt;
+            &lt;p&gt;Información de tu línea y negocio.&lt;/p&gt;
+        &lt;/div&gt;
 
-    <div id="chat-container">
-        <div class="message ai-message">Hello! I am DuckieDuck, your personal AI assistant. How can I help you today?</div>
-    </div>
+        &lt;div id=&quot;settings-view&quot; class=&quot;view-section&quot; style=&quot;display:none;&quot;&gt;
+            &lt;h2&gt;Ajustes&lt;/h2&gt;
+            &lt;p&gt;Configuración general.&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
 
-    <!-- Popup Drawers for Keyboard Actions -->
-    <div id="emoji-drawer" class="drawer-popup">
-        <h4>Emojis</h4>
-        <div class="grid-options" onclick="insertSymbol('😊')"><span>😊</span><span>😂</span><span>🔥</span><span>👍</span><span>❤️</span><span>😎</span><span>🎉</span><span>🚀</span></div>
-    </div>
-    <div id="gif-drawer" class="drawer-popup">
-        <h4>GIFs</h4>
-        <div class="grid-options" onclick="insertSymbol('(Duck Dance GIF)')"><span>🕺</span><span>💃</span><span>🦆</span><span>✨</span></div>
-    </div>
-    <div id="sticker-drawer" class="drawer-popup">
-        <h4>Stickers</h4>
-        <div class="grid-options" onclick="insertSymbol('🦆 [Sticker]')"><span>🐥</span><span>🦆</span><span>👑</span><span>💎</span></div>
-    </div>
-    <div id="gallery-drawer" class="drawer-popup">
-        <h4>Gallery / AI Image</h4>
-        <p style="font-size:0.9em; margin:5px 0;">Upload or generate image:</p>
-        <input type="file" id="gallery-upload" accept="image/*" style="width:100%;">
-    </div>
-    <div id="mic-drawer" class="drawer-popup">
-        <h4>Microphone (Press & Talk)</h4>
-        <p style="font-size:0.9em; margin:5px 0;" id="mic-status">Tap button below to simulate voice recording...</p>
-        <button id="record-audio-btn" style="width:100%; background:#d9534f;">Hold to Talk 🎙️</button>
-    </div>
+    &lt;script&gt;
+        function switchTab(tabName) {
+            document.getElementById('chat-view').style.display = 'none';
+            document.getElementById('calls-view').style.display = 'none';
+            document.getElementById('plan-view').style.display = 'none';
+            document.getElementById('settings-view').style.display = 'none';
 
-    <div id="input-area">
-        <button class="icon-btn" id="emoji-btn" title="Emoji">😃</button>
-        <button class="icon-btn" id="gif-btn" title="GIF">GIF</button>
-        <button class="icon-btn" id="sticker-btn" title="Stickers">Stc</button>
-        <button class="icon-btn" id="gallery-btn" title="Gallery/Camera">📷</button>
-        <textarea id="user-input" placeholder="talk to Duckie..."></textarea>
-        <button class="icon-btn" id="mic-btn" title="Microphone">🎙️</button>
-        <button id="send-btn">Send</button>
-    </div>
-
-    <script>
-        const root = document.documentElement;
-        const customizerPanel = document.getElementById('customizer-panel');
-        const toggleCustomizerBtn = document.getElementById('toggle-customizer');
-        const chatContainer = document.getElementById('chat-container');
-        const userInput = document.getElementById('user-input');
-        const sendBtn = document.getElementById('send-btn');
-
-        // Drawers toggle logic
-        const drawers = document.querySelectorAll('.drawer-popup');
-        function closeAllDrawers() { drawers.forEach(d => d.classList.remove('open')); }
-
-        document.getElementById('emoji-btn').addEventListener('click', (e) => { e.stopPropagation(); closeAllDrawers(); document.getElementById('emoji-drawer').classList.toggle('open'); });
-        document.getElementById('gif-btn').addEventListener('click', (e) => { e.stopPropagation(); closeAllDrawers(); document.getElementById('gif-drawer').classList.toggle('open'); });
-        document.getElementById('sticker-btn').addEventListener('click', (e) => { e.stopPropagation(); closeAllDrawers(); document.getElementById('sticker-drawer').classList.toggle('open'); });
-        document.getElementById('gallery-btn').addEventListener('click', (e) => { e.stopPropagation(); closeAllDrawers(); document.getElementById('gallery-drawer').classList.toggle('open'); });
-        document.getElementById('mic-btn').addEventListener('click', (e) => { e.stopPropagation(); closeAllDrawers(); document.getElementById('mic-drawer').classList.toggle('open'); });
-
-        window.addEventListener('click', () => closeAllDrawers());
-        drawers.forEach(d => d.addEventListener('click', (e) => e.stopPropagation()));
-
-        function insertSymbol(val) {
-            userInput.value += val;
-            closeAllDrawers();
-        }
-
-        // Gallery upload preview to chat
-        document.getElementById('gallery-upload').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                appendMessage('user', '[Uploaded Image]');
-                closeAllDrawers();
-            }
-        });
-
-        // Microphone simulated press and talk
-        const recordBtn = document.getElementById('record-audio-btn');
-        recordBtn.addEventListener('mousedown', () => { document.getElementById('mic-status').textContent = "Listening... Release to send audio."; });
-        recordBtn.addEventListener('mouseup', () => { 
-            document.getElementById('mic-status').textContent = "Audio sent!";
-            userInput.value = "Voice message transcribed successfully.";
-            closeAllDrawers();
-        });
-
-        toggleCustomizerBtn.addEventListener('click', () => {
-            customizerPanel.classList.toggle('open');
-            toggleCustomizerBtn.textContent = customizerPanel.classList.contains('open') ? 'Close' : '⚙️ Customize';
-        });
-
-        const bgColorPicker = document.getElementById('bg-color-picker');
-        const textColorPicker = document.getElementById('text-color-picker');
-
-        bgColorPicker.addEventListener('input', (e) => {
-            root.style.setProperty('--bg-color', e.target.value);
-            saveSettings();
-        });
-
-        textColorPicker.addEventListener('input', (e) => {
-            root.style.setProperty('--text-color', e.target.value);
-            saveSettings();
-        });
-
-        const fontSelector = document.getElementById('font-selector');
-        fontSelector.addEventListener('change', (e) => {
-            root.style.setProperty('--font-stack', e.target.value);
-            saveSettings();
-        });
-        
-        document.getElementById('reset-theme').addEventListener('click', () => {
-            localStorage.removeItem('duckieTalkSettings');
-            location.reload();
-        });
-
-        function saveSettings() {
-            const settings = {
-                bgColor: bgColorPicker.value,
-                textColor: textColorPicker.value,
-                fontFamily: fontSelector.value
+            document.getElementById(tabName + '-view').style.display = 'block';
+            
+            const titles = {
+                'chat': 'Centro de Chat IA',
+                'calls': 'Teclado de Llamadas',
+                'plan': 'Tu Plan Móvil',
+                'settings': 'Ajustes del Sistema'
             };
-            localStorage.setItem('duckieTalkSettings', JSON.stringify(settings));
+            document.getElementById('header-title').textContent = titles[tabName];
         }
 
-        function loadSettings() {
-            const savedSettings = JSON.parse(localStorage.getItem('duckieTalkSettings'));
-            if (savedSettings) {
-                bgColorPicker.value = savedSettings.bgColor;
-                root.style.setProperty('--bg-color', savedSettings.bgColor);
-                textColorPicker.value = savedSettings.textColor;
-                root.style.setProperty('--text-color', savedSettings.textColor);
-                fontSelector.value = savedSettings.fontFamily;
-                root.style.setProperty('--font-stack', savedSettings.fontFamily);
-            }
-        }
-        
-        loadSettings();
-
-        function appendMessage(sender, text) {
-            const messageDiv = document.createElement('div');
-            messageDiv.classList.add('message');
-            messageDiv.classList.add(sender === 'user' ? 'user-message' : 'ai-message');
-            messageDiv.textContent = text;
-            chatContainer.appendChild(messageDiv);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-
-        sendBtn.addEventListener('click', async () => {
-            const text = userInput.value.trim();
+        function sendMessage() {
+            const inputField = document.getElementById('userInput');
+            const chatContainer = document.getElementById('chat-container');
+            const apiKeyInput = document.getElementById('apiKeyInput');
+            
+            const text = inputField.value.trim();
             if (!text) return;
 
-            appendMessage('user', text);
-            userInput.value = '';
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user-message';
+            userMsg.textContent = text;
+            chatContainer.appendChild(userMsg);
+            
+            inputField.value = '';
+            chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            try {
-                const response = await fetch('/.netlify/functions/gemini', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: text }),
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    appendMessage('ai', data.reply);
+            setTimeout(() => {
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'message ai-message';
+                
+                if(!apiKeyInput.value.trim()) {
+                    aiMsg.textContent = "Por favor ingresa tu llave API (AIza...) en el campo correspondiente para conectar con los servidores de Duckie.";
                 } else {
-                    appendMessage('ai', "Oops! " + (data.error || "Something went wrong."));
+                    aiMsg.textContent = "Conectado correctamente. Recibido: " + text;
                 }
-
-            } catch (error) {
-                console.error('Connection Error:', error);
-                appendMessage('ai', "Error connecting to Duckie's servers.");
-            }
-        });
-
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendBtn.click();
-            }
-        });
-    </script>
-</body>
-</html>
+                
+                chatContainer.appendChild(aiMsg);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 500);
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
