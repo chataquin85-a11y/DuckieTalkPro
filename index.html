@@ -276,7 +276,7 @@
             userInput.value = '';
 
             try {
-                const response = await fetch('/chat-handler', {
+                const response = await fetch('/.netlify/functions/chat-handler', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ prompt: text }),
