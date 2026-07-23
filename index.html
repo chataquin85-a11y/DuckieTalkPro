@@ -276,7 +276,7 @@
             userInput.value = '';
 
             try {
-                const response = await fetch('/.netlify/functions/chat-handler', {
+                const response = await fetch('/.netlify/functions/gemini', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ prompt: text }),
@@ -287,11 +287,11 @@
                 if (response.ok) {
                     appendMessage('ai', data.reply);
                 } else {
-                    appendMessage('ai', "Oops! I'm having trouble connecting. " + (data.error || ""));
+                    appendMessage('ai', "Oops! " + (data.error || "Something went wrong."));
                 }
 
             } catch (error) {
-                console.error('Error:', error);
+                console.error('Connection Error:', error);
                 appendMessage('ai', "Error connecting to Duckie's servers.");
             }
         });
