@@ -1,58 +1,58 @@
-// netlify/functions/chat-handler.js
-// This is your secure backend function. It reads the key you put in the Netlify vault.
+// chat-handler.js
+// Modernized backend utilizing the @google/genai SDK and GEMINI_API_KEY vault variable.
 
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const { GoogleGenAI } = require("@google/genai");
 
 exports.handler = async (event, context) => {
-    // 1. Security Check: Ensure it's a POST request
+    const headers = {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Content-Type": "application/json"
+    };
+
+    if (event.httpMethod === 'OPTIONS') {
+        return { statusCode: 200, headers, body: '' };
+    }
+
     if (event.httpMethod !== 'POST') {
-        return { statusCode: 405, body: 'Method Not Allowed' };
+        return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method Not Allowed' }) };
     }
 
-    // 2. Parse the user's prompt from the frontend
-    let prompt;
     try {
-        const body = JSON.parse(event.body);
-        prompt = body.prompt;
-    } catch (e) {
-        return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON body' }) };
-    }
+        const body = JSON.parse(event.body || '{}');
+        const prompt = body.prompt;
 
-    if (!prompt) {
-        return { statusCode: 400, body: JSON.stringify({ error: 'Prompt is required' }) };
-    }
+        if (!prompt) {
+            return { statusCode: 400, headers, body: JSON.stringify({ error: 'Prompt is required' }) };
+        }
 
-    // 3. Get the API Key from the Netlify Vault (This is what you set in image_7.png)
-    // Netlify securely injects this when the function runs.
-    const apiKey = process.env.GOOGLE_API_KEY;
+        const apiKey = process.env.GEMINI_API_KEY;
+        if (!apiKey) {
+            return { statusCode: 500, headers, body: JSON.stringify({ error: 'Server configuration error: GEMINI_API_KEY is missing from environment variables.' }) };
+        }
 
-    if (!apiKey) {
-        return { statusCode: 500, body: JSON.stringify({ error: 'Server Configuration Error: API Key not found' }) };
-    }
+        const ai = new GoogleGenAI({ apiKey: apiKey });
 
-    // 4. Initialize Gemini API
-    const genAI = new GoogleGenerativeAI(apiKey);
-    // We are using the recommended gemini-1.5-flash for speed and cost efficiency
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const response = await ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: prompt,
+        });
 
-    // 5. Call the Gemini API (SECURELY)
-    try {
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
+        const text = response.text;
 
-        // 6. Send the response back to your frontend
         return {
             statusCode: 200,
+            headers,
             body: JSON.stringify({ reply: text }),
         };
 
     } catch (error) {
-        console.error("Gemini API Error:", error);
+        console.error("Backend Execution Error:", error);
         return {
             statusCode: 500,
-            // DO NOT expose the actual Google error message to the public
-            body: JSON.stringify({ error: 'Failed to generate AI response.' }),
+            headers,
+            body: JSON.stringify({ error: error.message || 'Failed to generate AI response from DuckieDuck.' }),
         };
     }
 };
