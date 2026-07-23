@@ -79,6 +79,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            position: relative;
         }
         textarea {
             flex: 1;
@@ -101,6 +102,25 @@
         button:hover { background-color: #0056b3; }
         .icon-btn { background: none; color: #555; font-size: 1.2em; padding: 5px; }
         .icon-btn:hover { color: #007bff; }
+
+        /* Popup Drawers for Emoji, GIF, Stickers, Gallery, Mic */
+        .drawer-popup {
+            position: absolute;
+            bottom: 70px;
+            left: 10px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1001;
+            width: 250px;
+        }
+        .drawer-popup.open { display: block; }
+        .drawer-popup h4 { margin-top: 0; margin-bottom: 10px; font-size: 1em; }
+        .grid-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; font-size: 1.3em; text-align: center; cursor: pointer; }
+        .grid-options span:hover { background: #f0f0f0; border-radius: 4px; }
 
         #customizer-panel {
             position: fixed;
@@ -160,7 +180,7 @@
             </select>
         </div>
         <div class="control-group">
-            <label for="logo-upload">Custom Logo:</label>
+            <label for="logo-upload">Custom Logo (Brand):</label>
             <input type="file" id="logo-upload" accept="image/*">
         </div>
         <button id="reset-theme">Reset Defaults</button>
@@ -170,12 +190,37 @@
         <div class="message ai-message">Hello! I am DuckieDuck, your personal AI assistant. How can I help you today?</div>
     </div>
 
+    <!-- Popup Drawers for Keyboard Actions -->
+    <div id="emoji-drawer" class="drawer-popup">
+        <h4>Emojis</h4>
+        <div class="grid-options" onclick="insertSymbol('😊')"><span>😊</span><span>😂</span><span>🔥</span><span>👍</span><span>❤️</span><span>😎</span><span>🎉</span><span>🚀</span></div>
+    </div>
+    <div id="gif-drawer" class="drawer-popup">
+        <h4>GIFs</h4>
+        <div class="grid-options" onclick="insertSymbol('(Duck Dance GIF)')"><span>🕺</span><span>💃</span><span>🦆</span><span>✨</span></div>
+    </div>
+    <div id="sticker-drawer" class="drawer-popup">
+        <h4>Stickers</h4>
+        <div class="grid-options" onclick="insertSymbol('🦆 [Sticker]')"><span>🐥</span><span>🦆</span><span>👑</span><span>💎</span></div>
+    </div>
+    <div id="gallery-drawer" class="drawer-popup">
+        <h4>Gallery / AI Image</h4>
+        <p style="font-size:0.9em; margin:5px 0;">Upload or generate image:</p>
+        <input type="file" id="gallery-upload" accept="image/*" style="width:100%;">
+    </div>
+    <div id="mic-drawer" class="drawer-popup">
+        <h4>Microphone (Press & Talk)</h4>
+        <p style="font-size:0.9em; margin:5px 0;" id="mic-status">Tap button below to simulate voice recording...</p>
+        <button id="record-audio-btn" style="width:100%; background:#d9534f;">Hold to Talk 🎙️</button>
+    </div>
+
     <div id="input-area">
-        <button class="icon-btn" title="Emoji">😃</button>
-        <button class="icon-btn" title="GIF">GIF</button>
-        <button class="icon-btn" title="Stickers">Stc</button>
+        <button class="icon-btn" id="emoji-btn" title="Emoji">😃</button>
+        <button class="icon-btn" id="gif-btn" title="GIF">GIF</button>
+        <button class="icon-btn" id="sticker-btn" title="Stickers">Stc</button>
+        <button class="icon-btn" id="gallery-btn" title="Gallery/Camera">📷</button>
         <textarea id="user-input" placeholder="talk to Duckie..."></textarea>
-        <button class="icon-btn" title="Microphone">🎙️</button>
+        <button class="icon-btn" id="mic-btn" title="Microphone">🎙️</button>
         <button id="send-btn">Send</button>
     </div>
 
@@ -188,6 +233,46 @@
         const sendBtn = document.getElementById('send-btn');
         const logoUpload = document.getElementById('logo-upload');
         const customLogoDisplay = document.getElementById('custom-logo-display');
+
+        // Drawers toggle logic
+        const drawers = document.querySelectorAll('.drawer-popup');
+        function closeAllDrawers() { drawers.forEach(d => d.classList.remove('open')); }
+
+        document.getElementById('emoji-btn').addEventListener('click', (e) => { e.stopPropagation(); closeAllDrawers(); document.getElementById('emoji-drawer').classList.toggle('open'); });
+        document.getElementById('gif-btn').addEventListener('click', (e) => { e.stopPropagation(); closeAllDrawers(); document.getElementById('gif-drawer').classList.toggle('open'); });
+        document.getElementById('sticker-btn').addEventListener('click', (e) => { e.stopPropagation(); closeAllDrawers(); document.getElementById('sticker-drawer').classList.toggle('open'); });
+        document.getElementById('gallery-btn').addEventListener('click', (e) => { e.stopPropagation(); closeAllDrawers(); document.getElementById('gallery-drawer').classList.toggle('open'); });
+        document.getElementById('mic-btn').addEventListener('click', (e) => { e.stopPropagation(); closeAllDrawers(); document.getElementById('mic-drawer').classList.toggle('open'); });
+
+        window.addEventListener('click', () => closeAllDrawers());
+        drawers.forEach(d => d.addEventListener('click', (e) => e.stopPropagation()));
+
+        function insertSymbol(val) {
+            userInput.value += val;
+            closeAllDrawers();
+        }
+
+        // Gallery upload preview to chat
+        document.getElementById('gallery-upload').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    appendMessage('user', '[Uploaded Image]');
+                    closeAllDrawers();
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Microphone simulated press and talk
+        const recordBtn = document.getElementById('record-audio-btn');
+        recordBtn.addEventListener('mousedown', () => { document.getElementById('mic-status').textContent = "Listening... Release to send audio."; });
+        recordBtn.addEventListener('mouseup', () => { 
+            document.getElementById('mic-status').textContent = "Audio sent!";
+            userInput.value = "Voice message transcribed successfully.";
+            closeAllDrawers();
+        });
 
         toggleCustomizerBtn.addEventListener('click', () => {
             customizerPanel.classList.toggle('open');
