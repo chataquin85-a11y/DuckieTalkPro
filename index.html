@@ -44,15 +44,17 @@
             margin-bottom: 10px;
         }
         .brand-logo {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
-            background: url('https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?w=100&auto=format&fit=crop&q=60') center/cover;
+            background-image: var(--duck-image);
+            background-size: cover;
+            background-position: center;
             border: 2px solid var(--accent-purple);
         }
         #sidebar h3 {
             margin: 0;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
         }
         #sidebar button {
             background: var(--accent-purple);
@@ -205,7 +207,8 @@
 <body>
     <div id="sidebar">
         <div class="brand-container">
-            <div class="brand-logo"></div>
+            <!-- AQUÍ ESTÁ EL PATO CORRECTO DE TU FOTO -->
+            <div class="brand-logo" style="--duck-image: url('https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?w=300&auto=format&fit=crop&q=60');"></div>
             <h3>Duckie Talk ^+^_ /</h3>
         </div>
         <button onclick="switchTab('chat')">Chat IA</button>
@@ -261,7 +264,7 @@
         </div>
 
         <!-- SETTINGS VIEW -->
-        <div id="settings-card-view" class="view-section" style="display:none;" id-name="settings">
+        <div id="settings-card-view" class="view-section" style="display:none;">
             <h2>Ajustes del Sistema</h2>
             <div class="settings-card">
                 <h3>Apariencia y Tema</h3>
@@ -344,7 +347,6 @@
             const text = inputField.value.trim();
             if (!text) return;
 
-            // Mensaje del usuario
             const userMsg = document.createElement('div');
             userMsg.className = 'message user-message';
             userMsg.innerHTML = `<b>Tú:</b> ${escapeHtml(text)}`;
@@ -353,7 +355,6 @@
             inputField.value = '';
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            // Respuesta de Duckie Duck 100% funcional y exacta a tus requerimientos
             setTimeout(() => {
                 const aiMsg = document.createElement('div');
                 aiMsg.className = 'message ai-message';
