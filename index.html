@@ -211,7 +211,7 @@
 
     <div class="sidebar">
         <div class="sidebar-header">
-            <img src="https://images.unsplash.com/photo-1559827291-72ee739d0d9a?w=150" alt="Duckie Logo">
+            <img src="IMG_0948.png" alt="Duckie Logo">
             <h3 id="sidebar-title">Duckie Talk Pro</h3>
         </div>
         <button onclick="switchTab('chat')">💬 Centro de Chat IA</button>
@@ -228,7 +228,7 @@
         </div>
 
         <div id="chat-view" class="chat-container" style="display: flex;">
-            <div class="message ai-message"><b>Duckie:</b> ¡Hola! Todo listo en tu aplicación independiente con IA integrada. ¿En qué te ayudo hoy? (e.g., consultas, asistencia general)</div>
+            <div class="message ai-message"><b>Duckie:</b> ¡Hola! Todo listo en tu aplicación independiente con IA integrada. ¿En qué te ayudo hoy?</div>
         </div>
 
         <div id="calls-view" class="chat-container" style="display: none;">
@@ -243,7 +243,7 @@
             <div class="settings-panel">
                 <div class="setting-group">
                     <h4>API Settings</h4>
-                    <label>Cambiar clave / Configurar API Key (e.g., ingresa tu clave privada):</label>
+                    <label>Configurar clave API:</label>
                     <input type="text" id="apiKeyInput" placeholder="Pega tu clave aquí...">
                 </div>
                 <div class="setting-group">
@@ -256,21 +256,17 @@
                         <option value="#f43f5e">Rosa Fucsia</option>
                     </select>
                 </div>
-                <div class="setting-group">
-                    <h4>Typography & Media</h4>
-                    <label>Gestionar galería y archivos cargados en el sistema.</label>
-                </div>
             </div>
         </div>
 
         <div id="docs-view" class="chat-container" style="display: none;">
-            <div class="message ai-message"><b>Duckie:</b> Documentación, galería de imágenes y elementos multimedia cargados.</div>
+            <div class="message ai-message"><b>Duckie:</b> Documentación, galería de imágenes y elementos multimedia.</div>
         </div>
 
         <div id="security-view" class="chat-container" style="display: none;">
-            <div class="message ai-message"><b>Duckie:</b> Estado de seguridad y protección de API Key activo.
+            <div class="message ai-message"><b>Duckie:</b> Estado de seguridad y protección activo.
                 <div class="link-box">
-                    Puedes ver y probar tu aplicación publicada en tu dominio oficial (e.g., https://duckiethemus.com):<br><br>
+                    Puedes ver y probar tu aplicación en tu dominio oficial:<br><br>
                     🔗 <a href="https://duckiethemus.com" target="_blank">https://duckiethemus.com</a>
                 </div>
             </div>
@@ -283,9 +279,8 @@
     </div>
 
     <script>
-        // Configuración de la API y referencia e.g. para ejemplos de configuración
         const parte1 = "AQ.Ab8"; 
-        const parte2 = "RN6KBfs7zsEySzfSy403oJWJfyAFhBke-ohrq2Z06c42B1A"; 
+        const parte2 = "X_AQUÍ_EL_RESTO_DE_TU_CLAVE"; 
         const API_KEY = parte1 + parte2;
 
         function switchTab(tabName) {
