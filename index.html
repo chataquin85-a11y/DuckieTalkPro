@@ -262,7 +262,7 @@
         </div>
 
         <!-- SETTINGS VIEW -->
-        <div id="settings-card-view" class="view-section" style="display:none;">
+        <div id="settings-view" class="view-section" style="display:none;">
             <h2>Ajustes del Sistema</h2>
             <div class="settings-card">
                 <h3>Apariencia y Tema</h3>
@@ -304,18 +304,17 @@
     </div>
 
     <script>
-        // Pega tu AQ Key real aquí abajo entre las comillas
         const API_KEY = "TU_AQ_KEY_AQUÍ";
 
         function switchTab(tabName) {
-            const views = ['chat', 'calls', 'plan', 'settings-card', 'docs', 'security'];
+            const views = ['chat', 'calls', 'plan', 'settings', 'docs', 'security'];
             views.forEach(v => {
                 const el = document.getElementById(v + '-view');
                 if(el) el.style.display = 'none';
             });
 
-            let target = tabName === 'settings' ? 'settings-card' : tabName;
-            document.getElementById(target + '-view').style.display = 'flex';
+            const targetEl = document.getElementById(tabName + '-view');
+            if(targetEl) targetEl.style.display = 'flex';
             
             const titles = {
                 'chat': 'Centro de Chat IA',
@@ -355,7 +354,7 @@
             inputField.value = '';
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            if(!API_KEY || API_KEY === "AQ.Ab8RN6J1Fl-ABqv7zDSJP5zZLErzg1S3CDDlVyAGaLs7X7Ja3w" {
+            if(!API_KEY || API_KEY === "TU_AQ_KEY_AQUÍ") {
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'message ai-message';
                 errorMsg.innerHTML = "<b>Duckie:</b> Por favor configura tu AQ Key dentro del código fuente.";
