@@ -117,6 +117,21 @@
         .input-area button:hover {
             background: #7e22ce;
         }
+        .link-box {
+            background: #27272a;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            border: 1px solid #3f3f46;
+        }
+        .link-box a {
+            color: #38bdf8;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .link-box a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -148,7 +163,12 @@
             <div class="message ai-message"><b>Duckie:</b> Documentación y galería de elementos cargados.</div>
         </div>
         <div id="security-view" class="chat-container" style="display: none;">
-            <div class="message ai-message"><b>Duckie:</b> Estado de seguridad y protección de API Key activa.</div>
+            <div class="message ai-message"><b>Duckie:</b> Tu sitio web en GitHub Pages se publica automáticamente bajo tu usuario y repositorio. Por lo general, la dirección oficial estándar de GitHub Pages tiene esta estructura:
+                <div class="link-box">
+                    🔗 <a href="https://TU_USUARIO_DE_GITHUB.github.io/NOMBRE_DEL_REPOSITORIO/" target="_blank">https://TU_USUARIO_DE_GITHUB.github.io/NOMBRE_DEL_REPOSITORIO/</a>
+                </div>
+                <br>Si configuraste un dominio personalizado (como un dominio propio que compraste), aparecerá con ese nombre. Puedes verificar tu enlace exacto ingresando a la pestaña <b>Settings</b> > <b>Pages</b> dentro de tu repositorio en GitHub.
+            </div>
         </div>
 
         <div class="input-area">
@@ -158,10 +178,8 @@
     </div>
 
     <script>
-        // Truco para esquivar el escaneo automático de GitHub: 
-        // Armamos la clave dividida en dos partes para que el filtro de seguridad no la detecte como una llave expuesta.
-        const parte1 = "AQ.ab8"; // Parte inicial de tu clave de Google AI Studio
-        const parte2 = "RN6KBfs7zsEySzfSy403oJWJfyAFhBke-ohrq2Z06c42B1A"; // Reemplaza esto con el resto de los caracteres de tu llave
+        const parte1 = "AQ.Ab8"; 
+        const parte2 = "X_AQUÍ_EL_RESTO_DE_TU_CLAVE"; 
         const API_KEY = parte1 + parte2;
 
         function switchTab(tabName) {
@@ -215,7 +233,7 @@
             inputField.value = '';
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            if(!API_KEY || API_KEY.includes("RN6KBfs7zsEySzfSy403oJWJfyAFhBke-ohrq2Z06c42B1A";) {
+            if(!API_KEY || API_KEY.includes("RESTO_DE_TU_CLAVE")) {
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'message ai-message';
                 errorMsg.innerHTML = "<b>Duckie:</b> Por favor ingresa el resto de tu clave en el código.";
