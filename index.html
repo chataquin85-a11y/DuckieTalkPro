@@ -47,7 +47,7 @@
             width: 45px;
             height: 45px;
             border-radius: 50%;
-            background-image: var(--duck-image);
+            background-image: url('https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?w=300&auto=format&fit=crop&q=60');
             background-size: cover;
             background-position: center;
             border: 2px solid var(--accent-purple);
@@ -207,7 +207,7 @@
 <body>
     <div id="sidebar">
         <div class="brand-container">
-            <div class="brand-logo" style="--duck-image: url('https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?w=300&auto=format&fit=crop&q=60');"></div>
+            <div class="brand-logo"></div>
             <h3>Duckie Talk ^+^_ /</h3>
         </div>
         <button onclick="switchTab('chat')">Chat IA</button>
@@ -304,7 +304,7 @@
     </div>
 
     <script>
-        // AQ Key integrada de forma interna
+        // Ingresa tu AQ Key aquí abajo entre las comillas
         const API_KEY = "TU_AQ_KEY_AQUÍ";
 
         function switchTab(tabName) {
@@ -355,7 +355,7 @@
             inputField.value = '';
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            if(!API_KEY || API_KEY === "AQ.Ab8RN6KMjnUaATnhNZjcLODt5hPnhiMalIho3B7gtjrLMlWJMg") {
+            if(!API_KEY || API_KEY === "TU_AQ_KEY_AQUÍ") {
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'message ai-message';
                 errorMsg.innerHTML = "<b>Duckie:</b> Por favor configura tu AQ Key dentro del código fuente.";
