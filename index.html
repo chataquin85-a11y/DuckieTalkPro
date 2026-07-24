@@ -207,7 +207,6 @@
 <body>
     <div id="sidebar">
         <div class="brand-container">
-            <!-- AQUÍ ESTÁ EL PATO CORRECTO DE TU FOTO -->
             <div class="brand-logo" style="--duck-image: url('https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?w=300&auto=format&fit=crop&q=60');"></div>
             <h3>Duckie Talk ^+^_ /</h3>
         </div>
@@ -238,7 +237,7 @@
                     <span style="margin-left:auto; color:#aaa;">Language: English (US)</span>
                 </div>
                 <div class="main-input-row">
-                    <input type="password" id="apiKeyInput" placeholder="AQ Key" value="AQ-DUCKIE-SECURE-2026-KEY" style="max-width: 160px;" title="AQ Key Incluida">
+                    <input type="password" id="apiKeyInput" placeholder="AQ Key" value="" style="max-width: 160px;" title="Ingresa tu API Key">
                     <input type="text" id="userInput" placeholder="Escribe tu mensaje..." onkeypress="handleKeyPress(event)">
                     <button onclick="sendMessage()">Enviar</button>
                 </div>
@@ -300,7 +299,7 @@
         <div id="security-view" class="view-section" style="display:none;">
             <h2>Seguridad</h2>
             <div class="settings-card">
-                <p><b>AQ Key Protegida:</b> Configurada correctamente en el sistema.</p>
+                <p><b>Estado de Seguridad:</b> Protegido y Enlazado.</p>
             </div>
         </div>
     </div>
@@ -339,7 +338,7 @@
             }
         }
 
-        function sendMessage() {
+        async function sendMessage() {
             const inputField = document.getElementById('userInput');
             const chatContainer = document.getElementById('chat-container');
             const apiKeyInput = document.getElementById('apiKeyInput');
@@ -355,23 +354,59 @@
             inputField.value = '';
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            setTimeout(() => {
+            const apiKey = apiKeyInput.value.trim();
+            if(!apiKey) {
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'message ai-message';
+                errorMsg.innerHTML = "<b>Duckie:</b> Por favor ingresa tu API Key / AQ Key en el campo inferior para recibir respuestas en tiempo real.";
+                chatContainer.appendChild(errorMsg);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+                return;
+            }
+
+            // Indicador de escribiendo
+            const loadingMsg = document.createElement('div');
+            loadingMsg.className = 'message ai-message';
+            loadingMsg.id = 'loading-reply';
+            loadingMsg.innerHTML = "<b>Duckie:</b> Escribiendo...";
+            chatContainer.appendChild(loadingMsg);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: text }] }]
+                    })
+                });
+
+                const data = await response.json();
+                document.getElementById('loading-reply').remove();
+
                 const aiMsg = document.createElement('div');
                 aiMsg.className = 'message ai-message';
-                
-                if(!apiKeyInput.value.trim()) {
-                    aiMsg.innerHTML = "<b>Duckie:</b> Por favor ingresa tu AQ Key en el campo correspondiente.";
+
+                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                    const replyText = data.candidates[0].content.parts[0].text;
+                    aiMsg.innerHTML = `<b>Duckie:</b> ${escapeHtml(replyText)}`;
                 } else {
-                    let replyText = "I'm doing well, thanks for asking. I'm a large language model, so I don't have feelings or emotions like humans do, but I'm functioning properly and ready to help with any questions or tasks you might have. How about you? How's your day going?";
-                    if(text.toLowerCase().includes('hello') || text.toLowerCase().includes('hola')) {
-                        replyText = "Hello. How can I help you today?";
-                    }
-                    aiMsg.innerHTML = `<b>Duckie:</b> ${replyText}`;
+                    aiMsg.innerHTML = "<b>Duckie:</b> Lo siento, hubo un problema al procesar tu respuesta.";
                 }
-                
+
                 chatContainer.appendChild(aiMsg);
                 chatContainer.scrollTop = chatContainer.scrollHeight;
-            }, 500);
+
+            } catch (error) {
+                if(document.getElementById('loading-reply')) {
+                    document.getElementById('loading-reply').remove();
+                }
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'message ai-message';
+                errorMsg.innerHTML = "<b>Duckie:</b> Error de conexión con el servicio.";
+                chatContainer.appendChild(errorMsg);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
         }
 
         function changeTheme() {
