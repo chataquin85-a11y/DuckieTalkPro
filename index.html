@@ -3,308 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duckie Talk ^+^_ /</title>
+    <title>Duckie Talk Pro</title>
     <style>
-        :root {
-            --bg-color: #1a1a1a;
-            --sidebar-color: #222222;
-            --header-color: #2a2a2a;
-            --text-color: #ffffff;
-            --accent-purple: #7b1fa2;
-            --accent-purple-hover: #8e24aa;
-            --chat-bg: #262626;
-            --chat-bubble-user: #4a148c;
-            --chat-bubble-ai: #333333;
-            --input-bg: #333333;
-            --input-border: #444444;
-        }
-        body {
-            font-family: 'Courier New', Courier, monospace;
-            color: var(--text-color);
-            background-color: var(--bg-color);
-            display: flex;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-        }
-        #sidebar {
-            width: 260px;
-            background: var(--sidebar-color);
-            color: white;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            border-right: 1px solid #333;
-        }
-        .brand-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        .brand-logo {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background-image: url('https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?w=300&auto=format&fit=crop&q=60');
-            background-size: cover;
-            background-position: center;
-            border: 2px solid var(--accent-purple);
-        }
-        #sidebar h3 {
-            margin: 0;
-            font-size: 1.05rem;
-        }
-        #sidebar button {
-            background: var(--accent-purple);
-            color: white;
-            border: none;
-            padding: 12px 15px;
-            text-align: left;
-            cursor: pointer;
-            border-radius: 8px;
-            font-weight: bold;
-            transition: background 0.2s;
-        }
-        #sidebar button:hover {
-            background: var(--accent-purple-hover);
-        }
-        #main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background-color: var(--bg-color);
-            overflow: hidden;
-        }
-        header {
-            background: var(--header-color);
-            color: white;
-            padding: 15px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #333;
-            height: 60px;
-        }
-        .view-section {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            overflow-y: auto;
-            max-width: 900px;
-            margin: 0 auto;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        #chat-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            background: var(--chat-bg);
-            border-radius: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #3a3a3a;
-        }
-        .message {
-            padding: 12px 18px;
-            border-radius: 10px;
-            max-width: 80%;
-            word-wrap: break-word;
-            line-height: 1.4;
-        }
-        .user-message {
-            background-color: var(--chat-bubble-user);
-            align-self: flex-end;
-            color: #fff;
-        }
-        .ai-message {
-            background-color: var(--chat-bubble-ai);
-            align-self: flex-start;
-            color: #e0e0e0;
-            border-left: 4px solid var(--accent-purple);
-        }
-        .input-area {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            background: var(--header-color);
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid #3a3a3a;
-        }
-        .toolbar {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            font-size: 0.9rem;
-        }
-        .toolbar button {
-            background: #333;
-            color: #fff;
-            border: 1px solid #444;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .toolbar button:hover {
-            background: var(--accent-purple);
-        }
-        .main-input-row {
-            display: flex;
-            gap: 10px;
-        }
-        .main-input-row input {
-            flex: 1;
-            padding: 12px;
-            border: 1px solid var(--input-border);
-            background: var(--input-bg);
-            color: white;
-            border-radius: 8px;
-            font-family: inherit;
-        }
-        .main-input-row button {
-            padding: 12px 25px;
-            background: var(--accent-purple);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .main-input-row button:hover {
-            background: var(--accent-purple-hover);
-        }
-        .settings-card {
-            background: var(--chat-bg);
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #3a3a3a;
-            margin-bottom: 15px;
-        }
-        .settings-card h3 {
-            margin-top: 0;
-            color: var(--accent-purple-hover);
-        }
-        .settings-card label {
-            display: block;
-            margin: 10px 0 5px;
-        }
-        .settings-card select, .settings-card input {
-            width: 100%;
-            padding: 10px;
-            background: var(--input-bg);
-            border: 1px solid var(--input-border);
-            color: white;
-            border-radius: 6px;
-        }
+        body { background-color: #121212; color: #ffffff; font-family: sans-serif; margin: 0; display: flex; height: 100vh; }
+        .sidebar { width: 250px; background: #1e1e1e; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .sidebar button { background: #6b21a8; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; text-align: left; font-size: 14px; }
+        .sidebar button:hover { background: #7e22ce; }
+        .main-content { flex: 1; display: flex; flex-direction: column; padding: 20px; }
+        .chat-container { flex: 1; background: #1a1a1a; border-radius: 12px; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; margin-bottom: 15px; border: 1px solid #333; }
+        .message { padding: 10px 15px; border-radius: 8px; max-width: 75%; line-height: 1.4; }
+        .user-message { background: #6b21a8; align-self: flex-end; }
+        .ai-message { background: #2a2a2a; align-self: flex-start; border: 1px solid #444; }
+        .input-area { display: flex; gap: 10px; }
+        .input-area input { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #1e1e1e; color: white; font-size: 14px; }
+        .input-area button { background: #9333ea; color: white; border: none; padding: 0 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div id="sidebar">
-        <div class="brand-container">
-            <div class="brand-logo"></div>
-            <h3>Duckie Talk ^+^_ /</h3>
-        </div>
-        <button onclick="switchTab('chat')">Chat IA</button>
-        <button onclick="switchTab('calls')">Llamadas</button>
+
+    <div class="sidebar">
+        <h3 id="header-title">Duckie Talk Pro</h3>
+        <button onclick="switchTab('chat')">Centro de Chat IA</button>
+        <button onclick="switchTab('calls')">Llamadas y Video Llamadas</button>
         <button onclick="switchTab('plan')">Tu Plan Móvil</button>
         <button onclick="switchTab('settings')">Ajustes</button>
         <button onclick="switchTab('docs')">Docs & Media</button>
         <button onclick="switchTab('security')">Seguridad</button>
     </div>
 
-    <div id="main">
-        <header>
-            <span id="header-title">Centro de Chat IA</span>
-            <span style="font-size: 0.85rem; color: #aaa;">Status: Online (duckiethemus.com)</span>
-        </header>
-
-        <!-- CHAT VIEW -->
-        <div id="chat-view" class="view-section">
-            <div id="chat-container">
-                <div class="message ai-message"><b>Duckie:</b> Hello. How can I help you today?</div>
-            </div>
-            <div class="input-area">
-                <div class="toolbar">
-                    <button onclick="insertText('😊 ')">Emoji</button>
-                    <button onclick="insertText('📷 ')">Gallery/Pics</button>
-                    <button onclick="insertText('🎤 ')">Microphone</button>
-                    <span style="margin-left:auto; color:#aaa;">Language: English (US)</span>
-                </div>
-                <div class="main-input-row">
-                    <input type="text" id="userInput" placeholder="Escribe tu mensaje..." onkeypress="handleKeyPress(event)">
-                    <button onclick="sendMessage()">Enviar</button>
-                </div>
-            </div>
+    <div class="main-content">
+        <div id="chat-view" class="chat-container" style="display: flex;">
+            <div class="message ai-message"><b>Duckie:</b> ¡Hola! ¿En qué te puedo ayudar hoy desde tu aplicación?</div>
+        </div>
+        <div id="calls-view" class="chat-container" style="display: none;">
+            <div class="message ai-message"><b>Duckie:</b> Panel de llamadas y videollamadas.</div>
+        </div>
+        <div id="plan-view" class="chat-container" style="display: none;">
+            <div class="message ai-message"><b>Duckie:</b> Información de tu plan móvil.</div>
+        </div>
+        <div id="settings-view" class="chat-container" style="display: none;">
+            <div class="message ai-message"><b>Duckie:</b> Ajustes del sistema y configuración.</div>
+        </div>
+        <div id="docs-view" class="chat-container" style="display: none;">
+            <div class="message ai-message"><b>Duckie:</b> Documentación y galería de imágenes (01, 02, 03 cargadas).</div>
+        </div>
+        <div id="security-view" class="chat-container" style="display: none;">
+            <div class="message ai-message"><b>Duckie:</b> Estado de seguridad y protección de API Key.</div>
         </div>
 
-        <!-- CALLS VIEW -->
-        <div id="calls-view" class="view-section" style="display:none;">
-            <h2>Llamadas y Video Llamadas</h2>
-            <div class="settings-card">
-                <p>Realiza llamadas de voz y video con tu red configurada.</p>
-                <button onclick="alert('Iniciando llamada de prueba...')">Iniciar Llamada</button>
-            </div>
-        </div>
-
-        <!-- PLAN VIEW -->
-        <div id="plan-view" class="view-section" style="display:none;">
-            <h2>Tu Plan Móvil y Negocio</h2>
-            <div class="settings-card">
-                <p><b>Estado de Línea:</b> Activa y Enlazada</p>
-                <p><b>Dominio:</b> <a href="https://www.duckiethemus.com" target="_blank" style="color: #ba68c8;">https://www.duckiethemus.com</a></p>
-            </div>
-        </div>
-
-        <!-- SETTINGS VIEW -->
-        <div id="settings-view" class="view-section" style="display:none;">
-            <h2>Ajustes del Sistema</h2>
-            <div class="settings-card">
-                <h3>Apariencia y Tema</h3>
-                <label>Color de Fondo / Tema:</label>
-                <select id="themeSelector" onchange="changeTheme()">
-                    <option value="dark">Dark (Por defecto)</option>
-                    <option value="purple">Morado Custom</option>
-                    <option value="light">Light</option>
-                </select>
-
-                <label>Tipografía:</label>
-                <select id="fontSelector" onchange="changeFont()">
-                    <option value="Courier New">Courier New (Default)</option>
-                    <option value="Comic Sans MS">Comic Sans</option>
-                    <option value="Arial">Clean / Classic</option>
-                </select>
-            </div>
-            <div class="settings-card">
-                <h3>Información de la App</h3>
-                <p>Duckie Talk Pro v2.5 - Marca Registrada</p>
-            </div>
-        </div>
-
-        <!-- DOCS VIEW -->
-        <div id="docs-view" class="view-section" style="display:none;">
-            <h2>Docs & Media</h2>
-            <div class="settings-card">
-                <p>Administra tus imágenes, GIFs, stickers y archivos multimedia.</p>
-            </div>
-        </div>
-
-        <!-- SECURITY VIEW -->
-        <div id="security-view" class="view-section" style="display:none;">
-            <h2>Seguridad</h2>
-            <div class="settings-card">
-                <p><b>Estado de Seguridad:</b> Protegido y Enlazado.</p>
-            </div>
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Escribe un mensaje..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">Enviar</button>
         </div>
     </div>
 
     <script>
-        const API_KEY ="AQ.Ab8RN6IQtf5aH3L9rFiyd7o7CUHEtw3cVfHd0kbNITUNbbJqIA";
+        const API_KEY = "PEGAR_TU_CLAVE_AQUI";
 
         function switchTab(tabName) {
             const views = ['chat', 'calls', 'plan', 'settings', 'docs', 'security'];
@@ -327,12 +81,6 @@
             document.getElementById('header-title').textContent = titles[tabName] || 'Duckie Talk Pro';
         }
 
-        function insertText(text) {
-            const input = document.getElementById('userInput');
-            input.value += text;
-            input.focus();
-        }
-
         function handleKeyPress(e) {
             if (e.key === 'Enter') {
                 sendMessage();
@@ -341,7 +89,7 @@
 
         async function sendMessage() {
             const inputField = document.getElementById('userInput');
-            const chatContainer = document.getElementById('chat-container');
+            const chatContainer = document.getElementById('chat-view');
             
             const text = inputField.value.trim();
             if (!text) return;
@@ -354,10 +102,10 @@
             inputField.value = '';
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            if(!API_KEY || API_KEY ==="AQ.Ab8RN6IQtf5aH3L9rFiyd7o7CUHEtw3cVfHd0kbNITUNbbJqIA";) {
+            if(!API_KEY || API_KEY === "PEGAR_TU_CLAVE_AQUI") {
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'message ai-message';
-                errorMsg.innerHTML = "<b>Duckie:</b> Por favor configura tu AQ Key dentro del código fuente.";
+                errorMsg.innerHTML = "<b>Duckie:</b> Por favor configura tu API Key de forma segura.";
                 chatContainer.appendChild(errorMsg);
                 chatContainer.scrollTop = chatContainer.scrollHeight;
                 return;
@@ -380,7 +128,9 @@
                 });
 
                 const data = await response.json();
-                document.getElementById('loading-reply').remove();
+                if(document.getElementById('loading-reply')) {
+                    document.getElementById('loading-reply').remove();
+                }
 
                 const aiMsg = document.createElement('div');
                 aiMsg.className = 'message ai-message';
@@ -405,33 +155,6 @@
                 chatContainer.appendChild(errorMsg);
                 chatContainer.scrollTop = chatContainer.scrollHeight;
             }
-        }
-
-        function changeTheme() {
-            const theme = document.getElementById('themeSelector').value;
-            if(theme === 'purple') {
-                document.documentElement.style.setProperty('--bg-color', '#2d1b4e');
-                document.documentElement.style.setProperty('--sidebar-color', '#381c5d');
-                document.documentElement.style.setProperty('--header-color', '#4a2375');
-                document.documentElement.style.setProperty('--chat-bg', '#351857');
-            } else if(theme === 'light') {
-                document.documentElement.style.setProperty('--bg-color', '#f4f4f4');
-                document.documentElement.style.setProperty('--sidebar-color', '#e2e2e2');
-                document.documentElement.style.setProperty('--header-color', '#ffffff');
-                document.documentElement.style.setProperty('--text-color', '#000000');
-                document.documentElement.style.setProperty('--chat-bg', '#ffffff');
-            } else {
-                document.documentElement.style.setProperty('--bg-color', '#1a1a1a');
-                document.documentElement.style.setProperty('--sidebar-color', '#222222');
-                document.documentElement.style.setProperty('--header-color', '#2a2a2a');
-                document.documentElement.style.setProperty('--text-color', '#ffffff');
-                document.documentElement.style.setProperty('--chat-bg', '#262626');
-            }
-        }
-
-        function changeFont() {
-            const font = document.getElementById('fontSelector').value;
-            document.body.style.fontFamily = font;
         }
 
         function escapeHtml(string) {
