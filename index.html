@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daki Jack Pro</title>
+    <title>Daki Jack Pro - Asistente Personal</title>
     <style>
         :root {
             --primary-color: #2563eb;
@@ -26,22 +26,21 @@
         }
         .app-container {
             background: var(--card-bg);
-            padding: 40px;
+            padding: 30px;
             border-radius: 12px;
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            max-width: 700px;
+            max-width: 650px;
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+            max-height: 700px;
         }
         h1 {
             color: var(--primary-color);
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             margin-top: 0;
-        }
-        h2 {
-            font-size: 1.2rem;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 8px;
-            margin-top: 24px;
+            margin-bottom: 5px;
         }
         .status-badge {
             display: inline-block;
@@ -49,48 +48,132 @@
             color: #166534;
             padding: 4px 12px;
             border-radius: 9999px;
-            font-size: 0.875rem;
+            font-size: 0.8rem;
             font-weight: 500;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            align-self: flex-start;
         }
-        ul {
-            padding-left: 20px;
-            line-height: 1.6;
-        }
-        .info-box {
-            background: #f1f5f9;
-            border-left: 4px solid var(--primary-color);
+        .chat-box {
+            flex: 1;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
             padding: 15px;
-            margin: 20px 0;
-            border-radius: 0 8px 8px 0;
+            overflow-y: auto;
+            background: #f1f5f9;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .message {
+            padding: 10px 14px;
+            border-radius: 8px;
+            max-width: 80%;
+            line-height: 1.4;
             font-size: 0.95rem;
+        }
+        .user-message {
+            background: var(--primary-color);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+        .assistant-message {
+            background: white;
+            color: var(--text-color);
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+            box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+        }
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+        }
+        input[type="text"]:focus {
+            border-color: var(--primary-color);
+        }
+        button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #1d4ed8;
         }
     </style>
 </head>
 <body>
     <div class="app-container">
-        <span class="status-badge">Sistema Modular Activo</span>
+        <span class="status-badge">Asistente Personal Activo</span>
         <h1>Daki Jack Pro</h1>
-        <p>Versión base optimizada, limpia y lista para GitHub, diseñada con arquitectura modular para evitar conflictos con otros proyectos.</p>
-
-        <div class="info-box">
-            <strong>Configuración de Negocio y Pagos:</strong> 
-            <ul>
-                <li><strong>Distribución de Ingresos:</strong> Esquema de 80% / 20%.</li>
-                <li><strong>Pasarela de Cobros:</strong> Integración activa con PayPal.</li>
-            </ul>
+        
+        <div id="chatBox" class="chat-box">
+            <div class="message assistant-message">
+                ¡Hola! Soy tu asistente personal Daki Jack Pro. Pídeme lo que necesites: recetas de cocina, opciones de organización o cualquier idea que quieras desarrollar.
+            </div>
         </div>
 
-        <h2>Protocolo de Ingeniería y Updates</h2>
-        <ul>
-            <li><strong>Aislamiento de Código:</strong> Estructura completamente independiente.</li>
-            <li><strong>Control de Calidad:</strong> Validación estricta libre de errores de sintaxis.</li>
-            <li><strong>Escalabilidad:</strong> Preparada para recibir actualizaciones continuas hacia el público.</li>
-        </ul>
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Ej. Dame una receta de pastel de fresa..." autocomplete="off">
+            <button id="sendBtn">Enviar</button>
+        </div>
     </div>
 
     <script>
-        console.log("Daki Jack Pro cargado sin errores en GitHub.");
+        const chatBox = document.getElementById('chatBox');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+
+        function appendMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(sender === 'user' ? 'user-message' : 'assistant-message');
+            messageDiv.textContent = text;
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function handleUserMessage() {
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            appendMessage(text, 'user');
+            userInput.value = '';
+
+            // Lógica base de respuesta del asistente personal
+            setTimeout(() => {
+                let response = "Entendido. Estoy procesando tu solicitud para darte las mejores opciones.";
+                
+                const lowerText = text.toLowerCase();
+                if (lowerText.includes('pastel') || lowerText.includes('fresa') || lowerText.includes('receta')) {
+                    response = "Aquí tienes opciones para tu pastel de fresa:\n1. Pastel clásico con crema batida y fresas naturales.\n2. Pastel de tres leches con topping de fresa.\n3. Cheesecake frío de fresa.\n¿Cuál de estas opciones te gustaría preparar?";
+                } else if (lowerText.includes('hola') || lowerText.includes('saludos')) {
+                    response = "¡Hola de nuevo! ¿En qué te ayudo hoy con tus proyectos o tus tareas personales?";
+                }
+
+                appendMessage(response, 'assistant');
+            }, 600);
+        }
+
+        sendBtn.addEventListener('click', handleUserMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleUserMessage();
+            }
+        });
     </script>
 </body>
 </html>
