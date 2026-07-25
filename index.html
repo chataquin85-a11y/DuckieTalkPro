@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duckie Jack Pro - PWA, Asistente y Comunicaciones</title>
+    <title>Duckie Duck Pro - PWA, Asistente y Comunicaciones</title>
     
     <!-- Configuración PWA (Manifiesto embebido) -->
     <link rel="manifest" href="data:application/manifest+json;charset=utf-8,{
-        %22name%22: %22Duckie Jack Pro%22,
-        %22short_name%22: %22DuckieJack%22,
+        %22name%22: %22Duckie Duck Pro%22,
+        %22short_name%22: %22DuckieDuck%22,
         %22start_url%22: %22./%22,
         %22display%22: %22standalone%22,
         %22background_color%22: %22%230f172a%22,
@@ -297,7 +297,7 @@
         <div class="sidebar-header">
             <div class="duck-branding">
                 <div class="duck-logo">🦆</div>
-                <span>Duckie Jack Pro</span>
+                <span>Duckie Duck Pro</span>
             </div>
             <button class="action-btn" id="addContactBtn" title="Añadir Contacto en Tiempo Real">+</button>
         </div>
@@ -327,7 +327,7 @@
             <span id="activeChatTitle">Duckie Guai-fai'v (Asistente Principal)</span>
             <div class="header-actions">
                 <button id="installPwaBtn" class="install-pwa-btn" onclick="installPWA()">📱 Instalar App</button>
-                <a href="https://wa.me/15550193825?text=Hola,%20quiero%20información%20sobre%20Duckie%20Jack%20Pro" target="_blank" class="whatsapp-link-btn" title="Chatear por WhatsApp">
+                <a href="https://wa.me/15550193825?text=Hola,%20quiero%20información%20sobre%20Duckie%20Duck%20Pro" target="_blank" class="whatsapp-link-btn" title="Chatear por WhatsApp">
                     💬 WhatsApp
                 </a>
                 <button class="action-btn" onclick="triggerMainCall('voice')">📞 Llamada</button>
@@ -337,7 +337,7 @@
 
         <div class="chat-container" id="chatContainer">
             <div class="message-bubble incoming">
-                ¡Actualizado! Ahora los contactos (como <strong>Pedro: 6198918186</strong>) cuentan con enlaces reales de llamada telefónica (**tel:**) y chat directo de WhatsApp. Haz clic en "📞 Llamar" desde la pestaña de contactos para marcar directamente desde tu celular.
+                ¡Actualizado a <strong>Duckie Duck Pro</strong>! Nombre cambiado oficialmente en toda la interfaz, manifiesto PWA y enlaces. Los contactos (como Pedro: 6198918186) están listos para marcar directamente.
             </div>
         </div>
 
@@ -462,7 +462,7 @@
             input.value = '';
 
             setTimeout(() => {
-                let reply = "Procesando instrucción en tiempo real en Duckie Jack Pro...";
+                let reply = "Procesando instrucción en tiempo real en Duckie Duck Pro...";
                 const lower = text.toLowerCase();
                 if (lower.includes('pastel') || lower.includes('receta') || lower.includes('fresa')) {
                     reply = "Aquí tienes opciones para tu pastel de fresa:\n1. Pastel clásico con crema batida y fresas naturales.\n2. Pastel de tres leches con topping de fresa.\n3. Cheesecake frío de fresa.\n¿Cuál de estas opciones prefieres?";
