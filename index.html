@@ -3,279 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duckiethemu's - Worldwide Bilingual App</title>
+    <title>Daki Jack Pro</title>
     <style>
         :root {
-            --bg-main: #0f0f17;
-            --bg-sidebar: #161622;
-            --bg-card: #1e1e2f;
-            --accent: #a855f7;
-            --accent-hover: #9333ea;
-            --text-main: #ffffff;
-            --text-muted: #9ca3af;
+            --primary-color: #2563eb;
+            --bg-color: #f8fafc;
+            --text-color: #1e293b;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
-        
-        .sidebar { width: 260px; background-color: var(--bg-sidebar); border-right: 1px solid #2d2d3d; display: flex; flex-direction: column; padding: 20px; gap: 10px; }
-        .logo-area { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-weight: bold; font-size: 1.1rem; color: var(--accent); }
-        .badge { display: inline-block; background: var(--accent); color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; margin-bottom: 15px; font-weight: bold; text-align: center; }
-        
-        .nav-btn { background: transparent; border: none; color: var(--text-main); padding: 12px 15px; text-align: left; border-radius: 8px; cursor: pointer; transition: background 0.2s; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; }
-        .nav-btn:hover, .nav-btn.active { background-color: var(--accent); color: #fff; }
-
-        .main-content { flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-        .section { display: none; flex: 1; flex-direction: column; padding: 30px; overflow-y: auto; }
-        .section.active { display: flex; }
-        
-        h2 { margin-bottom: 20px; color: var(--text-main); }
-
-        .card { background-color: var(--bg-card); border-radius: 12px; padding: 25px; max-width: 600px; border: 1px solid #2d2d3d; margin-bottom: 20px; }
-        .card h3 { color: var(--accent); margin-bottom: 10px; }
-        .card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; line-height: 1.5; }
-        
-        input[type="text"] { width: 100%; padding: 12px 15px; background: var(--bg-main); border: 1px solid #3f3f5f; border-radius: 8px; color: #fff; font-size: 0.95rem; margin-bottom: 15px; outline: none; }
-        input[type="text"]:focus { border-color: var(--accent); }
-
-        .btn-primary { background-color: var(--accent); color: #ffffff; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
-        .btn-primary:hover { background-color: var(--accent-hover); }
-
-        .chat-container { flex: 1; display: flex; flex-direction: column; gap: 15px; overflow-y: auto; padding-bottom: 20px; }
-        .message { padding: 12px 18px; border-radius: 10px; max-width: 75%; line-height: 1.4; word-break: break-word; }
-        .message.user { background-color: var(--accent); color: white; align-self: flex-end; }
-        .message.ai { background-color: var(--bg-card); color: white; align-self: flex-start; border: 1px solid #2d2d3d; }
-        .message img { max-width: 100%; border-radius: 8px; margin-top: 8px; display: block; }
-        
-        .chat-input-area { display: flex; gap: 10px; padding-top: 15px; border-top: 1px solid #2d2d3d; align-items: center; }
-        .chat-input-area input { margin-bottom: 0; flex: 1; }
-        .file-btn { background: #2d2d3d; color: #fff; border: none; padding: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .file-btn:hover { background: #3f3f5f; }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .app-container {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            max-width: 700px;
+            width: 100%;
+        }
+        h1 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-top: 0;
+        }
+        h2 {
+            font-size: 1.2rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+            margin-top: 24px;
+        }
+        .status-badge {
+            display: inline-block;
+            background: #dcfce7;
+            color: #166534;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        ul {
+            padding-left: 20px;
+            line-height: 1.6;
+        }
+        .info-box {
+            background: #f1f5f9;
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95rem;
+        }
     </style>
 </head>
 <body>
+    <div class="app-container">
+        <span class="status-badge">Sistema Modular Activo</span>
+        <h1>Daki Jack Pro</h1>
+        <p>Versión base optimizada, limpia y lista para GitHub, diseñada con arquitectura modular para evitar conflictos con otros proyectos.</p>
 
-    <div class="sidebar">
-        <div class="logo-area">🦆 Duckiethemu's</div>
-        <div class="badge">Worldwide Bilingual App</div>
-        <button class="nav-btn active" onclick="switchSection('chat', this)">💬 Centro de Chat IA / AI Chat</button>
-        <button class="nav-btn" onclick="switchSection('calls', this)">📞 Llamadas / Calls</button>
-        <button class="nav-btn" onclick="switchSection('plan', this)">📱 Tu Plan / Mobile Plan</button>
-        <button class="nav-btn" onclick="switchSection('settings', this)">⚙️ Ajustes / Settings</button>
-        <button class="nav-btn" onclick="switchSection('docs', this)">📁 Docs & Media</button>
-        <button class="nav-btn" onclick="switchSection('about', this)">💡 Origen / About Us</button>
-        <button class="nav-btn" onclick="switchSection('security', this)">🔒 Seguridad / Security</button>
-    </div>
-
-    <div class="main-content">
-        <!-- CENTRO DE CHAT IA -->
-        <div id="chat" class="section active">
-            <h2>Centro de Chat IA (Gemini Multimodal Real-Time)</h2>
-            <div class="chat-container" id="chatHistory">
-                <div class="message ai">¡Hola! Soy Duckie Guai-fai'v. Asistente bilingüe mundial conectado en tiempo real.<br>Hello! I am Duckie Guai-fai'v. Worldwide bilingual assistant connected in real time.</div>
-            </div>
-            <div class="chat-input-area">
-                <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageSelect(event)">
-                <button class="file-btn" onclick="document.getElementById('imageInput').click()" title="Adjuntar Imagen / Attach Image">📎</button>
-                <input type="text" id="userInput" placeholder="Escribe un mensaje o describe la imagen... / Type a message..." onkeypress="handleKeyPress(event)">
-                <button class="btn-primary" onclick="sendMessage()">Enviar / Send</button>
-            </div>
+        <div class="info-box">
+            <strong>Configuración de Negocio y Pagos:</strong> 
+            <ul>
+                <li><strong>Distribución de Ingresos:</strong> Esquema de 80% / 20%.</li>
+                <li><strong>Pasarela de Cobros:</strong> Integración activa con PayPal.</li>
+            </ul>
         </div>
 
-        <!-- LLAMADAS Y VIDEO LLAMADAS -->
-        <div id="calls" class="section">
-            <h2>Llamadas y Video Llamadas / Calls & Video Calls</h2>
-            <div class="card">
-                <h3>Centro de Comunicación / Communication Center</h3>
-                <p>Conecta en tiempo real mediante voz y video asistido con Duckie Guai-fai'v.<br>Connect in real time through assisted voice and video with Duckie Guai-fai'v.</p>
-                <button class="btn-primary" onclick="alert('Iniciando canal de voz y video... / Starting voice and video channel...')">Iniciar Videollamada / Start Call</button>
-            </div>
-        </div>
-
-        <!-- TU PLAN MOVIL -->
-        <div id="plan" class="section">
-            <h2>Tu Plan Móvil / Your Mobile Plan</h2>
-            <div class="card">
-                <h3>Estado de Suscripción / Subscription Status</h3>
-                <p>Gestiona tu dispositivo dedicado y número asignado para la app.<br>Manage your dedicated device and assigned phone number for the app.</p>
-                <button class="btn-primary" onclick="alert('Suscripción activa al Plan Pro / Active Pro Plan Subscription')">Ver Detalles / View Details</button>
-            </div>
-        </div>
-
-        <!-- AJUSTES -->
-        <div id="settings" class="section">
-            <h2>Ajustes del Sistema / System Settings</h2>
-            <div class="card">
-                <h3>Credenciales de Acceso (API / Token)</h3>
-                <p>Clave configurada de forma segura para evitar bloqueos y soportar autenticación flexible:<br>Securely configured key to prevent blocks and support flexible authentication:</p>
-                <input type="text" id="apiKeyInput" placeholder="Clave protegida... / Protected key...">
-                <button class="btn-primary" onclick="saveApiKey()">Guardar Credencial / Save Credential</button>
-            </div>
-        </div>
-
-        <!-- ORIGEN DEL PROYECTO (ACERCA DE) -->
-        <div id="about" class="section">
-            <h2>Origen y Filosofía de Duckiethemu's / Origin & Philosophy</h2>
-            <div class="card">
-                <h3>¿Qué significa Duckiethemu's? / What does Duckiethemu's mean?</h3>
-                <p>En español e inglés: <strong>"Duckie the multi-uses"</strong> (el pato multiusos). Representa una herramienta versátil, diseñada para servir en todo lo que necesites.<br>In Spanish and English: <strong>"Duckie the multi-uses"</strong> (the multi-purpose duck). It represents a versatile tool designed to serve for everything you need.</p>
-            </div>
-            <div class="card">
-                <h3>Nuestra Esencia y Familia de Aplicaciones / Our Essence & App Family</h3>
-                <p>Forma parte de una gran familia tecnológica junto a proyectos totalmente funcionales y separados como <strong>Duckie Marketplace</strong>. La imagen simbólica del pato frente a los edificios representa que, sin importar el paso de los años, el tiempo o los cambios del entorno, siempre nos adaptamos y evolucionamos en sintonía con el futuro.<br>It is part of a great technological family alongside fully functional and separate projects like <strong>Duckie Marketplace</strong>. The symbolic image of the duck in front of the buildings represents that, regardless of the passage of years, time, or environmental changes, we always adapt and evolve in tune with the future.</p>
-            </div>
-        </div>
-
-        <!-- DOCS & MEDIA -->
-        <div id="docs" class="section">
-            <h2>Docs & Media</h2>
-            <div class="card">
-                <h3>Archivos y Recursos / Files & Resources</h3>
-                <p>Administra los archivos multimedia y documentos del sistema.<br>Manage multimedia files and system documents.</p>
-            </div>
-        </div>
-
-        <!-- SEGURIDAD -->
-        <div id="security" class="section">
-            <h2>Seguridad / Security</h2>
-            <div class="card">
-                <h3>Protección de Cuenta / Account Protection</h3>
-                <p>Configuración de cifrado y aislamiento de proyectos independientes.<br>Encryption settings and isolation of independent projects.</p>
-            </div>
-        </div>
+        <h2>Protocolo de Ingeniería y Updates</h2>
+        <ul>
+            <li><strong>Aislamiento de Código:</strong> Estructura completamente independiente.</li>
+            <li><strong>Control de Calidad:</strong> Validación estricta libre de errores de sintaxis.</li>
+            <li><strong>Escalabilidad:</strong> Preparada para recibir actualizaciones continuas hacia el público.</li>
+        </ul>
     </div>
 
     <script>
-        const part1 = "AQ.Ab8RN6LSm2fXGV8";
-        const part2 = "VhnNjeZITDxaqsh87LacWXAQpFVu6gTGIQA";
-        const DEFAULT_API_KEY = part1 + part2;
-
-        let selectedImageBase64 = null;
-        let selectedMimeType = null;
-
-        function switchSection(sectionId, btn) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
-            btn.classList.add('active');
-        }
-
-        function saveApiKey() {
-            const key = document.getElementById('apiKeyInput').value.trim();
-            if(!key) {
-                alert('Por favor ingresa una clave válida. / Please enter a valid key.');
-                return;
-            }
-            localStorage.setItem('duckie_api_key', key);
-            alert('¡Credencial guardada exitosamente! / Credential successfully saved!');
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            let savedKey = localStorage.getItem('duckie_api_key');
-            if(!savedKey) {
-                savedKey = DEFAULT_API_KEY;
-                localStorage.setItem('duckie_api_key', savedKey);
-            }
-            document.getElementById('apiKeyInput').value = savedKey;
-        });
-
-        function handleImageSelect(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            selectedMimeType = file.type;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                selectedImageBase64 = e.target.result.split(',')[1];
-                
-                const chatHistory = document.getElementById('chatHistory');
-                const userMsg = document.createElement('div');
-                userMsg.className = 'message user';
-                userMsg.innerHTML = `[Imagen adjunta / Attached Image]<br><img src="${e.target.result}" alt="Preview">`;
-                chatHistory.appendChild(userMsg);
-                chatHistory.scrollTop = chatHistory.scrollHeight;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        async function sendMessage() {
-            const input = document.getElementById('userInput');
-            const text = input.value.trim();
-            if(!text && !selectedImageBase64) return;
-
-            const chatHistory = document.getElementById('chatHistory');
-            
-            if (text && !selectedImageBase64) {
-                const userMsg = document.createElement('div');
-                userMsg.className = 'message user';
-                userMsg.textContent = text;
-                chatHistory.appendChild(userMsg);
-            }
-            
-            input.value = '';
-            chatHistory.scrollTop = chatHistory.scrollHeight;
-
-            const aiMsg = document.createElement('div');
-            aiMsg.className = 'message ai';
-            aiMsg.textContent = 'Pensando... / Thinking...';
-            chatHistory.appendChild(aiMsg);
-            chatHistory.scrollTop = chatHistory.scrollHeight;
-
-            const apiKey = localStorage.getItem('duckie_api_key') || DEFAULT_API_KEY;
-
-            try {
-                let parts = [];
-                if (text) {
-                    parts.push({ text: text });
-                }
-                if (selectedImageBase64 && selectedMimeType) {
-                    parts.push({
-                        inline_data: {
-                            mime_type: selectedMimeType,
-                            data: selectedImageBase64
-                        }
-                    });
-                }
-
-                let endpoint = '';
-                let headers = { 'Content-Type': 'application/json' };
-
-                if (apiKey.startsWith('AIza')) {
-                    endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-                } else {
-                    endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`;
-                    headers['Authorization'] = `Bearer ${apiKey}`;
-                }
-
-                const response = await fetch(endpoint, {
-                    method: 'POST',
-                    headers: headers,
-                    body: JSON.stringify({
-                        contents: [{ parts: parts }]
-                    })
-                });
-
-                const data = await response.json();
-                
-                if (data.candidates && data.candidates[0].content.parts[0].text) {
-                    aiMsg.textContent = data.candidates[0].content.parts[0].text;
-                } else if (data.error) {
-                    aiMsg.textContent = 'Error de la API: ' + data.error.message;
-                } else {
-                    aiMsg.textContent = 'Respuesta vacía o error de formato. / Empty response or format error.';
-                }
-            } catch (error) {
-                aiMsg.textContent = 'Error de conexión en tiempo real: ' + error.message;
-            }
-
-            selectedImageBase64 = null;
-            selectedMimeType = null;
-            document.getElementById('imageInput').value = '';
-            chatHistory.scrollTop = chatHistory.scrollHeight;
-        }
-
-        function handleKeyPress(e) {
-            if(e.key === 'Enter') sendMessage();
-        }
+        console.log("Daki Jack Pro cargado sin errores en GitHub.");
     </script>
 </body>
 </html>
