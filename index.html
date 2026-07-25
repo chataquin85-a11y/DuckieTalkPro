@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Duckie Talk Pro</title>
-    <!-- Configuración para PWA (App Móvil Instalable) -->
     <link rel="manifest" href="data:application/manifest+json,{
         &quot;name&quot;: &quot;Duckie Talk Pro&quot;,
         &quot;short_name&quot;: &quot;Duckie&quot;,
@@ -99,7 +98,7 @@
             margin: 0;
             color: #f43f5e;
         }
-        .chat-container {
+        .view-container {
             flex: 1;
             background: #18181b;
             border-radius: 16px;
@@ -191,12 +190,12 @@
         .input-area button.send-btn:hover {
             background: #7e22ce;
         }
-        .settings-panel {
+        .settings-panel, .calls-panel, .plan-panel, .docs-panel {
             display: flex;
             flex-direction: column;
             gap: 20px;
             color: #f4f4f5;
-            max-width: 600px;
+            max-width: 700px;
         }
         .setting-group {
             background: #27272a;
@@ -237,6 +236,49 @@
         .save-btn:hover {
             background: #059669;
         }
+        .call-card, .plan-card {
+            background: #27272a;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #3f3f46;
+            text-align: center;
+        }
+        .call-btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .call-action-btn {
+            padding: 12px 24px;
+            border-radius: 30px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+            font-size: 14px;
+        }
+        .btn-audio { background: #10b981; }
+        .btn-audio:hover { background: #059669; }
+        .btn-video { background: #3b82f6; }
+        .btn-video:hover { background: #2563eb; }
+        .btn-end { background: #ef4444; }
+        .btn-end:hover { background: #dc2626; }
+        
+        .progress-bar-container {
+            background: #121212;
+            border-radius: 8px;
+            height: 16px;
+            width: 100%;
+            margin-top: 8px;
+            overflow: hidden;
+            border: 1px solid #3f3f46;
+        }
+        .progress-bar-fill {
+            background: #a855f7;
+            height: 100%;
+            width: 45%;
+        }
         #imagePreviewContainer {
             padding: 8px 12px;
             background: #18181b;
@@ -269,39 +311,71 @@
             <h2 id="header-title">Centro de Chat IA</h2>
         </div>
 
-        <div id="chat-view" class="chat-container" style="display: flex;">
-            <div class="message ai-message"><b>Duckie:</b> ¡Hola! Ya tengo memoria de conversación activa y capacidad para analizar imágenes. ¿Qué hacemos hoy?</div>
+        <div id="chat-view" class="view-container" style="display: flex;">
+            <div class="message ai-message"><b>Duckie:</b> ¡Hola! Sistema actualizado para aceptar tus credenciales de pago. ¿Qué hacemos hoy?</div>
         </div>
 
-        <div id="calls-view" class="chat-container" style="display: none;">
-            <div class="message ai-message"><b>Duckie:</b> Panel de llamadas, videollamadas y tonos activos.</div>
-        </div>
-
-        <div id="plan-view" class="chat-container" style="display: none;">
-            <div class="message ai-message"><b>Duckie:</b> Información y estado actual de tu plan móvil conectado.</div>
-        </div>
-
-        <div id="settings-view" class="chat-container" style="display: none;">
-            <div class="settings-panel">
-                <div class="setting-group">
-                    <h4>API Settings</h4>
-                    <label>Configurar clave API:</label>
-                    <input type="text" id="apiKeyInput" placeholder="Pega tu clave aquí...">
-                    <button class="save-btn" onclick="saveApiKey()">Guardar Clave</button>
-                </div>
-                <div class="setting-group">
-                    <h4>Instalación PWA</h4>
-                    <label>Puedes instalar esta web como aplicación nativa en tu dispositivo desde el menú de opciones de tu navegador (Añadir a pantalla de inicio).</label>
+        <div id="calls-view" class="view-container" style="display: none;">
+            <div class="calls-panel">
+                <div class="call-card">
+                    <h3>Centro de Comunicación Duckie</h3>
+                    <p id="callStatusText" style="color: #a855f7; font-weight: 500;">Estado: Listo para conectar llamada con IA.</p>
+                    <div id="activeCallScreen" style="margin: 20px 0; font-size: 18px; display: none;">
+                        🔴 En línea con Duckie Talk Pro... (<span id="callTimer">00:00</span>)
+                    </div>
+                    <div class="call-btn-group">
+                        <button class="call-action-btn btn-audio" onclick="startCall('audio')">📞 Llamar de Voz</button>
+                        <button class="call-action-btn btn-video" onclick="startCall('video')">📹 Videollamada</button>
+                        <button class="call-action-btn btn-end" id="endCallBtn" onclick="endCall()" style="display: none;">Colgar</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div id="docs-view" class="chat-container" style="display: none;">
-            <div class="message ai-message"><b>Duckie:</b> Galería de documentos y multimedia.</div>
+        <div id="plan-view" class="view-container" style="display: none;">
+            <div class="plan-panel">
+                <div class="plan-card" style="text-align: left;">
+                    <h3 style="color: #a855f7; margin-top:0;">Mi Plan Móvil Activo</h3>
+                    <p><b>Estado del Servicio:</b> <span style="color: #10b981;">Activo e Ilimitado</span></p>
+                    <p><b>Consumo de Datos Mensual:</b> 14.5 GB / 50 GB</p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="width: 29%;"></div>
+                    </div>
+                    <p style="margin-top: 15px;"><b>Minutos Disponibles:</b> Minutos ilimitados nacionales e internacionales.</p>
+                    <button class="save-btn" onclick="alert('¡Tu plan está actualizado al máximo rendimiento!')">Actualizar Plan</button>
+                </div>
+            </div>
         </div>
 
-        <div id="security-view" class="chat-container" style="display: none;">
-            <div class="message ai-message"><b>Duckie:</b> Sistema seguro activo en <b>duckiethemus.com</b>.</div>
+        <div id="settings-view" class="view-container" style="display: none;">
+            <div class="settings-panel">
+                <div class="setting-group">
+                    <h4>Credenciales de Acceso (API / Token)</h4>
+                    <label>Pega tu clave o token (empiece con AQ... o AIza...):</label>
+                    <input type="text" id="apiKeyInput" placeholder="Pega tu credencial aquí...">
+                    <button class="save-btn" onclick="saveApiKey()">Guardar Credencial</button>
+                </div>
+                <div class="setting-group">
+                    <h4>Aplicación PWA</h4>
+                    <label>Instalada y lista para ejecutarse como aplicación nativa.</label>
+                </div>
+            </div>
+        </div>
+
+        <div id="docs-view" class="view-container" style="display: none;">
+            <div class="docs-panel">
+                <div class="setting-group">
+                    <h4>Galería y Archivos Multimedia</h4>
+                    <label>Aquí se almacenan los archivos y fotos analizados en tus conversaciones.</label>
+                    <div id="mediaGallery" style="margin-top: 10px; color: #71717a; font-style: italic;">
+                        No hay archivos multimedia recientes guardados en caché.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="security-view" class="view-container" style="display: none;">
+            <div class="message ai-message"><b>Duckie:</b> Sistema seguro activo en <b>duckiethemus.com</b>. Propiedad 100% de su creador.</div>
         </div>
 
         <div id="imagePreviewContainer">
@@ -318,10 +392,11 @@
     </div>
 
     <script>
-        // Historial de chat para mantener la memoria con Gemini
         let chatHistory = [];
         let selectedImageBase64 = null;
         let selectedImageMime = null;
+        let callInterval = null;
+        let callSeconds = 0;
 
         window.onload = function() {
             const savedKey = localStorage.getItem('duckie_api_key');
@@ -334,9 +409,9 @@
             const key = document.getElementById('apiKeyInput').value.trim();
             if(key) {
                 localStorage.setItem('duckie_api_key', key);
-                alert('¡Clave guardada exitosamente!');
+                alert('¡Credencial guardada exitosamente!');
             } else {
-                alert('Por favor ingresa una clave válida.');
+                alert('Por favor ingresa una credencial válida.');
             }
         }
 
@@ -349,7 +424,7 @@
 
             const targetEl = document.getElementById(tabName + '-view');
             if(targetEl) {
-                targetEl.style.display = (tabName === 'settings') ? 'block' : 'flex';
+                targetEl.style.display = (tabName === 'chat' || tabName === 'calls' || tabName === 'plan' || tabName === 'security') ? 'flex' : 'block';
             }
             
             const titles = {
@@ -364,12 +439,33 @@
 
             const inputArea = document.getElementById('bottomInputArea');
             const previewContainer = document.getElementById('imagePreviewContainer');
-            if(tabName === 'settings') {
+            if(tabName !== 'chat') {
                 inputArea.style.display = 'none';
                 previewContainer.style.display = 'none';
             } else {
                 inputArea.style.display = 'flex';
             }
+        }
+
+        function startCall(type) {
+            document.getElementById('callStatusText').textContent = type === 'audio' ? '🔊 Conectando llamada de voz con Duckie...' : '📹 Iniciando videollamada HD...';
+            document.getElementById('activeCallScreen').style.display = 'block';
+            document.getElementById('endCallBtn').style.display = 'inline-block';
+            callSeconds = 0;
+            clearInterval(callInterval);
+            callInterval = setInterval(() => {
+                callSeconds++;
+                let mins = Math.floor(callSeconds / 60).toString().padStart(2, '0');
+                let secs = (callSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('callTimer').textContent = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        function endCall() {
+            clearInterval(callInterval);
+            document.getElementById('callStatusText').textContent = 'Estado: Llamada finalizada.';
+            document.getElementById('activeCallScreen').style.display = 'none';
+            document.getElementById('endCallBtn').style.display = 'none';
         }
 
         function handleImageSelect(event) {
@@ -378,9 +474,9 @@
                 selectedImageMime = file.type;
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    // Obtener la cadena base64 pura sin el prefijo data:...
                     selectedImageBase64 = e.target.result.split(',')[1];
                     document.getElementById('imagePreviewContainer').style.display = 'flex';
+                    document.getElementById('mediaGallery').innerHTML = `<img src="${e.target.result}" style="max-width:150px; border-radius:8px;" />`;
                 };
                 reader.readAsDataURL(file);
             }
@@ -406,7 +502,6 @@
             const text = inputField.value.trim();
             if (!text && !selectedImageBase64) return;
 
-            // Construir contenido visual del usuario
             let userHtml = `<b>Tú:</b> ${escapeHtml(text)}`;
             if (selectedImageBase64) {
                 userHtml += `<br><img src="data:${selectedImageMime};base64,${selectedImageBase64}" />`;
@@ -417,7 +512,6 @@
             userMsg.innerHTML = userHtml;
             chatContainer.appendChild(userMsg);
             
-            // Construir la estructura de partes para la API de Gemini (Soporta Multimodal + Memoria)
             let currentParts = [];
             if (text) {
                 currentParts.push({ text: text });
@@ -431,7 +525,6 @@
                 });
             }
 
-            // Guardar turno del usuario en el historial de memoria
             chatHistory.push({
                 role: "user",
                 parts: currentParts
@@ -441,11 +534,11 @@
             clearImage();
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            const activeKey = localStorage.getItem('duckie_api_key');
-            if(!activeKey) {
+            const activeCred = localStorage.getItem('duckie_api_key');
+            if(!activeCred) {
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'message ai-message';
-                errorMsg.innerHTML = "<b>Duckie:</b> Por favor ve a <b>Ajustes</b>, pega tu clave API y guárdala.";
+                errorMsg.innerHTML = "<b>Duckie:</b> Por favor ve a <b>Ajustes</b>, pega tu credencial y guárdala.";
                 chatContainer.appendChild(errorMsg);
                 chatContainer.scrollTop = chatContainer.scrollHeight;
                 return;
@@ -459,10 +552,19 @@
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
             try {
-                // Solicitud a Gemini incluyendo todo el historial de la conversación (memoria)
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${activeKey}`, {
+                // Preparamos la conexión adaptada al tipo de credencial (Bearer Token si es AQ... o Query Key si es AIza...)
+                let fetchUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`;
+                let fetchHeaders = { 'Content-Type': 'application/json' };
+
+                if (activeCred.startsWith('AQ')) {
+                    fetchHeaders['Authorization'] = `Bearer ${activeCred}`;
+                } else {
+                    fetchUrl += `?key=${activeCred}`;
+                }
+
+                const response = await fetch(fetchUrl, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: fetchHeaders,
                     body: JSON.stringify({
                         contents: chatHistory
                     })
@@ -480,7 +582,6 @@
                     const replyText = data.candidates[0].content.parts[0].text;
                     aiMsg.innerHTML = `<b>Duckie:</b> ${escapeHtml(replyText)}`;
                     
-                    // Guardar respuesta de la IA en el historial de memoria
                     chatHistory.push({
                         role: "model",
                         parts: [{ text: replyText }]
@@ -491,7 +592,7 @@
                     aiMsg.innerHTML = "<b>Duckie:</b> Lo siento, hubo un problema al procesar tu respuesta.";
                 }
 
-                    chatContainer.appendChild(aiMsg);
+                chatContainer.appendChild(aiMsg);
                 chatContainer.scrollTop = chatContainer.scrollHeight;
 
             } catch (error) {
