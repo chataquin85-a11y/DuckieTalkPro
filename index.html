@@ -33,6 +33,7 @@
             --accent-color: #3b82f6;
             --duck-yellow: #fbbf24;
             --whatsapp-color: #25d366;
+            --call-color: #22c55e;
         }
         body {
             font-family: system-ui, -apple-system, sans-serif;
@@ -120,6 +121,10 @@
         .contact-item:hover, .call-item:hover {
             background: rgba(255,255,255,0.08);
         }
+        .contact-actions {
+            display: flex;
+            gap: 6px;
+        }
         .main-panel {
             flex: 1;
             display: flex;
@@ -154,6 +159,21 @@
         .action-btn:hover {
             background: var(--primary-color);
         }
+        .call-action-btn {
+            background: var(--call-color);
+            color: white;
+            text-decoration: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .call-action-btn:hover {
+            opacity: 0.9;
+        }
         .whatsapp-link-btn {
             background: var(--whatsapp-color);
             color: white;
@@ -178,7 +198,7 @@
             font-size: 0.85rem;
             font-weight: bold;
             cursor: pointer;
-            display: none; /* Se muestra si el navegador permite instalar la PWA */
+            display: none;
         }
         .install-pwa-btn:hover {
             opacity: 0.9;
@@ -310,14 +330,14 @@
                 <a href="https://wa.me/15550193825?text=Hola,%20quiero%20información%20sobre%20Duckie%20Jack%20Pro" target="_blank" class="whatsapp-link-btn" title="Chatear por WhatsApp">
                     💬 WhatsApp
                 </a>
-                <button class="action-btn" onclick="startCall('voice')">📞 Llamada</button>
-                <button class="action-btn" onclick="startCall('video')">📹 Videollamada</button>
+                <button class="action-btn" onclick="triggerMainCall('voice')">📞 Llamada</button>
+                <button class="action-btn" onclick="triggerMainCall('video')">📹 Videollamada</button>
             </div>
         </div>
 
         <div class="chat-container" id="chatContainer">
             <div class="message-bubble incoming">
-                ¡Hola! Sistema <strong>Duckie Jack Pro</strong> activo con capacidad **PWA** (instalable como app en tu celular), memoria de chat, gestión de contactos en tiempo real, llamadas, notas de voz, fotos multimedia de referencia y enlace directo de WhatsApp. ¿Qué deseas hacer hoy?
+                ¡Actualizado! Ahora los contactos (como <strong>Pedro: 6198918186</strong>) cuentan con enlaces reales de llamada telefónica (**tel:**) y chat directo de WhatsApp. Haz clic en "📞 Llamar" desde la pestaña de contactos para marcar directamente desde tu celular.
             </div>
         </div>
 
@@ -332,11 +352,11 @@
     <script>
         let currentTab = 'chats';
         let dynamicContacts = [
-            { name: "Duckie Assistant", phone: "+1 (555) 019-DUCK" },
-            { name: "Cliente Marketplace", phone: "+1 (555) 888-SHOP" }
+            { name: "Pedro", phone: "6198918186" },
+            { name: "Duckie Assistant", phone: "+15550193825" },
+            { name: "Cliente Marketplace", phone: "+15558887766" }
         ];
 
-        // Lógica de instalación PWA
         let deferredPrompt;
         const installBtn = document.getElementById('installPwaBtn');
 
@@ -361,7 +381,6 @@
 
         function switchTab(tab) {
             currentTab = tab;
-            const content = document.getElementById('sidebarContent');
             const tabs = document.querySelectorAll('.nav-tab');
             tabs.forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
@@ -386,18 +405,25 @@
                     html += `
                         <div class="contact-item">
                             <div><strong>${c.name}</strong><br><small style="color: var(--text-muted);">${c.phone}</small></div>
-                            <button class="action-btn" onclick="selectChat('${c.name}')">Chat</button>
+                            <div class="contact-actions">
+                                <a href="tel:${c.phone}" class="call-action-btn" title="Llamar por teléfono">📞 Llamar</a>
+                                <a href="https://wa.me/${c.phone.replace(/[^0-9]/g, '')}" target="_blank" class="whatsapp-link-btn" style="padding: 6px 10px; font-size: 0.8rem;" title="Enviar WhatsApp">💬</a>
+                            </div>
                         </div>
                     `;
                 });
                 content.innerHTML = html;
             } else if (currentTab === 'calls') {
-                content.innerHTML = `
-                    <div class="call-item">
-                        <div><strong>Llamada en tiempo real - Asistente</strong><br><small style="color: var(--text-muted);">Registrada hoy</small></div>
-                        <span style="color: #22c55e;">✔ Activa</span>
-                    </div>
-                `;
+                let html = '<div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">Acceso rápido de marcado telefónico directo:</div>';
+                dynamicContacts.forEach(c => {
+                    html += `
+                        <div class="call-item">
+                            <div><strong>${c.name}</strong><br><small style="color: var(--text-muted);">${c.phone}</small></div>
+                            <a href="tel:${c.phone}" class="call-action-btn">📞 Marcar</a>
+                        </div>
+                    `;
+                });
+                content.innerHTML = html;
             }
         }
 
@@ -436,7 +462,7 @@
             input.value = '';
 
             setTimeout(() => {
-                let reply = "Procesando instrucción en tiempo real en Duckie Jack Pro (PWA)...";
+                let reply = "Procesando instrucción en tiempo real en Duckie Jack Pro...";
                 const lower = text.toLowerCase();
                 if (lower.includes('pastel') || lower.includes('receta') || lower.includes('fresa')) {
                     reply = "Aquí tienes opciones para tu pastel de fresa:\n1. Pastel clásico con crema batida y fresas naturales.\n2. Pastel de tres leches con topping de fresa.\n3. Cheesecake frío de fresa.\n¿Cuál de estas opciones prefieres?";
@@ -459,20 +485,21 @@
             }, 800);
         }
 
-        function startCall(type) {
-            const title = type === 'voice' ? 'Iniciando llamada de voz...' : 'Iniciando videollamada HD...';
-            alert(title + " Conectando canal de comunicación en tiempo real con Duckie Jack Pro.");
+        function triggerMainCall(type) {
+            window.location.href = "tel:6198918186";
         }
 
         document.getElementById('addContactBtn').addEventListener('click', () => {
             const name = prompt("Ingrese el nombre del nuevo contacto:");
             if (!name) return;
-            const phone = prompt("Ingrese el número de teléfono con código de país (ej. +1 555-0199):");
+            const phone = prompt("Ingrese el número de teléfono con código de área (ej. 6198918186):");
             if (!phone) return;
 
             dynamicContacts.push({ name: name, phone: phone });
-            switchTab('contacts');
-            alert(`¡Contacto "${name}" con número ${phone} agregado en tiempo real exitosamente!`);
+            if (currentTab === 'contacts' || currentTab === 'calls') {
+                renderSidebarContent();
+            }
+            alert(`¡Contacto "${name}" con número ${phone} agregado exitosamente!`);
         });
 
         document.getElementById('messageInput').addEventListener('keypress', (e) => {
