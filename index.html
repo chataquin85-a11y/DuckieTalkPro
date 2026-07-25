@@ -4,6 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Duckie Talk Pro</title>
+    <!-- Configuración para PWA (App Móvil Instalable) -->
+    <link rel="manifest" href="data:application/manifest+json,{
+        &quot;name&quot;: &quot;Duckie Talk Pro&quot;,
+        &quot;short_name&quot;: &quot;Duckie&quot;,
+        &quot;start_url&quot;: &quot;/&quot;,
+        &quot;display&quot;: &quot;standalone&quot;,
+        &quot;background_color&quot;: &quot;#0f0f11&quot;,
+        &quot;theme_color&quot;: &quot;#7c3aed&quot;,
+        &quot;icons&quot;: [{
+            &quot;src&quot;: &quot;https://images.unsplash.com/photo-1559827291-72ee739d0d9a?w=192&quot;,
+            &quot;sizes&quot;: &quot;192x192&quot;,
+            &quot;type&quot;: &quot;image/jpeg&quot;
+        }]
+    }">
     <style>
         * { box-sizing: border-box; }
         body {
@@ -120,6 +134,11 @@
             border: 1px solid #3f3f46;
             border-bottom-left-radius: 4px;
         }
+        .message img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 8px;
+        }
         .input-area {
             display: flex;
             gap: 10px;
@@ -128,8 +147,9 @@
             border-radius: 16px;
             border: 1px solid #27272a;
             box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            align-items: center;
         }
-        .input-area input {
+        .input-area input[type="text"] {
             flex: 1;
             padding: 14px 18px;
             border-radius: 12px;
@@ -140,21 +160,35 @@
             outline: none;
             transition: border-color 0.2s;
         }
-        .input-area input:focus {
+        .input-area input[type="text"]:focus {
             border-color: #a855f7;
         }
-        .input-area button {
+        .file-btn {
+            background: #27272a;
+            color: #a855f7;
+            border: 1px solid #3f3f46;
+            padding: 12px 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.2s;
+        }
+        .file-btn:hover {
+            background: #3f3f46;
+        }
+        .input-area button.send-btn {
             background: #9333ea;
             color: white;
             border: none;
-            padding: 0 28px;
+            padding: 0 24px;
+            height: 48px;
             border-radius: 12px;
             cursor: pointer;
             font-weight: bold;
             font-size: 14px;
             transition: background 0.2s;
         }
-        .input-area button:hover {
+        .input-area button.send-btn:hover {
             background: #7e22ce;
         }
         .settings-panel {
@@ -181,7 +215,7 @@
             margin-bottom: 8px;
             font-size: 14px;
         }
-        .setting-group select, .setting-group input[type="text"] {
+        .setting-group input[type="text"] {
             width: 100%;
             padding: 10px 14px;
             border-radius: 8px;
@@ -190,20 +224,28 @@
             border: 1px solid #3f3f46;
             outline: none;
         }
-        .link-box {
-            background: #27272a;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 10px;
-            border: 1px solid #3f3f46;
-        }
-        .link-box a {
-            color: #38bdf8;
+        .save-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
             font-weight: bold;
-            text-decoration: none;
+            margin-top: 10px;
         }
-        .link-box a:hover {
-            text-decoration: underline;
+        .save-btn:hover {
+            background: #059669;
+        }
+        #imagePreviewContainer {
+            padding: 8px 12px;
+            background: #18181b;
+            border-top: 1px solid #27272a;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #a855f7;
         }
     </style>
 </head>
@@ -211,7 +253,7 @@
 
     <div class="sidebar">
         <div class="sidebar-header">
-            <img src="IMG_0948.png" alt="Duckie Logo">
+            <img src="https://images.unsplash.com/photo-1559827291-72ee739d0d9a?w=150" alt="Duckie Logo">
             <h3 id="sidebar-title">Duckie Talk Pro</h3>
         </div>
         <button onclick="switchTab('chat')">💬 Centro de Chat IA</button>
@@ -228,11 +270,11 @@
         </div>
 
         <div id="chat-view" class="chat-container" style="display: flex;">
-            <div class="message ai-message"><b>Duckie:</b> ¡Hola! Todo listo en tu aplicación independiente con IA integrada. ¿En qué te ayudo hoy?</div>
+            <div class="message ai-message"><b>Duckie:</b> ¡Hola! Ya tengo memoria de conversación activa y capacidad para analizar imágenes. ¿Qué hacemos hoy?</div>
         </div>
 
         <div id="calls-view" class="chat-container" style="display: none;">
-            <div class="message ai-message"><b>Duckie:</b> Panel de llamadas, videollamadas y tonos activos. Listo para conectar.</div>
+            <div class="message ai-message"><b>Duckie:</b> Panel de llamadas, videollamadas y tonos activos.</div>
         </div>
 
         <div id="plan-view" class="chat-container" style="display: none;">
@@ -245,43 +287,58 @@
                     <h4>API Settings</h4>
                     <label>Configurar clave API:</label>
                     <input type="text" id="apiKeyInput" placeholder="Pega tu clave aquí...">
+                    <button class="save-btn" onclick="saveApiKey()">Guardar Clave</button>
                 </div>
                 <div class="setting-group">
-                    <h4>Apariencia y Colores</h4>
-                    <label>Color de acento:</label>
-                    <select id="themeColorSelect" onchange="changeTheme(this.value)">
-                        <option value="#7c3aed">Morado Clásico (Duckie)</option>
-                        <option value="#2563eb">Azul Estilo Meta / WhatsApp</option>
-                        <option value="#10b981">Verde Esmeralda</option>
-                        <option value="#f43f5e">Rosa Fucsia</option>
-                    </select>
+                    <h4>Instalación PWA</h4>
+                    <label>Puedes instalar esta web como aplicación nativa en tu dispositivo desde el menú de opciones de tu navegador (Añadir a pantalla de inicio).</label>
                 </div>
             </div>
         </div>
 
         <div id="docs-view" class="chat-container" style="display: none;">
-            <div class="message ai-message"><b>Duckie:</b> Documentación, galería de imágenes y elementos multimedia.</div>
+            <div class="message ai-message"><b>Duckie:</b> Galería de documentos y multimedia.</div>
         </div>
 
         <div id="security-view" class="chat-container" style="display: none;">
-            <div class="message ai-message"><b>Duckie:</b> Estado de seguridad y protección activo.
-                <div class="link-box">
-                    Puedes ver y probar tu aplicación en tu dominio oficial:<br><br>
-                    🔗 <a href="https://duckiethemus.com" target="_blank">https://duckiethemus.com</a>
-                </div>
-            </div>
+            <div class="message ai-message"><b>Duckie:</b> Sistema seguro activo en <b>duckiethemus.com</b>.</div>
+        </div>
+
+        <div id="imagePreviewContainer">
+            <span>📷 Imagen adjunta lista para enviar.</span>
+            <button onclick="clearImage()" style="background:none; border:none; color:#f43f5e; cursor:pointer; font-weight:bold;">✕ Quitar</button>
         </div>
 
         <div class="input-area" id="bottomInputArea">
+            <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageSelect(event)">
+            <button class="file-btn" onclick="document.getElementById('imageInput').click()" title="Adjuntar Imagen">📎</button>
             <input type="text" id="userInput" placeholder="Escribe un mensaje..." onkeypress="handleKeyPress(event)">
-            <button onclick="sendMessage()">Enviar</button>
+            <button class="send-btn" onclick="sendMessage()">Enviar</button>
         </div>
     </div>
 
     <script>
-        const parte1 = "AQ.Ab8"; 
-        const parte2 = "X_AQUÍ_EL_RESTO_DE_TU_CLAVE"; 
-        const API_KEY = parte1 + parte2;
+        // Historial de chat para mantener la memoria con Gemini
+        let chatHistory = [];
+        let selectedImageBase64 = null;
+        let selectedImageMime = null;
+
+        window.onload = function() {
+            const savedKey = localStorage.getItem('duckie_api_key');
+            if(savedKey) {
+                document.getElementById('apiKeyInput').value = savedKey;
+            }
+        };
+
+        function saveApiKey() {
+            const key = document.getElementById('apiKeyInput').value.trim();
+            if(key) {
+                localStorage.setItem('duckie_api_key', key);
+                alert('¡Clave guardada exitosamente!');
+            } else {
+                alert('Por favor ingresa una clave válida.');
+            }
+        }
 
         function switchTab(tabName) {
             const views = ['chat', 'calls', 'plan', 'settings', 'docs', 'security'];
@@ -306,21 +363,34 @@
             document.getElementById('header-title').textContent = titles[tabName] || 'Duckie Talk Pro';
 
             const inputArea = document.getElementById('bottomInputArea');
+            const previewContainer = document.getElementById('imagePreviewContainer');
             if(tabName === 'settings') {
                 inputArea.style.display = 'none';
+                previewContainer.style.display = 'none';
             } else {
                 inputArea.style.display = 'flex';
             }
         }
 
-        function changeTheme(color) {
-            document.documentElement.style.setProperty('--primary-color', color);
-            const buttons = document.querySelectorAll('.sidebar button, .input-area button, .user-message');
-            buttons.forEach(btn => {
-                if(!btn.classList.contains('ai-message')) {
-                    btn.style.background = color;
-                }
-            });
+        function handleImageSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                selectedImageMime = file.type;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Obtener la cadena base64 pura sin el prefijo data:...
+                    selectedImageBase64 = e.target.result.split(',')[1];
+                    document.getElementById('imagePreviewContainer').style.display = 'flex';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function clearImage() {
+            selectedImageBase64 = null;
+            selectedImageMime = null;
+            document.getElementById('imageInput').value = '';
+            document.getElementById('imagePreviewContainer').style.display = 'none';
         }
 
         function handleKeyPress(e) {
@@ -331,33 +401,51 @@
 
         async function sendMessage() {
             const inputField = document.getElementById('userInput');
-            
-            const views = ['chat', 'calls', 'plan', 'settings', 'docs', 'security'];
-            let activeViewId = 'chat-view';
-            views.forEach(v => {
-                const el = document.getElementById(v + '-view');
-                if(el && el.style.display !== 'none' && v !== 'settings') {
-                    activeViewId = v + '-view';
-                }
-            });
-            const chatContainer = document.getElementById(activeViewId);
+            const chatContainer = document.getElementById('chat-view');
             
             const text = inputField.value.trim();
-            if (!text) return;
+            if (!text && !selectedImageBase64) return;
+
+            // Construir contenido visual del usuario
+            let userHtml = `<b>Tú:</b> ${escapeHtml(text)}`;
+            if (selectedImageBase64) {
+                userHtml += `<br><img src="data:${selectedImageMime};base64,${selectedImageBase64}" />`;
+            }
 
             const userMsg = document.createElement('div');
             userMsg.className = 'message user-message';
-            userMsg.innerHTML = `<b>Tú:</b> ${escapeHtml(text)}`;
+            userMsg.innerHTML = userHtml;
             chatContainer.appendChild(userMsg);
             
+            // Construir la estructura de partes para la API de Gemini (Soporta Multimodal + Memoria)
+            let currentParts = [];
+            if (text) {
+                currentParts.push({ text: text });
+            }
+            if (selectedImageBase64) {
+                currentParts.push({
+                    inline_data: {
+                        mime_type: selectedImageMime,
+                        data: selectedImageBase64
+                    }
+                });
+            }
+
+            // Guardar turno del usuario en el historial de memoria
+            chatHistory.push({
+                role: "user",
+                parts: currentParts
+            });
+
             inputField.value = '';
+            clearImage();
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            const activeKey = API_KEY;
-            if(!activeKey || activeKey.includes("RESTO_DE_TU_CLAVE")) {
+            const activeKey = localStorage.getItem('duckie_api_key');
+            if(!activeKey) {
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'message ai-message';
-                errorMsg.innerHTML = "<b>Duckie:</b> Por favor ingresa el resto de tu clave en el código o en los ajustes.";
+                errorMsg.innerHTML = "<b>Duckie:</b> Por favor ve a <b>Ajustes</b>, pega tu clave API y guárdala.";
                 chatContainer.appendChild(errorMsg);
                 chatContainer.scrollTop = chatContainer.scrollHeight;
                 return;
@@ -366,16 +454,17 @@
             const loadingMsg = document.createElement('div');
             loadingMsg.className = 'message ai-message';
             loadingMsg.id = 'loading-reply';
-            loadingMsg.innerHTML = "<b>Duckie:</b> Escribiendo...";
+            loadingMsg.innerHTML = "<b>Duckie:</b> Pensando...";
             chatContainer.appendChild(loadingMsg);
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
             try {
+                // Solicitud a Gemini incluyendo todo el historial de la conversación (memoria)
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${activeKey}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: text }] }]
+                        contents: chatHistory
                     })
                 });
 
@@ -390,11 +479,19 @@
                 if (data.candidates && data.candidates[0].content.parts[0].text) {
                     const replyText = data.candidates[0].content.parts[0].text;
                     aiMsg.innerHTML = `<b>Duckie:</b> ${escapeHtml(replyText)}`;
+                    
+                    // Guardar respuesta de la IA en el historial de memoria
+                    chatHistory.push({
+                        role: "model",
+                        parts: [{ text: replyText }]
+                    });
+                } else if (data.error) {
+                    aiMsg.innerHTML = `<b>Duckie:</b> Error de la API: ${escapeHtml(data.error.message)}`;
                 } else {
                     aiMsg.innerHTML = "<b>Duckie:</b> Lo siento, hubo un problema al procesar tu respuesta.";
                 }
 
-                chatContainer.appendChild(aiMsg);
+                    chatContainer.appendChild(aiMsg);
                 chatContainer.scrollTop = chatContainer.scrollHeight;
 
             } catch (error) {
