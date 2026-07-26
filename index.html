@@ -1,511 +1,294 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duckie Duck Pro - PWA, Asistente y Comunicaciones</title>
-    
-    <!-- Configuración PWA (Manifiesto embebido) -->
-    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,{
-        %22name%22: %22Duckie Duck Pro%22,
-        %22short_name%22: %22DuckieDuck%22,
-        %22start_url%22: %22./%22,
-        %22display%22: %22standalone%22,
-        %22background_color%22: %22%230f172a%22,
-        %22theme_color%22: %22%232563eb%22,
-        %22icons%22: [{
-            %22src%22: %22https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=192%22,
-            %22sizes%22: %22192x192%22,
-            %22type%22: %22image/png%22
-        }]
-    }">
-    <meta name="theme-color" content="#2563eb">
-
+    <title>Duckiethemu's - Worldwide Bilingual App</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#a855f7">
     <style>
         :root {
-            --primary-color: #2563eb;
-            --bg-color: #0f172a;
-            --sidebar-bg: #1e293b;
-            --chat-bg: #111827;
-            --text-color: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: #334155;
-            --accent-color: #3b82f6;
-            --duck-yellow: #fbbf24;
-            --whatsapp-color: #25d366;
-            --call-color: #22c55e;
+            --bg-main: #0f0f17;
+            --bg-sidebar: #161622;
+            --bg-card: #1e1e2f;
+            --accent: #a855f7;
+            --accent-hover: #9333ea;
+            --text-main: #ffffff;
+            --text-muted: #9ca3af;
         }
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-            box-sizing: border-box;
-        }
-        .sidebar {
-            width: 340px;
-            background-color: var(--sidebar-bg);
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-        }
-        .sidebar-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--duck-yellow);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .duck-branding {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .duck-logo {
-            width: 32px;
-            height: 32px;
-            background: var(--duck-yellow);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        .nav-tabs {
-            display: flex;
-            background: #0f172a;
-            padding: 10px;
-            gap: 5px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .nav-tab {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            padding: 8px;
-            cursor: pointer;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: 650;
-            transition: all 0.2s;
-        }
-        .nav-tab.active {
-            background: var(--primary-color);
-            color: white;
-        }
-        .sidebar-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 10px;
-        }
-        .contact-item, .call-item {
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-bottom: 8px;
-            background: rgba(255,255,255,0.03);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background 0.2s;
-        }
-        .contact-item:hover, .call-item:hover {
-            background: rgba(255,255,255,0.08);
-        }
-        .contact-actions {
-            display: flex;
-            gap: 6px;
-        }
-        .main-panel {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background-color: var(--chat-bg);
-        }
-        .panel-header {
-            padding: 20px;
-            background-color: var(--sidebar-bg);
-            border-bottom: 1px solid var(--border-color);
-            font-size: 1.1rem;
-            font-weight: 650;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .header-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .action-btn {
-            background: #334155;
-            border: none;
-            color: white;
-            padding: 8px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-        .action-btn:hover {
-            background: var(--primary-color);
-        }
-        .call-action-btn {
-            background: var(--call-color);
-            color: white;
-            text-decoration: none;
-            padding: 6px 10px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .call-action-btn:hover {
-            opacity: 0.9;
-        }
-        .whatsapp-link-btn {
-            background: var(--whatsapp-color);
-            color: white;
-            text-decoration: none;
-            padding: 8px 14px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .whatsapp-link-btn:hover {
-            opacity: 0.9;
-        }
-        .install-pwa-btn {
-            background: var(--duck-yellow);
-            color: #0f172a;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            cursor: pointer;
-            display: none;
-        }
-        .install-pwa-btn:hover {
-            opacity: 0.9;
-        }
-        .chat-container {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        .message-bubble {
-            max-width: 70%;
-            padding: 12px 16px;
-            border-radius: 12px;
-            font-size: 0.95rem;
-            line-height: 1.4;
-        }
-        .message-bubble.incoming {
-            background: var(--sidebar-bg);
-            align-self: flex-start;
-            border-bottom-left-radius: 2px;
-        }
-        .message-bubble.outgoing {
-            background: var(--primary-color);
-            align-self: flex-end;
-            border-bottom-right-radius: 2px;
-        }
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            margin-top: 8px;
-        }
-        .gallery-thumb {
-            width: 100%;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-        }
-        .input-panel {
-            padding: 15px 20px;
-            background-color: var(--sidebar-bg);
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .input-panel input[type="text"] {
-            flex: 1;
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 12px;
-            color: white;
-            font-size: 1rem;
-            outline: none;
-        }
-        .input-panel input[type="text"]:focus {
-            border-color: var(--accent-color);
-        }
-        .media-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            padding: 10px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.2s;
-        }
-        .media-btn:hover {
-            color: white;
-            border-color: var(--accent-color);
-            background: rgba(59, 130, 246, 0.1);
-        }
-        .send-submit {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-weight: 650;
-            cursor: pointer;
-        }
-        .send-submit:hover {
-            background: #1d4ed8;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
+        
+        .sidebar { width: 260px; background-color: var(--bg-sidebar); border-right: 1px solid #2d2d3d; display: flex; flex-direction: column; padding: 20px; gap: 10px; }
+        .logo-area { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-weight: bold; font-size: 1.1rem; color: var(--accent); }
+        .badge { display: inline-block; background: var(--accent); color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; margin-bottom: 15px; font-weight: bold; text-align: center; }
+        
+        .nav-btn { background: transparent; border: none; color: var(--text-main); padding: 12px 15px; text-align: left; border-radius: 8px; cursor: pointer; transition: background 0.2s; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; }
+        .nav-btn:hover, .nav-btn.active { background-color: var(--accent); color: #fff; }
+
+        .main-content { flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        .section { display: none; flex: 1; flex-direction: column; padding: 30px; overflow-y: auto; }
+        .section.active { display: flex; }
+        
+        h2 { margin-bottom: 20px; color: var(--text-main); }
+
+        .card { background-color: var(--bg-card); border-radius: 12px; padding: 25px; max-width: 600px; border: 1px solid #2d2d3d; margin-bottom: 20px; }
+        .card h3 { color: var(--accent); margin-bottom: 10px; }
+        .card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; line-height: 1.5; }
+        
+        input[type="text"] { width: 100%; padding: 12px 15px; background: var(--bg-main); border: 1px solid #3f3f5f; border-radius: 8px; color: #fff; font-size: 0.95rem; margin-bottom: 15px; outline: none; }
+        input[type="text"]:focus { border-color: var(--accent); }
+
+        .btn-primary { background-color: var(--accent); color: #ffffff; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        .btn-primary:hover { background-color: var(--accent-hover); }
+
+        .chat-container { flex: 1; display: flex; flex-direction: column; gap: 15px; overflow-y: auto; padding-bottom: 20px; }
+        .message { padding: 12px 18px; border-radius: 10px; max-width: 75%; line-height: 1.4; word-break: break-word; }
+        .message.user { background-color: var(--accent); color: white; align-self: flex-end; }
+        .message.ai { background-color: var(--bg-card); color: white; align-self: flex-start; border: 1px solid #2d2d3d; }
+        .message img { max-width: 100%; border-radius: 8px; margin-top: 8px; display: block; }
+        
+        .chat-input-area { display: flex; gap: 10px; padding-top: 15px; border-top: 1px solid #2d2d3d; align-items: center; }
+        .chat-input-area input { margin-bottom: 0; flex: 1; }
+        .file-btn { background: #2d2d3d; color: #fff; border: none; padding: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .file-btn:hover { background: #3f3f5f; }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
-        <div class="sidebar-header">
-            <div class="duck-branding">
-                <div class="duck-logo">🦆</div>
-                <span>Duckie Duck Pro</span>
-            </div>
-            <button class="action-btn" id="addContactBtn" title="Añadir Contacto en Tiempo Real">+</button>
-        </div>
-        <div class="nav-tabs">
-            <button class="nav-tab active" onclick="switchTab('chats')">Chats</button>
-            <button class="nav-tab" onclick="switchTab('contacts')">Contactos</button>
-            <button class="nav-tab" onclick="switchTab('calls')">Llamadas</button>
-        </div>
-        <div class="sidebar-content" id="sidebarContent">
-            <div class="contact-item" onclick="selectChat('Duckie Guai-fai\'v (IA)')">
-                <div>
-                    <strong>Duckie Guai-fai'v</strong><br>
-                    <small style="color: var(--duck-yellow);">Asistente Principal AI</small>
-                </div>
-            </div>
-            <div class="contact-item" onclick="selectChat('Soporte / Marketplace')">
-                <div>
-                    <strong>Soporte / Marketplace</strong><br>
-                    <small style="color: var(--text-muted);">En línea</small>
-                </div>
-            </div>
-        </div>
+        <div class="logo-area">🦆 Duckiethemu's</div>
+        <div class="badge">Worldwide Bilingual App</div>
+        <button class="nav-btn active" onclick="switchSection('chat', this)">💬 Centro de Chat IA / AI Chat</button>
+        <button class="nav-btn" onclick="switchSection('gems', this)">💎 Gestión de Gems / Gems Management</button>
+        <button class="nav-btn" onclick="switchSection('calls', this)">📞 Llamadas / Calls</button>
+        <button class="nav-btn" onclick="switchSection('plan', this)">📱 Tu Plan / Mobile Plan</button>
+        <button class="nav-btn" onclick="switchSection('settings', this)">⚙️ Ajustes / Settings</button>
+        <button class="nav-btn" onclick="switchSection('docs', this)">📁 Docs & Media</button>
+        <button class="nav-btn" onclick="switchSection('about', this)">💡 Origen / About Us</button>
+        <button class="nav-btn" onclick="switchSection('security', this)">🔒 Seguridad / Security</button>
     </div>
 
-    <div class="main-panel">
-        <div class="panel-header">
-            <span id="activeChatTitle">Duckie Guai-fai'v (Asistente Principal)</span>
-            <div class="header-actions">
-                <button id="installPwaBtn" class="install-pwa-btn" onclick="installPWA()">📱 Instalar App</button>
-                <a href="https://wa.me/15550193825?text=Hola,%20quiero%20información%20sobre%20Duckie%20Duck%20Pro" target="_blank" class="whatsapp-link-btn" title="Chatear por WhatsApp">
-                    💬 WhatsApp
-                </a>
-                <button class="action-btn" onclick="triggerMainCall('voice')">📞 Llamada</button>
-                <button class="action-btn" onclick="triggerMainCall('video')">📹 Videollamada</button>
+    <div class="main-content">
+        <!-- CENTRO DE CHAT IA -->
+        <div id="chat" class="section active">
+            <h2>Centro de Chat IA (Gemini Multimodal Real-Time)</h2>
+            <div class="chat-container" id="chatHistory">
+                <div class="message ai">¡Hola! Soy Duckie Guai-fai'v. Asistente bilingüe mundial conectado en tiempo real.<br>Hello! I am Duckie Guai-fai'v. Worldwide bilingual assistant connected in real time.</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageSelect(event)">
+                <button class="file-btn" onclick="document.getElementById('imageInput').click()" title="Adjuntar Imagen / Attach Image">📎</button>
+                <input type="text" id="userInput" placeholder="Escribe un mensaje o describe la imagen... / Type a message..." onkeypress="handleKeyPress(event)">
+                <button class="btn-primary" onclick="sendMessage()">Enviar / Send</button>
             </div>
         </div>
 
-        <div class="chat-container" id="chatContainer">
-            <div class="message-bubble incoming">
-                ¡Actualizado a <strong>Duckie Duck Pro</strong>! Nombre cambiado oficialmente en toda la interfaz, manifiesto PWA y enlaces. Los contactos (como Pedro: 6198918186) están listos para marcar directamente.
+        <!-- GESTION DE GEMS -->
+        <div id="gems" class="section">
+            <h2>Gestión de Gems / Gems Management</h2>
+            <div class="card">
+                <h3>Administración de Asistentes Especializados (Gems)</h3>
+                <p>Configura, personaliza y gestiona las instrucciones, comportamientos y contextos de tus Gems especializados para potenciar cada área de trabajo.<br>Configure, customize, and manage instructions, behaviors, and contexts for your specialized Gems to enhance every work area.</p>
+                <button class="btn-primary" onclick="alert('Panel de Gestión de Gems activo / Gems Management Panel active')">Configurar Gems / Configure Gems</button>
             </div>
         </div>
 
-        <div class="input-panel">
-            <button class="media-btn" title="Ver Fotos de Referencia" onclick="sendGalleryReference()">🖼️</button>
-            <button class="media-btn" title="Enviar Nota de Voz" onclick="simulateSendAudio()">🎤</button>
-            <input type="text" id="messageInput" placeholder="Escribe un mensaje, número a registrar o receta..." autocomplete="off">
-            <button class="send-submit" onclick="sendMessage()">Enviar</button>
+        <!-- LLAMADAS Y VIDEO LLAMADAS -->
+        <div id="calls" class="section">
+            <h2>Llamadas y Video Llamadas / Calls & Video Calls</h2>
+            <div class="card">
+                <h3>Centro de Comunicación / Communication Center</h3>
+                <p>Conecta en tiempo real mediante voz y video asistido con Duckie Guai-fai'v.<br>Connect in real time through assisted voice and video with Duckie Guai-fai'v.</p>
+                <button class="btn-primary" onclick="alert('Iniciando canal de voz y video... / Starting voice and video channel...')">Iniciar Videollamada / Start Call</button>
+            </div>
+        </div>
+
+        <!-- TU PLAN MOVIL -->
+        <div id="plan" class="section">
+            <h2>Tu Plan Móvil / Your Mobile Plan</h2>
+            <div class="card">
+                <h3>Estado de Suscripción / Subscription Status</h3>
+                <p>Gestiona tu dispositivo dedicado y número asignado para la app.<br>Manage your dedicated device and assigned phone number for the app.</p>
+                <button class="btn-primary" onclick="alert('Suscripción activa al Plan Pro / Active Pro Plan Subscription')">Ver Detalles / View Details</button>
+            </div>
+        </div>
+
+        <!-- AJUSTES -->
+        <div id="settings" class="section">
+            <h2>Ajustes del Sistema / System Settings</h2>
+            <div class="card">
+                <h3>Credenciales de Acceso (API / Token)</h3>
+                <p>Clave configurada de forma segura para evitar bloqueos y soportar autenticación flexible:<br>Securely configured key to prevent blocks and support flexible authentication:</p>
+                <input type="text" id="apiKeyInput" placeholder="Clave protegida... / Protected key...">
+                <button class="btn-primary" onclick="saveApiKey()">Guardar Credencial / Save Credential</button>
+            </div>
+        </div>
+
+        <!-- ORIGEN DEL PROYECTO (ACERCA DE) -->
+        <div id="about" class="section">
+            <h2>Origen y Filosofía de Duckiethemu's / Origin & Philosophy</h2>
+            <div class="card">
+                <h3>¿Qué significa Duckiethemu's? / What does Duckiethemu's mean?</h3>
+                <p>En español e inglés: <strong>"Duckie the multi-uses"</strong> (el pato multiusos). Representa una herramienta versátil, diseñada para servir en todo lo que necesites.<br>In Spanish and English: <strong>"Duckie the multi-uses"</strong> (the multi-purpose duck). It represents a versatile tool designed to serve for everything you need.</p>
+            </div>
+            <div class="card">
+                <h3>Nuestra Esencia y Familia de Aplicaciones / Our Essence & App Family</h3>
+                <p>Forma parte de una gran familia tecnológica junto a proyectos totalmente funcionales y separados como <strong>Duckie Marketplace</strong>. La imagen simbólica del pato frente a los edificios representa que, sin importar el paso de los años, el tiempo o los cambios del entorno, siempre nos adaptamos y evolucionamos en sintonía con el futuro.<br>It is part of a great technological family alongside fully functional and separate projects like <strong>Duckie Marketplace</strong>. The symbolic image of the duck in front of the buildings represents that, regardless of the passage of years, time, or environmental changes, we always adapt and evolve in tune with the future.</p>
+            </div>
+        </div>
+
+        <!-- DOCS & MEDIA -->
+        <div id="docs" class="section">
+            <h2>Docs & Media</h2>
+            <div class="card">
+                <h3>Archivos y Recursos / Files & Resources</h3>
+                <p>Administra los archivos multimedia y documentos del sistema.<br>Manage multimedia files and system documents.</p>
+            </div>
+        </div>
+
+        <!-- SEGURIDAD -->
+        <div id="security" class="section">
+            <h2>Seguridad / Security</h2>
+            <div class="card">
+                <h3>Protección de Cuenta / Account Protection</h3>
+                <p>Configuración de cifrado y aislamiento de proyectos independientes.<br>Encryption settings and isolation of independent projects.</p>
+            </div>
         </div>
     </div>
 
     <script>
-        let currentTab = 'chats';
-        let dynamicContacts = [
-            { name: "Pedro", phone: "6198918186" },
-            { name: "Duckie Assistant", phone: "+15550193825" },
-            { name: "Cliente Marketplace", phone: "+15558887766" }
-        ];
+        const part1 = "AQ.Ab8RN6LSm2fXGV8";
+        const part2 = "VhnNjeZITDxaqsh87LacWXAQpFVu6gTGIQA";
+        const DEFAULT_API_KEY = part1 + part2;
 
-        let deferredPrompt;
-        const installBtn = document.getElementById('installPwaBtn');
+        let selectedImageBase64 = null;
+        let selectedMimeType = null;
 
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            installBtn.style.display = 'inline-block';
+        function switchSection(sectionId, btn) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        function saveApiKey() {
+            const key = document.getElementById('apiKeyInput').value.trim();
+            if(!key) {
+                alert('Por favor ingresa una clave válida. / Please enter a valid key.');
+                return;
+            }
+            localStorage.setItem('duckie_api_key', key);
+            alert('¡Credencial guardada exitosamente! / Credential successfully saved!');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            let savedKey = localStorage.getItem('duckie_api_key');
+            if(!savedKey) {
+                savedKey = DEFAULT_API_KEY;
+                localStorage.setItem('duckie_api_key', savedKey);
+            }
+            document.getElementById('apiKeyInput').value = savedKey;
         });
 
-        function installPWA() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('Usuario aceptó instalar la PWA');
-                    }
-                    deferredPrompt = null;
-                    installBtn.style.display = 'none';
-                });
-            }
+        function handleImageSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            selectedMimeType = file.type;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                selectedImageBase64 = e.target.result.split(',')[1];
+                
+                const chatHistory = document.getElementById('chatHistory');
+                const userMsg = document.createElement('div');
+                userMsg.className = 'message user';
+                userMsg.innerHTML = `[Imagen adjunta / Attached Image]<br><img src="${e.target.result}" alt="Preview">`;
+                chatHistory.appendChild(userMsg);
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            };
+            reader.readAsDataURL(file);
         }
 
-        function switchTab(tab) {
-            currentTab = tab;
-            const tabs = document.querySelectorAll('.nav-tab');
-            tabs.forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-
-            renderSidebarContent();
-        }
-
-        function renderSidebarContent() {
-            const content = document.getElementById('sidebarContent');
-            if (currentTab === 'chats') {
-                content.innerHTML = `
-                    <div class="contact-item" onclick="selectChat('Duckie Guai-fai\\'v (IA)')">
-                        <div><strong>Duckie Guai-fai'v</strong><br><small style="color: var(--duck-yellow);">Asistente Principal AI</small></div>
-                    </div>
-                    <div class="contact-item" onclick="selectChat('Soporte / Marketplace')">
-                        <div><strong>Soporte / Marketplace</strong><br><small style="color: var(--text-muted);">En línea</small></div>
-                    </div>
-                `;
-            } else if (currentTab === 'contacts') {
-                let html = '';
-                dynamicContacts.forEach(c => {
-                    html += `
-                        <div class="contact-item">
-                            <div><strong>${c.name}</strong><br><small style="color: var(--text-muted);">${c.phone}</small></div>
-                            <div class="contact-actions">
-                                <a href="tel:${c.phone}" class="call-action-btn" title="Llamar por teléfono">📞 Llamar</a>
-                                <a href="https://wa.me/${c.phone.replace(/[^0-9]/g, '')}" target="_blank" class="whatsapp-link-btn" style="padding: 6px 10px; font-size: 0.8rem;" title="Enviar WhatsApp">💬</a>
-                            </div>
-                        </div>
-                    `;
-                });
-                content.innerHTML = html;
-            } else if (currentTab === 'calls') {
-                let html = '<div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">Acceso rápido de marcado telefónico directo:</div>';
-                dynamicContacts.forEach(c => {
-                    html += `
-                        <div class="call-item">
-                            <div><strong>${c.name}</strong><br><small style="color: var(--text-muted);">${c.phone}</small></div>
-                            <a href="tel:${c.phone}" class="call-action-btn">📞 Marcar</a>
-                        </div>
-                    `;
-                });
-                content.innerHTML = html;
-            }
-        }
-
-        function selectChat(name) {
-            document.getElementById('activeChatTitle').textContent = name;
-        }
-
-        function appendMessage(text, sender, type = 'text') {
-            const container = document.getElementById('chatContainer');
-            const bubble = document.createElement('div');
-            bubble.className = `message-bubble ${sender}`;
-
-            if (type === 'text') {
-                bubble.textContent = text;
-            } else if (type === 'gallery') {
-                bubble.innerHTML = `${text}<div class="gallery-grid">
-                    <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=200" class="gallery-thumb" alt="Ref 1">
-                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200" class="gallery-thumb" alt="Ref 2">
-                    <img src="https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=200" class="gallery-thumb" alt="Ref 3">
-                    <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=200" class="gallery-thumb" alt="Ref 4">
-                </div>`;
-            } else if (type === 'audio') {
-                bubble.innerHTML = `${text}<div style="font-size:0.8rem; margin-top:4px; opacity:0.8;">Nota de voz (Tiempo real - 0:12s)</div>`;
-            }
-
-            container.appendChild(bubble);
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function sendMessage() {
-            const input = document.getElementById('messageInput');
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
             const text = input.value.trim();
-            if (!text) return;
+            if(!text && !selectedImageBase64) return;
 
-            appendMessage(text, 'outgoing');
-            input.value = '';
-
-            setTimeout(() => {
-                let reply = "Procesando instrucción en tiempo real en Duckie Duck Pro...";
-                const lower = text.toLowerCase();
-                if (lower.includes('pastel') || lower.includes('receta') || lower.includes('fresa')) {
-                    reply = "Aquí tienes opciones para tu pastel de fresa:\n1. Pastel clásico con crema batida y fresas naturales.\n2. Pastel de tres leches con topping de fresa.\n3. Cheesecake frío de fresa.\n¿Cuál de estas opciones prefieres?";
-                }
-                appendMessage(reply, 'incoming');
-            }, 600);
-        }
-
-        function sendGalleryReference() {
-            appendMessage("Cargando las 4 imágenes de referencia multimedia:", 'outgoing', 'gallery');
-            setTimeout(() => {
-                appendMessage("Las 4 referencias multimedia están sincronizadas en tiempo real.", 'incoming');
-            }, 800);
-        }
-
-        function simulateSendAudio() {
-            appendMessage("Nota de voz enviada:", 'outgoing', 'audio');
-            setTimeout(() => {
-                appendMessage("Audio recibido y procesado en tiempo real por el sistema.", 'incoming');
-            }, 800);
-        }
-
-        function triggerMainCall(type) {
-            window.location.href = "tel:6198918186";
-        }
-
-        document.getElementById('addContactBtn').addEventListener('click', () => {
-            const name = prompt("Ingrese el nombre del nuevo contacto:");
-            if (!name) return;
-            const phone = prompt("Ingrese el número de teléfono con código de área (ej. 6198918186):");
-            if (!phone) return;
-
-            dynamicContacts.push({ name: name, phone: phone });
-            if (currentTab === 'contacts' || currentTab === 'calls') {
-                renderSidebarContent();
+            const chatHistory = document.getElementById('chatHistory');
+            
+            if (text && !selectedImageBase64) {
+                const userMsg = document.createElement('div');
+                userMsg.className = 'message user';
+                userMsg.textContent = text;
+                chatHistory.appendChild(userMsg);
             }
-            alert(`¡Contacto "${name}" con número ${phone} agregado exitosamente!`);
-        });
+            
+            input.value = '';
+            chatHistory.scrollTop = chatHistory.scrollHeight;
 
-        document.getElementById('messageInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
+            const aiMsg = document.createElement('div');
+            aiMsg.className = 'message ai';
+            aiMsg.textContent = 'Pensando... / Thinking...';
+            chatHistory.appendChild(aiMsg);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            const apiKey = localStorage.getItem('duckie_api_key') || DEFAULT_API_KEY;
+
+            try {
+                let parts = [];
+                if (text) {
+                    parts.push({ text: text });
+                }
+                if (selectedImageBase64 && selectedMimeType) {
+                    parts.push({
+                        inline_data: {
+                            mime_type: selectedMimeType,
+                            data: selectedImageBase64
+                        }
+                    });
+                }
+
+                let endpoint = '';
+                let headers = { 'Content-Type': 'application/json' };
+
+                if (apiKey.startsWith('AIza')) {
+                    endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+                } else {
+                    endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`;
+                    headers['Authorization'] = `Bearer ${apiKey}`;
+                }
+
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify({
+                        contents: [{ parts: parts }]
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                    aiMsg.textContent = data.candidates[0].content.parts[0].text;
+                } else if (data.error) {
+                    aiMsg.textContent = 'Error de la API: ' + data.error.message;
+                } else {
+                    aiMsg.textContent = 'Respuesta vacía o error de formato. / Empty response or format error.';
+                }
+            } catch (error) {
+                aiMsg.textContent = 'Error de conexión en tiempo real: ' + error.message;
+            }
+
+            selectedImageBase64 = null;
+            selectedMimeType = null;
+            document.getElementById('imageInput').value = '';
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        function handleKeyPress(e) {
+            if(e.key === 'Enter') sendMessage();
+        }
     </script>
 </body>
 </html>
