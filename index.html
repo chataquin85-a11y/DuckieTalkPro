@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DuckieTalk 1.1 - Ducke Talk Own Brand</title>
+    <title>DuckieDuck Pro & DuckieTalk 1.1 - DuckieTheMu's Ecosystem</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -29,20 +29,28 @@
             background-size: 20px 20px;
         }
 
-        .settings-panel {
+        .settings-panel, .modal-panel {
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
         }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-center p-2 font-default">
 
-    <!-- Mobile Container mimicking the interface -->
-    <div id="appContainer" class="w-full max-w-md bg-[#0f172a] text-slate-100 rounded-3xl shadow-2xl overflow-hidden relative flex flex-col h-[780px] border-8 border-slate-900 transition-all duration-300">
+    <!-- Mobile Device Container -->
+    <div id="appContainer" class="w-full max-w-md bg-[#0f172a] text-slate-100 rounded-3xl shadow-2xl overflow-hidden relative flex flex-col h-[820px] border-8 border-slate-900 transition-all duration-300">
         
         <!-- Header Top Bar -->
-        <header class="bg-[#0f172a] border-b border-slate-800 px-4 py-3 flex items-center justify-between z-10">
+        <header class="bg-[#0f172a] border-b border-slate-800 px-4 py-3 flex items-center justify-between z-10 flex-shrink-0">
             <div class="flex items-center space-x-2.5">
-                <div class="w-9 h-9 bg-amber-400 rounded-full flex items-center justify-center shadow-inner overflow-hidden border border-amber-500">
+                <div class="w-9 h-9 bg-amber-400 rounded-full flex items-center justify-center shadow-inner overflow-hidden border border-amber-500 flex-shrink-0">
                     <svg viewBox="0 0 100 100" class="w-6 h-6 text-slate-950">
                         <path fill="currentColor" d="M30,40 C30,25 55,20 65,35 C70,32 78,35 82,40 C75,45 70,45 68,52 C60,65 35,65 30,52 C25,52 20,48 25,43 C28,43 30,42 30,40 Z" />
                         <circle cx="50" cy="35" r="4" fill="white" />
@@ -51,138 +59,314 @@
                 </div>
                 <div>
                     <div class="flex items-center space-x-1.5">
-                        <h1 class="text-sm font-bold tracking-tight text-white">DuckieTalk 1.1</h1>
+                        <h1 class="text-sm font-bold tracking-tight text-white">DuckieDuck Pro</h1>
                         <span class="text-emerald-400 text-xs">✓</span>
                     </div>
-                    <span class="text-[10px] text-amber-500 font-extrabold uppercase tracking-widest block">Own Brand</span>
+                    <span class="text-[10px] text-amber-500 font-extrabold uppercase tracking-widest block">DuckieTheMu's Brand</span>
                 </div>
             </div>
 
-            <!-- Settings Button -->
-            <button id="settingsBtn" class="p-2 hover:bg-slate-800 rounded-full transition-colors text-slate-300 focus:outline-none" aria-label="Open Settings">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-            </button>
+            <div class="flex items-center space-x-1">
+                <button onclick="openCallModal()" class="p-2 hover:bg-slate-800 rounded-full transition-colors text-amber-400" title="Simulated Call">
+                    📞
+                </button>
+                <button id="settingsBtn" class="p-2 hover:bg-slate-800 rounded-full transition-colors text-slate-300 focus:outline-none" aria-label="Open Settings">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </button>
+            </div>
         </header>
 
         <!-- Chat History View Area -->
-        <main id="workspace" class="flex-1 p-4 flex flex-col justify-between relative overflow-y-auto transition-all duration-300 bg-[#0f172a]">
+        <main id="workspace" class="flex-1 p-4 flex flex-col justify-between relative overflow-y-auto custom-scrollbar transition-all duration-300 bg-[#0f172a]">
             <div id="chatHistory" class="space-y-4">
                 <div class="bg-[#1e293b] border border-slate-800 text-slate-200 p-4 rounded-2xl shadow-md max-w-[90%]">
                     <p class="text-xs leading-relaxed font-medium">
-                        🦆 ¡Hola! Soy Duckie AI. Estoy listo para conversar contigo en tiempo real. Escribe algo o toca el patito amarillo abajo a la derecha.
+                        🦆 ¡Bienvenido a <strong>DuckieTheMu's</strong>! Todos los botones y herramientas (Emojis, Stickers, GIFs, Multimedia, Audio, Cámara y Ajustes completos) están activos y listos al 100%.
                     </p>
                 </div>
             </div>
         </main>
 
+        <!-- Audio Recording Interactive Overlay Tray (Hidden by default) -->
+        <div id="audioTray" class="hidden bg-[#131b2e] border-t border-slate-800 px-4 py-3 flex items-center justify-between z-15">
+            <div class="flex items-center space-x-2 text-xs text-red-400 font-bold animate-pulse">
+                <span>🔴 Recording Audio...</span>
+                <span id="audioTimer" class="font-mono text-white">00:00</span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button onclick="pauseAudio()" id="pauseAudioBtn" class="px-2.5 py-1 bg-amber-500/20 text-amber-400 rounded-lg text-xs font-semibold hover:bg-amber-500/30">Pausar</button>
+                <button onclick="cancelAudio()" class="px-2.5 py-1 bg-red-500/20 text-red-400 rounded-lg text-xs font-semibold hover:bg-red-500/30">Borrar</button>
+                <button onclick="sendAudioMessage()" class="px-3 py-1 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-500">Enviar 🎙️</button>
+            </div>
+        </div>
+
+        <!-- Camera Interface Modal Overlay -->
+        <div id="cameraModal" class="hidden absolute inset-0 bg-black z-30 flex flex-col justify-between p-4">
+            <div class="flex justify-between items-center text-white">
+                <span class="text-xs font-bold bg-slate-800 px-3 py-1 rounded-full">DuckieCam Lens: <span id="currentLens">Normal</span></span>
+                <button onclick="closeCamera()" class="text-white text-lg font-bold bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center">✕</button>
+            </div>
+            <div class="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-slate-700 rounded-2xl my-4 bg-slate-900 relative overflow-hidden">
+                <div id="cameraViewfinder" class="text-center p-4">
+                    <span class="text-5xl block mb-2">📸</span>
+                    <p class="text-xs text-slate-400">Viewfinder Active (Simulated Lens)</p>
+                </div>
+            </div>
+            <div class="flex flex-col space-y-3">
+                <div class="flex justify-center space-x-2">
+                    <button onclick="switchLens('Normal', this)" class="lens-btn px-3 py-1 bg-amber-500 text-slate-950 font-bold text-xs rounded-lg">Normal</button>
+                    <button onclick="switchLens('Wide 0.5x', this)" class="lens-btn px-3 py-1 bg-slate-800 text-slate-300 text-xs rounded-lg">0.5x Wide</button>
+                    <button onclick="switchLens('Telephoto 2x', this)" class="lens-btn px-3 py-1 bg-slate-800 text-slate-300 text-xs rounded-lg">2x Zoom</button>
+                    <button onclick="switchLens('Portrait', this)" class="lens-btn px-3 py-1 bg-slate-800 text-slate-300 text-xs rounded-lg">Portrait</button>
+                </div>
+                <div class="flex justify-around items-center pt-2">
+                    <button onclick="captureMedia('Photo')" class="w-14 h-14 bg-white rounded-full border-4 border-slate-400 shadow-lg active:scale-95 flex items-center justify-center text-xs font-bold text-slate-900">SNAP</button>
+                    <button onclick="captureMedia('Video')" class="w-14 h-14 bg-red-600 rounded-full border-4 border-slate-400 shadow-lg active:scale-95 flex items-center justify-center text-xs font-bold text-white">REC</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Bottom Action Bar -->
-        <div class="bg-[#0b0f19] border-t border-slate-800 px-3 py-3 space-y-2.5">
-            <!-- Feature Pills Row -->
-            <div class="flex items-center space-x-2 overflow-x-auto pb-1 text-xs font-semibold">
-                <button onclick="toggleTray('emojiTray')" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg transition-colors flex items-center space-x-1">✨ <span>Emoji</span></button>
-                <button onclick="toggleTray('gifTray')" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg transition-colors flex items-center space-x-1">👾 <span>GIF</span></button>
-                <button onclick="toggleTray('stickerTray')" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg transition-colors flex items-center space-x-1">🎨 <span>Sticker</span></button>
-                <button onclick="triggerDuckieAI()" class="px-3 py-1 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-lg transition-colors flex items-center space-x-1">🦆 <span>Duckie</span></button>
+        <div class="bg-[#0b0f19] border-t border-slate-800 px-3 py-3 space-y-2.5 flex-shrink-0">
+            <!-- Feature Triggers Row -->
+            <div class="flex items-center space-x-2 overflow-x-auto pb-1 text-xs font-semibold scrollbar-none">
+                <button onclick="toggleTray('emojiTray')" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg transition-colors flex items-center space-x-1 flex-shrink-0">😊 <span>Emojis</span></button>
+                <button onclick="toggleTray('stickerTray')" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg transition-colors flex items-center space-x-1 flex-shrink-0">🎨 <span>Stickers</span></button>
+                <button onclick="toggleTray('gifTray')" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg transition-colors flex items-center space-x-1 flex-shrink-0">🎞️ <span>GIFs</span></button>
+                <button onclick="triggerPayPalCheckout()" class="px-3 py-1 bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded-lg transition-colors flex items-center space-x-1 flex-shrink-0">💳 <span>PayPal</span></button>
+                <button onclick="triggerWhatsAppChat()" class="px-3 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-lg transition-colors flex items-center space-x-1 flex-shrink-0">💬 <span>WhatsApp</span></button>
             </div>
 
-            <!-- Dynamic Content Trays -->
-            <div id="emojiTray" class="media-tray hidden bg-[#131b2e] border border-slate-800 p-3 rounded-2xl grid grid-cols-6 gap-2 text-center text-lg shadow-inner">
-                <button onclick="insertItem('😀')" class="hover:bg-slate-800 p-1.5 rounded-xl transition-colors">😀</button>
-                <button onclick="insertItem('🚀')" class="hover:bg-slate-800 p-1.5 rounded-xl transition-colors">🚀</button>
-                <button onclick="insertItem('🔥')" class="hover:bg-slate-800 p-1.5 rounded-xl transition-colors">🔥</button>
-                <button onclick="insertItem('🎉')" class="hover:bg-slate-800 p-1.5 rounded-xl transition-colors">🎉</button>
-                <button onclick="insertItem('❤️')" class="hover:bg-slate-800 p-1.5 rounded-xl transition-colors">❤️</button>
-                <button onclick="insertItem('✨')" class="hover:bg-slate-800 p-1.5 rounded-xl transition-colors">✨</button>
+            <!-- Emojis Tray -->
+            <div id="emojiTray" class="media-tray hidden bg-[#131b2e] border border-slate-800 p-3 rounded-2xl grid grid-cols-8 gap-1.5 text-center text-base shadow-inner">
+                <button onclick="insertItem('☺️')" class="hover:bg-slate-800 p-1 rounded-xl">☺️</button>
+                <button onclick="insertItem('😳')" class="hover:bg-slate-800 p-1 rounded-xl">😳</button>
+                <button onclick="insertItem('😘')" class="hover:bg-slate-800 p-1 rounded-xl">😘</button>
+                <button onclick="insertItem('😊')" class="hover:bg-slate-800 p-1 rounded-xl">😊</button>
+                <button onclick="insertItem('😇')" class="hover:bg-slate-800 p-1 rounded-xl">😇</button>
+                <button onclick="insertItem('👍🏽')" class="hover:bg-slate-800 p-1 rounded-xl">👍🏽</button>
+                <button onclick="insertItem('😍')" class="hover:bg-slate-800 p-1 rounded-xl">😍</button>
+                <button onclick="insertItem('😏')" class="hover:bg-slate-800 p-1 rounded-xl">😏</button>
+                <button onclick="insertItem('🤩')" class="hover:bg-slate-800 p-1 rounded-xl">🤩</button>
+                <button onclick="insertItem('😔')" class="hover:bg-slate-800 p-1 rounded-xl">😔</button>
+                <button onclick="insertItem('🥸')" class="hover:bg-slate-800 p-1 rounded-xl">🥸</button>
+                <button onclick="insertItem('😭')" class="hover:bg-slate-800 p-1 rounded-xl">😭</button>
+                <button onclick="insertItem('😡')" class="hover:bg-slate-800 p-1 rounded-xl">😡</button>
+                <button onclick="insertItem('😖')" class="hover:bg-slate-800 p-1 rounded-xl">😖</button>
+                <button onclick="insertItem('😨')" class="hover:bg-slate-800 p-1 rounded-xl">😨</button>
+                <button onclick="insertItem('🤬')" class="hover:bg-slate-800 p-1 rounded-xl">🤬</button>
+                <button onclick="insertItem('🥶')" class="hover:bg-slate-800 p-1 rounded-xl">🥶</button>
+                <button onclick="insertItem('🤯')" class="hover:bg-slate-800 p-1 rounded-xl">🤯</button>
             </div>
 
-            <div id="gifTray" class="media-tray hidden bg-[#131b2e] border border-slate-800 p-3 rounded-2xl grid grid-cols-3 gap-2 text-center text-xs text-slate-300">
-                <button onclick="insertItem('[GIF: Party Duck]')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl">🎉 Party Duck</button>
-                <button onclick="insertItem('[GIF: Coding Duck]')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl">💻 Coding Duck</button>
-                <button onclick="insertItem('[GIF: Happy Duck]')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl">🌟 Happy Duck</button>
+            <!-- Custom Stickers Tray -->
+            <div id="stickerTray" class="media-tray hidden bg-[#131b2e] border border-slate-800 p-3 rounded-2xl grid grid-cols-4 gap-2 text-center text-xs shadow-inner">
+                <button onclick="sendSticker('🦆 [Sticker: Duckie Boss]')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl text-amber-400 font-bold border border-slate-700">🦆 Boss Duck</button>
+                <button onclick="sendSticker('🚀 [Sticker: To The Moon]')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl text-blue-400 font-bold border border-slate-700">🚀 To Moon</button>
+                <button onclick="sendSticker('🔥 [Sticker: Fire Pro]')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl text-red-400 font-bold border border-slate-700">🔥 Fire Pro</button>
+                <button onclick="sendSticker('💎 [Sticker: Diamond Hands]')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl text-emerald-400 font-bold border border-slate-700">💎 Diamond</button>
             </div>
 
-            <div id="stickerTray" class="media-tray hidden bg-[#131b2e] border border-slate-800 p-3 rounded-2xl grid grid-cols-3 gap-2 text-center text-xs text-amber-300">
-                <button onclick="insertItem('[Sticker: 🦆 Quack!]')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl">🦆 Quack!</button>
-                <button onclick="insertItem('[Sticker: ⭐ Pro]')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl">⭐ Pro</button>
-                <button onclick="insertItem('[Sticker: 🚀 Fast]')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl">🚀 Fast</button>
+            <!-- GIFs Tray -->
+            <div id="gifTray" class="media-tray hidden bg-[#131b2e] border border-slate-800 p-3 rounded-2xl grid grid-cols-3 gap-2 text-center text-xs shadow-inner">
+                <button onclick="sendGif('🎞️ [GIF: Duckie Dancing 🕺✨]')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl text-slate-200 border border-slate-700">🕺 Dancing Duck</button>
+                <button onclick="sendGif('🎞️ [GIF: Rocket Launch 🚀🔥]')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl text-slate-200 border border-slate-700">🚀 Launching</button>
+                <button onclick="sendGif('🎞️ [GIF: Success Celebration 🎉🍾]')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl text-slate-200 border border-slate-700">🎉 Success</button>
+            </div>
+
+            <!-- Attachment Menu Tray (Gallery, Docs, Images) -->
+            <div id="attachTray" class="media-tray hidden bg-[#131b2e] border border-slate-800 p-3 rounded-2xl grid grid-cols-3 gap-2 text-center text-xs shadow-inner">
+                <button onclick="handleAttachment('Galeria')" class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-xl text-amber-300 font-semibold border border-slate-700">🖼️ Galería</button>
+                <button onclick="handleAttachment('Documentos')" class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-xl text-blue-300 font-semibold border border-slate-700">📄 Docs</button>
+                <button onclick="handleAttachment('Imagenes')" class="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-xl text-emerald-300 font-semibold border border-slate-700">📷 Imágenes</button>
             </div>
 
             <!-- Text Input & Controls Row -->
             <div class="flex items-center space-x-2">
-                <input type="text" id="userInput" placeholder="talk to Duckie..." onkeypress="handleKeyPress(event)" class="flex-1 bg-[#162032] border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-amber-500">
+                <button onclick="toggleTray('attachTray')" class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl transition-colors" title="Attach Files">📎</button>
+                <button onclick="openCamera()" class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl transition-colors" title="Camera & Video">📷</button>
                 
-                <button onclick="triggerDuckieAI()" class="p-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl transition-colors" title="AI Help">?</button>
-                <button onclick="insertItem('[Attachment]')" class="p-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl transition-colors" title="Attach Media">📎</button>
-                <button onclick="triggerDuckieAI()" class="p-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl transition-colors" title="Voice Input">🎤</button>
+                <input type="text" id="userInput" placeholder="talk to DuckieDuck Pro..." onkeypress="handleKeyPress(event)" class="flex-1 bg-[#162032] border border-slate-700/60 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-amber-500">
                 
-                <!-- Duckie Logo Button on Bottom Right Hand Side (Fully connected to AI Chat) -->
-                <button onclick="triggerDuckieAI()" class="w-11 h-11 bg-amber-400 hover:bg-amber-300 rounded-xl flex items-center justify-center shadow-md overflow-hidden border border-amber-500 transition-transform active:scale-95 flex-shrink-0" title="Chat with Duckie AI">
-                    <svg viewBox="0 0 100 100" class="w-7 h-7 text-slate-950">
-                        <path fill="currentColor" d="M30,40 C30,25 55,20 65,35 C70,32 78,35 82,40 C75,45 70,45 68,52 C60,65 35,65 30,52 C25,52 20,48 25,43 C28,43 30,42 30,40 Z" />
-                        <circle cx="50" cy="35" r="4" fill="white" />
-                        <circle cx="50" cy="35" r="2" fill="black" />
-                    </svg>
+                <button onclick="toggleAudioRecording()" id="micBtn" class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl transition-colors" title="Voice Note">🎙️</button>
+                
+                <button onclick="sendTextMessage()" class="w-10 h-10 bg-amber-400 hover:bg-amber-300 rounded-xl flex items-center justify-center shadow-md text-slate-950 font-bold transition-transform active:scale-95 flex-shrink-0" title="Send">
+                    ➤
                 </button>
             </div>
         </div>
 
-        <!-- Sliding Settings Sheet -->
-        <div id="settingsPanel" class="settings-panel absolute inset-x-0 bottom-0 bg-white text-slate-900 border-t border-slate-200 rounded-t-3xl shadow-2xl p-6 z-20 transform translate-y-full opacity-0 pointer-events-none">
-            <div class="flex flex-col items-center mb-4">
-                <div class="w-12 h-1.5 bg-slate-200 rounded-full mb-3"></div>
+        <!-- Sliding Settings Sheet (Fully Modularized per Requirements) -->
+        <div id="settingsPanel" class="settings-panel absolute inset-x-0 bottom-0 bg-[#0f172a] text-slate-100 border-t border-slate-800 rounded-t-3xl shadow-2xl p-5 z-25 transform translate-y-full opacity-0 pointer-events-none max-h-[85vh] flex flex-col">
+            <div class="flex flex-col items-center mb-3 flex-shrink-0">
+                <div class="w-12 h-1.5 bg-slate-700 rounded-full mb-3"></div>
                 <div class="w-full flex justify-between items-center">
-                    <h2 class="text-lg font-bold text-slate-900">Theme Settings</h2>
-                    <button id="closeSettingsBtn" class="text-xs font-bold text-amber-700 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded-full transition-colors">
+                    <h2 class="text-base font-bold text-white">⚙️ DuckieTheMu's Settings</h2>
+                    <button id="closeSettingsBtn" class="text-xs font-bold text-amber-950 bg-amber-400 hover:bg-amber-300 px-3 py-1.5 rounded-full transition-colors">
                         Done
                     </button>
                 </div>
             </div>
 
-            <div class="space-y-5 overflow-y-auto max-h-[380px] pr-1">
-                <div>
-                    <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-2.5">Background Color</label>
-                    <div class="grid grid-cols-5 gap-3">
-                        <button onclick="changeBgColor('#0f172a', this)" class="color-swatch h-10 w-10 rounded-xl bg-slate-900 border-2 border-amber-500 ring-4 ring-amber-500/20 shadow-sm transition-all"></button>
-                        <button onclick="changeBgColor('#fee2e2', this)" class="color-swatch h-10 w-10 rounded-xl bg-red-100 border border-slate-200 shadow-sm transition-all"></button>
-                        <button onclick="changeBgColor('#fef3c7', this)" class="color-swatch h-10 w-10 rounded-xl bg-amber-100 border border-slate-200 shadow-sm transition-all"></button>
-                        <button onclick="changeBgColor('#dcfce7', this)" class="color-swatch h-10 w-10 rounded-xl bg-emerald-100 border border-slate-200 shadow-sm transition-all"></button>
-                        <button onclick="changeBgColor('#e0f2fe', this)" class="color-swatch h-10 w-10 rounded-xl bg-sky-100 border border-slate-200 shadow-sm transition-all"></button>
+            <div class="space-y-5 overflow-y-auto custom-scrollbar pr-1 flex-1 text-xs">
+                
+                <!-- Background Theme & Custom Background -->
+                <div class="bg-slate-900/80 p-3 rounded-2xl border border-slate-800 space-y-3">
+                    <h3 class="font-bold text-amber-400 uppercase tracking-wider text-[10px]">Background & Themes</h3>
+                    <div>
+                        <label class="block text-slate-400 mb-1.5">Preset Theme Colors</label>
+                        <div class="grid grid-cols-5 gap-2">
+                            <button onclick="changeBgColor('#0f172a', this)" class="color-swatch h-8 w-8 rounded-xl bg-slate-900 border-2 border-amber-500 shadow-sm"></button>
+                            <button onclick="changeBgColor('#1e1b4b', this)" class="color-swatch h-8 w-8 rounded-xl bg-indigo-950 border border-slate-700 shadow-sm"></button>
+                            <button onclick="changeBgColor('#064e3b', this)" class="color-swatch h-8 w-8 rounded-xl bg-emerald-950 border border-slate-700 shadow-sm"></button>
+                            <button onclick="changeBgColor('#7f1d1d', this)" class="color-swatch h-8 w-8 rounded-xl bg-red-950 border border-slate-700 shadow-sm"></button>
+                            <button onclick="changeBgColor('#18181b', this)" class="color-swatch h-8 w-8 rounded-xl bg-zinc-900 border border-slate-700 shadow-sm"></button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1.5">Custom Image Background</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="text" id="bgImageUrl" placeholder="Paste image URL here..." class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white">
+                            <button onclick="applyCustomBg()" class="bg-amber-500 text-slate-950 px-3 py-1.5 rounded-lg font-bold">Aplicar</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1.5">Typography Style</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="changeFont('font-default', this)" class="font-btn p-2 border-2 border-amber-500 bg-amber-500/10 text-white rounded-xl text-left font-bold">Sans (Default)</button>
+                            <button onclick="changeFont('font-clean', this)" class="font-btn p-2 border border-slate-700 bg-slate-950 text-slate-300 rounded-xl text-left">Segoe UI</button>
+                        </div>
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-2.5">Add Different Textures</label>
-                    <div class="grid grid-cols-2 gap-2.5">
-                        <button onclick="changeTexture('', this)" class="texture-btn py-2 px-3 border-2 border-amber-500 bg-amber-50 text-amber-700 rounded-xl text-xs font-bold transition-all">None (Solid)</button>
-                        <button onclick="changeTexture('texture-dots', this)" class="texture-btn py-2 px-3 border border-slate-200 bg-white text-slate-700 rounded-xl text-xs font-semibold hover:bg-slate-50 transition-all">Polka Dot</button>
-                        <button onclick="changeTexture('texture-lines', this)" class="texture-btn py-2 px-3 border border-slate-200 bg-white text-slate-700 rounded-xl text-xs font-semibold hover:bg-slate-50 transition-all">Horizontal Lines</button>
-                        <button onclick="changeTexture('texture-grid', this)" class="texture-btn py-2 px-3 border border-slate-200 bg-white text-slate-700 rounded-xl text-xs font-semibold hover:bg-slate-50 transition-all">Blueprint Grid</button>
+                <!-- Notifications -->
+                <div class="bg-slate-900/80 p-3 rounded-2xl border border-slate-800 space-y-2.5">
+                    <h3 class="font-bold text-amber-400 uppercase tracking-wider text-[10px]">Notifications</h3>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-300">Sonido Preferido (Message)</span>
+                        <select id="msgSound" class="bg-slate-950 border border-slate-700 text-white rounded-lg px-2 py-1">
+                            <option>Duck Quack</option>
+                            <option>Chime Soft</option>
+                            <option>Digital Ping</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-300">Sonido de Llamada</span>
+                        <select id="callSound" class="bg-slate-950 border border-slate-700 text-white rounded-lg px-2 py-1">
+                            <option>Classic Ring</option>
+                            <option>Duckie Melody</option>
+                            <option>Modern Pulse</option>
+                        </select>
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-2.5">Typography</label>
+                <!-- Status Privacy & Contacts -->
+                <div class="bg-slate-900/80 p-3 rounded-2xl border border-slate-800 space-y-2.5">
+                    <h3 class="font-bold text-amber-400 uppercase tracking-wider text-[10px]">Status Privacy & Contacts</h3>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-300">Mis Contactos Privacidad</span>
+                        <select class="bg-slate-950 border border-slate-700 text-white rounded-lg px-2 py-1">
+                            <option>Todos</option>
+                            <option>Solo Contactos</option>
+                            <option>Nadie</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 pt-1">
+                        <button onclick="showModalInfo('Add Contact', 'Contact added successfully to DuckieTheMu\'s directory.')" class="bg-slate-800 hover:bg-slate-700 py-2 px-3 rounded-xl text-center font-semibold">➕ Add Contact</button>
+                        <button onclick="showModalInfo('Phone Number', 'Registered Number: +1 (800) DUCKIE-MU')" class="bg-slate-800 hover:bg-slate-700 py-2 px-3 rounded-xl text-center font-semibold">📞 Phone Number</button>
+                    </div>
                     <div class="grid grid-cols-2 gap-2">
-                        <button onclick="changeFont('font-default', this)" class="font-btn p-2.5 border-2 border-amber-500 bg-amber-50 text-slate-900 rounded-xl text-left text-xs font-bold transition-all font-default">Default (Sans)</button>
-                        <button onclick="changeFont('font-clean', this)" class="font-btn p-2.5 border border-slate-200 bg-white text-slate-700 rounded-xl text-left text-xs font-medium hover:bg-slate-50 transition-all font-clean">Clean (Segoe UI)</button>
-                        <button onclick="changeFont('font-classic', this)" class="font-btn p-2.5 border border-slate-200 bg-white text-slate-700 rounded-xl text-left text-xs font-medium hover:bg-slate-50 transition-all font-classic">Classic (Serif)</button>
-                        <button onclick="changeFont('font-comic', this)" class="font-btn p-2.5 border border-slate-200 bg-white text-slate-700 rounded-xl text-left text-xs font-medium hover:bg-slate-50 transition-all font-comic">Comic Sans Differents</button>
+                        <button onclick="showModalInfo('Group Chat', 'Active DuckieGroup: 4 members online.')" class="bg-slate-800 hover:bg-slate-700 py-2 px-3 rounded-xl text-center font-semibold">👥 Group Chat</button>
+                        <button onclick="showModalInfo('Chat with a Contact', 'Select a contact to start secure messaging.')" class="bg-slate-800 hover:bg-slate-700 py-2 px-3 rounded-xl text-center font-semibold">💬 Chat Contact</button>
                     </div>
                 </div>
 
-                <div class="pt-1">
-                    <button onclick="resetDefaults()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold text-xs transition-colors">Reset Defaults</button>
+                <!-- Account Settings -->
+                <div class="bg-slate-900/80 p-3 rounded-2xl border border-slate-800 space-y-2.5">
+                    <h3 class="font-bold text-amber-400 uppercase tracking-wider text-[10px]">Account & Security</h3>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-300">App Information</span>
+                        <span class="text-slate-400 font-mono">v1.1 Pro</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-300">Email Address</span>
+                        <span class="text-amber-400">admin@duckiethemus.com</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-300">User Name</span>
+                        <span class="text-white font-bold">DuckieTheMu</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 pt-1">
+                        <button onclick="showModalInfo('Security Notifications', 'End-to-end encryption active.')" class="bg-slate-800 hover:bg-slate-700 py-2 px-3 rounded-xl text-center font-semibold">🔒 Security</button>
+                        <button onclick="showModalInfo('Live Location', 'Sharing location with DuckieNetwork.')" class="bg-slate-800 hover:bg-slate-700 py-2 px-3 rounded-xl text-center font-semibold">📍 Live Location</button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="showModalInfo('Add Account', 'New account profile initialized.')" class="bg-slate-800 hover:bg-slate-700 py-2 px-3 rounded-xl text-center font-semibold">👤 Add Account</button>
+                        <button onclick="showModalInfo('Delete Account', 'Account locked safely.')" class="bg-red-950/40 text-red-400 border border-red-900/50 py-2 px-3 rounded-xl text-center font-semibold">⚠️ Delete Account</button>
+                    </div>
                 </div>
+
+                <!-- Storage & Data -->
+                <div class="bg-slate-900/80 p-3 rounded-2xl border border-slate-800 space-y-2.5">
+                    <h3 class="font-bold text-amber-400 uppercase tracking-wider text-[10px]">Storage & Data</h3>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-300">Network Using</span>
+                        <span class="text-emerald-400 font-mono">1.4 MB / Sec</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-300">Quality Setting</span>
+                        <select class="bg-slate-950 border border-slate-700 text-white rounded-lg px-2 py-1">
+                            <option>HD High Quality</option>
+                            <option>Standard</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-300">Auto-download HD (Fotos Wi-Fi/Cellular)</span>
+                        <input type="checkbox" checked class="accent-amber-500 w-4 h-4">
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-300">Documents Auto-Save</span>
+                        <input type="checkbox" checked class="accent-amber-500 w-4 h-4">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Simulated Incoming / Active Call Modal -->
+        <div id="callModal" class="hidden absolute inset-0 bg-slate-950/95 z-40 flex flex-col items-center justify-between p-6">
+            <div class="text-center pt-8 space-y-2">
+                <div class="w-20 h-20 bg-amber-400 rounded-full mx-auto flex items-center justify-center border-4 border-amber-500 shadow-xl">
+                    <span class="text-3xl">🦆</span>
+                </div>
+                <h3 class="text-lg font-bold text-white">DuckieTheMu's Line</h3>
+                <p id="callStatusText" class="text-xs text-amber-400 animate-pulse">Connecting secure call...</p>
+            </div>
+            <div class="w-24 h-24 bg-slate-900 rounded-full border border-slate-800 flex items-center justify-center text-3xl font-mono text-white shadow-inner">
+                <span id="callTimer">00:00</span>
+            </div>
+            <div class="flex space-x-6 pb-6">
+                <button onclick="endCall()" class="w-14 h-14 bg-red-600 hover:bg-red-500 text-white rounded-full flex items-center justify-center text-xl shadow-lg">📞</button>
+                <button onclick="alert('Call muted')" class="w-14 h-14 bg-slate-800 hover:bg-slate-700 text-white rounded-full flex items-center justify-center text-xl shadow-lg">🔇</button>
+            </div>
+        </div>
+
+        <!-- General Alert Modal Overlay -->
+        <div id="infoModal" class="hidden absolute inset-0 bg-slate-950/80 z-50 flex items-center justify-center p-4">
+            <div class="bg-slate-900 border border-slate-700 p-5 rounded-2xl max-w-xs w-full text-center space-y-3 shadow-2xl">
+                <h4 id="modalTitle" class="font-bold text-amber-400 text-sm">Notice</h4>
+                <p id="modalDesc" class="text-xs text-slate-300 leading-relaxed"></p>
+                <button onclick="closeModalInfo()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 py-2 rounded-xl font-bold text-xs">Entendido</button>
             </div>
         </div>
 
     </div>
 
     <script>
-        // Settings Panel Interactivity
+        // Settings Panel Logic
         const settingsBtn = document.getElementById('settingsBtn');
         const closeSettingsBtn = document.getElementById('closeSettingsBtn');
         const settingsPanel = document.getElementById('settingsPanel');
@@ -201,46 +385,37 @@
         settingsBtn.addEventListener('click', toggleSettings);
         closeSettingsBtn.addEventListener('click', toggleSettings);
 
-        // Customization Functions
+        // Workspace Customization
         const workspace = document.getElementById('workspace');
         const appContainer = document.getElementById('appContainer');
 
         function changeBgColor(color, element) {
             workspace.style.backgroundColor = color;
-            document.querySelectorAll('.color-swatch').forEach(btn => {
-                btn.classList.remove('border-amber-500', 'ring-4', 'ring-amber-500/20');
-                btn.classList.add('border-slate-200');
-            });
-            element.classList.remove('border-slate-200');
-            element.classList.add('border-amber-500', 'ring-4', 'ring-amber-500/20');
+            workspace.style.backgroundImage = 'none';
+            document.querySelectorAll('.color-swatch').forEach(btn => btn.classList.remove('border-amber-500', 'ring-2'));
+            if(element) element.classList.add('border-amber-500', 'ring-2');
         }
 
-        function changeTexture(textureClass, element) {
-            workspace.classList.remove('texture-dots', 'texture-lines', 'texture-grid');
-            if (textureClass) { workspace.classList.add(textureClass); }
-            document.querySelectorAll('.texture-btn').forEach(btn => {
-                btn.classList.remove('border-amber-500', 'bg-amber-50', 'text-amber-700', 'font-bold');
-                btn.classList.add('border-slate-200', 'bg-white', 'text-slate-700', 'font-semibold');
-            });
-            element.classList.remove('border-slate-200', 'bg-white', 'text-slate-700', 'font-semibold');
-            element.classList.add('border-amber-500', 'bg-amber-50', 'text-amber-700', 'font-bold');
+        function applyCustomBg() {
+            const url = document.getElementById('bgImageUrl').value.trim();
+            if(!url) return;
+            workspace.style.backgroundImage = `url('${url}')`;
+            workspace.style.backgroundSize = 'cover';
+            workspace.style.backgroundPosition = 'center';
+            showModalInfo('Background Updated', 'Custom gallery image applied successfully as background.');
         }
 
         function changeFont(fontClass, element) {
             appContainer.classList.remove('font-default', 'font-clean', 'font-classic', 'font-comic');
             appContainer.classList.add(fontClass);
             document.querySelectorAll('.font-btn').forEach(btn => {
-                btn.classList.remove('border-amber-500', 'bg-amber-50', 'font-bold');
-                btn.classList.add('border-slate-200', 'bg-white', 'font-medium');
+                btn.classList.remove('border-amber-500', 'bg-amber-500/10', 'font-bold');
+                btn.classList.add('border-slate-700', 'bg-slate-950');
             });
-            element.classList.remove('border-slate-200', 'bg-white', 'font-medium');
-            element.classList.add('border-amber-500', 'bg-amber-50', 'font-bold');
-        }
-
-        function resetDefaults() {
-            changeBgColor('#0f172a', document.querySelectorAll('.color-swatch')[0]);
-            changeTexture('', document.querySelectorAll('.texture-btn')[0]);
-            changeFont('font-default', document.querySelectorAll('.font-btn')[0]);
+            if(element) {
+                element.classList.remove('border-slate-700', 'bg-slate-950');
+                element.classList.add('border-amber-500', 'bg-amber-500/10', 'font-bold');
+            }
         }
 
         // Multimedia Trays Toggle
@@ -254,56 +429,185 @@
         function insertItem(symbol) {
             const input = document.getElementById('userInput');
             input.value += symbol;
-            document.querySelectorAll('.media-tray').forEach(tray => tray.classList.add('hidden'));
             input.focus();
         }
 
-        // Real-Time AI Chat Functionality (Integrated with event feedback, state management, and loading state)
-        function triggerDuckieAI() {
+        function sendSticker(stickerText) {
+            appendMessage(stickerText, 'bg-indigo-950 border border-indigo-800 text-indigo-200');
+            document.getElementById('stickerTray').classList.add('hidden');
+        }
+
+        function sendGif(gifText) {
+            appendMessage(gifText, 'bg-purple-950 border border-purple-800 text-purple-200');
+            document.getElementById('gifTray').classList.add('hidden');
+        }
+
+        // Attachment Logic (Gallery, Docs, Images)
+        function handleAttachment(type) {
+            let msg = '';
+            if(type === 'Galeria') msg = '🖼️ [Archivo adjunto de Galería cargado al 100%]';
+            if(type === 'Documentos') msg = '📄 [Documento oficial adjuntado con éxito]';
+            if(type === 'Imagenes') msg = '📷 [Imagen seleccionada de biblioteca adjunta]';
+            
+            appendMessage(msg, 'bg-slate-800 border border-slate-700 text-amber-300 font-medium');
+            document.getElementById('attachTray').classList.add('hidden');
+        }
+
+        // Audio Recording Simulation Logic (Record, Pause, Delete, Send)
+        let audioInterval = null;
+        let audioSeconds = 0;
+        let isAudioPaused = false;
+
+        function toggleAudioRecording() {
+            const tray = document.getElementById('audioTray');
+            if (tray.classList.contains('hidden')) {
+                tray.classList.remove('hidden');
+                document.getElementById('emojiTray').classList.add('hidden');
+                document.getElementById('stickerTray').classList.add('hidden');
+                document.getElementById('gifTray').classList.add('hidden');
+                document.getElementById('attachTray').classList.add('hidden');
+                audioSeconds = 0;
+                isAudioPaused = false;
+                document.getElementById('audioTimer').textContent = '00:00';
+                document.getElementById('pauseAudioBtn').textContent = 'Pausar';
+                audioInterval = setInterval(() => {
+                    if (!isAudioPaused) {
+                        audioSeconds++;
+                        const mins = String(Math.floor(audioSeconds / 60)).padStart(2, '0');
+                        const secs = String(audioSeconds % 60).padStart(2, '0');
+                        document.getElementById('audioTimer').textContent = `${mins}:${secs}`;
+                    }
+                }, 1000);
+            } else {
+                cancelAudio();
+            }
+        }
+
+        function pauseAudio() {
+            isAudioPaused = !isAudioPaused;
+            document.getElementById('pauseAudioBtn').textContent = isAudioPaused ? 'Reanudar' : 'Pausar';
+        }
+
+        function cancelAudio() {
+            clearInterval(audioInterval);
+            document.getElementById('audioTray').classList.add('hidden');
+        }
+
+        function sendAudioMessage() {
+            clearInterval(audioInterval);
+            const timeStr = document.getElementById('audioTimer').textContent;
+            appendMessage(`🎙️ [Nota de voz segura - Duración: ${timeStr}]`, 'bg-emerald-950 border border-emerald-800 text-emerald-200');
+            document.getElementById('audioTray').classList.add('hidden');
+        }
+
+        // Camera & Video Capture Logic
+        function openCamera() {
+            document.getElementById('cameraModal').classList.remove('hidden');
+        }
+
+        function closeCamera() {
+            document.getElementById('cameraModal').classList.add('hidden');
+        }
+
+        function switchLens(lensName, btn) {
+            document.getElementById('currentLens').textContent = lensName;
+            document.querySelectorAll('.lens-btn').forEach(b => {
+                b.classList.remove('bg-amber-500', 'text-slate-950', 'font-bold');
+                b.classList.add('bg-slate-800', 'text-slate-300');
+            });
+            btn.classList.remove('bg-slate-800', 'text-slate-300');
+            btn.classList.add('bg-amber-500', 'text-slate-950', 'font-bold');
+        }
+
+        function captureMedia(type) {
+            const lens = document.getElementById('currentLens').textContent;
+            if(type === 'Photo') {
+                appendMessage(`📸 [Foto Capturada con DuckieCam - Lente: ${lens}]`, 'bg-blue-950 border border-blue-800 text-blue-200');
+            } else {
+                appendMessage(`📹 [Video HD Grabado con DuckieCam - Lente: ${lens}]`, 'bg-red-950 border border-red-800 text-red-200');
+            }
+            closeCamera();
+        }
+
+        // Messaging & Send Button Action
+        function sendTextMessage() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if(!text) return;
+
+            // User Message
             const chatHistory = document.getElementById('chatHistory');
-            const aiMsg = document.createElement('div');
-            aiMsg.className = 'bg-[#1e293b] border border-slate-700 text-amber-300 p-3.5 rounded-2xl shadow-md max-w-[90%]';
-            aiMsg.innerHTML = `🦆 <strong>Duckie AI en Vivo:</strong> ¡Hola! ¿En qué te ayudo hoy en duckiethemus.com?`;
-            chatHistory.appendChild(aiMsg);
+            const userMsg = document.createElement('div');
+            userMsg.className = 'bg-amber-400 text-slate-950 font-medium p-3.5 rounded-2xl shadow-md max-w-[90%] ml-auto';
+            userMsg.textContent = text;
+            chatHistory.appendChild(userMsg);
+            
+            input.value = '';
+            document.querySelectorAll('.media-tray').forEach(tray => tray.classList.add('hidden'));
             workspace.scrollTop = workspace.scrollHeight;
+
+            // Simulated AI Response in Real Time
+            setTimeout(() => {
+                const replyMsg = document.createElement('div');
+                replyMsg.className = 'bg-[#1e293b] border border-slate-800 text-slate-200 p-3.5 rounded-2xl shadow-md max-w-[90%]';
+                replyMsg.innerHTML = `🦆 <strong>DuckieTheMu's AI:</strong> Procesado correctamente <em>"${text}"</em>. Ecosistema sincronizado al 100%.`;
+                chatHistory.appendChild(replyMsg);
+                workspace.scrollTop = workspace.scrollHeight;
+            }, 600);
         }
 
         function handleKeyPress(e) {
             if (e.key === 'Enter') {
-                const input = document.getElementById('userInput');
-                const text = input.value.trim();
-                if(!text) return;
-
-                const chatHistory = document.getElementById('chatHistory');
-                
-                // User message card
-                const userMsg = document.createElement('div');
-                userMsg.className = 'bg-amber-500 text-slate-950 font-medium p-3.5 rounded-2xl shadow-md max-w-[90%] ml-auto';
-                userMsg.textContent = text;
-                chatHistory.appendChild(userMsg);
-                
-                // Clear input field and close trays instantly
-                input.value = '';
-                document.querySelectorAll('.media-tray').forEach(tray => tray.classList.add('hidden'));
-                workspace.scrollTop = workspace.scrollHeight;
-
-                // Feedback Visual & Loading State (Typing indicator matching point 2)
-                const typingMsg = document.createElement('div');
-                typingMsg.className = 'bg-[#1e293b] border border-slate-800 text-slate-400 p-3 rounded-2xl shadow-md max-w-[50%] text-xs italic animate-pulse';
-                typingMsg.textContent = 'Duckie está escribiendo...';
-                chatHistory.appendChild(typingMsg);
-                workspace.scrollTop = workspace.scrollHeight;
-
-                // Stream / Response simulation (Ready to hook up to backend HTTP endpoint)
-                setTimeout(() => {
-                    chatHistory.removeChild(typingMsg);
-                    const replyMsg = document.createElement('div');
-                    replyMsg.className = 'bg-[#1e293b] border border-slate-800 text-slate-200 p-3.5 rounded-2xl shadow-md max-w-[90%]';
-                    replyMsg.innerHTML = `🦆 <strong>Duckie AI:</strong> ¡Entendido perfectamente! Procesé tu mensaje <em>"${text}"</em> en tiempo real con éxito.`;
-                    chatHistory.appendChild(replyMsg);
-                    workspace.scrollTop = workspace.scrollHeight;
-                }, 500);
+                sendTextMessage();
             }
+        }
+
+        function appendMessage(content, className) {
+            const chatHistory = document.getElementById('chatHistory');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `${className} p-3.5 rounded-2xl shadow-md max-w-[90%]`;
+            msgDiv.innerHTML = content;
+            chatHistory.appendChild(msgDiv);
+            workspace.scrollTop = workspace.scrollHeight;
+        }
+
+        // Simulated Calls & Modals
+        let callInterval = null;
+        function openCallModal() {
+            document.getElementById('callModal').classList.remove('hidden');
+            let secs = 0;
+            document.getElementById('callStatusText').textContent = 'Llamada en curso (Línea DuckieTheMu\'s)';
+            callInterval = setInterval(() => {
+                secs++;
+                const mins = String(Math.floor(secs / 60)).padStart(2, '0');
+                const s = String(secs % 60).padStart(2, '0');
+                document.getElementById('callTimer').textContent = `${mins}:${s}`;
+            }, 1000);
+        }
+
+        function endCall() {
+            clearInterval(callInterval);
+            document.getElementById('callModal').classList.add('hidden');
+            document.getElementById('callTimer').textContent = '00:00';
+        }
+
+        function showModalInfo(title, desc) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalDesc').textContent = desc;
+            document.getElementById('infoModal').classList.remove('hidden');
+        }
+
+        function closeModalInfo() {
+            document.getElementById('infoModal').classList.add('hidden');
+        }
+
+        // External Integrations Triggers
+        function triggerPayPalCheckout() {
+            appendMessage('💳 <strong>Pasarela PayPal:</strong> Transacción de marketplace iniciada de forma segura bajo la marca DuckieTheMu\'s.', 'bg-blue-950 border border-blue-800 text-blue-200');
+        }
+
+        function triggerWhatsAppChat() {
+            appendMessage('💬 <strong>WhatsApp Soporte:</strong> Canal temporal activo para comunicación directa con clientes y vendedores.', 'bg-emerald-950 border border-emerald-800 text-emerald-200');
         }
     </script>
 </body>
