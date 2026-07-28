@@ -65,7 +65,7 @@
             <div id="chatHistory" class="space-y-4">
                 <div class="bg-[#022c22] border border-[#047857]/40 text-emerald-100 p-4 rounded-2xl shadow-md max-w-[90%]">
                     <p class="text-xs leading-relaxed font-medium">
-                        🦆 ¡Sistema actualizado con sonido **Quack Quack** sintético integrado! Cada mensaje y llamada suena con estilo de patito.
+                        🦆 ¡Sistema actualizado con sonido **Quack Quack** y enlace directo a WhatsApp (6198918186)!
                     </p>
                 </div>
             </div>
@@ -92,7 +92,7 @@
                 <button onclick="toggleTray('stickerTray')" class="px-3 py-1 bg-[#064e3b] hover:bg-[#047857] text-slate-200 rounded-lg transition-colors flex items-center space-x-1 flex-shrink-0">🎨 <span>Stickers</span></button>
                 <button onclick="toggleTray('gifTray')" class="px-3 py-1 bg-[#064e3b] hover:bg-[#047857] text-slate-200 rounded-lg transition-colors flex items-center space-x-1 flex-shrink-0">🎞️ <span>GIFs</span></button>
                 <button onclick="triggerPayPalCheckout()" class="px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-lg transition-colors flex items-center space-x-1 flex-shrink-0">💳 <span>PayPal</span></button>
-                <button onclick="triggerWhatsAppChat()" class="px-3 py-1 bg-green-500/20 text-green-300 border border-green-500/30 rounded-lg transition-colors flex items-center space-x-1 flex-shrink-0">💬 <span>WhatsApp</span></button>
+                <button onclick="triggerWhatsAppChat()" class="px-3 py-1 bg-green-500/20 text-green-300 border border-green-500/30 rounded-lg transition-colors flex items-center space-x-1 flex-shrink-0">💬 <span>WhatsApp (619)</span></button>
             </div>
 
             <!-- Bandeja de Emojis -->
@@ -212,7 +212,6 @@
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 
-                // Primer quack (tono más agudo al inicio)
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 
@@ -229,7 +228,6 @@
                 osc.start();
                 osc.stop(audioCtx.currentTime + 0.2);
 
-                // Segundo quack eco (quack secundario rápido)
                 setTimeout(() => {
                     if (audioCtx.state === 'closed') return;
                     const osc2 = audioCtx.createOscillator();
@@ -466,7 +464,10 @@
 
         function triggerWhatsAppChat() {
             playQuackSound();
-            appendMessage('💬 <strong>WhatsApp Quack Soporte:</strong> Canal temporal activo con alerta de patito.', 'bg-[#064e3b] border border-[#047857] text-emerald-200');
+            // Enlace directo configurado con el número 6198918186
+            const whatsappUrl = "https://wa.me/16198918186?text=Hola%2C%20vengo%20de%20DuckieDuck%20Pro";
+            appendMessage('💬 <strong>WhatsApp Quack:</strong> Abriendo chat directo al número <strong>6198918186</strong>...', 'bg-[#064e3b] border border-[#047857] text-emerald-200');
+            window.open(whatsappUrl, '_blank');
         }
     </script>
 </body>
