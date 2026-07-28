@@ -1,241 +1,227 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duckiethemu's - Worldwide Bilingual App</title>
+    <title>Ducke Talk - Own Brand</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#a855f7">
+    <meta name="theme-color" content="#1e293b">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --bg-main: #0f0f17;
-            --bg-sidebar: #161622;
-            --bg-card: #1e1e2f;
-            --accent: #a855f7;
-            --accent-hover: #9333ea;
-            --text-main: #ffffff;
-            --text-muted: #9ca3af;
+        /* Custom typography definitions matching the user spec */
+        .font-default {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
-        
-        .sidebar { width: 260px; background-color: var(--bg-sidebar); border-right: 1px solid #2d2d3d; display: flex; flex-direction: column; padding: 20px; gap: 10px; }
-        .logo-area { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-weight: bold; font-size: 1.1rem; color: var(--accent); }
-        .badge { display: inline-block; background: var(--accent); color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; margin-bottom: 15px; font-weight: bold; text-align: center; }
-        
-        .nav-btn { background: transparent; border: none; color: var(--text-main); padding: 12px 15px; text-align: left; border-radius: 8px; cursor: pointer; transition: background 0.2s; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; }
-        .nav-btn:hover, .nav-btn.active { background-color: var(--accent); color: #fff; }
+        .font-clean {
+            font-family: 'Segoe UI', Candara, 'Bitstream Vera Sans', 'DejaVu Sans', sans-serif;
+            letter-spacing: -0.01em;
+        }
+        .font-classic {
+            font-family: Garamond, Baskerville, 'Baskerville Old Face', 'Hoefler Text', 'Times New Roman', serif;
+        }
+        .font-comic {
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+        }
 
-        .main-content { flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-        .section { display: none; flex: 1; flex-direction: column; padding: 30px; overflow-y: auto; }
-        .section.active { display: flex; }
-        
-        h2 { margin-bottom: 20px; color: var(--text-main); }
+        /* Textured Background Options */
+        .texture-dots {
+            background-color: #f8fafc;
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 16px 16px;
+        }
+        .texture-lines {
+            background-color: #f8fafc;
+            background-image: linear-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 100% 24px;
+        }
+        .texture-grid {
+            background-color: #f8fafc;
+            background-image: linear-gradient(to right, #e2e8f0 1px, transparent 1px), linear-gradient(to bottom, #e2e8f0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
 
-        .card { background-color: var(--bg-card); border-radius: 12px; padding: 25px; max-width: 600px; border: 1px solid #2d2d3d; margin-bottom: 20px; }
-        .card h3 { color: var(--accent); margin-bottom: 10px; }
-        .card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; line-height: 1.5; }
-        
-        input[type="text"] { width: 100%; padding: 12px 15px; background: var(--bg-main); border: 1px solid #3f3f5f; border-radius: 8px; color: #fff; font-size: 0.95rem; margin-bottom: 15px; outline: none; }
-        input[type="text"]:focus { border-color: var(--accent); }
-
-        .btn-primary { background-color: var(--accent); color: #ffffff; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
-        .btn-primary:hover { background-color: var(--accent-hover); }
-
-        .chat-container { flex: 1; display: flex; flex-direction: column; gap: 15px; overflow-y: auto; padding-bottom: 20px; }
-        .message { padding: 12px 18px; border-radius: 10px; max-width: 75%; line-height: 1.4; word-break: break-word; }
-        .message.user { background-color: var(--accent); color: white; align-self: flex-end; }
-        .message.ai { background-color: var(--bg-card); color: white; align-self: flex-start; border: 1px solid #2d2d3d; }
-        .message img { max-width: 100%; border-radius: 8px; margin-top: 8px; display: block; }
-        
-        .chat-input-area { display: flex; gap: 10px; padding-top: 15px; border-top: 1px solid #2d2d3d; align-items: center; }
-        .chat-input-area input { margin-bottom: 0; flex: 1; }
-        .file-btn { background: #2d2d3d; color: #fff; border: none; padding: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .file-btn:hover { background: #3f3f5f; }
+        /* Smooth UI Transitions */
+        .settings-panel {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+        }
     </style>
 </head>
-<body>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-center p-2 font-default">
 
-    <div class="sidebar">
-        <div class="logo-area">🦆 Duckiethemu's</div>
-        <div class="badge">Worldwide Bilingual App</div>
-        <button class="nav-btn active" onclick="switchSection('chat', this)">💬 Centro de Chat IA / AI Chat</button>
-        <button class="nav-btn" onclick="switchSection('gems', this)">💎 Gestión de Gems / Gems Management</button>
-        <button class="nav-btn" onclick="switchSection('calls', this)">📞 Llamadas / Calls</button>
-        <button class="nav-btn" onclick="switchSection('plan', this)">📱 Tu Plan / Mobile Plan</button>
-        <button class="nav-btn" onclick="switchSection('settings', this)">⚙️ Ajustes / Settings</button>
-        <button class="nav-btn" onclick="switchSection('docs', this)">📁 Docs & Media</button>
-        <button class="nav-btn" onclick="switchSection('about', this)">💡 Origen / About Us</button>
-        <button class="nav-btn" onclick="switchSection('security', this)">🔒 Seguridad / Security</button>
-    </div>
-
-    <div class="main-content">
-        <!-- CENTRO DE CHAT IA -->
-        <div id="chat" class="section active">
-            <h2>Centro de Chat IA (Duckie Guai-fai'v Real-Time)</h2>
-            <div class="chat-container" id="chatHistory">
-                <div class="message ai">¡Hola! Soy Duckie Guai-fai'v. Tu asistente personal y bilingüe mundial conectado en tiempo real.<br>Hello! I am Duckie Guai-fai'v. Your personal and worldwide bilingual assistant connected in real time.</div>
+    <!-- Main Container replicating mobile card interface from screenshots -->
+    <div id="appContainer" class="w-full max-w-md bg-white text-slate-900 rounded-3xl shadow-2xl overflow-hidden relative flex flex-col h-[750px] border-8 border-slate-900 transition-all duration-300">
+        
+        <!-- Top App Bar / Header -->
+        <header class="bg-white border-b border-slate-100 px-5 py-4 flex items-center justify-between z-10">
+            <div class="flex items-center space-x-3">
+                <!-- Permanent Duck Brand Logo Component -->
+                <div class="w-10 h-10 bg-amber-400 rounded-full flex items-center justify-center shadow-inner overflow-hidden border border-amber-500">
+                    <svg viewBox="0 0 100 100" class="w-7 h-7 text-slate-950">
+                        <path fill="currentColor" d="M30,40 C30,25 55,20 65,35 C70,32 78,35 82,40 C75,45 70,45 68,52 C60,65 35,65 30,52 C25,52 20,48 25,43 C28,43 30,42 30,40 Z" />
+                        <circle cx="50" cy="35" r="4" fill="white" />
+                        <circle cx="50" cy="35" r="2" fill="black" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-base font-bold tracking-tight text-slate-900">Ducke Talk</h1>
+                    <span class="text-[10px] text-amber-600 font-extrabold uppercase tracking-widest block -mt-1">OWN BRAND</span>
+                </div>
             </div>
-            <div class="chat-input-area">
-                <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageSelect(event)">
-                <button class="file-btn" onclick="document.getElementById('imageInput').click()" title="Adjuntar Imagen / Attach Image">📎</button>
-                <input type="text" id="userInput" placeholder="Escribe un mensaje o describe la imagen... / Type a message..." onkeypress="handleKeyPress(event)">
-                <button class="btn-primary" onclick="sendMessage()">Enviar / Send</button>
+
+            <!-- Interactive Settings Gear Button -->
+            <button id="settingsBtn" class="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-700 focus:outline-none" aria-label="Open Theme Settings">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+            </button>
+        </header>
+
+        <!-- Main Workspace Area -->
+        <main id="workspace" class="flex-1 p-5 flex flex-col justify-between relative overflow-y-auto transition-all duration-300 bg-slate-50">
+            <div id="textContent" class="space-y-4 my-auto">
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 max-w-[85%]">
+                    <p class="text-xs font-bold text-amber-600 mb-1 uppercase tracking-wider">System Message</p>
+                    <p class="text-sm text-slate-800 leading-relaxed font-medium">
+                        "Just change background theme settings"
+                    </p>
+                </div>
+
+                <div class="bg-amber-500 text-white p-5 rounded-2xl shadow-sm max-w-[85%] self-end ml-auto">
+                    <p class="text-xs font-bold opacity-90 mb-1 uppercase tracking-wider">User Guide</p>
+                    <p class="text-sm leading-relaxed font-medium">
+                        Tap the settings cog icon in the top right to customize background colors, explore multiple textures, or transform the layout typography live!
+                    </p>
+                </div>
+            </div>
+            <p class="text-[11px] text-center text-slate-400 mt-4 pointer-events-none font-semibold">Ducke Talk Framework v1.0</p>
+        </main>
+
+        <!-- Bottom Quick Tools Bar (Inspired by Capture 11 & 12) -->
+        <div class="bg-white border-t border-slate-100 px-4 py-3 flex items-center justify-between text-xs font-semibold text-slate-600">
+            <button class="flex items-center space-x-1 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors text-slate-700">✨ <span>Emoji</span></button>
+            <button class="flex items-center space-x-1 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors text-slate-700">👾 <span>GIF</span></button>
+            <button class="flex items-center space-x-1 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors text-slate-700">🎨 <span>Sticker</span></button>
+            <button class="flex items-center space-x-1 px-3 py-1.5 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors text-amber-700">🦆 <span>Duckie</span></button>
+        </div>
+
+        <!-- Sliding Theme & Settings Sheet Overlay (Capture 14 style) -->
+        <div id="settingsPanel" class="settings-panel absolute inset-x-0 bottom-0 bg-white border-t border-slate-200 rounded-t-3xl shadow-2xl p-6 z-20 transform translate-y-full opacity-0 pointer-events-none">
+            <div class="flex flex-col items-center mb-4">
+                <div class="w-12 h-1.5 bg-slate-200 rounded-full mb-3"></div>
+                <div class="w-full flex justify-between items-center">
+                    <h2 class="text-lg font-bold text-slate-900">Theme Settings</h2>
+                    <button id="closeSettingsBtn" class="text-xs font-bold text-amber-700 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded-full transition-colors">
+                        Done
+                    </button>
+                </div>
+            </div>
+
+            <div class="space-y-5 overflow-y-auto max-h-[380px] pr-1">
+                <!-- Section 1: Background Colors -->
+                <div>
+                    <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-2.5">Background Color</label>
+                    <div class="grid grid-cols-5 gap-3">
+                        <button onclick="changeBgColor('#f8fafc', this)" class="color-swatch h-10 w-10 rounded-xl bg-slate-50 border-2 border-amber-500 ring-4 ring-amber-500/20 shadow-sm relative transition-all"></button>
+                        <button onclick="changeBgColor('#fee2e2', this)" class="color-swatch h-10 w-10 rounded-xl bg-red-100 border border-slate-200 shadow-sm transition-all"></button>
+                        <button onclick="changeBgColor('#fef3c7', this)" class="color-swatch h-10 w-10 rounded-xl bg-amber-100 border border-slate-200 shadow-sm transition-all"></button>
+                        <button onclick="changeBgColor('#dcfce7', this)" class="color-swatch h-10 w-10 rounded-xl bg-emerald-100 border border-slate-200 shadow-sm transition-all"></button>
+                        <button onclick="changeBgColor('#e0f2fe', this)" class="color-swatch h-10 w-10 rounded-xl bg-sky-100 border border-slate-200 shadow-sm transition-all"></button>
+                    </div>
+                </div>
+
+                <!-- Section 2: Different Textures -->
+                <div>
+                    <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-2.5">Add Different Textures</label>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <button onclick="changeTexture('', this)" class="texture-btn py-2 px-3 border-2 border-amber-500 bg-amber-50 text-amber-700 rounded-xl text-xs font-bold transition-all">None (Solid)</button>
+                        <button onclick="changeTexture('texture-dots', this)" class="texture-btn py-2 px-3 border border-slate-200 bg-white text-slate-700 rounded-xl text-xs font-semibold hover:bg-slate-50 transition-all">Polka Dot</button>
+                        <button onclick="changeTexture('texture-lines', this)" class="texture-btn py-2 px-3 border border-slate-200 bg-white text-slate-700 rounded-xl text-xs font-semibold hover:bg-slate-50 transition-all">Horizontal Lines</button>
+                        <button onclick="changeTexture('texture-grid', this)" class="texture-btn py-2 px-3 border border-slate-200 bg-white text-slate-700 rounded-xl text-xs font-semibold hover:bg-slate-50 transition-all">Blueprint Grid</button>
+                    </div>
+                </div>
+
+                <!-- Section 3: Typography Options -->
+                <div>
+                    <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-2.5">Typography</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="changeFont('font-default', this)" class="font-btn p-2.5 border-2 border-amber-500 bg-amber-50 text-slate-900 rounded-xl text-left text-xs font-bold transition-all font-default">Default (Sans)</button>
+                        <button onclick="changeFont('font-clean', this)" class="font-btn p-2.5 border border-slate-200 bg-white text-slate-700 rounded-xl text-left text-xs font-medium hover:bg-slate-50 transition-all font-clean">Clean (Segoe UI)</button>
+                        <button onclick="changeFont('font-classic', this)" class="font-btn p-2.5 border border-slate-200 bg-white text-slate-700 rounded-xl text-left text-xs font-medium hover:bg-slate-50 transition-all font-classic">Classic (Serif)</button>
+                        <button onclick="changeFont('font-comic', this)" class="font-btn p-2.5 border border-slate-200 bg-white text-slate-700 rounded-xl text-left text-xs font-medium hover:bg-slate-50 transition-all font-comic">Comic Sans Differents</button>
+                    </div>
+                </div>
+
+                <!-- Reset Defaults Button -->
+                <div class="pt-1">
+                    <button onclick="resetDefaults()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold text-xs transition-colors">Reset Defaults</button>
+                </div>
             </div>
         </div>
 
-        <!-- GESTION DE GEMS -->
-        <div id="gems" class="section">
-            <h2>Gestión de Gems / Gems Management</h2>
-            <div class="card">
-                <h3>Administración de Asistentes Especializados (Gems)</h3>
-                <p>Configura, personaliza y gestiona las instrucciones, comportamientos y contextos de tus Gems especializados para potenciar cada área de trabajo.<br>Configure, customize, and manage instructions, behaviors, and contexts for your specialized Gems to enhance every work area.</p>
-                <button class="btn-primary" onclick="alert('Panel de Gestión de Gems activo / Gems Management Panel active')">Configurar Gems / Configure Gems</button>
-            </div>
-        </div>
-
-        <!-- LLAMADAS Y VIDEO LLAMADAS -->
-        <div id="calls" class="section">
-            <h2>Llamadas y Video Llamadas / Calls & Video Calls</h2>
-            <div class="card">
-                <h3>Centro de Comunicación / Communication Center</h3>
-                <p>Conecta en tiempo real mediante voz y video asistido con Duckie Guai-fai'v.<br>Connect in real time through assisted voice and video with Duckie Guai-fai'v.</p>
-                <button class="btn-primary" onclick="alert('Iniciando canal de voz y video... / Starting voice and video channel...')">Iniciar Videollamada / Start Call</button>
-            </div>
-        </div>
-
-        <!-- TU PLAN MOVIL -->
-        <div id="plan" class="section">
-            <h2>Tu Plan Móvil / Your Mobile Plan</h2>
-            <div class="card">
-                <h3>Estado de Suscripción / Subscription Status</h3>
-                <p>Gestiona tu dispositivo dedicado y número asignado para la app.<br>Manage your dedicated device and assigned phone number for the app.</p>
-                <button class="btn-primary" onclick="alert('Suscripción activa al Plan Pro / Active Pro Plan Subscription')">Ver Detalles / View Details</button>
-            </div>
-        </div>
-
-        <!-- AJUSTES -->
-        <div id="settings" class="section">
-            <h2>Ajustes del Sistema / System Settings</h2>
-            <div class="card">
-                <h3>Configuración de Conexión Local</h3>
-                <p>El sistema opera en modo autónomo y bilingüe con respuestas inteligentes integradas.<br>The system operates in autonomous and bilingual mode with integrated smart responses.</p>
-                <input type="text" id="apiKeyInput" value="Modo Autónomo / Autonomous Mode" readonly>
-                <button class="btn-primary" onclick="alert('Modo autónomo activo y verificado. / Autonomous mode active and verified.')">Estado del Sistema</button>
-            </div>
-        </div>
-
-        <!-- ORIGEN DEL PROYECTO (ACERCA DE) -->
-        <div id="about" class="section">
-            <h2>Origen y Filosofía de Duckiethemu's / Origin & Philosophy</h2>
-            <div class="card">
-                <h3>¿Qué significa Duckiethemu's? / What does Duckiethemu's mean?</h3>
-                <p>En español e inglés: <strong>"Duckie the multi-uses"</strong> (el pato multiusos). Representa una herramienta versátil, diseñada para servir en todo lo que necesites.<br>In Spanish and English: <strong>"Duckie the multi-uses"</strong> (the multi-purpose duck). It represents a versatile tool designed to serve for everything you need.</p>
-            </div>
-            <div class="card">
-                <h3>Nuestra Esencia y Familia de Aplicaciones / Our Essence & App Family</h3>
-                <p>Forma parte de una gran familia tecnológica junto a proyectos totalmente funcionales y separados como <strong>Duckie Marketplace</strong>. La imagen simbólica del pato frente a los edificios representa que, sin importar el paso de los años, el tiempo o los cambios del entorno, siempre nos adaptamos y evolucionamos en sintonía con el futuro.<br>It is part of a great technological family alongside fully functional and separate projects like <strong>Duckie Marketplace</strong>. The symbolic image of the duck in front of the buildings represents that, regardless of the passage of years, time, or environmental changes, we always adapt and evolve in tune with the future.</p>
-            </div>
-        </div>
-
-        <!-- DOCS & MEDIA -->
-        <div id="docs" class="section">
-            <h2>Docs & Media</h2>
-            <div class="card">
-                <h3>Archivos y Recursos / Files & Resources</h3>
-                <p>Administra los archivos multimedia y documentos del sistema.<br>Manage multimedia files and system documents.</p>
-            </div>
-        </div>
-
-        <!-- SEGURIDAD -->
-        <div id="security" class="section">
-            <h2>Seguridad / Security</h2>
-            <div class="card">
-                <h3>Protección de Cuenta / Account Protection</h3>
-                <p>Configuración de cifrado y aislamiento de proyectos independientes.<br>Encryption settings and isolation of independent projects.</p>
-            </div>
-        </div>
     </div>
 
     <script>
-        let selectedImageBase64 = null;
-        let selectedMimeType = null;
+        const settingsBtn = document.getElementById('settingsBtn');
+        const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+        const settingsPanel = document.getElementById('settingsPanel');
+        const workspace = document.getElementById('workspace');
+        const appContainer = document.getElementById('appContainer');
+        let isSettingsOpen = false;
 
-        function switchSection(sectionId, btn) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
-            btn.classList.add('active');
+        function toggleSettings() {
+            isSettingsOpen = !isSettingsOpen;
+            if (isSettingsOpen) {
+                settingsPanel.classList.remove('translate-y-full', 'opacity-0', 'pointer-events-none');
+                settingsPanel.classList.add('translate-y-0', 'opacity-100');
+            } else {
+                settingsPanel.classList.remove('translate-y-0', 'opacity-100');
+                settingsPanel.classList.add('translate-y-full', 'opacity-0', 'pointer-events-none');
+            }
         }
 
-        function handleImageSelect(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+        settingsBtn.addEventListener('click', toggleSettings);
+        closeSettingsBtn.addEventListener('click', toggleSettings);
 
-            selectedMimeType = file.type;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                selectedImageBase64 = e.target.result.split(',')[1];
-                
-                const chatHistory = document.getElementById('chatHistory');
-                const userMsg = document.createElement('div');
-                userMsg.className = 'message user';
-                userMsg.innerHTML = `[Imagen adjunta / Attached Image]<br><img src="${e.target.result}" alt="Preview">`;
-                chatHistory.appendChild(userMsg);
-                chatHistory.scrollTop = chatHistory.scrollHeight;
-            };
-            reader.readAsDataURL(file);
+        function changeBgColor(color, element) {
+            workspace.style.backgroundColor = color;
+            document.querySelectorAll('.color-swatch').forEach(btn => {
+                btn.classList.remove('border-amber-500', 'ring-4', 'ring-amber-500/20');
+                btn.classList.add('border-slate-200');
+            });
+            element.classList.remove('border-slate-200');
+            element.classList.add('border-amber-500', 'ring-4', 'ring-amber-500/20');
         }
 
-        async function sendMessage() {
-            const input = document.getElementById('userInput');
-            const text = input.value.trim();
-            if(!text && !selectedImageBase64) return;
-
-            const chatHistory = document.getElementById('chatHistory');
-            
-            // Mostrar mensaje del usuario
-            const userMsg = document.createElement('div');
-            userMsg.className = 'message user';
-            userMsg.textContent = text || '[Imagen enviada / Image sent]';
-            chatHistory.appendChild(userMsg);
-            
-            input.value = '';
-            chatHistory.scrollTop = chatHistory.scrollHeight;
-
-            // Burbuja de pensando
-            const aiMsg = document.createElement('div');
-            aiMsg.className = 'message ai';
-            aiMsg.textContent = 'Duckie Guai-fai\'v está procesando... / Processing...';
-            chatHistory.appendChild(aiMsg);
-            chatHistory.scrollTop = chatHistory.scrollHeight;
-
-            // Simulación de respuesta inteligente en tiempo real bilingüe sin requerir clave externa de API
-            setTimeout(() => {
-                let reply = "";
-                const lowerText = text.toLowerCase();
-
-                if (lowerText.includes('hola') || lowerText.includes('hello')) {
-                    reply = "¡Hola de nuevo! ¿En qué te ayudo hoy con tu proyecto o tus aplicaciones bilingües?<br>Hello again! How can I help you today with your project or bilingual apps?";
-                } else if (lowerText.includes('marketplace')) {
-                    reply = "¡Duckie Marketplace está marchando excelente como proyecto independiente! Recuerda que puedes gestionar tus artículos y ropa sin interferir con esta app.<br>Duckie Marketplace is running great as an independent project!";
-                } else if (selectedImageBase64) {
-                    reply = "¡Imagen recibida y analizada correctamente por Duckie Guai-fai'v! Excelente captura visual para el sistema.<br>Image successfully received and analyzed!";
-                } else {
-                    reply = `Entendido perfectamente sobre "${text}". Como tu asistente bilingüe Duckie Guai-fai'v, estoy operando al 100% en tiempo real en tu dominio.<br>Understood perfectly. Operating at 100% real-time in your domain.`;
-                }
-
-                aiMsg.innerHTML = reply;
-                chatHistory.scrollTop = chatHistory.scrollHeight;
-            }, 1000);
-
-            selectedImageBase64 = null;
-            selectedMimeType = null;
-            document.getElementById('imageInput').value = '';
+        function changeTexture(textureClass, element) {
+            workspace.classList.remove('texture-dots', 'texture-lines', 'texture-grid');
+            if (textureClass) { workspace.classList.add(textureClass); }
+            document.querySelectorAll('.texture-btn').forEach(btn => {
+                btn.classList.remove('border-amber-500', 'bg-amber-50', 'text-amber-700', 'font-bold');
+                btn.classList.add('border-slate-200', 'bg-white', 'text-slate-700', 'font-semibold');
+            });
+            element.classList.remove('border-slate-200', 'bg-white', 'text-slate-700', 'font-semibold');
+            element.classList.add('border-amber-500', 'bg-amber-50', 'text-amber-700', 'font-bold');
         }
 
-        function handleKeyPress(e) {
-            if(e.key === 'Enter') sendMessage();
+        function changeFont(fontClass, element) {
+            appContainer.classList.remove('font-default', 'font-clean', 'font-classic', 'font-comic');
+            appContainer.classList.add(fontClass);
+            document.querySelectorAll('.font-btn').forEach(btn => {
+                btn.classList.remove('border-amber-500', 'bg-amber-50', 'font-bold');
+                btn.classList.add('border-slate-200', 'bg-white', 'font-medium');
+            });
+            element.classList.remove('border-slate-200', 'bg-white', 'font-medium');
+            element.classList.add('border-amber-500', 'bg-amber-50', 'font-bold');
+        }
+
+        function resetDefaults() {
+            const defaultColorSwatch = document.querySelectorAll('.color-swatch')[0];
+            changeBgColor('#f8fafc', defaultColorSwatch);
+            const defaultTextureBtn = document.querySelectorAll('.texture-btn')[0];
+            changeTexture('', defaultTextureBtn);
+            const defaultFontBtn = document.querySelectorAll('.font-btn')[0];
+            changeFont('font-default', defaultFontBtn);
         }
     </script>
 </body>
