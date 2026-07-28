@@ -36,8 +36,10 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-center p-2 font-default">
 
+    <!-- Mobile Container mimicking the interface -->
     <div id="appContainer" class="w-full max-w-md bg-[#0f172a] text-slate-100 rounded-3xl shadow-2xl overflow-hidden relative flex flex-col h-[780px] border-8 border-slate-900 transition-all duration-300">
         
+        <!-- Header Top Bar -->
         <header class="bg-[#0f172a] border-b border-slate-800 px-4 py-3 flex items-center justify-between z-10">
             <div class="flex items-center space-x-2.5">
                 <div class="w-9 h-9 bg-amber-400 rounded-full flex items-center justify-center shadow-inner overflow-hidden border border-amber-500">
@@ -56,6 +58,7 @@
                 </div>
             </div>
 
+            <!-- Settings Button -->
             <button id="settingsBtn" class="p-2 hover:bg-slate-800 rounded-full transition-colors text-slate-300 focus:outline-none" aria-label="Open Settings">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -64,6 +67,7 @@
             </button>
         </header>
 
+        <!-- Chat History View Area -->
         <main id="workspace" class="flex-1 p-4 flex flex-col justify-between relative overflow-y-auto transition-all duration-300 bg-[#0f172a]">
             <div id="chatHistory" class="space-y-4">
                 <div class="bg-[#1e293b] border border-slate-800 text-slate-200 p-4 rounded-2xl shadow-md max-w-[90%]">
@@ -74,7 +78,9 @@
             </div>
         </main>
 
+        <!-- Bottom Action Bar -->
         <div class="bg-[#0b0f19] border-t border-slate-800 px-3 py-3 space-y-2.5">
+            <!-- Feature Pills Row -->
             <div class="flex items-center space-x-2 overflow-x-auto pb-1 text-xs font-semibold">
                 <button onclick="toggleTray('emojiTray')" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg transition-colors flex items-center space-x-1">✨ <span>Emoji</span></button>
                 <button onclick="toggleTray('gifTray')" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg transition-colors flex items-center space-x-1">👾 <span>GIF</span></button>
@@ -82,6 +88,7 @@
                 <button onclick="triggerDuckieAI()" class="px-3 py-1 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-lg transition-colors flex items-center space-x-1">🦆 <span>Duckie</span></button>
             </div>
 
+            <!-- Dynamic Content Trays -->
             <div id="emojiTray" class="media-tray hidden bg-[#131b2e] border border-slate-800 p-3 rounded-2xl grid grid-cols-6 gap-2 text-center text-lg shadow-inner">
                 <button onclick="insertItem('😀')" class="hover:bg-slate-800 p-1.5 rounded-xl transition-colors">😀</button>
                 <button onclick="insertItem('🚀')" class="hover:bg-slate-800 p-1.5 rounded-xl transition-colors">🚀</button>
@@ -103,6 +110,7 @@
                 <button onclick="insertItem('[Sticker: 🚀 Fast]')" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-xl">🚀 Fast</button>
             </div>
 
+            <!-- Text Input & Controls Row -->
             <div class="flex items-center space-x-2">
                 <input type="text" id="userInput" placeholder="talk to Duckie..." onkeypress="handleKeyPress(event)" class="flex-1 bg-[#162032] border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-amber-500">
                 
@@ -110,6 +118,7 @@
                 <button onclick="insertItem('[Attachment]')" class="p-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl transition-colors" title="Attach Media">📎</button>
                 <button onclick="triggerDuckieAI()" class="p-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl transition-colors" title="Voice Input">🎤</button>
                 
+                <!-- Duckie Logo Button on Bottom Right Hand Side (Fully connected to AI Chat) -->
                 <button onclick="triggerDuckieAI()" class="w-11 h-11 bg-amber-400 hover:bg-amber-300 rounded-xl flex items-center justify-center shadow-md overflow-hidden border border-amber-500 transition-transform active:scale-95 flex-shrink-0" title="Chat with Duckie AI">
                     <svg viewBox="0 0 100 100" class="w-7 h-7 text-slate-950">
                         <path fill="currentColor" d="M30,40 C30,25 55,20 65,35 C70,32 78,35 82,40 C75,45 70,45 68,52 C60,65 35,65 30,52 C25,52 20,48 25,43 C28,43 30,42 30,40 Z" />
@@ -120,6 +129,7 @@
             </div>
         </div>
 
+        <!-- Sliding Settings Sheet -->
         <div id="settingsPanel" class="settings-panel absolute inset-x-0 bottom-0 bg-white text-slate-900 border-t border-slate-200 rounded-t-3xl shadow-2xl p-6 z-20 transform translate-y-full opacity-0 pointer-events-none">
             <div class="flex flex-col items-center mb-4">
                 <div class="w-12 h-1.5 bg-slate-200 rounded-full mb-3"></div>
@@ -248,7 +258,7 @@
             input.focus();
         }
 
-        // Real-Time AI Chat Functionality
+        // Real-Time AI Chat Functionality (Integrated with event feedback, state management, and loading state)
         function triggerDuckieAI() {
             const chatHistory = document.getElementById('chatHistory');
             const aiMsg = document.createElement('div');
@@ -272,18 +282,19 @@
                 userMsg.textContent = text;
                 chatHistory.appendChild(userMsg);
                 
+                // Clear input field and close trays instantly
                 input.value = '';
                 document.querySelectorAll('.media-tray').forEach(tray => tray.classList.add('hidden'));
                 workspace.scrollTop = workspace.scrollHeight;
 
-                // Real-Time typing simulation
+                // Feedback Visual & Loading State (Typing indicator matching point 2)
                 const typingMsg = document.createElement('div');
                 typingMsg.className = 'bg-[#1e293b] border border-slate-800 text-slate-400 p-3 rounded-2xl shadow-md max-w-[50%] text-xs italic animate-pulse';
                 typingMsg.textContent = 'Duckie está escribiendo...';
                 chatHistory.appendChild(typingMsg);
                 workspace.scrollTop = workspace.scrollHeight;
 
-                // Real-time instant reply
+                // Stream / Response simulation (Ready to hook up to backend HTTP endpoint)
                 setTimeout(() => {
                     chatHistory.removeChild(typingMsg);
                     const replyMsg = document.createElement('div');
