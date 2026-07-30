@@ -719,6 +719,58 @@ botonesMenu.forEach(boton => {
         }
     });
 });
+const botonEnviar = document.getElementById('enviar-btn');
+const entradaTexto = document.getElementById('mensaje-input');
+const contenedorChat = document.getElementById('chat-messages');
+
+botonEnviar.addEventListener('click', async () => {
+    const textoUsuario = entradaTexto.value.trim();
+    if (!textoUsuario) return;
+
+    // 1. Mostrar mensaje del usuario en pantalla
+    contenedorChat.innerHTML += `<div class="mensaje-usuario">${textoUsuario}</div>`;
+    entradaTexto.value = '';
+
+    // 2. Crear burbuja vacía para la respuesta de la IA
+    const burbujaIA = document.createElement('div');
+    burbujaIA.className = 'mensaje-ia';
+    burbujaIA.innerHTML = `<b>DuckieDuck Pro:</b> <span></span>`;
+    contenedorChat.appendChild(burbujaIA);
+    const espacioTextoIA = burbujaIA.querySelector('span');
+
+    try {
+        botonEnviar.disabled = true;
+
+        // 3. Petición a TU propio backend seguro (fuera de GitHub)
+        const respuestaServidor = await fetch('https://tu-backend-seguro.com/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mensaje: textoUsuario })
+        });
+
+        if (!respuestaServidor.ok) throw new Error("Error en el servidor");
+
+        // 4. Lectura fluida palabra por palabra (Stream)
+        const lectorStream = respuestaServidor.body.getReader();
+        const decodificador = new TextDecoder();
+
+        while (true) {
+            const { value, done } = await lectorStream.read();
+            if (done) break;
+            
+            const chunk = decodificador.decode(value, { stream: true });
+            espacioTextoIA.textContent += chunk;
+            
+            // Mantener el scroll al fondo automáticamente
+            contenedorChat.scrollTop = contenedorChat.scrollHeight;
+        }
+
+    } catch (error) {
+        espacioTextoIA.textContent = "Hubo un error de conexión con el servidor seguro.";
+    } finally {
+        botonEnviar.disabled = false;
+    }
+});
 
     </script>
 </body>
