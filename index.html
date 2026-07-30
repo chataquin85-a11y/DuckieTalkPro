@@ -679,6 +679,47 @@
             document.getElementById('callModal').classList.add('hidden');
             playQuackSound();
         }
+        // Lógica para cambiar dinámicamente el contenido principal según el menú lateral
+const botonesMenu = document.querySelectorAll('.menu-item'); // Asegúrate de asignar esta clase a tus botones del menú
+const areaPrincipal = document.getElementById('chat-main-container'); // Contenedor central de la app
+
+const vistas = {
+    'new-chat': `
+        <div class="chat-view">
+            <div class="mensaje-bot">🦆 New chat started in DuckieTheMu's Ecosystem. What shall we talk about today?</div>
+        </div>
+    `,
+    'images': `
+        <div class="panel-interactivo">
+            <h2>Galería de Imágenes</h2>
+            <p>Aquí aparecerán tus imágenes generadas y subidas.</p>
+            <input type="file" id="subir-imagen" accept="image/*">
+        </div>
+    `,
+    'videos': `
+        <div class="panel-interactivo">
+            <h2>Sección de Videos</h2>
+            <p>Visualiza y administra tus archivos multimedia.</p>
+        </div>
+    `,
+    'library': `
+        <div class="panel-interactivo">
+            <h2>Biblioteca / DuckieTalk</h2>
+            <p>Tus notas, prompts guardados y recursos de proyectos.</p>
+        </div>
+    `
+};
+
+// Escuchador de clicks para los botones del menú
+botonesMenu.forEach(boton => {
+    boton.addEventListener('click', (e) => {
+        const seccion = e.currentTarget.dataset.target; // Ejemplo: data-target="images"
+        if (vistas[seccion]) {
+            areaPrincipal.innerHTML = vistas[seccion];
+        }
+    });
+});
+
     </script>
 </body>
 </html>
