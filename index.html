@@ -559,19 +559,27 @@
             input.value = '';
             playQuackSound();
             toggleTray('');
+ {try {
+    const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ mensaje: text })
+    });
 
-            setTimeout(() => {
-                let response = "🦆 [DuckieDuck Pro]: Received! Everything is running smoothly in DuckieTheMu's Ecosystem.";
-                const lower = text.toLowerCase();
-                if (lower.includes('hello') || lower.includes('hi')) {
-                    response = "🦆 Hello! I am DuckieDuck Pro. How can I help you today?";
-                } else if (lower.includes('whatsapp') || lower.includes('619')) {
-                    response = "💬 You can contact us directly on WhatsApp: +1 (619) 891-8186.";
-                }
-                appendMessage(response, 'bot');
-                playQuackSound();
-            }, 800);
-        }
+    const data = await response.json();
+
+    if (data.respuesta) {
+        appendMessage(data.respuesta, 'bot');
+        playQuackSound();
+    } else {
+        appendMessage("Error al procesar la respuesta", 'bot');
+    }
+} catch (error) {
+    console.error("Error de conexión:", error);
+    appendMessage("Error de conexión con el servidor", 'bot');
+}
 
         function appendMessage(text, sender) {
             const history = document.getElementById('chatHistory');
