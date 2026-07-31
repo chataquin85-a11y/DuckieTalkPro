@@ -570,8 +570,8 @@
 
                 const data = await response.json();
 
-                if (data.respuesta) {
-                    appendMessage(data.respuesta, 'bot');
+                if (data.reply) {
+                    appendMessage(data.reply, 'bot');
                     playQuackSound();
                 } else {
                     appendMessage("Error al procesar la respuesta", 'bot');
