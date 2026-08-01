@@ -1,692 +1,196 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DuckieDuck Pro & DuckieTalk 1.3 - DuckieTheMu's Ecosystem</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#064e3b">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="DuckieTheMu's">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DuckieTalk^+^_/ Official</title>
     <style>
-        .font-default { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
-        .settings-panel, .modal-panel, .profile-panel, .sidebar-panel {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
-        }
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #065f46; border-radius: 4px; }
+        /* Estilos base de tu aplicación premium */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body, html { width: 100%; height: 100%; background-color: #0b141a; color: #e9edef; overflow: hidden; }
+        
+        /* Contenedor principal de la App */
+        #app-container { display: flex; flex-direction: column; width: 100%; height: 100%; position: relative; }
+
+        /* CABECERA PREMIUM (HEADER) */
+        .app-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background-color: #202c33; height: 60px; z-index: 10; border-bottom: 1px solid #2a3942; }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .menu-btn { font-size: 24px; cursor: pointer; color: #aebac1; background: none; border: none; }
+        .brand-zone { display: flex; align-items: center; gap: 10px; }
+        .brand-logo { width: 38px; height: 38px; border-radius: auto; object-fit: cover; }
+        .brand-title { font-size: 18px; font-weight: 600; color: #e9edef; }
+        .settings-btn { font-size: 22px; cursor: pointer; color: #aebac1; background: none; border: none; transition: transform 0.3s ease; }
+        .settings-btn:active { transform: rotate(45deg); }
+
+        /* ZONA CENTRAL: CAJA DE CHAT */
+        .chat-box { flex: 1; padding: 16px; overflow-y: auto; background-color: #0b141a; display: flex; flex-direction: column; gap: 12px; padding-bottom: 20px; }
+        .msg { max-width: 75%; padding: 8px 12px; border-radius: 8px; font-size: 15px; line-height: 1.4; word-wrap: break-word; }
+        .msg.user { background-color: #00a884; color: #ffffff; align-self: flex-end; border-top-right-radius: 0; }
+        .msg.bot { background-color: #202c33; color: #e9edef; align-self: flex-start; border-top-left-radius: 0; }
+
+        /* PANEL INFERIOR MULTIMEDIA EQUIVALENTE */
+        .input-panel { background-color: #202c33; padding: 8px 12px; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #2a3942; }
+        .input-row { display: flex; align-items: center; gap: 10px; width: 100%; }
+        
+        /* Botones de Adjuntos y Acciones */
+        .action-icon { font-size: 22px; color: #aebac1; background: none; border: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; }
+        .action-icon:active { color: #00a884; }
+        
+        /* Caja de Texto Inteligente */
+        .text-input-field { flex: 1; height: 40px; background-color: #2a3942; border: none; border-radius: 8px; padding: 0 12px; color: #e9edef; font-size: 15px; outline: none; }
+        .text-input-field::placeholder { color: #8696a0; }
+
+        /* Fila de Funciones Avanzadas y de Entretenimiento */
+        .features-row { display: flex; align-items: center; justify-content: space-between; padding-top: 4px; border-top: 1px solid #2a3942; }
+        .media-group { display: flex; gap: 16px; }
+        
+        /* Botón Suite DuckieTalkPro */
+        .pro-suite-btn { background-color: #00a884; color: white; border: none; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .pro-suite-btn:active { background-color: #008f72; }
+
+        /* PANELES FLOTANTES INTERACTIVOS (MENÚ Y CONFIGURACIÓN) */
+        .side-panel { position: fixed; top: 0; bottom: 0; width: 280px; background-color: #111b21; z-index: 100; transform: translateX(-100%); transition: transform 0.3s ease; box-shadow: 4px 0 10px rgba(0,0,0,0.5); padding: 20px; }
+        .side-panel.open { transform: translateX(0); }
+        .panel-close { display: flex; justify-content: flex-end; margin-bottom: 20px; }
+        .panel-title { font-size: 20px; margin-bottom: 15px; border-bottom: 1px solid #222e35; padding-bottom: 10px; color: #00a884; }
+        .panel-item { padding: 12px 8px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 15px; }
+        .panel-item:hover { background-color: #202c33; }
+        .overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.6); z-index: 90; display: none; }
     </style>
 </head>
-<body class="bg-[#022c22] text-slate-100 min-h-screen flex flex-col items-center justify-center p-2 font-default">
+<body>
 
-    <!-- Invisible Native Inputs -->
-    <input type="file" id="realFileInput" accept="image/*,video/*,.pdf,.doc,.docx,.txt" class="hidden" onchange="handleFileSelected(event)">
-    <input type="file" id="realCameraInput" accept="image/*" capture="environment" class="hidden" onchange="handleFileSelected(event)">
-    <input type="file" id="bgImageInput" accept="image/*" class="hidden" onchange="handleBgImageSelected(event)">
-
-    <!-- Mobile Style Main Container -->
-    <div id="appContainer" class="w-full max-w-md bg-[#064e3b] text-slate-100 rounded-3xl shadow-2xl overflow-hidden relative flex flex-col h-[820px] border-8 border-[#022c22] transition-all duration-300 bg-cover bg-center">
-        
-        <!-- Header with Sidebar Menu Button -->
-        <header class="bg-[#064e3b]/95 backdrop-blur-md border-b border-[#047857]/40 px-4 py-3 flex items-center justify-between z-10 flex-shrink-0">
-            <div class="flex items-center space-x-2.5">
-                <button onclick="openSidebar()" class="p-2 hover:bg-[#047857]/50 rounded-full transition-colors text-emerald-300 focus:outline-none" title="Open Menu">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-                <div class="flex items-center space-x-2 cursor-pointer" onclick="openProfileModal()" title="View DuckieTalk Profile">
-                    <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center shadow-inner overflow-hidden border border-emerald-400 p-0.5 flex-shrink-0">
-                        <img src="IMG_1101.png" alt="Duckie Logo" class="w-full h-full object-cover rounded-full">
-                    </div>
-                    <div>
-                        <div class="flex items-center space-x-1">
-                            <h1 class="text-xs font-bold tracking-tight text-white">DuckieDuck Pro</h1>
-                            <span class="text-emerald-300 text-[10px]">✓</span>
-                        </div>
-                        <span class="text-[9px] text-emerald-300 font-extrabold uppercase tracking-widest block">duckiethemus.com</span>
-                    </div>
+    <div id="app-container">
+        <!-- 1. HEADER PREMIUM -->
+        <header class="app-header">
+            <div class="header-left">
+                <button class="menu-btn" onclick="toggleMenu(true)">☰</button>
+                <div class="brand-zone">
+                    <img src="https://github.io" class="brand-logo" alt="Logo">
+                    <span class="brand-title">DuckieTalk^+^_/</span>
                 </div>
             </div>
-
-            <div class="flex items-center space-x-1">
-                <button onclick="openCallModal()" class="p-2 hover:bg-[#047857]/50 rounded-full transition-colors text-emerald-300" title="Call">📞</button>
-                <button id="settingsBtn" class="p-2 hover:bg-[#047857]/50 rounded-full transition-colors text-slate-200 focus:outline-none" title="Settings">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                </button>
-            </div>
+            <button class="settings-btn" onclick="toggleSettings(true)">⚙️</button>
         </header>
 
-        <!-- Slide-out Sidebar Menu -->
-        <div id="sidebarMenu" class="sidebar-panel absolute inset-y-0 left-0 w-72 bg-[#022c22] border-r border-[#047857]/40 z-50 transform -translate-x-full opacity-0 pointer-events-none flex flex-col shadow-2xl p-4">
-            <div class="flex items-center justify-between pb-4 border-b border-[#047857]/40">
-                <div class="flex items-center space-x-2">
-                    <span class="text-lg">🦆</span>
-                    <h2 class="font-bold text-sm text-white">Duckie The Mu's</h2>
-                </div>
-                <button onclick="closeSidebar()" class="p-2 hover:bg-[#064e3b] rounded-full text-slate-300">✕</button>
-            </div>
-
-            <!-- Sidebar Menu Options -->
-            <div class="flex-1 py-4 space-y-2 overflow-y-auto custom-scrollbar text-xs">
-                <button onclick="startNewChat()" class="w-full text-left px-3 py-2.5 hover:bg-[#064e3b] rounded-xl flex items-center space-x-2 text-slate-200 transition-colors">
-                    <span>✏️</span>
-                    <span class="font-semibold">New chat</span>
-                </button>
-                <button onclick="alert('Ecosystem chats search tool')" class="w-full text-left px-3 py-2.5 hover:bg-[#064e3b] rounded-xl flex items-center space-x-2 text-slate-200 transition-colors">
-                    <span>🔍</span>
-                    <span class="font-semibold">Search chats</span>
-                </button>
-                <button onclick="toggleTray('attachTray'); closeSidebar();" class="w-full text-left px-3 py-2.5 hover:bg-[#064e3b] rounded-xl flex items-center space-x-2 text-slate-200 transition-colors">
-                    <span>🖼️</span>
-                    <span class="font-semibold">Images</span>
-                </button>
-                <button onclick="toggleTray('attachTray'); closeSidebar();" class="w-full text-left px-3 py-2.5 hover:bg-[#064e3b] rounded-xl flex items-center space-x-2 text-slate-200 transition-colors">
-                    <span>🎞️</span>
-                    <span class="font-semibold">Videos</span>
-                </button>
-                <button onclick="openProfileModal(); closeSidebar();" class="w-full text-left px-3 py-2.5 hover:bg-[#064e3b] rounded-xl flex items-center space-x-2 text-slate-200 transition-colors">
-                    <span>📚</span>
-                    <span class="font-semibold">Library / DuckieTalk</span>
-                </button>
-
-                <div class="pt-4 pb-1 text-[10px] font-bold text-emerald-400 uppercase tracking-widest">Notebooks & Projects</div>
-                <button onclick="startNewChat()" class="w-full text-left px-3 py-2 hover:bg-[#064e3b] rounded-xl flex items-center space-x-2 text-slate-300">
-                    <span>📓</span>
-                    <span>New notebook</span>
-                </button>
-                <button onclick="appendMessage('🦆 [DuckieApp Envelope]: Active project loaded into memory.', 'bot'); closeSidebar();" class="w-full text-left px-3 py-2 hover:bg-[#064e3b] rounded-xl flex items-center space-x-2 text-slate-300">
-                    <span>🦆</span>
-                    <span>Duckie App Envelope...</span>
-                </button>
-            </div>
-
-            <!-- Dynamic Sidebar Footer -->
-            <div class="pt-4 border-t border-[#047857]/40 flex items-center justify-between" id="sidebarUserFooter">
-                <div class="flex items-center space-x-2">
-                    <div id="userAvatarBadge" class="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center font-bold text-white text-xs">AA</div>
-                    <div>
-                        <span id="userNameDisplay" class="text-xs font-bold text-white block">Amado Apolonio</span>
-                        <span id="userRoleDisplay" class="text-[10px] text-emerald-400">Pro Ecosystem (Owner)</span>
-                    </div>
-                </div>
-                <button onclick="settingsBtn.click(); closeSidebar();" class="p-2 hover:bg-[#064e3b] rounded-full text-slate-300">⚙️</button>
-            </div>
-        </div>
-
-        <!-- Chat History Area -->
-        <main id="workspace" class="flex-1 p-4 flex flex-col justify-between relative overflow-y-auto custom-scrollbar transition-all duration-300">
-            <div id="chatHistory" class="space-y-4">
-                <div class="bg-[#022c22]/95 backdrop-blur-sm border border-[#047857]/40 text-emerald-100 p-4 rounded-2xl shadow-md max-w-[90%]">
-                    <p class="text-xs leading-relaxed font-medium">
-                        🦆 Welcome to DuckieTalk ^+^_/! System with user authentication and roles, running securely under HTTPS (`https://www.duckiethemus.com`).
-                    </p>
-                </div>
+        <!-- 2. CAJA CENTRAL DE MENSAJES -->
+        <main class="chat-box" id="chatBox">
+            <div class="msg bot">
+                <b>DuckieTalk IA:</b> ¡Bienvenido a tu canal verificado seguro! Estoy listo para procesar tus mensajes, audios y archivos en tiempo real. 🦆✨
             </div>
         </main>
 
-        <!-- Audio Recording Interactive Tray -->
-        <div id="audioTray" class="hidden bg-[#022c22]/95 backdrop-blur-md border-t border-[#047857]/40 px-4 py-3 flex items-center justify-between z-15">
-            <div class="flex items-center space-x-2 text-xs text-red-400 font-bold animate-pulse">
-                <span>🔴 Recording Audio...</span>
-                <span id="audioTimer" class="font-mono text-white">00:00</span>
+        <!-- 3. PANEL DE CONTROL MULTIMEDIA INFERIOR -->
+        <footer class="input-panel">
+            <!-- Fila Superior de Entrada de Datos -->
+            <div class="input-row">
+                <button class="action-icon" title="Adjuntar Multimedia" onclick="triggerAttachment()">📎</button>
+                <input type="text" id="userInput" class="text-input-field" placeholder="Escribe un mensaje seguro..." onkeypress="checkEnter(event)">
+                <button class="action-icon" title="Grabar Nota de Voz" onclick="triggerMicrophone()">🎙️</button>
+                <button class="action-icon" style="color: #00a884; font-size: 24px;" title="Enviar Mensaje" onclick="sendTextMessage()">🚀</button>
             </div>
-            <div class="flex items-center space-x-2">
-                <button onclick="pauseAudio()" id="pauseAudioBtn" class="px-2.5 py-1 bg-emerald-500/20 text-emerald-300 rounded-lg text-xs font-semibold hover:bg-emerald-500/30">Pause</button>
-                <button onclick="cancelAudio()" class="px-2.5 py-1 bg-red-500/20 text-red-400 rounded-lg text-xs font-semibold hover:bg-red-500/30">Delete</button>
-                <button onclick="sendAudioMessage()" class="px-3 py-1 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-500">Send 🎙️</button>
-            </div>
-        </div>
-
-        <!-- Bottom Action Bar -->
-        <div class="bg-[#022c22]/95 backdrop-blur-md border-t border-[#047857]/40 px-3 py-3 space-y-2.5 flex-shrink-0">
-            <!-- Quick Access Row -->
-            <div class="flex items-center space-x-2 overflow-x-auto pb-1 text-xs font-semibold scrollbar-none">
-                <button onclick="toggleTray('emojiTray')" class="px-3 py-1 bg-[#064e3b] hover:bg-[#047857] text-slate-200 rounded-lg transition-colors flex items-center space-x-1 flex-shrink-0">😊 <span>Emojis</span></button>
-                <button onclick="toggleTray('stickerTray')" class="px-3 py-1 bg-[#064e3b] hover:bg-[#047857] text-slate-200 rounded-lg transition-colors flex items-center space-x-1 flex-shrink-0">🎨 <span>Stickers</span></button>
-                <button onclick="toggleTray('gifTray')" class="px-3 py-1 bg-[#064e3b] hover:bg-[#047857] text-slate-200 rounded-lg transition-colors flex items-center space-x-1 flex-shrink-0">🎞️ <span>GIFs</span></button>
-                <button onclick="openProfileModal()" class="px-3 py-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-lg transition-colors flex items-center space-x-1 flex-shrink-0">🦆 <span>DuckieTalk</span></button>
-                <button onclick="triggerWhatsAppChat()" class="px-3 py-1 bg-green-500/20 text-green-300 border border-green-500/30 rounded-lg transition-colors flex items-center space-x-1 flex-shrink-0">💬 <span>WhatsApp (619)</span></button>
-            </div>
-
-            <!-- Emoji Tray -->
-            <div id="emojiTray" class="media-tray hidden bg-[#022c22] border border-[#047857]/40 p-3 rounded-2xl grid grid-cols-8 gap-1.5 text-center text-base shadow-inner">
-                <button onclick="insertItem('☺️')" class="hover:bg-[#064e3b] p-1 rounded-xl">☺️</button>
-                <button onclick="insertItem('😳')" class="hover:bg-[#064e3b] p-1 rounded-xl">😳</button>
-                <button onclick="insertItem('😘')" class="hover:bg-[#064e3b] p-1 rounded-xl">😘</button>
-                <button onclick="insertItem('😊')" class="hover:bg-[#064e3b] p-1 rounded-xl">😊</button>
-                <button onclick="insertItem('😇')" class="hover:bg-[#064e3b] p-1 rounded-xl">😇</button>
-                <button onclick="insertItem('👍🏽')" class="hover:bg-[#064e3b] p-1 rounded-xl">👍🏽</button>
-                <button onclick="insertItem('😍')" class="hover:bg-[#064e3b] p-1 rounded-xl">😍</button>
-                <button onclick="insertItem('😏')" class="hover:bg-[#064e3b] p-1 rounded-xl">😏</button>
-            </div>
-
-            <!-- Sticker Tray -->
-            <div id="stickerTray" class="media-tray hidden bg-[#022c22] border border-[#047857]/40 p-3 rounded-2xl grid grid-cols-4 gap-2 text-center text-xs shadow-inner">
-                <button onclick="sendSticker('🦆 [Sticker: Duckie Boss]')" class="bg-[#064e3b] hover:bg-[#047857] p-2 rounded-xl text-emerald-300 font-bold border border-[#047857]">🦆 Boss Duck</button>
-                <button onclick="sendSticker('🚀 [Sticker: To The Moon]')" class="bg-[#064e3b] hover:bg-[#047857] p-2 rounded-xl text-emerald-300 font-bold border border-[#047857]">🚀 To Moon</button>
-                <button onclick="sendSticker('🔥 [Sticker: Fire Pro]')" class="bg-[#064e3b] hover:bg-[#047857] p-2 rounded-xl text-emerald-300 font-bold border border-[#047857]">🔥 Fire Pro</button>
-                <button onclick="sendSticker('💎 [Sticker: Diamond Hands]')" class="bg-[#064e3b] hover:bg-[#047857] p-2 rounded-xl text-emerald-300 font-bold border border-[#047857]">💎 Diamond</button>
-            </div>
-
-            <!-- GIF Tray -->
-            <div id="gifTray" class="media-tray hidden bg-[#022c22] border border-[#047857]/40 p-3 rounded-2xl grid grid-cols-3 gap-2 text-center text-xs shadow-inner">
-                <button onclick="sendGif('🎞️ [GIF: Duckie Dancing 🕺✨]')" class="bg-[#064e3b] hover:bg-[#047857] p-2 rounded-xl text-slate-200 border border-[#047857]">🕺 Dancing Duck</button>
-                <button onclick="sendGif('🎞️ [GIF: Rocket Launch 🚀🔥]')" class="bg-[#064e3b] hover:bg-[#047857] p-2 rounded-xl text-slate-200 border border-[#047857]">🚀 Launching</button>
-                <button onclick="sendGif('🎞️ [GIF: Success Celebration 🎉🍾]')" class="bg-[#064e3b] hover:bg-[#047857] p-2 rounded-xl text-slate-200 border border-[#047857]">🎉 Success</button>
-            </div>
-
-            <!-- Attach Tray (📎) -->
-            <div id="attachTray" class="media-tray hidden bg-[#022c22] border border-[#047857]/40 p-3 rounded-2xl grid grid-cols-3 gap-2 text-center text-xs shadow-inner">
-                <button onclick="openDeviceGallery()" class="bg-[#064e3b] hover:bg-[#047857] p-2.5 rounded-xl text-emerald-300 font-semibold border border-[#047857]">🖼️ Gallery</button>
-                <button onclick="openDeviceDocs()" class="bg-[#064e3b] hover:bg-[#047857] p-2.5 rounded-xl text-emerald-300 font-semibold border border-[#047857]">📄 Docs</button>
-                <button onclick="openDeviceCamera()" class="bg-[#064e3b] hover:bg-[#047857] p-2.5 rounded-xl text-emerald-300 font-semibold border border-[#047857]">📷 Camera</button>
-            </div>
-
-            <!-- Text Input and Controls Row -->
-            <div class="flex items-center space-x-2">
-                <button onclick="toggleTray('attachTray')" class="p-2 bg-[#064e3b] hover:bg-[#047857] text-slate-200 rounded-xl transition-colors" title="Attach File">📎</button>
-                <button onclick="openDeviceCamera()" class="p-2 bg-[#064e3b] hover:bg-[#047857] text-slate-200 rounded-xl transition-colors" title="Quick Camera">📷</button>
-                
-                <input type="text" id="userInput" placeholder="talk to DuckieDuck Pro..." onkeypress="handleKeyPress(event)" class="flex-1 bg-[#03231a] border border-[#047857]/50 rounded-xl px-3 py-2 text-sm text-white placeholder-emerald-400/50 focus:outline-none focus:border-emerald-400">
-                
-                <button onclick="toggleAudioRecording()" id="micBtn" class="p-2 bg-[#064e3b] hover:bg-[#047857] text-slate-200 rounded-xl transition-colors" title="Voice Note">🎙️</button>
-                
-                <button onclick="sendTextMessage()" class="w-10 h-10 bg-emerald-500 hover:bg-emerald-400 rounded-xl flex items-center justify-center shadow-md text-slate-950 font-bold transition-transform active:scale-95 flex-shrink-0" title="Send">
-                    ➤
+            
+            <!-- Fila Inferior de Herramientas Avanzadas -->
+            <div class="features-row">
+                <div class="media-group">
+                    <button class="action-icon" onclick="alert('Módulo de Emojis Abierto')">😊</button>
+                    <button class="action-icon" onclick="alert('Módulo de Stickers Abierto')">📂</button>
+                    <button class="action-icon" onclick="alert('Módulo de Gifts Abierto')">🎁</button>
+                    <button class="action-icon" onclick="alert('Cámara Activada')">📷</button>
+                </div>
+                <!-- Botón de Evolución a DuckieTalkPro -->
+                <button class="pro-suite-btn" onclick="alert('Abriendo Suite de Comunicación DuckieTalkPro:\n- Llamadas de Voz\n- Video Llamadas\n- Mensajería Masiva\n- Control de Contactos')">
+                    <span>🦆</span> DuckieTalkPro
                 </button>
             </div>
-        </div>
+        </footer>
+    </div>
 
-        <!-- Official DuckieTalk Profile Panel -->
-        <div id="profileModal" class="profile-panel absolute inset-0 bg-[#064e3b] text-slate-100 z-30 transform translate-y-full opacity-0 pointer-events-none flex flex-col overflow-y-auto custom-scrollbar">
-            <div class="px-4 py-3 flex items-center justify-between border-b border-[#047857]/40 bg-[#022c22] flex-shrink-0">
-                <button onclick="closeProfileModal()" class="p-2 text-emerald-300 hover:bg-[#047857]/40 rounded-full font-bold text-sm flex items-center space-x-1">
-                    <span>← Back</span>
-                </button>
-                <span class="text-xs font-bold uppercase tracking-widest text-emerald-400">Official Channel</span>
-                <div class="w-10"></div>
-            </div>
+    <!-- MENÚ LATERAL IZQUIERDO (☰) -->
+    <div id="overlayMenu" class="overlay" onclick="toggleMenu(false)"></div>
+    <div id="menuPanel" class="side-panel">
+        <div class="panel-close"><button class="menu-btn" onclick="toggleMenu(false)">✕</button></div>
+        <div class="panel-title">Menú Flotante</div>
+        <div class="panel-item" onclick="alert('Canal Verificado Activo')">🛡️ Official Verified Channel</div>
+        <div class="panel-item" onclick="alert('Generando Enlace de Compartir o QR')">🔗 Share Channel Link</div>
+        <div class="panel-item" onclick="alert('Abriendo Soporte Directo')">💬 Open WhatsApp Support</div>
+    </div>
 
-            <div class="p-6 flex flex-col items-center space-y-6 flex-1">
-                <div class="relative mt-4">
-                    <div class="w-32 h-32 bg-emerald-500 rounded-full p-1 shadow-2xl border-4 border-emerald-400 overflow-hidden flex items-center justify-center">
-                        <img src="IMG_1101.png" alt="DuckieTalk Logo" class="w-full h-full object-cover rounded-full">
-                    </div>
-                </div>
-
-                <div class="text-center space-y-1">
-                    <h2 class="text-xl font-extrabold text-white tracking-tight">DuckieTalk ^+^_/</h2>
-                    <p class="text-xs text-emerald-300 font-medium">Official Ecosystem • https://www.duckiethemus.com</p>
-                </div>
-
-                <div class="w-full bg-[#022c22] border border-[#047857]/40 p-4 rounded-2xl shadow-inner space-y-3 text-xs">
-                    <div class="flex items-center space-x-2 text-emerald-400 font-bold">
-                        <span>📢 Verified Public Channel (HTTPS)</span>
-                    </div>
-                    <p class="text-slate-300 leading-relaxed">
-                        DuckieDuck Pro's official real-time communication space, protected under secure protocol at duckiethemus.com.
-                    </p>
-                </div>
-
-                <div class="w-full space-y-2.5">
-                    <button onclick="shareChannelLink()" class="w-full py-3 bg-[#022c22] hover:bg-[#047857]/50 border border-[#047857] rounded-2xl text-xs font-bold text-emerald-300 shadow-md transition-colors flex items-center justify-center space-x-2">
-                        <span>🔗 Share Channel Link</span>
-                    </button>
-                    <button onclick="triggerWhatsAppChat()" class="w-full py-3 bg-green-600 hover:bg-green-500 rounded-2xl text-xs font-bold text-white shadow-md transition-colors flex items-center justify-center space-x-2">
-                        <span>💬 Open WhatsApp Support (619)</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Settings Slide-out Panel with Wallpaper & Admin Panel -->
-        <div id="settingsPanel" class="settings-panel absolute inset-x-0 bottom-0 bg-[#064e3b] text-slate-100 border-t border-[#047857]/40 rounded-t-3xl shadow-2xl p-5 z-25 transform translate-y-full opacity-0 pointer-events-none max-h-[85vh] flex flex-col">
-            <div class="flex flex-col items-center mb-3 flex-shrink-0">
-                <div class="w-12 h-1.5 bg-[#047857] rounded-full mb-3"></div>
-                <div class="w-full flex justify-between items-center">
-                    <h2 class="text-base font-bold text-white">⚙️ Settings & Control</h2>
-                    <button id="closeSettingsBtn" class="text-xs font-bold text-slate-950 bg-emerald-400 hover:bg-emerald-300 px-3 py-1.5 rounded-full transition-colors">
-                        Done
-                    </button>
-                </div>
-            </div>
-
-            <div class="space-y-4 overflow-y-auto custom-scrollbar pr-1 flex-1 text-xs">
-                <!-- Identity / Role Simulation Section -->
-                <div class="bg-[#022c22] p-3.5 rounded-2xl border border-[#047857]/40 space-y-3">
-                    <h3 class="font-bold text-emerald-400 uppercase tracking-wider text-[10px]">👤 Profile & Permissions (Owner / User)</h3>
-                    <div class="space-y-2">
-                        <p class="text-slate-300 text-[11px]">Toggle view to test how regular users see the app versus you (Owner):</p>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button onclick="setAppRole('owner')" class="py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold transition-colors">Owner View (You)</button>
-                            <button onclick="setAppRole('guest')" class="py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-semibold border border-slate-700 transition-colors">User View</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Exclusive Admin Panel (Conditional for Owner) -->
-                <div id="adminControlPanel" class="bg-[#022c22] p-3.5 rounded-2xl border border-emerald-500/50 space-y-3 hidden">
-                    <div class="flex items-center justify-between">
-                        <h3 class="font-bold text-emerald-300 uppercase tracking-wider text-[10px]">👑 Creator Panel (Admin Control)</h3>
-                        <span class="bg-emerald-500/20 text-emerald-300 text-[9px] px-2 py-0.5 rounded-full font-bold">Active</span>
-                    </div>
-                    <p class="text-slate-300 text-[11px]">Master control of duckiethemus.com ecosystem:</p>
-                    <button onclick="alert('Firebase system connected securely. Server operating under HTTPS without exposing public keys.')" class="w-full py-2 bg-[#064e3b] hover:bg-[#047857] text-emerald-200 border border-[#047857] rounded-xl font-semibold transition-colors">
-                        📊 View Connection Stats
-                    </button>
-                </div>
-
-                <!-- Wallpaper / Backgrounds -->
-                <div class="bg-[#022c22] p-3.5 rounded-2xl border border-[#047857]/40 space-y-3">
-                    <h3 class="font-bold text-emerald-400 uppercase tracking-wider text-[10px]">🎨 Wallpaper & Backgrounds</h3>
-                    <button onclick="openBgImageSelector()" class="w-full py-2.5 bg-[#064e3b] hover:bg-[#047857] text-emerald-200 border border-[#047857] rounded-xl font-semibold flex items-center justify-center space-x-2 transition-colors">
-                        <span>🖼️ Choose from Photos (Gallery)</span>
-                    </button>
-                    <div class="pt-1">
-                        <span class="text-[10px] font-bold text-slate-300 block mb-1.5">Solid Colors:</span>
-                        <div class="grid grid-cols-5 gap-2">
-                            <button onclick="changeBgColor('#064e3b')" class="h-8 w-8 rounded-xl bg-[#064e3b] border-2 border-emerald-400 shadow-sm"></button>
-                            <button onclick="changeBgColor('#022c22')" class="h-8 w-8 rounded-xl bg-[#022c22] border border-[#047857] shadow-sm"></button>
-                            <button onclick="changeBgColor('#14532d')" class="h-8 w-8 rounded-xl bg-green-900 border border-[#047857] shadow-sm"></button>
-                            <button onclick="changeBgColor('#18181b')" class="h-8 w-8 rounded-xl bg-zinc-900 border border-[#047857] shadow-sm"></button>
-                            <button onclick="changeBgColor('#0f172a')" class="h-8 w-8 rounded-xl bg-slate-900 border border-slate-700 shadow-sm"></button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Sound Effects -->
-                <div class="bg-[#022c22] p-3.5 rounded-2xl border border-[#047857]/40 space-y-2">
-                    <h3 class="font-bold text-emerald-400 uppercase tracking-wider text-[10px]">🔊 Sound Effects</h3>
-                    <div class="flex items-center justify-between">
-                        <span class="text-slate-200">Quack Quack Sound</span>
-                        <button onclick="playQuackSound()" class="px-3 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs transition-transform active:scale-95">Test Quack 🦆</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Simulated Call Modal -->
-        <div id="callModal" class="hidden absolute inset-0 bg-[#022c22]/95 z-40 flex flex-col items-center justify-between p-6">
-            <div class="text-center pt-8 space-y-2">
-                <div class="w-20 h-20 bg-emerald-500 rounded-full mx-auto flex items-center justify-center border-4 border-emerald-400 shadow-xl animate-bounce">
-                    <span class="text-3xl">🦆</span>
-                </div>
-                <h3 class="text-lg font-bold text-white">DuckieTheMu's Line</h3>
-                <p id="callStatusText" class="text-xs text-emerald-300 animate-pulse">Duck Call Connected...</p>
-            </div>
-            <div class="w-24 h-24 bg-[#064e3b] rounded-full border border-[#047857] flex items-center justify-center text-3xl font-mono text-white shadow-inner">
-                <span id="callTimer">00:00</span>
-            </div>
-            <div class="flex space-x-6 pb-6">
-                <button onclick="endCall()" class="w-14 h-14 bg-red-600 hover:bg-red-500 text-white rounded-full flex items-center justify-center text-xl shadow-lg" title="Hang up">📞</button>
-            </div>
-        </div>
+    <!-- MENÚ LATERAL DERECHO (⚙️) -->
+    <div id="overlaySettings" class="overlay" onclick="toggleSettings(false)"></div>
+    <div id="settingsPanel" class="side-panel" style="right: 0; transform: translateX(100%);">
+        <div class="panel-close"><button class="menu-btn" onclick="toggleSettings(false)">✕</button></div>
+        <div class="panel-title">Ajustes Generales</div>
+        <div class="panel-item">🌐 Servidor: <span style="color: #00a884; font-weight: bold; margin-left: 5px;">ONLINE</span></div>
+        <div class="panel-item" onclick="alert('Cambiando de tema...')">🌓 Alternar Modo Claro / Oscuro</div>
+        <div class="panel-item" onclick="alert('Seguridad HTTPS Cifrada Activa')">🔒 Privacidad y Cifrado HTTPS</div>
+        <div class="panel-item" onclick="alert('Sonido Quack Configurado')">🔊 Sonido de Envío (Quack)</div>
     </div>
 
     <script>
-        // --- SECURE FIREBASE INITIALIZATION (Protected API Config) ---
-        const firebaseConfig = {
-            apiKey: window.FIREBASE_API_KEY || "AIzaSyProtectedFallbackKeyForDuckieDuckPro",
-            authDomain: "duckietalkpro.firebaseapp.com",
-            databaseURL: "https://duckietalkpro-default-rtdb.firebaseio.com",
-            projectId: "duckietalkpro",
-            storageBucket: "duckietalkpro.appspot.com",
-            messagingSenderId: "3653584335869",
-            appId: "1:3653584335869:web:secureconfiguredapp"
-        };
-
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        const db = firebase.database();
-        console.log("DuckieDuck Pro: Firebase Database connected securely.");
-
-        // --- AUDIO SYNTHESIZER ---
-        function playQuackSound() {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(320, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(180, audioCtx.currentTime + 0.18);
-                
-                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
-                
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.2);
-            } catch (e) {
-                console.log("AudioContext blocked", e);
-            }
+        /* LÓGICA DE CONTROL INTERACTIVO DE LA INTERFAZ */
+        function toggleMenu(open) {
+            document.getElementById('menuPanel').classList.toggle('open', open);
+            document.getElementById('overlayMenu').style.display = open ? 'block' : 'none';
         }
 
-        // --- ROLE MANAGEMENT (Owner vs User) ---
-        function setAppRole(role) {
-            const nameDisplay = document.getElementById('userNameDisplay');
-            const roleDisplay = document.getElementById('userRoleDisplay');
-            const avatarBadge = document.getElementById('userAvatarBadge');
-            const adminPanel = document.getElementById('adminControlPanel');
-
-            if (role === 'owner') {
-                nameDisplay.innerText = "Amado Apolonio";
-                roleDisplay.innerText = "Pro Ecosystem (Owner)";
-                avatarBadge.innerText = "AA";
-                avatarBadge.className = "w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center font-bold text-white text-xs";
-                adminPanel.classList.remove('hidden');
-                appendMessage("👑 [System]: Owner Mode Activated. Creator controls enabled.", "bot");
-            } else {
-                nameDisplay.innerText = "Guest / User";
-                roleDisplay.innerText = "DuckieTalk Community Member";
-                avatarBadge.innerText = "GU";
-                avatarBadge.className = "w-8 h-8 bg-slate-700 rounded-full flex items-center justify-center font-bold text-white text-xs";
-                adminPanel.classList.add('hidden');
-                appendMessage("👤 [System]: Normal User Mode Activated. Admin panel hidden.", "bot");
-            }
-            playQuackSound();
+        function toggleSettings(open) {
+            const panel = document.getElementById('settingsPanel');
+            panel.style.transform = open ? 'translateX(0)' : 'translateX(100%)';
+            document.getElementById('overlaySettings').style.display = open ? 'block' : 'none';
         }
 
-        // --- SIDEBAR MANAGEMENT ---
-        function openSidebar() {
-            const sb = document.getElementById('sidebarMenu');
-            sb.classList.remove('-translate-x-full', 'opacity-0', 'pointer-events-none');
-            sb.classList.add('translate-x-0', 'opacity-100');
-            playQuackSound();
+        function checkEnter(event) {
+            if (event.key === 'Enter') { sendTextMessage(); }
         }
 
-        function closeSidebar() {
-            const sb = document.getElementById('sidebarMenu');
-            sb.classList.add('-translate-x-full', 'opacity-0', 'pointer-events-none');
-            sb.classList.remove('translate-x-0', 'opacity-100');
+        function triggerAttachment() {
+            alert("Accediendo de forma segura a tus fotos y videos desde tu dispositivo...");
         }
 
-        function startNewChat() {
-            document.getElementById('chatHistory').innerHTML = `
-                <div class="bg-[#022c22]/95 backdrop-blur-sm border border-[#047857]/40 text-emerald-100 p-4 rounded-2xl shadow-md max-w-[90%]">
-                    <p class="text-xs leading-relaxed font-medium">
-                        🦆 New chat started in DuckieTheMu's Ecosystem. What shall we talk about today?
-                    </p>
-                </div>
-            `;
-            closeSidebar();
-            playQuackSound();
+        function triggerMicrophone() {
+            alert("Micrófono activo a través de tu Carrier Service / Wi-Fi. Transmitiendo audio bidireccional...");
         }
 
-        // --- TRAYS AND PROFILE MANAGEMENT ---
-        function toggleTray(trayId) {
-            const trays = ['emojiTray', 'stickerTray', 'gifTray', 'attachTray'];
-            trays.forEach(id => {
-                const el = document.getElementById(id);
-                if (id === trayId) {
-                    el.classList.toggle('hidden');
-                } else {
-                    el.classList.add('hidden');
-                }
-            });
-        }
-
-        function openProfileModal() {
-            const profile = document.getElementById('profileModal');
-            profile.classList.remove('translate-y-full', 'opacity-0', 'pointer-events-none');
-            profile.classList.add('translate-y-0', 'opacity-100');
-            playQuackSound();
-        }
-
-        function closeProfileModal() {
-            const profile = document.getElementById('profileModal');
-            profile.classList.add('translate-y-full', 'opacity-0', 'pointer-events-none');
-            profile.classList.remove('translate-y-0', 'opacity-100');
-        }
-
-        function shareChannelLink() {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'DuckieTalk ^+^_/',
-                    text: 'Join the official DuckieTheMu\'s Ecosystem channel!',
-                    url: 'https://www.duckiethemus.com'
-                }).catch(() => {});
-            } else {
-                alert("Link copied: https://www.duckiethemus.com");
-            }
-        }
-
-        function insertItem(emoji) {
-            const input = document.getElementById('userInput');
-            input.value += emoji;
-            input.focus();
-        }
-
-        function sendSticker(stickerText) {
-            appendMessage(stickerText, 'user');
-            toggleTray('');
-            playQuackSound();
-            setTimeout(() => {
-                appendMessage("🦆 [DuckieDuck Pro]: Sticker received with ducky style! 💎", 'bot');
-                playQuackSound();
-            }, 600);
-        }
-
-        function sendGif(gifText) {
-            appendMessage(gifText, 'user');
-            toggleTray('');
-            playQuackSound();
-            setTimeout(() => {
-                appendMessage("🦆 [DuckieDuck Pro]: Excellent GIF choice! 🚀✨", 'bot');
-                playQuackSound();
-            }, 600);
-        }
-
-        // --- FILE AND CAMERA INPUTS ---
-        function openDeviceGallery() {
-            document.getElementById('realFileInput').click();
-            toggleTray('');
-        }
-
-        function openDeviceDocs() {
-            document.getElementById('realFileInput').click();
-            toggleTray('');
-        }
-
-        function openDeviceCamera() {
-            document.getElementById('realCameraInput').click();
-        }
-
-        function handleFileSelected(event) {
-            const file = event.target.files[0];
-            if (file) {
-                appendMessage(`📎 [Attached File]: ${file.name} (${Math.round(file.size / 1024)} KB)`, 'user');
-                playQuackSound();
-                setTimeout(() => {
-                    appendMessage("🦆 [DuckieDuck Pro]: File successfully received in DuckieTheMu's Ecosystem! 📁", 'bot');
-                    playQuackSound();
-                }, 700);
-            }
-        }
-
-        // --- WALLPAPER / CUSTOM BACKGROUNDS ---
-        function openBgImageSelector() {
-            document.getElementById('bgImageInput').click();
-        }
-
-        function handleBgImageSelected(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const imageUrl = e.target.result;
-                    const container = document.getElementById('appContainer');
-                    container.style.backgroundImage = `url('${imageUrl}')`;
-                    container.style.backgroundColor = 'transparent';
-                    playQuackSound();
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function changeBgColor(color) {
-            const container = document.getElementById('appContainer');
-            container.style.backgroundImage = 'none';
-            container.style.backgroundColor = color;
-            playQuackSound();
-        }
-
-        // --- TEXT MESSAGES & CHAT ---
-        function handleKeyPress(event) {
-            if (event.key === 'Enter') {
-                sendTextMessage();
-            }
-        }
-
+        /* FUNCIÓN DE ENVÍO DIRECTO A TU BACKEND EN CODESPACES */
         async function sendTextMessage() {
             const input = document.getElementById('userInput');
             const text = input.value.trim();
+            
             if (!text) return;
 
-            appendMessage(text, 'user');
+            // 1. Mostrar mensaje del usuario en el chat
+            const chatBox = document.getElementById('chatBox');
+            const userDiv = document.createElement('div');
+            userDiv.className = 'msg user';
+            userDiv.textContent = text;
+            chatBox.appendChild(userDiv);
+            
             input.value = '';
-            playQuackSound();
-            toggleTray('');
+            chatBox.scrollTop = chatBox.scrollHeight;
 
             try {
-                const response = await fetch ('https://organic-yodel-xrgvvj4vxxj3vpvj-3000.app.github.dev/api/chat' ,{
+                // 2. Conexión con tu backend en Codespaces
+                const response = await fetch('/api/chat', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ mensaje: text })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text })
                 });
-
                 const data = await response.json();
 
-                if (data.reply) {
-                    appendMessage(data.reply, 'bot');
-                    playQuackSound();
-                } else {
-                    appendMessage("Error al procesar la respuesta", 'bot');
-                }
+                // 3. Mostrar respuesta de la IA en el chat
+                const botDiv = document.createElement('div');
+                botDiv.className = 'msg bot';
+                botDiv.innerHTML = `<b>DuckieTalk IA:</b> ${data.reply || "¡Cuac! Mensaje procesado correctamente. 🦆"}`;
+                chatBox.appendChild(botDiv);
+                chatBox.scrollTop = chatBox.scrollHeight;
             } catch (error) {
-                console.error("Error de conexión:", error);
-                appendMessage("Error de conexión con el servidor", 'bot');
+                console.error("Error al conectar con el servidor:", error);
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'msg bot';
+                errorDiv.innerHTML = `<b>DuckieTalk IA:</b> ¡Cuac! Hubo un pequeño error de conexión con el servidor.`;
+                chatBox.appendChild(errorDiv);
             }
-        }
-
-        function appendMessage(text, sender) {
-            const history = document.getElementById('chatHistory');
-            const div = document.createElement('div');
-            
-            if (sender === 'user') {
-                div.className = "bg-emerald-600/95 backdrop-blur-sm text-white p-3.5 rounded-2xl shadow-md max-w-[85%] ml-auto text-xs font-medium leading-relaxed";
-            } else {
-                div.className = "bg-[#022c22]/95 backdrop-blur-sm border border-[#047857]/40 text-emerald-100 p-3.5 rounded-2xl shadow-md max-w-[85%] text-xs font-medium leading-relaxed";
-            }
-            
-            div.innerHTML = `<p>${text}</p>`;
-            history.appendChild(div);
-            
-            const workspace = document.getElementById('workspace');
-            workspace.scrollTop = workspace.scrollHeight;
-        }
-
-        // --- AUDIO RECORDING ---
-        let isRecording = false;
-        let audioInterval = null;
-        let audioSeconds = 0;
-
-        function toggleAudioRecording() {
-            const tray = document.getElementById('audioTray');
-            if (!isRecording) {
-                isRecording = true;
-                audioSeconds = 0;
-                document.getElementById('audioTimer').innerText = "00:00";
-                tray.classList.remove('hidden');
-                audioInterval = setInterval(() => {
-                    audioSeconds++;
-                    const mins = String(Math.floor(audioSeconds / 60)).padStart(2, '0');
-                    const secs = String(audioSeconds % 60).padStart(2, '0');
-                    document.getElementById('audioTimer').innerText = `${mins}:${secs}`;
-                }, 1000);
-            } else {
-                cancelAudio();
-            }
-        }
-
-        function pauseAudio() {
-            clearInterval(audioInterval);
-            document.getElementById('pauseAudioBtn').innerText = "Resume";
-        }
-
-        function cancelAudio() {
-            clearInterval(audioInterval);
-            isRecording = false;
-            document.getElementById('audioTray').classList.add('hidden');
-            document.getElementById('pauseAudioBtn').innerText = "Pause";
-        }
-
-        function sendAudioMessage() {
-            clearInterval(audioInterval);
-            isRecording = false;
-            document.getElementById('audioTray').classList.add('hidden');
-            appendMessage(`🎙️ [Voice Note]: ${document.getElementById('audioTimer').innerText} of audio saved.`, 'user');
-            playQuackSound();
-            setTimeout(() => {
-                appendMessage("🦆 [DuckieDuck Pro]: Voice note successfully processed by the duck server. 🎙️✨", 'bot');
-                playQuackSound();
-            }, 800);
-        }
-
-        // --- WHATSAPP ---
-        function triggerWhatsAppChat() {
-            window.open('https://wa.me/16198918186', '_blank');
-        }
-
-        // --- SETTINGS & CONFIGURATION ---
-        const settingsBtn = document.getElementById('settingsBtn');
-        const closeSettingsBtn = document.getElementById('closeSettingsBtn');
-        const settingsPanel = document.getElementById('settingsPanel');
-
-        settingsBtn.addEventListener('click', () => {
-            settingsPanel.classList.remove('translate-y-full', 'opacity-0', 'pointer-events-none');
-            settingsPanel.classList.add('translate-y-0', 'opacity-100');
-        });
-
-        closeSettingsBtn.addEventListener('click', () => {
-            settingsPanel.classList.add('translate-y-full', 'opacity-0', 'pointer-events-none');
-            settingsPanel.classList.remove('translate-y-0', 'opacity-100');
-        });
-
-        // --- SIMULATED CALL ---
-        let callInterval = null;
-        let callSeconds = 0;
-
-        function openCallModal() {
-            document.getElementById('callModal').classList.remove('hidden');
-            callSeconds = 0;
-            document.getElementById('callTimer').innerText = "00:00";
-            playQuackSound();
-            callInterval = setInterval(() => {
-                callSeconds++;
-                const mins = String(Math.floor(callSeconds / 60)).padStart(2, '0');
-                const secs = String(callSeconds % 60).padStart(2, '0');
-                document.getElementById('callTimer').innerText = `${mins}:${secs}`;
-            }, 1000);
-        }
-
-        function endCall() {
-            clearInterval(callInterval);
-            document.getElementById('callModal').classList.add('hidden');
-            playQuackSound();
         }
     </script>
 </body>
