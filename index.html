@@ -15,11 +15,11 @@
         /* CABECERA PREMIUM (HEADER) */
         .app-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background-color: #202c33; height: 60px; z-index: 10; border-bottom: 1px solid #2a3942; }
         .header-left { display: flex; align-items: center; gap: 15px; }
-        .menu-btn { font-size: 24px; cursor: pointer; color: #aebac1; background: none; border: none; }
+        .menu-btn { font-size: 24px; cursor: pointer; color: #aebac1; background: none; border: none; outline: none; }
         .brand-zone { display: flex; align-items: center; gap: 10px; }
         .brand-logo { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; }
         .brand-title { font-size: 18px; font-weight: 600; color: #e9edef; }
-        .settings-btn { font-size: 22px; cursor: pointer; color: #aebac1; background: none; border: none; transition: transform 0.3s ease; }
+        .settings-btn { font-size: 22px; cursor: pointer; color: #aebac1; background: none; border: none; outline: none; transition: transform 0.3s ease; }
         .settings-btn:active { transform: rotate(45deg); }
 
         /* ZONA CENTRAL: CAJA DE CHAT */
@@ -34,7 +34,7 @@
         .input-row { display: flex; align-items: center; gap: 10px; width: 100%; }
         
         /* Botones de Adjuntos y Acciones */
-        .action-icon { font-size: 22px; color: #aebac1; background: none; border: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; }
+        .action-icon { font-size: 22px; color: #aebac1; background: none; border: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; outline: none; }
         .action-icon:active { color: #00a884; }
         
         /* Caja de Texto Inteligente */
@@ -46,28 +46,26 @@
         .media-group { display: flex; gap: 16px; }
         
         /* Botón Suite DuckieTalkPro */
-        .pro-suite-btn { background-color: #00a884; color: white; border: none; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .pro-suite-btn { background-color: #00a884; color: white; border: none; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2); outline: none; }
         .pro-suite-btn:active { background-color: #008f72; }
 
-        /* INTERFAZ FLOTANTE: PANEL DE CONTROL VERDE (DURKIENTALKPRO) */
+        /* INTERFAZ FLOTANTE: PANEL DE CONTROL VERDE */
         .side-panel { position: fixed; top: 0; bottom: 0; width: 300px; background-color: #111b21; z-index: 100; transform: translateX(100%); transition: transform 0.3s ease; box-shadow: -4px 0 10px rgba(0,0,0,0.5); padding: 20px; display: flex; flex-direction: column; gap: 15px; }
         .side-panel.open { transform: translateX(0); }
         .panel-close { display: flex; justify-content: flex-end; margin-bottom: 5px; }
         
         /* Estilo de la Tarjeta de Administrador Verde */
-        .admin-card { background-color: #0d47a1; background: linear-gradient(135deg, #1b5e20, #004d40); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border: 1px solid #2e7d32; }
+        .admin-card { background: linear-gradient(135deg, #1b5e20, #004d40); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border: 1px solid #2e7d32; }
         .admin-title { font-size: 16px; font-weight: bold; color: #a5d6a7; border-bottom: 1px solid #2e7d32; padding-bottom: 6px; }
         .admin-row { font-size: 14px; color: #e8f5e9; display: flex; justify-content: space-between; align-items: center; }
         .admin-badge { background-color: #00a884; color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold; }
         
         /* Botones del Panel Verde */
-        .panel-btn { background-color: #202c33; color: #e9edef; border: 1px solid #2a3942; padding: 10px; border-radius: 8px; text-align: left; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 10px; width: 100%; }
+        .panel-btn { background-color: #202c33; color: #e9edef; border: 1px solid #2a3942; padding: 10px; border-radius: 8px; text-align: left; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 10px; width: 100%; outline: none; }
         .panel-btn:active { background-color: #2a3942; border-color: #00a884; }
 
         /* Capa oscura trasera */
         .overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.6); z-index: 90; display: none; }
-        
-        /* Selector de archivos invisible */
         #fileInput { display: none; }
     </style>
 </head>
@@ -82,7 +80,7 @@
             <div class="header-left">
                 <button class="menu-btn" onclick="toggleMenu(true)">☰</button>
                 <div class="brand-zone">
-                    <img src="https://github.io" class="brand-logo" alt="Logo" onerror="this.src='https://placehold.co🦆'">
+                    <img src="./IMG_1101.png" class="brand-logo" alt="Logo" onerror="this.src='https://github.io'">
                     <span class="brand-title">DuckieTalk^+^_/</span>
                 </div>
             </div>
@@ -112,7 +110,7 @@
                     <button class="action-icon" onclick="insertEmoji('🎁')">🎁</button>
                     <button class="action-icon" onclick="openAttachment()">📷</button>
                 </div>
-                <!-- Botón Suite DuckieTalkPro que abre el Panel Verde sin alertas -->
+                <!-- Botón Suite DuckieTalkPro -->
                 <button class="pro-suite-btn" onclick="toggleProSuite(true)">
                     <span>🦆</span> DuckieTalkPro
                 </button>
@@ -130,13 +128,15 @@
         <button class="panel-btn" onclick="window.open('https://wa.me', '_blank')">💬 Open WhatsApp support</button>
     </div>
 
-    <!-- INTERFAZ FLOTANTE DERECHA: PANEL DE CONTROL VERDE DE ADMINISTRADOR -->
+    <!-- INTERFAZ FLOTANTE DERECHA: PANEL DE CONTROL VERDE -->
     <div id="overlayPro" class="overlay" onclick="toggleProSuite(false)"></div>
     <div id="proPanel" class="side-panel" style="right: 0;">
         <div class="panel-close"><button class="menu-btn" onclick="toggleProSuite(false)">✕</button></div>
         
-        <!-- Tarjeta Verde de Administrador de Amado -->
+        <!-- Tarjeta Verde de Administrador -->
         <div class="admin-card">
             <div class="admin-title">DuckieTalkPro Suite</div>
             <div class="admin-row"><span>Owner:</span> <b>Amado Apolonio</b></div>
             <div class="admin-row"><span>Ecosystem:</span> <span class="admin-badge">Pro Ecosystem</span></div>
+            <div class="admin-row"><span>Server Status:</span> <span style="color: #a5d6a7; font-weight: bold;">ONLINE</span></div>
+        </div>
