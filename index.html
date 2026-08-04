@@ -17,18 +17,19 @@
         .header-left { display: flex; align-items: center; gap: 15px; }
         .menu-btn { font-size: 24px; cursor: pointer; color: #aebac1; background: none; border: none; }
         .brand-zone { display: flex; align-items: center; gap: 10px; }
-        .brand-logo { width: 38px; height: 38px; border-radius: auto; object-fit: cover; }
+        .brand-logo { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; }
         .brand-title { font-size: 18px; font-weight: 600; color: #e9edef; }
         .settings-btn { font-size: 22px; cursor: pointer; color: #aebac1; background: none; border: none; transition: transform 0.3s ease; }
         .settings-btn:active { transform: rotate(45deg); }
 
         /* ZONA CENTRAL: CAJA DE CHAT */
-        .chat-box { flex: 1; padding: 16px; overflow-y: auto; background-color: #0b141a; display: flex; flex-direction: column; gap: 12px; padding-bottom: 20px; }
-        .msg { max-width: 75%; padding: 8px 12px; border-radius: 8px; font-size: 15px; line-height: 1.4; word-wrap: break-word; }
+        .chat-box { flex: 1; padding: 16px; overflow-y: auto; background-color: #0b141a; display: flex; flex-direction: column; gap: 12px; padding-bottom: 20px; transition: background 0.3s ease; }
+        .msg { max-width: 75%; padding: 8px 12px; border-radius: 8px; font-size: 15px; line-height: 1.4; word-wrap: break-word; animation: fadeIn 0.2s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         .msg.user { background-color: #00a884; color: #ffffff; align-self: flex-end; border-top-right-radius: 0; }
         .msg.bot { background-color: #202c33; color: #e9edef; align-self: flex-start; border-top-left-radius: 0; }
 
-        /* PANEL INFERIOR MULTIMEDIA EQUIVALENTE */
+        /* PANEL INFERIOR MULTIMEDIA */
         .input-panel { background-color: #202c33; padding: 8px 12px; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #2a3942; }
         .input-row { display: flex; align-items: center; gap: 10px; width: 100%; }
         
@@ -48,17 +49,32 @@
         .pro-suite-btn { background-color: #00a884; color: white; border: none; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         .pro-suite-btn:active { background-color: #008f72; }
 
-        /* PANELES FLOTANTES INTERACTIVOS (MENÚ Y CONFIGURACIÓN) */
-        .side-panel { position: fixed; top: 0; bottom: 0; width: 280px; background-color: #111b21; z-index: 100; transform: translateX(-100%); transition: transform 0.3s ease; box-shadow: 4px 0 10px rgba(0,0,0,0.5); padding: 20px; }
+        /* INTERFAZ FLOTANTE: PANEL DE CONTROL VERDE (DURKIENTALKPRO) */
+        .side-panel { position: fixed; top: 0; bottom: 0; width: 300px; background-color: #111b21; z-index: 100; transform: translateX(100%); transition: transform 0.3s ease; box-shadow: -4px 0 10px rgba(0,0,0,0.5); padding: 20px; display: flex; flex-direction: column; gap: 15px; }
         .side-panel.open { transform: translateX(0); }
-        .panel-close { display: flex; justify-content: flex-end; margin-bottom: 20px; }
-        .panel-title { font-size: 20px; margin-bottom: 15px; border-bottom: 1px solid #222e35; padding-bottom: 10px; color: #00a884; }
-        .panel-item { padding: 12px 8px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 15px; }
-        .panel-item:hover { background-color: #202c33; }
+        .panel-close { display: flex; justify-content: flex-end; margin-bottom: 5px; }
+        
+        /* Estilo de la Tarjeta de Administrador Verde */
+        .admin-card { background-color: #0d47a1; background: linear-gradient(135deg, #1b5e20, #004d40); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border: 1px solid #2e7d32; }
+        .admin-title { font-size: 16px; font-weight: bold; color: #a5d6a7; border-bottom: 1px solid #2e7d32; padding-bottom: 6px; }
+        .admin-row { font-size: 14px; color: #e8f5e9; display: flex; justify-content: space-between; align-items: center; }
+        .admin-badge { background-color: #00a884; color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold; }
+        
+        /* Botones del Panel Verde */
+        .panel-btn { background-color: #202c33; color: #e9edef; border: 1px solid #2a3942; padding: 10px; border-radius: 8px; text-align: left; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 10px; width: 100%; }
+        .panel-btn:active { background-color: #2a3942; border-color: #00a884; }
+
+        /* Capa oscura trasera */
         .overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.6); z-index: 90; display: none; }
+        
+        /* Selector de archivos invisible */
+        #fileInput { display: none; }
     </style>
 </head>
 <body>
+
+    <!-- Selector de archivos oculto para el botón Clip -->
+    <input type="file" id="fileInput" accept="image/*,video/*" onchange="handleFileSelect(event)">
 
     <div id="app-container">
         <!-- 1. HEADER PREMIUM -->
@@ -66,40 +82,38 @@
             <div class="header-left">
                 <button class="menu-btn" onclick="toggleMenu(true)">☰</button>
                 <div class="brand-zone">
-                    <img src="https://github.io" class="brand-logo" alt="Logo">
+                    <img src="https://github.io" class="brand-logo" alt="Logo" onerror="this.src='https://placehold.co🦆'">
                     <span class="brand-title">DuckieTalk^+^_/</span>
                 </div>
             </div>
-            <button class="settings-btn" onclick="toggleSettings(true)">⚙️</button>
+            <button class="settings-btn" onclick="toggleProSuite(true)">⚙️</button>
         </header>
 
         <!-- 2. CAJA CENTRAL DE MENSAJES -->
         <main class="chat-box" id="chatBox">
             <div class="msg bot">
-                <b>DuckieTalk IA:</b> ¡Bienvenido a tu canal verificado seguro! Estoy listo para procesar tus mensajes, audios y archivos en tiempo real. 🦆✨
+                <b>DuckieTalk IA:</b> ¡Bienvenido a tu canal verificado seguro! Estoy listo para procesar tus mensajes, audios y archivos multimedia en tiempo real. 🦆✨
             </div>
         </main>
 
         <!-- 3. PANEL DE CONTROL MULTIMEDIA INFERIOR -->
         <footer class="input-panel">
-            <!-- Fila Superior de Entrada de Datos -->
             <div class="input-row">
-                <button class="action-icon" title="Adjuntar Multimedia" onclick="triggerAttachment()">📎</button>
+                <button class="action-icon" title="Adjuntar Fotos/Videos" onclick="openAttachment()">📎</button>
                 <input type="text" id="userInput" class="text-input-field" placeholder="Escribe un mensaje seguro..." onkeypress="checkEnter(event)">
-                <button class="action-icon" title="Grabar Nota de Voz" onclick="triggerMicrophone()">🎙️</button>
+                <button class="action-icon" id="micBtn" title="Grabar Nota de Voz" onclick="toggleMicrophone()">🎙️</button>
                 <button class="action-icon" style="color: #00a884; font-size: 24px;" title="Enviar Mensaje" onclick="sendTextMessage()">🚀</button>
             </div>
             
-            <!-- Fila Inferior de Herramientas Avanzadas -->
             <div class="features-row">
                 <div class="media-group">
-                    <button class="action-icon" onclick="alert('Módulo de Emojis Abierto')">😊</button>
-                    <button class="action-icon" onclick="alert('Módulo de Stickers Abierto')">📂</button>
-                    <button class="action-icon" onclick="alert('Módulo de Gifts Abierto')">🎁</button>
-                    <button class="action-icon" onclick="alert('Cámara Activada')">📷</button>
+                    <button class="action-icon" onclick="insertEmoji('😊')">😊</button>
+                    <button class="action-icon" onclick="insertEmoji('📂')">📂</button>
+                    <button class="action-icon" onclick="insertEmoji('🎁')">🎁</button>
+                    <button class="action-icon" onclick="openAttachment()">📷</button>
                 </div>
-                <!-- Botón de Evolución a DuckieTalkPro -->
-                <button class="pro-suite-btn" onclick="alert('Abriendo Suite de Comunicación DuckieTalkPro:\n- Llamadas de Voz\n- Video Llamadas\n- Mensajería Masiva\n- Control de Contactos')">
+                <!-- Botón Suite DuckieTalkPro que abre el Panel Verde sin alertas -->
+                <button class="pro-suite-btn" onclick="toggleProSuite(true)">
                     <span>🦆</span> DuckieTalkPro
                 </button>
             </div>
@@ -108,90 +122,21 @@
 
     <!-- MENÚ LATERAL IZQUIERDO (☰) -->
     <div id="overlayMenu" class="overlay" onclick="toggleMenu(false)"></div>
-    <div id="menuPanel" class="side-panel">
+    <div id="menuPanel" class="side-panel" style="left: 0; transform: translateX(-100%);">
         <div class="panel-close"><button class="menu-btn" onclick="toggleMenu(false)">✕</button></div>
-        <div class="panel-title">Menú Flotante</div>
-        <div class="panel-item" onclick="alert('Canal Verificado Activo')">🛡️ Official Verified Channel</div>
-        <div class="panel-item" onclick="alert('Generando Enlace de Compartir o QR')">🔗 Share Channel Link</div>
-        <div class="panel-item" onclick="alert('Abriendo Soporte Directo')">💬 Open WhatsApp Support</div>
+        <div class="panel-title" style="color: #00a884; font-size: 18px; font-weight: bold;">Menú Opciones</div>
+        <button class="panel-btn" onclick="addBotMessage('🛡️ Canal verificado oficial activo y seguro.')">🛡️ Official channel verified</button>
+        <button class="panel-btn" onclick="addBotMessage('🔗 Compartir link: Generando código QR seguro...')">🔗 Share channel link</button>
+        <button class="panel-btn" onclick="window.open('https://wa.me', '_blank')">💬 Open WhatsApp support</button>
     </div>
 
-    <!-- MENÚ LATERAL DERECHO (⚙️) -->
-    <div id="overlaySettings" class="overlay" onclick="toggleSettings(false)"></div>
-    <div id="settingsPanel" class="side-panel" style="right: 0; transform: translateX(100%);">
-        <div class="panel-close"><button class="menu-btn" onclick="toggleSettings(false)">✕</button></div>
-        <div class="panel-title">Ajustes Generales</div>
-        <div class="panel-item">🌐 Servidor: <span style="color: #00a884; font-weight: bold; margin-left: 5px;">ONLINE</span></div>
-        <div class="panel-item" onclick="alert('Cambiando de tema...')">🌓 Alternar Modo Claro / Oscuro</div>
-        <div class="panel-item" onclick="alert('Seguridad HTTPS Cifrada Activa')">🔒 Privacidad y Cifrado HTTPS</div>
-        <div class="panel-item" onclick="alert('Sonido Quack Configurado')">🔊 Sonido de Envío (Quack)</div>
-    </div>
-
-    <script>
-        /* LÓGICA DE CONTROL INTERACTIVO DE LA INTERFAZ */
-        function toggleMenu(open) {
-            document.getElementById('menuPanel').classList.toggle('open', open);
-            document.getElementById('overlayMenu').style.display = open ? 'block' : 'none';
-        }
-
-        function toggleSettings(open) {
-            const panel = document.getElementById('settingsPanel');
-            panel.style.transform = open ? 'translateX(0)' : 'translateX(100%)';
-            document.getElementById('overlaySettings').style.display = open ? 'block' : 'none';
-        }
-
-        function checkEnter(event) {
-            if (event.key === 'Enter') { sendTextMessage(); }
-        }
-
-        function triggerAttachment() {
-            alert("Accediendo de forma segura a tus fotos y videos desde tu dispositivo...");
-        }
-
-        function triggerMicrophone() {
-            alert("Micrófono activo a través de tu Carrier Service / Wi-Fi. Transmitiendo audio bidireccional...");
-        }
-
-        /* FUNCIÓN DE ENVÍO DIRECTO A TU BACKEND EN CODESPACES */
-        async function sendTextMessage() {
-            const input = document.getElementById('userInput');
-            const text = input.value.trim();
-            
-            if (!text) return;
-
-            // 1. Mostrar mensaje del usuario en el chat
-            const chatBox = document.getElementById('chatBox');
-            const userDiv = document.createElement('div');
-            userDiv.className = 'msg user';
-            userDiv.textContent = text;
-            chatBox.appendChild(userDiv);
-            
-            input.value = '';
-            chatBox.scrollTop = chatBox.scrollHeight;
-
-            try {
-                // 2. Conexión con tu backend en Codespaces
-                const response = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: text })
-                });
-                const data = await response.json();
-
-                // 3. Mostrar respuesta de la IA en el chat
-                const botDiv = document.createElement('div');
-                botDiv.className = 'msg bot';
-                botDiv.innerHTML = `<b>DuckieTalk IA:</b> ${data.reply || "¡Cuac! Mensaje procesado correctamente. 🦆"}`;
-                chatBox.appendChild(botDiv);
-                chatBox.scrollTop = chatBox.scrollHeight;
-            } catch (error) {
-                console.error("Error al conectar con el servidor:", error);
-                const errorDiv = document.createElement('div');
-                errorDiv.className = 'msg bot';
-                errorDiv.innerHTML = `<b>DuckieTalk IA:</b> ¡Cuac! Hubo un pequeño error de conexión con el servidor.`;
-                chatBox.appendChild(errorDiv);
-            }
-        }
-    </script>
-</body>
-</html>
+    <!-- INTERFAZ FLOTANTE DERECHA: PANEL DE CONTROL VERDE DE ADMINISTRADOR -->
+    <div id="overlayPro" class="overlay" onclick="toggleProSuite(false)"></div>
+    <div id="proPanel" class="side-panel" style="right: 0;">
+        <div class="panel-close"><button class="menu-btn" onclick="toggleProSuite(false)">✕</button></div>
+        
+        <!-- Tarjeta Verde de Administrador de Amado -->
+        <div class="admin-card">
+            <div class="admin-title">DuckieTalkPro Suite</div>
+            <div class="admin-row"><span>Owner:</span> <b>Amado Apolonio</b></div>
+            <div class="admin-row"><span>Ecosystem:</span> <span class="admin-badge">Pro Ecosystem</span></div>
