@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/chataquin85-a11y/DuckieTalkPro#readme",
   "dependencies": {
+    "@capacitor/cli": "^8.5.0",
+    "@capacitor/core": "^8.5.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
