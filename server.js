@@ -1,71 +1,55 @@
-const express = require('express');
+Const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
-const fetch = require('node-fetch');
-const path = require('path');
-
 const app = express();
 
-app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname)));
+
+// Allows your GitHub Pages app (www.duckiethemus.com) to talk safely to Render
+app.use(cors({
+    origin: ['https://duckiethemus.com', 'https://github.io']
+}));
 
 app.post('/api/chat', async (req, res) => {
     try {
-        const { contents, mensaje, message, prompt } = req.body;
+        const { mensaje } = req.body;
 
-        let formattedContents = [];
+        // Pulls your key safely from Render's hidden Environment Variables
+        const apiKey = process.env.AI_API_KEY;
 
-        if (contents && Array.isArray(contents)) {
-            formattedContents = contents;
-        } else {
-            const userMessage = mensaje || message || prompt;
-            if (!userMessage) {
-                return res.status(400).json({ error: "No se proporcionó ningún mensaje." });
-            }
-            formattedContents = [{
-                role: "user",
-                parts: [{ text: userMessage }]
-            }];
+        if (!apiKey) {
+            return res.status(500).json({ error: "Missing Groq API Key configuration on Render." });
         }
 
-        const respuestaIA = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`, {
+        // Direct connection to the official Groq API endpoint
+        const respuestaIA = await fetch('https://groq.com', {
             method: 'POST',
             headers: {
+                'Authorization': `Bearer ${apiKey}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                contents: formattedContents
+                model: "llama-3.3-70b-versatile",
+                messages: [{ role: "user", content: mensaje }],
+                stream: true
             })
         });
 
-        const data = await respuestaIA.json();
+        // Set up streaming response headers back to your iPad/iPhone interface
+        res.setHeader('Content-Type', 'text/event-stream');
+        res.setHeader('Cache-Control', 'no-cache');
+        res.setHeader('Connection', 'keep-alive');
 
-        if (data.error) {
-            console.error("❌ ERROR REAL DE GOOGLE:", data.error);
-            return res.status(respuestaIA.status).json({ error: data.error.message || "Error en la API de Google" });
-        }
-
-        if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) {
-            const aiReply = data.candidates[0].content.parts[0].text;
-            res.json({ reply: aiReply });
-        } else {
-            console.log("⚠️ Estructura inesperada de Google:", data);
-            res.status(500).json({ error: "Estructura de respuesta inesperada" });
-        }
+        // Pipe the stream straight back to your client frontend application
+        respuestaIA.body.pipe(res);
 
     } catch (error) {
-        console.error("❌ Error detallado en servidor:", error);
-        res.status(500).json({ error: error.message });
+        console.error("Error processing AI request:", error);
+        res.status(500).json({ error: "Error procesando la solicitud de IA" });
     }
 });
 
+// Port configuration for Render deployment environment
 const PORT = process.env.PORT || 3000;
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en el puerto ${PORT}`);
+    console.log(`Backend seguro corriendo en el puerto ${PORT}`);
 });
