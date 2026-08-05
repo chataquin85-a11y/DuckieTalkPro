@@ -1,0 +1,307 @@
+Html<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DuckieTalkPro</title>
+    <!-- Cargamos FontAwesome para que todos los iconos (cohete, engranaje, etc.) se muestren correctamente -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <style>
+        :root {
+            --bg-color: #111b21;
+            --panel-bg: #202c33;
+            --text-color: #e9edef;
+            --accent-green: #00a884;
+            --bubble-user: #005c4b;
+            --bubble-bot: #202c33;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Barra de navegación superior */
+        .header {
+            background-color: var(--panel-bg);
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #2f3b43;
+            z-index: 10;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .menu-btn, .settings-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .brand-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand-name {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        /* Contenedor principal de mensajes */
+        .chat-container {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .burbuja {
+            max-width: 75%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 15px;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .burbuja-pato {
+            background-color: var(--bubble-bot);
+            align-self: flex-start;
+            border-top-left-radius: 0;
+        }
+
+        .burbuja-usuario {
+            background-color: var(--bubble-user);
+            align-self: flex-end;
+            border-top-right-radius: 0;
+        }
+
+        /* Barra de entrada inferior */
+        .footer {
+            background-color: var(--panel-bg);
+            padding: 10px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            border-top: 1px solid #2f3b43;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: #8696a0;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 6px;
+        }
+
+        .icon-btn:hover {
+            color: var(--text-color);
+        }
+
+        .input-box {
+            flex: 1;
+            background-color: #2a3942;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: var(--text-color);
+            font-size: 15px;
+            outline: none;
+        }
+
+        /* Emojis y accesos rápidos */
+        .emoji-row {
+            display: flex;
+            gap: 16px;
+            padding-left: 40px;
+            font-size: 20px;
+        }
+
+        .emoji-item {
+            cursor: pointer;
+        }
+
+        /* Botón inferior verde DuckieTalkPro */
+        .pro-bar {
+            background-color: #00a884;
+            color: #fff;
+            text-align: center;
+            padding: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Ventanas o Paneles emergentes modales ocultos por defecto */
+        .panel-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--panel-bg);
+            border: 1px solid #2f3b43;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            z-index: 100;
+            width: 80%;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        .panel-popup h3 {
+            margin-top: 0;
+            color: var(--accent-green);
+        }
+
+        .panel-popup button {
+            background-color: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            margin-top: 14px;
+            cursor: pointer;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 90;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Capa oscura de fondo para los paneles modales -->
+    <div class="overlay" id="popupOverlay"></div>
+
+    <!-- Barra Superior -->
+    <header class="header">
+        <div class="header-left">
+            <button class="menu-btn" id="btnMenu" title="Menú"><i class="fas fa-bars"></i></button>
+            <div class="brand-logo">🦆</div>
+            <div class="brand-name">DuckieTalk^+^_/</div>
+        </div>
+        <button class="settings-btn" id="btnConfig" title="Configuración"><i class="fas fa-cog"></i></button>
+    </header>
+
+    <!-- Área de Conversación -->
+    <main class="chat-container" id="chatBox">
+        <div class="burbuja burbuja-pato">
+            <strong>DuckieTalk IA:</strong> ¡Bienvenido a tu canal verificado seguro! Estoy listo para procesar tus mensajes, audios y archivos multimedia en tiempo real. 🦆✨
+        </div>
+    </main>
+
+    <!-- Paneles de Funcionalidad Ocultos (Burbujas/Pestañas que se activan al pulsar) -->
+    <div class="panel-popup" id="panelMenu">
+        <h3>Menú Lateral</h3>
+        <p>Historial de chats, perfil y opciones avanzadas de navegación.</p>
+        <button onclick="cerrarPaneles()">Cerrar</button>
+    </div>
+
+    <div class="panel-popup" id="panelConfig">
+        <h3>Ajustes del Sistema</h3>
+        <p>Configuración del modelo de Inteligencia Artificial y personalización.</p>
+        <button onclick="cerrarPaneles()">Cerrar</button>
+    </div>
+
+    <div class="panel-popup" id="panelAdjuntar">
+        <h3>Adjuntar Multimedia</h3>
+        <p>Selecciona documentos, imágenes o archivos de tu portapapeles.</p>
+        <button onclick="cerrarPaneles()">Cerrar</button>
+    </div>
+
+    <!-- Barra Inferior de Entrada y Botones -->
+    <footer class="footer">
+        <div class="input-row">
+            <button class="icon-btn" id="btnClip" title="Adjuntar"><i class="fas fa-paperclip"></i></button>
+            <input type="text" class="input-box" id="userInput" placeholder="Escribe un mensaje aquí...">
+            <button class="icon-btn" id="btnMicro" title="Audio"><i class="fas fa-microphone"></i></button>
+            <button class="icon-btn" id="btnEnviar" title="Enviar"><i class="fas fa-rocket"></i></button>
+        </div>
+        <div class="emoji-row">
+            <span class="emoji-item" id="btnCarpeta" title="Archivos">📂</span>
+            <span class="emoji-item" id="btnRegalo" title="Regalo">🎁</span>
+            <span class="emoji-item" id="btnCamara" title="Cámara">📷</span>
+        </div>
+    </footer>
+
+    <!-- Barra de Estado / Atajo inferior -->
+    <div class="pro-bar" id="btnDuckiePro">
+        🚀 DuckieTalkPro Activo
+    </div>
+
+    <!-- LÓGICA DE INTERACTIVIDAD Y RED CON RENDER -->
+    <script>
+        const SERVER_URL = 'https://onrender.com';
+
+        // Elementos de la interfaz
+        const chatBox = document.getElementById('chatBox');
+        const userInput = document.getElementById('userInput');
+        const overlay = document.getElementById('popupOverlay');
+
+        // Función para agregar burbujas visuales al contenedor del chat
+        function agregarBurbuja(texto, esUsuario) {
+            const burbuja = document.createElement('div');
+            burbuja.className = `burbuja ${esUsuario ? 'burbuja-usuario' : 'burbuja-pato'}`;
+            burbuja.innerHTML = `<strong>${esUsuario ? 'Tú' : 'DuckieTalk IA'}:</strong> ${texto}`;
+            chatBox.appendChild(burbuja);
+            chatBox.scrollTop = chatBox.scrollHeight; // Desplazamiento automático abajo
+        }
+
+        // Lógica de comunicación con el backend desplegado en Render
+        async function enviarMensaje() {
+            const texto = userInput.value.trim();
+            if (!texto) return;
+
+            // Mostrar el mensaje en la pantalla del iPad/Celular
+            agregarBurbuja(texto, true);
+            userInput.value = '';
+
+            try {
+                const response = await fetch(`${SERVER_URL}/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mensaje: texto })
+                });
+                const data = await response.json();
+                agregarBurbuja(data.respuesta, false);
+            } catch (error) {
+                console.error('Error de red con Render:', error);
+                agregarBurbuja('¡Quack! Tuvimos un problema al comunicarnos con el servidor remoto de Render.', false);
+            }
+        }
