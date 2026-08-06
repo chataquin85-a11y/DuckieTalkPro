@@ -23,7 +23,7 @@ app.post('/api/chat', async (req, res) => {
         const apiKey = process.env.GROQ_API_KEY;
 
         if (!apiKey) {
-            return res.status(500).json({ error: "Falta la llave GROQ_API_KEY en el servidor." });
+            return res.status(500).json({ error: "." });
         }
 
         // Conexión estable usando axios (evita el error de fetch en Render)
