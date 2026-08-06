@@ -1,55 +1,54 @@
 const express = require('express');
-const cors = require('cors');
+const axios = require('axios'); // Motor profesional ultra compatible con la nube
 const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Permiso de pase libre (CORS) integrado
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    if (req.method === "OPTIONS") {
+        return res.sendStatus(200);
+    }
+    next();
+});
 
 app.use(express.json());
 
-// Allows your GitHub Pages app (www.duckiethemus.com) to talk safely to Render
-app.use(cors({
-    origin: ['https://duckiethemus.com', 'https://github.io']
-}));
-
+// Ruta unificada conectada de forma infalible con Groq
 app.post('/api/chat', async (req, res) => {
     try {
         const { mensaje } = req.body;
-
-        // Pulls your key safely from Render's hidden Environment Variables
-        const apiKey = process.env.AI_API_KEY;
+        const apiKey = process.env.GROQ_API_KEY;
 
         if (!apiKey) {
-            return res.status(500).json({ error: "Missing Groq API Key configuration on Render." });
+            return res.status(500).json({ error: "Falta la llave GROQ_API_KEY en el servidor." });
         }
 
-        // Direct connection to the official Groq API endpoint
-        const respuestaIA = await fetch('https://groq.com', {
-            method: 'POST',
+        // Conexión estable usando axios (evita el error de fetch en Render)
+        const respuestaIA = await axios.post('https://groq.com', {
+            model: "llama-3.3-70b-versatile",
+            messages: [{ role: "user", content: mensaje }]
+        }, {
             headers: {
                 'Authorization': `Bearer ${apiKey}`,
                 'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                model: "llama-3.3-70b-versatile",
-                messages: [{ role: "user", content: mensaje }],
-                stream: true
-            })
+            }
         });
 
-        // Set up streaming response headers back to your iPad/iPhone interface
-        res.setHeader('Content-Type', 'text/event-stream');
-        res.setHeader('Cache-Control', 'no-cache');
-        res.setHeader('Connection', 'keep-alive');
-
-        // Pipe the stream straight back to your client frontend application
-        respuestaIA.body.pipe(res);
+        if (respuestaIA.data && respuestaIA.data.choices && respuestaIA.data.choices[0].message) {
+            res.json({ reply: respuestaIA.data.choices[0].message.content });
+        } else {
+            res.json({ error: "Estructura inesperada de la IA." });
+        }
 
     } catch (error) {
-        console.error("Error processing AI request:", error);
-        res.status(500).json({ error: "Error procesando la solicitud de IA" });
+        console.error("Error procesando solicitud:", error.message);
+        res.status(500).json({ error: "Error procesando la solicitud de IA." });
     }
 });
 
-// Port configuration for Render deployment environment
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Backend seguro corriendo en el puerto ${PORT}`);
 });
