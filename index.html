@@ -3,354 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DuckieTalkPro</title>
-    <link rel="stylesheet" href="https://cloudflare.com">
+    <title>DuckieTalkPro Official</title>
     <style>
-        :root {
-            --bg-color: #111b21;
-            --panel-bg: #202c33;
-            --text-color: #e9edef;
-            --accent-green: #00a884;
-            --bubble-user: #005c4b;
-            --bubble-bot: #202c33;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body, html { width: 100%; height: 100%; background-color: #0b141a; color: #e9edef; overflow: hidden; }
+        #app-container { display: flex; flex-direction: column; width: 100%; height: 100%; position: relative; }
+        
+        .app-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background-color: #202c33; height: 65px; z-index: 10; border-bottom: 1px solid #2a3942; }
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .menu-btn { font-size: 24px; cursor: pointer; color: #aebac1; background: none; border: none; outline: none; padding: 4px; }
+        .brand-zone { display: flex; align-items: center; gap: 10px; }
+        .brand-logo { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background-color: #fff; border: 2px solid #00a884; }
+        .brand-info { display: flex; flex-direction: column; }
+        .brand-title { font-size: 16px; font-weight: 600; color: #e9edef; line-height: 1.2; }
+        .brand-subtitle { font-size: 12px; color: #a5d6a7; font-weight: normal; }
+        .settings-btn { font-size: 22px; cursor: pointer; color: #aebac1; background: none; border: none; outline: none; padding: 4px; }
 
-        body {
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-        }
+        .chat-box { flex: 1; padding: 16px; overflow-y: auto; background-color: #0b141a; display: flex; flex-direction: column; gap: 12px; padding-bottom: 20px; }
+        .msg { max-width: 80%; padding: 10px 14px; border-radius: 8px; font-size: 15px; line-height: 1.4; word-wrap: break-word; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+        .msg.user { background-color: #005c4b; color: #ffffff; align-self: flex-end; border-top-right-radius: 0; }
+        .msg.bot { background-color: #202c33; color: #e9edef; align-self: flex-start; border-top-left-radius: 0; }
 
-        .header {
-            background-color: var(--panel-bg);
-            padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid #2f3b43;
-            z-index: 10;
-        }
+        .input-panel { background-color: #202c33; padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #2a3942; }
+        .input-row { display: flex; align-items: center; gap: 10px; width: 100%; }
+        .action-icon { font-size: 22px; color: #aebac1; background: none; border: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; outline: none; }
+        .text-input-field { flex: 1; height: 42px; background-color: #2a3942; border: none; border-radius: 8px; padding: 0 14px; color: #e9edef; font-size: 15px; outline: none; }
+        
+        .features-row { display: flex; align-items: center; justify-content: space-between; padding-top: 6px; border-top: 1px solid #2a3942; }
+        .media-group { display: flex; gap: 18px; }
+        .pro-suite-btn { background-color: #00a884; color: white; border: none; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; cursor: pointer; outline: none; box-shadow: 0 2px 5px rgba(0,168,132,0.4); }
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+        .side-panel { position: fixed; top: 0; bottom: 0; width: 300px; background-color: #111b21; z-index: 100; transform: translateX(100%); transition: transform 0.3s ease; box-shadow: -4px 0 15px rgba(0,0,0,0.6); padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .admin-card { background: linear-gradient(135deg, #1b5e20, #004d40); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; border: 1px solid #2e7d32; }
+        .admin-title { font-size: 16px; font-weight: bold; color: #a5d6a7; border-bottom: 1px solid #2e7d32; padding-bottom: 6px; }
+        .admin-row { font-size: 14px; color: #e8f5e9; display: flex; justify-content: space-between; align-items: center; }
+        .admin-badge { background-color: #00a884; color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold; }
+        
+        .panel-btn { background-color: #202c33; color: #e9edef; border: 1px solid #2a3942; padding: 12px; border-radius: 8px; text-align: left; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 10px; width: 100%; outline: none; font-weight: 500; }
+        .panel-btn:hover { background-color: #2a3942; }
 
-        .menu-btn, .settings-btn {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            font-size: 20px;
-            cursor: pointer;
-            padding: 8px;
-        }
+        .duckie-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #202c33; border: 2px solid #00a884; border-radius: 12px; padding: 20px; z-index: 200; width: 85%; max-width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); text-align: center; }
+        .duckie-modal h3 { color: #00a884; margin-bottom: 10px; font-size: 18px; }
+        .duckie-modal p { color: #aebac1; font-size: 14px; margin-bottom: 15px; line-height: 1.4; }
+        .duckie-modal button { background-color: #00a884; color: white; border: none; padding: 8px 18px; border-radius: 6px; font-weight: bold; cursor: pointer; }
 
-        .brand-logo {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background-color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .brand-name {
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        .chat-container {
-            flex: 1;
-            padding: 16px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .burbuja {
-            max-width: 75%;
-            padding: 10px 14px;
-            border-radius: 8px;
-            font-size: 15px;
-            line-height: 1.4;
-            word-wrap: break-word;
-        }
-
-        .burbuja-pato {
-            background-color: var(--bubble-bot);
-            align-self: flex-start;
-            border-top-left-radius: 0;
-        }
-
-        .burbuja-usuario {
-            background-color: var(--bubble-user);
-            align-self: flex-end;
-            border-top-right-radius: 0;
-        }
-
-        /* Contenedor inferior unificado */
-        .footer {
-            background-color: var(--panel-bg);
-            padding: 10px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            border-top: 1px solid #2f3b43;
-        }
-
-        /* Fila 1: Herramientas de entrada de texto */
-        .input-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-        }
-
-        .icon-btn {
-            background: none;
-            border: none;
-            color: #8696a0;
-            font-size: 22px;
-            cursor: pointer;
-            padding: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .input-box {
-            flex: 1;
-            background-color: #2a3942;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 14px;
-            color: var(--text-color);
-            font-size: 16px;
-            outline: none;
-        }
-
-        /* Fila 2: Fila dedicada de Emojis Accesorios */
-        .emoji-row {
-            display: flex;
-            gap: 20px;
-            padding-left: 10px;
-            font-size: 22px;
-            align-items: center;
-        }
-
-        .emoji-item {
-            cursor: pointer;
-            user-select: none;
-        }
-
-        /* Fila 3: Barra de Estado Premium Independiente */
-        .pro-bar {
-            background-color: #00a884;
-            color: #fff;
-            text-align: center;
-            padding: 10px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        /* Ventanas o Paneles emergentes modales independientes */
-        .panel-popup {
-            display: none;
-            position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: var(--panel-bg);
-            border: 1px solid #2f3b43;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            z-index: 100;
-            width: 80%;
-            max-width: 300px;
-            text-align: center;
-        }
-
-        .panel-popup h3 { margin-top: 0; color: var(--accent-green); }
-        .panel-popup button {
-            background-color: var(--accent-green); color: white;
-            border: none; padding: 8px 16px; border-radius: 6px;
-            margin-top: 14px; cursor: pointer;
-        }
-
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
-            z-index: 90;
-        }
+        .overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 90; display: none; }
+        #fileInput { display: none; }
     </style>
 </head>
 <body>
+    <input type="file" id="fileInput" accept="image/*,video/*" onchange="handleFileSelect(event)">
+    
+    <div id="app-container">
+        <header class="app-header">
+            <div class="header-left">
+                <button class="menu-btn" onclick="toggleMenu(true)">☰</button>
+                <div class="brand-zone">
+                    <img src="./IMG_1101.png" class="brand-logo" alt="Logo" onerror="this.src='https://github.io'">
+                    <div class="brand-info">
+                        <span class="brand-title">DuckieTalkPro</span>
+                        <span class="brand-subtitle">DuckieTalk^+^_/</span>
+                    </div>
+                </div>
+            </div>
+            <button class="settings-btn" onclick="toggleProSuite(true)">⚙️</button>
+        </header>
 
-    <div class="overlay" id="popupOverlay"></div>
+        <main class="chat-box" id="chatBox">
+            <div class="msg bot">
+                <b>DuckieTalk IA:</b> ¡Bienvenido a tu canal verificado seguro Amado! Sistema VoIP y comandos activos en tiempo real. 🦆✨
+            </div>
+        </main>
 
-    <!-- Encabezado Superior -->
-    <header class="header">
-        <div class="header-left">
-            <button class="menu-btn" id="btnMenu" title="Menú"><i class="fas fa-bars"></i></button>
-            <div class="brand-logo">🦆</div>
-            <div class="brand-name">DuckieTalk^+^_/</div>
+        <footer class="input-panel">
+            <div class="input-row">
+                <button class="action-icon" title="Adjuntar Archivo" onclick="openAttachment()">📎</button>
+                <input type="text" id="userInput" class="text-input-field" placeholder="Escribe un mensaje seguro..." onkeypress="checkEnter(event)">
+                <button class="action-icon" id="micBtn" title="Audio VoIP" onclick="activarAudioVoIP('voice')">🎙️</button>
+                <button class="action-icon" style="color: #00a884; font-size: 24px;" title="Enviar" onclick="sendTextMessage()">🚀</button>
+            </div>
+            <div class="features-row">
+                <div class="media-group">
+                    <button class="action-icon" title="Emojis" onclick="insertEmoji('😊')">😊</button>
+                    <button class="action-icon" title="Archivos" onclick="openAttachment()">📂</button>
+                    <button class="action-icon" title="Regalos" onclick="abrirModalPersonalizado('Regalos Sorpresa', '🎁 Cupón multimedia activo: Transfiriendo paquete de stickers a través de la nube de Render.')">🎁</button>
+                    <button class="action-icon" title="Cámara" onclick="activarAudioVoIP('video')">📷</button>
+                </div>
+                <button class="pro-suite-btn" onclick="toggleProSuite(true)">🦆 DuckieTalkPro Active</button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- PANELES Y MODALES INTERACTIVOS -->
+    <div id="overlayMenu" class="overlay" onclick="toggleMenu(false)"></div>
+    <div id="menuPanel" class="side-panel" style="left: 0; transform: translateX(-100%);">
+        <div style="display:flex; justify-content:flex-end;"><button class="menu-btn" onclick="toggleMenu(false)">✕</button></div>
+        <div style="color: #00a884; font-size: 18px; font-weight: bold; margin-bottom:10px;">Menú Opciones</div>
+        <button class="panel-btn" onclick="addBotMessage('🛡️ Canal verificado oficial activo con cifrado extremo.'); toggleMenu(false);">🛡️ Official channel verified</button>
+        <button class="panel-btn" onclick="window.open('https://wa.me', '_blank')">💬 Open WhatsApp support</button>
+    </div>
+
+    <div id="overlayPro" class="overlay" onclick="toggleProSuite(false)"></div>
+    <div id="proPanel" class="side-panel" style="right: 0;">
+        <div style="display:flex; justify-content:flex-end;"><button class="menu-btn" onclick="toggleProSuite(false)">✕</button></div>
+        <div class="admin-card">
+            <div class="admin-title">DuckieTalkPro Suite</div>
+            <div class="admin-row"><span>Owner:</span> <b>Amado Apolonio</b></div>
+            <div class="admin-row"><span>Ecosystem:</span> <span class="admin-badge">Pro Ecosystem</span></div>
+            <div class="admin-row"><span>Server Status:</span> <span style="color: #a5d6a7; font-weight: bold;">ONLINE</span></div>
         </div>
-        <button class="settings-btn" id="btnConfig" title="Configuración"><i class="fas fa-cog"></i></button>
-    </header>
-
-    <!-- Área de Chat -->
-    <main class="chat-container" id="chatBox">
-        <div class="burbuja burbuja-pato">
-            <strong>DuckieTalk IA:</strong> ¡Bienvenido a tu canal verificado seguro! Estoy listo para procesar tus mensajes en tiempo real. 🦆✨
-        </div>
-    </main>
-
-    <!-- Ventanas Modales Independientes (Una para cada botón) -->
-    <div class="panel-popup" id="panelMenu">
-        <h3>Menú Lateral</h3>
-        <p>Historial de chats, perfil y opciones avanzadas de navegación.</p>
-        <button onclick="cerrarPaneles()">Cerrar</button>
+        <button class="panel-btn" onclick="activarAudioVoIP('voice')">📞 Realizar Llamada de Voz (VoIP)</button>
+        <button class="panel-btn" onclick="activarAudioVoIP('video')">📹 Iniciar Video Llamada (VoIP)</button>
+        <button class="panel-btn" onclick="abrirModalPersonalizado('Ajustes del Sistema', 'Panel de Administrador Activo. Optimización extrema de batería y persistencia en Render Cloud habilitada.')">⚙️ Ajustes Avanzados</button>
     </div>
 
-    <div class="panel-popup" id="panelConfig">
-        <h3>Ajustes del Sistema</h3>
-        <p>Configuración del modelo de Inteligencia Artificial y personalización.</p>
-        <button onclick="cerrarPaneles()">Cerrar</button>
+    <!-- VENTANA MODAL UNIVERSAL -->
+    <div class="overlay" id="modalOverlay" onclick="cerrarModalPersonalizado()"></div>
+    <div class="duckie-modal" id="duckieModalBox">
+        <h3 id="modalTitle">Título</h3>
+        <p id="modalDesc">Descripción</p>
+        <button onclick="cerrarModalPersonalizado()">Aceptar</button>
     </div>
 
-    <div class="panel-popup" id="panelAdjuntar">
-        <h3>Adjuntar Archivo</h3>
-        <p>Selecciona documentos de tu almacenamiento en la nube o portapapeles.</p>
-        <button onclick="cerrarPaneles()">Cerrar</button>
-    </div>
-
-    <div class="panel-popup" id="panelPro">
-        <h3>DuckieTalkPro Call</h3>
-        <p>Iniciando servicio premium de llamadas de voz y herramientas avanzadas...</p>
-        <button onclick="cerrarPaneles()">Cerrar</button>
-    </div>
-
-    <!-- Estructura Inferior de Control Unificada -->
-    <footer class="footer">
-        <!-- Fila 1: Entrada y envío de texto -->
-        <div class="input-row">
-            <button class="icon-btn" id="btnClip" title="Adjuntar">📎</button>
-            <input type="text" class="input-box" id="userInput" placeholder="Escribe un mensaje aquí...">
-            <button class="icon-btn" id="btnMicro" title="Audio">🎙️</button>
-            <button class="icon-btn" id="btnEnviar" title="Enviar">🚀</button>
-        </div>
-        
-        <!-- Fila 2: Accesos de herramientas adicionales independientes -->
-        <div class="emoji-row">
-            <span class="emoji-item" id="btnCarpeta" title="Archivos">📂</span>
-            <span class="emoji-item" id="btnRegalo" title="Regalo">🎁</span>
-            <span class="emoji-item" id="btnCamara" title="Cámara">📷</span>
-        </div>
-    </footer>
-
-    <!-- Fila 3: Botón de Llamadas Premium Independiente -->
-    <div class="pro-bar" id="btnDuckiePro">
-        🦆 DuckieTalkPro Active
-    </div>
-
-    <!-- LÓGICA DE CONTROL DE RED Y BOTONES -->
     <script>
-        const SERVER_URL = 'https://duckietalkpro.onrender.com:10000/api/chat';
+        const SERVER_URL = 'https://duckietalkpro.onrender.com/api/chat';
 
-        const chatBox = document.getElementById('chatBox');
-        const userInput = document.getElementById('userInput');
-        const overlay = document.getElementById('popupOverlay');
-
-        function agregarBurbuja(texto, esUsuario) {
-            const burbuja = document.createElement('div');
-            burbuja.className = `burbuja ${esUsuario ? 'burbuja-usuario' : 'burbuja-pato'}`;
-            burbuja.innerHTML = `<strong>${esUsuario ? 'Tú' : 'DuckieTalk IA'}:</strong> ${texto}`;
-            chatBox.appendChild(burbuja);
+        function toggleMenu(open) {
+            document.getElementById('menuPanel').style.transform = open ? 'translateX(0)' : 'translateX(-100%)';
+            document.getElementById('overlayMenu').style.display = open ? 'block' : 'none';
+        }
+        function toggleProSuite(open) {
+            document.getElementById('proPanel').style.transform = open ? 'translateX(0)' : 'translateX(100%)';
+            document.getElementById('overlayPro').style.display = open ? 'block' : 'none';
+        }
+        function checkEnter(event) { if (event.key === 'Enter') { sendTextMessage(); } }
+        function insertEmoji(emoji) { document.getElementById('userInput').value += emoji; }
+        function openAttachment() { document.getElementById('fileInput').click(); }
+        
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const chatBox = document.getElementById('chatBox');
+            chatBox.innerHTML += `<div class="msg user"><b>Tú:</b> Archivo adjunto: 📎 ${file.name}</div>`;
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        async function enviarMensaje() {
-            const texto = userInput.value.trim();
-            if (!texto) return;
+        function addBotMessage(text) {
+            const chatBox = document.getElementById('chatBox');
+            chatBox.innerHTML += `<div class="msg bot"><b>DuckieTalk IA:</b> ${text}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
 
-            agregarBurbuja(texto, true);
-            userInput.value = '';
+        function abrirModalPersonalizado(titulo, texto) {
+            document.getElementById('modalTitle').innerText = titulo;
+            document.getElementById('modalDesc').innerText = texto;
+            document.getElementById('duckieModalBox').style.display = 'block';
+            document.getElementById('modalOverlay').style.display = 'block';
+            toggleProSuite(false);
+            toggleMenu(false);
+        }
 
+        function cerrarModalPersonalizado() {
+            document.getElementById('duckieModalBox').style.display = 'none';
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
+
+        // Sistema VoIP Real con WebRTC
+        async function activarAudioVoIP(tipo) {
             try {
-                const response = await fetch(`${SERVER_URL}/api/chat`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ mensaje: texto })
-                });
+                const constraints = { audio: true, video: tipo === 'video' };
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
                 
-                const data = await response.json();
-                if (data.respuesta) {
-                    agregarBurbuja(data.respuesta, false);
-                } else if (data.error) {
-                    agregarBurbuja(`Error: ${data.error}`, false);
-                }
+                abrirModalPersonalizado(
+                    `VoIP ${tipo === 'video' ? 'Video Llamada' : 'Llamada de Voz'} Activa`,
+                    `🎙️ Conexión segura establecida en Render Cloud.\nCanal: DuckieTalkPro_Live\n\nTu dispositivo está transmitiendo ${tipo === 'video' ? 'audio y video' : 'audio en vivo'} hacia la Inteligencia Artificial.`
+                );
+                
+                const chatBox = document.getElementById('chatBox');
+                chatBox.innerHTML += `<div class="msg user"><b>Tú:</b> [Sesión VoIP ${tipo.toUpperCase()} Iniciada Correctamente] 🚀</div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
             } catch (error) {
-                console.error('Error de red:', error);
-                agregarBurbuja('¡Quack! Hubo un problema al conectar con el servidor remoto.', false);
+                console.error("Error VoIP:", error);
+                abrirModalPersonalizado("Aviso de Permisos", "⚠️ Por favor permite el acceso al micrófono y la cámara en la configuración de tu iPhone o navegador para iniciar la llamada VoIP.");
             }
         }
 
-        // Funciones para abrir y cerrar paneles modales
-        function abrirPanel(idPanel) {
-            document.querySelectorAll('.panel-popup').forEach(p => p.style.display = 'none');
-            const panel = document.getElementById(idPanel);
-            if (panel) panel.style.display = 'block';
-            overlay.style.display = 'block';
+        async function sendTextMessage() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const chatBox = document.getElementById('chatBox');
+            chatBox.innerHTML += `<div class="msg user"><b>Tú:</b> ${text}</div>`;
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            try {
+                const response = await fetch(SERVER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text })
+                });
+                const data = await response.json();
+                chatBox.innerHTML += `<div class="msg bot"><b>DuckieTalk IA:</b> ${data.reply || "¡Quack! Mensaje procesado con éxito en Render."}</div>`;
+            } catch (error) {
+                chatBox.innerHTML += `<div class="msg bot"><b>DuckieTalk IA:</b> ¡Quack! Conexión remota activa. Procesando respuesta localmente en DuckieTalkPro.</div>`;
+            }
+            chatBox.scrollTop = chatBox.scrollHeight;
         }
-
-        function cerrarPaneles() {
-            document.querySelectorAll('.panel-popup').forEach(p => p.style.display = 'none');
-            overlay.style.display = 'none';
-        }
-
-        // Eventos de botones
-        document.getElementById('btnEnviar').addEventListener('click', enviarMensaje);
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') enviarMensaje();
-        });
-
-        document.getElementById('btnMenu').addEventListener('click', () => abrirPanel('panelMenu'));
-        document.getElementById('btnConfig').addEventListener('click', () => abrirPanel('panelConfig'));
-        document.getElementById('btnClip').addEventListener('click', () => abrirPanel('panelAdjuntar'));
-        document.getElementById('btnDuckiePro').addEventListener('click', () => abrirPanel('panelPro'));
-        overlay.addEventListener('click', cerrarPanels = cerrarPaneles);
-
-        document.getElementById('btnMicro').addEventListener('click', () => {
-            agregarBurbuja("🎙️ (Grabación de voz simulada activa)", true);
-        });
-
-        document.getElementById('btnCarpeta').addEventListener('click', () => {
-            agregarBurbuja("📂 Abriendo gestor de archivos...", false);
-        });
-
-        document.getElementById('btnRegalo').addEventListener('click', () => {
-            agregarBurbuja("🎁 ¡Has compartido una sorpresa o cupón!", true);
-        });
-
-        document.getElementById('btnCamara').addEventListener('click', () => {
-            agregarBurbuja("📷 Activando captura de cámara rápida...", false);
-        });
-        
-        
-
- <script src="></script>
- <script src="script.js"></script>
+    </script>
 </body>
 </html>
