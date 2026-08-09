@@ -26,6 +26,8 @@ jobs:
           rm -rf ios || true
           npx cap add ios || true
           npx cap sync ios
+          ls -la ios
+          ls -la ios/App || true
 
       - name: Setup Xcode Environment
         uses: maxim-lobanov/setup-xcode@v1
@@ -34,16 +36,26 @@ jobs:
 
       - name: Build iOS App Archive
         run: |
-          xcodebuild -workspace ios/App/App.xcworkspace \
+          if [ -d "ios/App" ]; then
+            cd ios/App
+          else
+            cd ios
+          fi
+          xcodebuild -workspace App.xcworkspace \
                      -scheme App \
                      -configuration Release \
-                     -archivePath $PWD/ios/build/App.xcarchive \
+                     -archivePath $PWD/build/App.xcarchive \
                      archive \
                      CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
 
       - name: Export IPA Package
         run: |
+          if [ -d "ios/App" ]; then
+            cd ios/App
+          else
+            cd ios
+          fi
           xcodebuild -exportArchive \
-                     -archivePath $PWD/ios/build/App.xcarchive \
-                     -exportPath $PWD/ios/build/ipa \
-                     -exportOptionsPlist ios/App/ExportOptions.plist || true
+                     -archivePath $PWD/build/App.xcarchive \
+                     -exportPath $PWD/build/ipa \
+                     -exportOptionsPlist ExportOptions.plist || true
