@@ -23,9 +23,9 @@ jobs:
 
       - name: Add and Sync iOS Platform
         run: |
-          npx cap add ios (rm -rf ios && npx cap add ios && npx cap sync ios) 
+          rm -rf ios || true
+          npx cap add ios || true
           npx cap sync ios
-
       - name: Setup Xcode Environment
         uses: maxim-lobanov/setup-xcode@v1
         with:
