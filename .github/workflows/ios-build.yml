@@ -21,8 +21,10 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Sync Capacitor Web Assets
-        run: npx cap sync ios
+      - name: Add and Sync iOS Platform
+        run: |
+          npx cap add ios || true
+          npx cap sync ios
 
       - name: Setup Xcode Environment
         uses: maxim-lobanov/setup-xcode@v1
