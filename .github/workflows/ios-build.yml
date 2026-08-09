@@ -34,7 +34,7 @@ jobs:
 
       - name: Build iOS App Archive
         run: |
-          cd ios/App
+          cd ios
           xcodebuild -workspace App.xcworkspace \
                      -scheme App \
                      -configuration Release \
@@ -44,7 +44,7 @@ jobs:
 
       - name: Export IPA Package
         run: |
-          cd ios/App
+          cd ios
           xcodebuild -exportArchive \
                      -archivePath $PWD/build/App.xcarchive \
                      -exportPath $PWD/build/ipa \
