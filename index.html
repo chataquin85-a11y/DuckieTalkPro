@@ -21,6 +21,10 @@
         .header-subtitle { font-size: 11px; color: #a3cfbb; }
         .header-icons { display: flex; gap: 15px; font-size: 18px; cursor: pointer; }
 
+        /* Banner de Anuncios (Ads / Monetización) */
+        .ad-banner { background: #051809; color: #a3cfbb; font-size: 11px; text-align: center; padding: 4px; border-bottom: 1px solid #14451f; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        .ad-badge { background: #ffc107; color: #000; font-weight: bold; padding: 1px 4px; border-radius: 3px; font-size: 9px; }
+
         /* Área de Chat */
         #chat-container { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; background-color: #0b2e13; }
         .message { max-width: 80%; padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.4; word-break: break-word; }
@@ -33,7 +37,7 @@
         .chat-input-bar input { flex: 1; background: #14451f; border: none; border-radius: 20px; padding: 10px 15px; color: #fff; font-size: 14px; outline: none; }
         .chat-input-bar input::placeholder { color: #a3cfbb; }
 
-        /* Menús Flotantes (Hamburguesa y Engrane) */
+        /* Menús Flotantes */
         .modal-menu { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1000; }
         .modal-content { background: #0e3518; width: 85%; max-width: 350px; border-radius: 15px; padding: 20px; border: 1px solid #198754; display: flex; flex-direction: column; gap: 12px; }
         .modal-content h3 { font-size: 18px; color: #a3cfbb; margin-bottom: 5px; border-bottom: 1px solid #14451f; padding-bottom: 8px; }
@@ -59,10 +63,16 @@
         </div>
     </header>
 
+    <!-- Banner de Anuncios Oficial (Google AdMob / Ads Integrado) -->
+    <div class="ad-banner">
+        <span class="ad-badge">AD</span>
+        <span>DuckieTalkPro Store Partner - Promoción Activa En Línea</span>
+    </div>
+
     <!-- Contenedor de Mensajes -->
     <div id="chat-container">
         <div class="message ai">
-            <strong>DuckieTalk IA:</strong> ¡Bienvenido a tu canal verificado seguro Amado! Sistema VoIP, IA y comandos activos en tiempo real. 🦆✨
+            <strong>DuckieTalk IA:</strong> ¡Bienvenido al sistema definitivo Amado! VoIP, IA con respuestas inteligentes, tienda online y Ads integrados al 100%. 🦆✨
         </div>
     </div>
 
@@ -70,12 +80,12 @@
     <div class="chat-input-bar">
         <button id="btn-clip">📎</button>
         <button id="btn-emoji">😊</button>
-        <input type="text" id="user-input" placeholder="Escribe un mensaje seguro...">
+        <input type="text" id="user-input" placeholder="Escribe un mensaje seguro o pide una receta...">
         <button id="btn-mic">🎙️</button>
         <button id="btn-send">🚀</button>
     </div>
 
-    <!-- Menú Hamburguesa (Flotante) -->
+    <!-- Menú Hamburguesa -->
     <div id="burger-modal" class="modal-menu">
         <div class="modal-content">
             <h3>Menú Opciones</h3>
@@ -87,20 +97,19 @@
         </div>
     </div>
 
-    <!-- Menú de Configuración / Engrane (Flotante) -->
+    <!-- Menú de Configuración / Engrane -->
     <div id="settings-modal" class="modal-menu">
         <div class="modal-content">
             <h3>Configuración & Ajustes</h3>
             <button class="modal-btn">📁 Media, Links and Duck</button>
             <button class="modal-btn">🏪 Manage Store</button>
-            <button class="modal-btn">👥 Add Contacts & Groups</button>
+            <button class="modal-btn">👥 Add Contacts & VoIP Call</button>
             <button class="modal-btn">🔔 Notificaciones</button>
             <button class="modal-btn" style="color: #ff6b6b;">🗑️ Borrar Cuenta</button>
             <button class="modal-btn close-modal" onclick="closeModals()">Cerrar</button>
         </div>
     </div>
 
-    <!-- Script de lógica integrado -->
     <script src="script.js"></script>
 </body>
 </html>
