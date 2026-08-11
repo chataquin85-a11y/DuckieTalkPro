@@ -1,5 +1,5 @@
 {
-  "appId": "com.amado.duckietalk",
-  "appName": "duckietalkpro",
-  "webDir": "www"
+  "appId": "com.duckietalk.pro",
+  "appName": "DuckieTalkPro",
+  "webDir": "."
 }
