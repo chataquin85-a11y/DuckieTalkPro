@@ -23,31 +23,28 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // --- INTELIGENCIA ARTIFICIAL AVANZADA Y RESPUESTAS EN TIEMPO REAL ---
-    function sendMessage() {
-        const text = userInput.value.trim();
-        if (!text) return;
-        appendMessage(text, "user");
-        userInput.value = "";
-
-        // Simulación de procesamiento de IA conectada a la web y comandos
-        setTimeout(() => {
-            let aiResponse = "¡Quack! He procesado tu consulta a través del motor inteligente de DuckieTalkPro.";
-            const lower = text.toLowerCase();
-            
-            if (lower.includes("hola") || lower.includes("saludos")) {
-                aiResponse = "¡Hola Amado! Es un gusto saludarte. Todos los sistemas de tu tienda, llamadas e IA están operando al máximo rendimiento. 🦆✨";
-            } else if (lower.includes("tienda") || lower.includes("producto") || lower.includes("nutribullet") || lower.includes("ropa")) {
-                aiResponse = "🏪 [Gestión de Tienda]: Productos activos en línea (NutriBullet, electrónicos y prendas de vestir) listos para tus clientes en la homepage.";
-            } else if (lower.includes("receta") || lower.includes("cocina")) {
-                aiResponse = "🍳 [Búsqueda Web]: Conectado a la red. ¿Qué te gustaría cocinar hoy? Puedo buscarte recetas locales al instante.";
-            } else if (lower.includes("anuncio") || lower.includes("ads") || lower.includes("monetizar")) {
-                aiResponse = "💰 [Google AdMob Integrado]: El banner de anuncios y los interstitial ads están configurados para generar ingresos pasivos en tu app.";
-            }
-
-            appendMessage(aiResponse, "ai");
-        }, 800);
-    }
-
+    function sendMessage() {// Llamada real y segura al backend desplegado en Render
+const text = userInput.value.trim();
+    if (!text) return;
+    appendMessage(text, "user");
+    userInput.value = "";
+        fetch('https://duckietalkpro.onrender.com/api/chat', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ message: text })
+})
+.then(response => response.json())
+.then(data => {
+    // Muestra la respuesta real generada por Gemini desde tu servidor
+    const aiResponse = data.reply || "¡Quack! Recibí tu mensaje, pero no obtuve respuesta.";
+    appendMessage(aiResponse, "ai");
+})
+.catch(error => {
+    console.error("Error al conectar con el servidor:", error);
+    appendMessage("¡Quack! Ocurrió un error al conectar con el servidor seguro.", "ai");
+});  
     function appendMessage(text, sender) {
         const msgDiv = document.createElement("div");
         msgDiv.className = `message ${sender}`;
