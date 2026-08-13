@@ -1,5 +1,6 @@
 {
-  "appId": "com.duckietalk.pro",
-  "appName": "DuckieTalkPro",
-  "webDir": "."
+  "appId": "com.duckietalkpro.app",
+  "appName": "DuckieDuck Pro",
+  "webDir": "www",
+  "bundledWebRuntime": false
 }
