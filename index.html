@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DuckieTalkPro</title>
+    <title>DuckieDuck Pro</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="content=yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="DuckieTalkPro">
     <link rel="apple-touch-icon" href="IMG_1101.png">
@@ -31,282 +31,94 @@
         .incoming { background-color: #14451f; align-self: flex-start; border-top-left-radius: 0; }
         .outgoing { background-color: #1b5e20; align-self: flex-end; border-top-right-radius: 0; }
 
-        /* Footer Controls Normal */
-        .footer-controls { background-color: #07220e; padding: 10px 15px; display: flex; gap: 8px; align-items: center; border-top: 1px solid #14451f; height: 60px; }
-        .footer-btn { background: none; border: none; color: #4ec9b0; font-size: 1.2em; cursor: pointer; padding: 5px; }
-        input[type="text"] { flex: 1; background-color: #14451f; border: none; border-radius: 20px; padding: 10px 15px; color: #ffffff; font-size: 0.95em; outline: none; }
-        .action-btn { background-color: #4ec9b0; border: none; color: #07220e; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; }
-
-        /* Barra Escuchando Voz */
-        .voice-recording-bar { display: none; background-color: #07220e; padding: 10px 15px; align-items: center; justify-content: space-between; border-top: 1px solid #14451f; height: 60px; width: 100%; }
-        .voice-timer { color: #ff5252; font-weight: bold; font-size: 1.1em; min-width: 50px; }
-        .voice-wave { flex: 1; text-align: center; color: #4ec9b0; font-size: 0.9em; font-weight: bold; }
-        .voice-actions-right { display: flex; gap: 15px; align-items: center; }
-        .trash-btn { background: none; border: none; color: #ff5252; font-size: 1.3em; cursor: pointer; }
-        .send-voice-btn { background: #2e7d32; border: none; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1em; cursor: pointer; }
-
-        /* Modales */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
-        .modal-content { background: #14451f; padding: 20px; border-radius: 12px; width: 100%; max-width: 340px; text-align: center; border: 1px solid #1f5e2b; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        .modal-content h3 { color: #4ec9b0; margin-bottom: 15px; font-size: 1.1em; }
-        .menu-option-btn { background: #1b5e20; color: white; border: 1px solid #2e7d32; width: 100%; padding: 12px; margin-bottom: 8px; border-radius: 8px; cursor: pointer; text-align: left; font-size: 0.9em; display: flex; align-items: center; gap: 10px; transition: background 0.2s; }
-        .menu-option-btn:hover { background: #2e7d32; }
-        .close-modal-btn { background: #d32f2f; color: white; border: none; width: 100%; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 5px; }
-        
-        .voip-input { width: 100%; background: #0b2e13; border: 1px solid #2e7d32; padding: 10px; border-radius: 8px; color: white; font-size: 1em; margin-bottom: 15px; outline: none; text-align: center; }
-        .voip-actions { display: flex; gap: 10px; }
-        .voip-actions button { flex: 1; padding: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
-        .btn-cancel { background: #424242; color: white; }
-        .btn-ok { background: #4ec9b0; color: #07220e; }
+        /* Input Controls Area */
+        .input-area { background: #07220e; padding: 10px 15px; display: flex; align-items: center; gap: 8px; border-top: 1px solid #14451f; }
+        .input-area input { flex: 1; background: #14451f; border: 1px solid #1f5e2b; border-radius: 20px; padding: 10px 15px; color: #fff; font-size: 0.95em; outline: none; }
+        .input-area input::placeholder { color: #858585; }
+        .send-btn { background: #2e7d32; border: none; color: white; padding: 10px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; }
+        .send-btn:active { background: #1b5e20; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="header-left">
-            <button onclick="openMenu('hamburgerModal')" style="background:none; border:none; color:white; font-size:1.2em; cursor:pointer;">☰</button>
             <img src="IMG_1101.png" alt="Logo" class="header-logo">
             <div>
                 <div class="header-title">DuckieTalkPro</div>
-                <div class="header-subtitle">DuckieTalk ^+^ 🦆</div>
+                <div class="header-subtitle">DuckieTalk ^+^ /</div>
             </div>
         </div>
         <div class="header-actions">
-            <button onclick="openVoipModal()" title="VoIP Call">📞</button>
-            <button onclick="openStore()" title="Online Store">🛒</button>
-            <button onclick="openMenu('gearModal')" title="Settings">⚙️</button>
+            <button title="Ajustes">⚙️</button>
         </div>
     </header>
 
     <div class="store-banner">
-        AD DuckieTalkStore Partner - Active Online Promotion
+        🦆 DuckieTalkPro - VoIP y Sistema Seguro Activo
     </div>
 
     <div class="chat-container" id="chatLog">
         <div class="message incoming">
-            <strong>DuckieTalk AI:</strong> Welcome to the ultimate system Amado! VoIP, smart AI responses, online store, and Firebase cloud sync active. ✨🦆
+            DuckieTalk IA: ¡Bienvenido a tu canal verificado seguro Amado! Sistema VoIP y comandos activos en tiempo real. 🦆✨
         </div>
     </div>
 
-    <div class="footer-controls" id="normalFooter">
-        <button class="footer-btn" onclick="openCameraModal()" title="Camera / Media">📎</button>
-        <button class="footer-btn" onclick="insertEmoji('😊')">😊</button>
-        <input type="text" id="userInput" placeholder="Type a secure message or voice dictation..." onkeypress="checkEnter(event)">
-        <button class="footer-btn" onclick="startSpeechRecognition()" title="Voice Dictation">🎙️</button>
-        <button class="action-btn" onclick="sendMessage()">➤</button>
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="Escribe un mensaje seguro...">
+        <button class="send-btn" id="sendBtn">Enviar</button>
     </div>
 
-    <div class="voice-recording-bar" id="voiceFooter">
-        <button class="trash-btn" onclick="cancelVoiceRecording()" title="Cancel">🗑️</button>
-        <div class="voice-timer" id="voiceTimer">0:00</div>
-        <div class="voice-wave">🔴 Listening to your voice...</div>
-        <div class="voice-actions-right">
-            <button class="send-voice-btn" onclick="stopSpeechRecognition()">✓</button>
-        </div>
-    </div>
-
-    <div class="modal" id="hamburgerModal">
-        <div class="modal-content">
-            <h3>Options Menu</h3>
-            <button class="menu-option-btn" onclick="selectMenuAction('Official Channel Verified', 'Status: Official Verified Channel of Amado Apolonio Simom. Extreme security and encryption active.')">🛡️ Official Channel Verified</button>
-            <button class="menu-option-btn" onclick="selectMenuAction('Terms of Service and Privacy', 'Terms of Service and Privacy: Google Play Store regulatory compliance validated.')">📄 Terms of Service & Privacy</button>
-            <button class="menu-option-btn" onclick="selectMenuAction('Advanced Chat Privacy', 'Advanced Chat Privacy: End-to-end encrypted messaging enabled.')">💬 Advanced Chat Privacy</button>
-            <button class="menu-option-btn" onclick="selectMenuAction('Technical Support', 'Technical Support: AI Assistant ready for 24/7 code assistance.')">🛠️ Technical Support</button>
-            <button class="close-modal-btn" onclick="closeModal('hamburgerModal')">Close</button>
-        </div>
-    </div>
-
-    <div class="modal" id="gearModal">
-        <div class="modal-content">
-            <h3>Configuration & Settings</h3>
-            <button class="menu-option-btn" onclick="selectMenuAction('Media, Links and Duck', 'Media, Links and Duck: Multimedia files and links successfully synchronized in the cloud.')">📁 Media, Links and Duck</button>
-            <button class="menu-option-btn" onclick="selectMenuAction('Manage Store', 'Manage Store: Online sales control panel open. Inventory updated.')">🛒 Manage Store</button>
-            <button class="menu-option-btn" onclick="closeModal('gearModal'); openVoipModal();">👥 Add Contacts & VoIP Call</button>
-            <button class="menu-option-btn" onclick="selectMenuAction('Notifications', 'Notifications: Push alerts and real-time call notifications configured.')">🔔 Notifications</button>
-            <button class="menu-option-btn" style="color:#ff8a80;" onclick="selectMenuAction('Delete Account', 'Delete Account: Security request registered. Data protection active.')">🗑️ Delete Account</button>
-            <button class="close-modal-btn" onclick="closeModal('gearModal')">Close</button>
-        </div>
-    </div>
-
-    <div class="modal" id="voipModal">
-        <div class="modal-content">
-            <h3>📞 [DuckieTalk VoIP]</h3>
-            <p style="font-size:0.85em; color:#b0bec5; margin-bottom:12px;">Enter phone number or ID to initiate call or video call:</p>
-            <input type="text" id="voipNumberInput" class="voip-input" value="+1 619 8918186">
-            <div class="voip-actions">
-                <button class="btn-cancel" onclick="closeModal('voipModal')">Cancel</button>
-                <button class="btn-ok" onclick="startVoipCall()">OK</button>
-            </div>
-        </div>
-    </div>
-
+    <!-- Script de Integración de Chat e IA -->
     <script>
-        let recognition = null;
-        let voiceInterval = null;
-        let voiceSeconds = 0;
+        const chatLog = document.getElementById('chatLog');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
 
-        function sendMessage() {
-            const input = document.getElementById('userInput');
-            const chatLog = document.getElementById('chatLog');
-            if (input.value.trim() === '') return;
+        async function handleSendMessage() {
+            const text = userInput.value.trim();
+            if (!text) return;
 
-            const userMsg = document.createElement('div');
-            userMsg.className = 'message outgoing';
-            userMsg.innerHTML = `<strong>You:</strong> ${input.value}`;
-            chatLog.appendChild(userMsg);
-
-            const textQuery = input.value;
-            input.value = '';
+            // Mostrar mensaje del usuario en pantalla
+            const userMsgDiv = document.createElement('div');
+            userMsgDiv.className = 'message outgoing';
+            userMsgDiv.textContent = 'Tú: ' + text;
+            chatLog.appendChild(userMsgDiv);
+            
+            userInput.value = '';
             chatLog.scrollTop = chatLog.scrollHeight;
 
-            setTimeout(() => {
-                const aiMsg = document.createElement('div');
-                aiMsg.className = 'message incoming';
-                aiMsg.innerHTML = `<strong>DuckieTalk AI:</strong> Quack! I have processed your query "${textQuery}" smoothly through DuckieTalkPro's intelligent engine. All systems running at peak performance. ✨🦆`;
-                chatLog.appendChild(aiMsg);
-                chatLog.scrollTop = chatLog.scrollHeight;
-            }, 600);
-        }
-
-        function checkEnter(e) {
-            if (e.key === 'Enter') { sendMessage(); }
-        }
-
-        function insertEmoji(emoji) {
-            document.getElementById('userInput').value += emoji;
-        }
-
-        function openMenu(modalId) {
-            document.getElementById(modalId).style.display = 'flex';
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-
-        function selectMenuAction(title, description) {
-            closeModal('hamburgerModal');
-            closeModal('gearModal');
-            
-            const chatLog = document.getElementById('chatLog');
-            const aiMsg = document.createElement('div');
-            aiMsg.className = 'message incoming';
-            aiMsg.innerHTML = `<strong>DuckieTalk AI:</strong> <em>${title}:</em> ${description}`;
-            chatLog.appendChild(aiMsg);
+            // Mensaje temporal de espera
+            const waitingDiv = document.createElement('div');
+            waitingDiv.className = 'message incoming';
+            waitingDiv.textContent = 'DuckieTalk IA: Pensando respuesta... 🦆';
+            chatLog.appendChild(waitingDiv);
             chatLog.scrollTop = chatLog.scrollHeight;
-        }
 
-        function openVoipModal() {
-            document.getElementById('voipModal').style.display = 'flex';
-        }
-
-        function startVoipCall() {
-            const num = document.getElementById('voipNumberInput').value;
-            closeModal('voipModal');
-            
-            const chatLog = document.getElementById('chatLog');
-            const callMsg = document.createElement('div');
-            callMsg.className = 'message incoming';
-            callMsg.innerHTML = `<strong>DuckieTalk AI:</strong> 📞 Connecting end-to-end encrypted VoIP call with <strong>${num}</strong> (WhatsApp / Messenger VoIP style active)... Servers online.`;
-            chatLog.appendChild(callMsg);
-            chatLog.scrollTop = chatLog.scrollHeight;
-        }
-
-        function openStore() {
-            selectMenuAction('Duckie Marketplace', 'Clothing and electronic devices catalog successfully synchronized in the cloud with duckiethemus.com.');
-        }
-
-        function startSpeechRecognition() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) {
-                alert('Speech recognition is not supported on this browser/device.');
-                return;
-            }
-
-            recognition = new SpeechRecognition();
-            recognition.lang = 'en-US';
-            recognition.interimResults = true;
-            recognition.continuous = true;
-
-            document.getElementById('normalFooter').style.display = 'none';
-            document.getElementById('voiceFooter').style.display = 'flex';
-
-            voiceSeconds = 0;
-            document.getElementById('voiceTimer').innerText = '0:01';
-            voiceInterval = setInterval(() => {
-                voiceSeconds++;
-                let mins = Math.floor(voiceSeconds / 60);
-                let secs = voiceSeconds % 60;
-                document.getElementById('voiceTimer').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-            }, 1000);
-
-            recognition.onresult = (event) => {
-                let transcript = '';
-                for (let i = event.resultIndex; i < event.results.length; i++) {
-                    transcript += event.results[i][0].transcript;
-                }
-                document.getElementById('userInput').value = transcript;
-            };
-
-            recognition.onend = () => {
-                stopSpeechRecognition();
-            };
-
-            recognition.start();
-        }
-
-        function stopSpeechRecognition() {
-            if (recognition) { recognition.stop(); }
-            if (voiceInterval) { clearInterval(voiceInterval); }
-            document.getElementById('voiceFooter').style.display = 'none';
-            document.getElementById('normalFooter').style.display = 'flex';
-            
-            const inputVal = document.getElementById('userInput').value.trim();
-            if (inputVal !== '') {
-                sendMessage();
-            }
-        }
-
-        function cancelVoiceRecording() {
-            if (recognition) { recognition.stop(); }
-            if (voiceInterval) { clearInterval(voiceInterval); }
-            document.getElementById('userInput').value = '';
-            document.getElementById('voiceFooter').style.display = 'none';
-            document.getElementById('normalFooter').style.display = 'flex';
-        }
-
-        async function openCameraModal() {
             try {
-                await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                const chatLog = document.getElementById('chatLog');
-                const camMsg = document.createElement('div');
-                camMsg.className = 'message outgoing';
-                camMsg.innerHTML = `<strong>You:</strong> 📷 [Camera Media & Video Note captured and attached via duckiethemus.com]`;
-                chatLog.appendChild(camMsg);
-                chatLog.scrollTop = chatLog.scrollHeight;
-            } catch (err) {
-                alert('Camera permission required.');
+                // REEMPLAZA ESTA URL CON TU ENLACE REAL DE RENDER
+                const response = await fetch('https://TU-BACKEND-EN-RENDER.onrender.com/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text })
+                });
+
+                const data = await response.json();
+                
+                // Actualizar con la respuesta real del servidor/IA
+                waitingDiv.textContent = 'DuckieTalk IA: ' + (data.reply || '¡Quack! Respuesta recibida.');
+            } catch (error) {
+                console.error("Error conectando al backend:", error);
+                waitingDiv.textContent = 'DuckieTalk IA: ¡Quack! Error de conexión con el servidor remoto.';
             }
+            chatLog.scrollTop = chatLog.scrollHeight;
         }
+
+        sendBtn.addEventListener('click', handleSendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSendMessage();
+        });
     </script>
 
-    <!-- Firebase Cloud SDK Integration -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-        
-        const firebaseConfig = {
-            apiKey: "TU_API_KEY_AQUÍ",
-            authDomain: "duckietalkpro.firebaseapp.com",
-            projectId: "duckietalkpro",
-            storageBucket: "duckietalkpro.appspot.com",
-            messagingSenderId: "TU_SENDER_ID",
-            appId: "TU_APP_ID"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        console.log("Firebase cloud persistence connected successfully for DuckieTalkPro 🚀");
-    </script>
 </body>
 </html>
