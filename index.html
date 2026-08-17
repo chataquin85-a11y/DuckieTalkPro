@@ -96,8 +96,8 @@
             chatLog.scrollTop = chatLog.scrollHeight;
 
             try {
-                // REEMPLAZA ESTA URL CON TU ENLACE REAL DE RENDER
-                const response = await fetch('https://TU-BACKEND-EN-RENDER.onrender.com/api/chat', {
+                // Llamada real al backend en Render
+                const response = await fetch('https://duckietalkpro.onrender.com/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message: text })
