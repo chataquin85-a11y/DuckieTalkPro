@@ -56,7 +56,10 @@
 
     <div class="store-banner">
         🦆 DuckieTalkPro - VoIP y Sistema Seguro Activo
-    </div>
+    </div<div style="padding: 10px; background: #111; display: flex; gap: 10px; justify-content: center;">
+    <button onclick="startVoiceCall()" style="background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">📞 Llamada de Voz</button>
+    <button onclick="startVideoCall()" style="background: #007bff; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">📹 Videollamada</button>
+</div>
 
     <div class="chat-container" id="chatLog">
         <div class="message incoming">
@@ -119,6 +122,98 @@
             if (e.key === 'Enter') handleSendMessage();
         });
     </script>
+<!-- Modal / Pantalla Flotante de Llamada Estilo Messenger / WhatsApp -->
+<div id="duckieCallModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center; flex-direction:column; font-family:sans-serif; color:white;">
+    <div style="background:#111; padding:30px; border-radius:20px; text-align:center; width:320px; box-shadow:0 10px 25px rgba(0,0,0,0.5); border: 2px solid #28a745;">
+        <h3 id="callTitle" style="margin-bottom:10px; color:#28a745;">DuckieCall VoIP</h3>
+        <p id="callStatus" style="font-size:14px; color:#bbb; margin-bottom:20px;">Conectando...</p>
+        
+        <!-- Contenedor de Video -->
+        <video id="callVideo" autoplay playsinline style="width:100%; height:180px; background:#000; border-radius:10px; display:none; object-fit:cover; margin-bottom:15px;"></video>
+        
+        <!-- Temporizador -->
+        <div id="callTimer" style="font-size:18px; font-weight:bold; margin-bottom:25px;">00:00</div>
+        
+        <!-- Controles de Llamada -->
+        <div style="display:flex; justify-content:space-around; width:100%;">
+            <button onclick="toggleMute()" id="muteBtn" style="background:#444; border:none; color:white; padding:12px; border-radius:50%; cursor:pointer; font-size:16px;">🎤</button>
+            <button onclick="endCall()" style="background:#dc3545; border:none; color:white; padding:12px 25px; border-radius:30px; cursor:pointer; font-weight:bold;">Colgar</button>
+        </div>
+    </div>
+</div>
 
+<script>
+    let callTimerInterval;
+    let callSeconds = 0;
+    let localStream = null;
+    let isMuted = false;
+
+    function startVoiceCall() {
+        const modal = document.getElementById('duckieCallModal');
+        const videoEl = document.getElementById('callVideo');
+        const titleEl = document.getElementById('callTitle');
+        
+        videoEl.style.display = 'none';
+        titleEl.innerText = "DuckieCall - Voz";
+        modal.style.display = 'flex';
+        
+        startCallTimer();
+    }
+
+    async function startVideoCall() {
+        const modal = document.getElementById('duckieCallModal');
+        const videoEl = document.getElementById('callVideo');
+        const titleEl = document.getElementById('callTitle');
+        
+        titleEl.innerText = "DuckieCall - Video";
+        videoEl.style.display = 'block';
+        modal.style.display = 'flex';
+
+        try {
+            localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            videoEl.srcObject = localStream;
+        } catch (error) {
+            console.error("Error al acceder a la cámara:", error);
+            alert("No se pudo acceder a la cámara o micrófono.");
+        }
+
+        startCallTimer();
+    }
+
+    function startCallTimer() {
+        callSeconds = 0;
+        document.getElementById('callStatus').innerText = "En llamada...";
+        callTimerInterval = setInterval(() => {
+            callSeconds++;
+            let mins = Math.floor(callSeconds / 60).toString().padStart(2, '0');
+            let secs = (callSeconds % 60).toString().padStart(2, '0');
+            document.getElementById('callTimer').innerText = `${mins}:${secs}`;
+        }, 1000);
+    }
+
+    function toggleMute() {
+        isMuted = !isMuted;
+        if (localStream) {
+            localStream.getAudioTracks().forEach(track => track.enabled = !isMuted);
+        }
+        document.getElementById('muteBtn').style.background = isMuted ? '#dc3545' : '#444';
+    }
+
+    function endCall() {
+        clearInterval(callTimerInterval);
+        if (localStream) {
+            localStream.getTracks().forEach(track => track.stop());
+            localStream = null;
+        }
+        document.getElementById('duckieCallModal').style.display = 'none';
+        document.getElementById('callVideo').srcObject = null;
+        isMuted = false;
+        document.getElementById('muteBtn').style.background = '#444';
+    }
+
+    // Exponer funciones globalmente
+    window.startVoiceCall = startVoiceCall;
+    window.startVideoCall = startVideoCall;
+</script>
 </body>
 </html>
