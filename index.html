@@ -121,7 +121,17 @@
         userInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') handleSendMessage();
         });
-    </script>
+   <!-- Modal General para Funciones de Botones -->
+<div id="duckieActionModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center; flex-direction:column; font-family:sans-serif; color:white;">
+    <div style="background:#111; padding:25px; border-radius:20px; text-align:center; width:340px; box-shadow:0 10px 25px rgba(0,0,0,0.5); border: 2px solid #28a745;">
+        <h3 id="actionModalTitle" style="margin-bottom:15px; color:#28a745;">DuckieTalk Pro</h3>
+        <div id="actionModalBody" style="font-size:14px; color:#bbb; margin-bottom:20px; max-height:200px; overflow-y:auto; text-align:left;">
+            <!-- Contenido dinámico -->
+        </div>
+        <button onclick="closeActionModal()" style="background:#dc3545; border:none; color:white; padding:10px 20px; border-radius:20px; cursor:pointer; font-weight:bold; width:100%;">Cerrar</button>
+    </div>
+</div>
+</script>
 <!-- Modal / Pantalla Flotante de Llamada Estilo Messenger / WhatsApp -->
 <div id="duckieCallModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center; flex-direction:column; font-family:sans-serif; color:white;">
     <div style="background:#111; padding:30px; border-radius:20px; text-align:center; width:320px; box-shadow:0 10px 25px rgba(0,0,0,0.5); border: 2px solid #28a745;">
@@ -210,10 +220,112 @@
         isMuted = false;
         document.getElementById('muteBtn').style.background = '#444';
     }
+    
+// 1. Botón Adjuntar Archivo (Clip 📎)
+    function openAttachment() {
+        const modal = document.getElementById('duckieActionModal');
+        document.getElementById('actionModalTitle').innerText = "Adjuntar Archivo Seguro";
+        document.getElementById('actionModalBody').innerHTML = `
+            <p style="margin-bottom:10px;">Selecciona un archivo para enviar al canal cifrado:</p>
+            <input type="file" id="fileInput" style="width:100%; color:#fff; margin-bottom:15px;" />
+            <button onclick="simulateSendFile()" style="background:#28a745; border:none; color:white; padding:8px 15px; border-radius:5px; cursor:pointer; width:100%;">Subir y Enviar</button>
+        `;
+        modal.style.display = 'flex';
+    }
 
+    function simulateSendFile() {
+        const fileInput = document.getElementById('fileInput');
+        if (fileInput.files.length > 0) {
+            alert("¡Archivo '" + fileInput.files[0].name + "' cifrado y enviado con éxito!");
+            closeActionModal();
+        } else {
+            alert("Por favor selecciona un archivo primero.");
+        }
+    }
+
+    // 2. Botón Emojis (😊)
+    function openEmojiPicker() {
+        const modal = document.getElementById('duckieActionModal');
+        document.getElementById('actionModalTitle').innerText = "Selector de Emojis 🦆";
+        const emojis = ["🦆", "🔥", "🚀", "💬", "✅", "⭐", "🎉", "💻", "😎", "🛠️", "🎯", "💡"];
+        let html = '<div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:10px; text-align:center;">';
+        emojis.forEach(emoji => {
+            html += `<button onclick="insertEmoji('${emoji}')" style="background:#222; border:1px solid #444; font-size:20px; padding:10px; border-radius:8px; cursor:pointer;">${emoji}</button>`;
+        });
+        html += '</div>';
+        document.getElementById('actionModalBody').innerHTML = html;
+        modal.style.display = 'flex';
+    }
+
+    function insertEmoji(emoji) {
+        const input = document.getElementById('userInput');
+        if (input) {
+            input.value += emoji;
+            input.focus();
+        }
+        closeActionModal();
+    }
+
+    // 3. Botón Carpeta / Archivos del Sistema (📂)
+    function openFolder() {
+        const modal = document.getElementById('duckieActionModal');
+        document.getElementById('actionModalTitle').innerText = "Gestor de Archivos Duckie";
+        document.getElementById('actionModalBody').innerHTML = `
+            <ul style="list-style:none; padding:0; margin:0;">
+                <li style="padding:8px; border-bottom:1px solid #333;">📁 DuckieMarketplace_backup.zip</li>
+                <li style="padding:8px; border-bottom:1px solid #333;">📁 Config_Render_Env.json</li>
+                <li style="padding:8px;">📁 Logs_Sistema_Seguro.txt</li>
+            </ul>
+        `;
+        modal.style.display = 'flex';
+    }
+
+    // 4. Botón Regalos / Recompensas (🎁)
+    function openRewards() {
+        const modal = document.getElementById('duckieActionModal');
+        document.getElementById('actionModalTitle').innerText = "Recompensas y Promos 🎁";
+        document.getElementById('actionModalBody').innerHTML = `
+            <p>¡Felicidades Amado! Tienes acceso prioritario al ecosistema Pro.</p>
+            <p style="color:#28a745; font-weight:bold; margin-top:10px;">Estado: Nivel Pro Activado 🚀</p>
+        `;
+        modal.style.display = 'flex';
+    }
+
+    // 5. Botón Ajustes (⚙️)
+    function openSettings() {
+        const modal = document.getElementById('duckieActionModal');
+        document.getElementById('actionModalTitle').innerText = "Ajustes del Sistema";
+        document.getElementById('actionModalBody').innerHTML = `
+            <p style="margin-bottom:10px;"><label><input type="checkbox" checked /> Notificaciones de Voz activas</label></p>
+            <p style="margin-bottom:10px;"><label><input type="checkbox" checked /> Modo Oscuro Cifrado</label></p>
+            <button onclick="clearChatLog()" style="background:#dc3545; border:none; color:white; padding:8px; border-radius:5px; cursor:pointer; width:100%; margin-top:10px;">Limpiar Historial de Chat</button>
+        `;
+        modal.style.display = 'flex';
+    }
+
+    function clearChatLog() {
+        const chatLog = document.getElementById('chatLog');
+        if(chatLog) {
+            chatLog.innerHTML = '<div class="message incoming">DuckieTalk IA: ¡Historial reiniciado con éxito! 🧹</div>';
+        }
+        closeActionModal();
+    }
+
+    function closeActionModal() {
+        document.getElementById('duckieActionModal').style.display = 'none';
+    }
     // Exponer funciones globalmente
+    window.openSettings = openSettings;
     window.startVoiceCall = startVoiceCall;
     window.startVideoCall = startVideoCall;
+    window.openAttachment = openAttachment;
+    window.openEmojiPicker = openEmojiPicker;
+    window.openFolder = openFolder;
+    window.openRewards = openRewards;
+    window.closeACtionModal = closeActionModal;
+    window.insertEmoji = insertEmoji;
+    window.simulateSendFile = simulateSendFile;
+    window.clearChatLog = clearChatlog;
 </script>
 </body>
 </html>
