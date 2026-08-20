@@ -77,45 +77,84 @@
         const chatLog = document.getElementById('chatLog');
         const userInput = document.getElementById('userInput');
         const sendBtn = document.getElementById('sendBtn');
+        
+async function handleSendMessage() {
+    const input = document.getElementById('userInput');
+    const chatLog = document.getElementById('chatLog');
+    const text = input.value.trim();
 
-        async function handleSendMessage() {
-            const text = userInput.value.trim();
-            if (!text) return;
+    if (!text) return;
 
-            // Mostrar mensaje del usuario en pantalla
-            const userMsgDiv = document.createElement('div');
-            userMsgDiv.className = 'message outgoing';
-            userMsgDiv.textContent = 'Tú: ' + text;
-            chatLog.appendChild(userMsgDiv);
-            
-            userInput.value = '';
-            chatLog.scrollTop = chatLog.scrollHeight;
+    // 1. Mostrar mensaje del usuario en el chat
+    chatLog.innerHTML += `<div class="message outgoing" style="text-align:right; margin:10px 0;"><span style="background:#28a745; padding:8px 12px; border-radius:10px; display:inline-block;">Tú: ${text}</span></div>`;
+    input.value = '';
+    chatLog.scrollTop = chatLog.scrollHeight;
 
-            // Mensaje temporal de espera
-            const waitingDiv = document.createElement('div');
-            waitingDiv.className = 'message incoming';
-            waitingDiv.textContent = 'DuckieTalk IA: Pensando respuesta... 🦆';
-            chatLog.appendChild(waitingDiv);
-            chatLog.scrollTop = chatLog.scrollHeight;
+    // 2. Mostrar indicador de "escribiendo..."
+    const loadingId = 'loading-' + Date.now();
+    chatLog.innerHTML += `<div id="${loadingId}" class="message incoming" style="margin:10px 0;"><span style="background:#444; padding:8px 12px; border-radius:10px; display:inline-block;">DuckieTalk IA está pensando... 🦆</span></div>`;
+    chatLog.scrollTop = chatLog.scrollHeight;
 
-            try {
-                // Llamada real al backend en Render
-                const response = await fetch('https://duckietalkpro.onrender.com/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: text })
-                });
+    try {
+        // Opción A: Si tienes un endpoint en tu backend de Render (ej. /api/chat)
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text })
+        });
 
-                const data = await response.json();
-                
-                // Actualizar con la respuesta real del servidor/IA
-                waitingDiv.textContent = 'DuckieTalk IA: ' + (data.reply || '¡Quack! Respuesta recibida.');
-            } catch (error) {
-                console.error("Error conectando al backend:", error);
-                waitingDiv.textContent = 'DuckieTalk IA: ¡Quack! Error de conexión con el servidor remoto.';
-            }
-            chatLog.scrollTop = chatLog.scrollHeight;
+        const data = await response.json();
+        
+        // Remover indicador de carga
+        document.getElementById(loadingId).remove();
+
+        // Mostrar respuesta real de la IA
+        if (data.reply) {
+            chatLog.innerHTML += `<div class="message incoming" style="margin:10px 0;"><span style="background:#333; padding:8px 12px; border-radius:10px; display:inline-block;">DuckieTalk IA: ${data.reply}</span></div>`;
+        } else {
+            chatLog.innerHTML += `<div class="message incoming" style="margin:10px 0;"><span style="background:#333; padding:8px 12px; border-radius:10px; display:inline-block;">DuckieTalk IA: ¡Quack! Recibí respuesta vacía del servidor.</span></div>`;
         }
+    } catch (error) {
+        // Remover indicador de carga en caso de error
+        const loader = document.getElementById(loadingId);
+        if (loader) loader.remove();
+
+        chatLog.innerHTML += `<div class="message incoming" style="margin:10px 0;"><span style="background:#dc3545; padding:8px 12px; border-radius:10px; display:inline-block;">DuckieTalk IA: Error de conexión con el servidor remoto. 🚨</span></div>`;
+    }
+
+    chatLog.scrollTop = chatLog.scrollHeight;
+}
+        try {
+              try {
+        // Llamada real al backend en Render
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text })
+        });
+
+        const data = await response.json();
+        
+        // Remover el mensaje de "Pensando..."
+        waitingDiv.remove();
+
+        // Mostrar la respuesta real de la IA
+        const replyDiv = document.createElement('div');
+        replyDiv.className = 'message incoming';
+        replyDiv.textContent = 'DuckieTalk IA: ' + (data.reply || '¡Quack! Recibí tu mensaje.');
+        chatLog.appendChild(replyDiv);
+
+    } catch (error) {
+        // En caso de error de conexión
+        waitingDiv.remove();
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'message incoming';
+        errorDiv.textContent = 'DuckieTalk IA: Error de conexión con el servidor remoto. 🚨';
+        chatLog.appendChild(errorDiv);
+    }
+
+    chatLog.scrollTop = chatLog.scrollHeight;
+} 
 
         sendBtn.addEventListener('click', handleSendMessage);
         userInput.addEventListener('keypress', (e) => {
