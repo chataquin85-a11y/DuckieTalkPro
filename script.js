@@ -23,12 +23,16 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // --- INTELIGENCIA ARTIFICIAL AVANZADA Y RESPUESTAS EN TIEMPO REAL ---
-    function sendMessage() {// Llamada real y segura al backend desplegado en Render
+    function sendMessage() {
 const text = userInput.value.trim();
     if (!text) return;
     appendMessage(text, "user");
     userInput.value = "";
-        fetch('https://duckietalkpro.onrender.com/api/chat', {
+    //Indicador visual de que la IA esta pensando
+       const loadingId = 'loading-' + Date.now();
+       appendMessage("Pensando respuesta...🦆", "ai");
+       
+      fetch('/api/chat', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
