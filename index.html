@@ -54,9 +54,11 @@
         </div>
     </header>
 
-    <div class="store-banner">
+    <div class="store-banner" onclick="openSystemStatus()" style="cursor: pointer;">
         🦆 DuckieTalkPro - VoIP y Sistema Seguro Activo
-    </div<div style="padding: 10px; background: #111; display: flex; gap: 10px; justify-content: center;">
+    </div>
+    
+    <div style="padding: 10px; background: #111; display: flex; gap: 10px; justify-content: center;">
     <button onclick="startVoiceCall()" style="background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">📞 Llamada de Voz</button>
     <button onclick="startVideoCall()" style="background: #007bff; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">📹 Videollamada</button>
 </div>
@@ -330,17 +332,28 @@ async function handleSendMessage() {
         modal.style.display = 'flex';
     }
 
-    // 5. Botón Ajustes (⚙️)
-    function openSettings() {
-        const modal = document.getElementById('duckieActionModal');
-        document.getElementById('actionModalTitle').innerText = "Ajustes del Sistema";
-        document.getElementById('actionModalBody').innerHTML = `
-            <p style="margin-bottom:10px;"><label><input type="checkbox" checked /> Notificaciones de Voz activas</label></p>
-            <p style="margin-bottom:10px;"><label><input type="checkbox" checked /> Modo Oscuro Cifrado</label></p>
-            <button onclick="clearChatLog()" style="background:#dc3545; border:none; color:white; padding:8px; border-radius:5px; cursor:pointer; width:100%; margin-top:10px;">Limpiar Historial de Chat</button>
-        `;
-        modal.style.display = 'flex';
-    }
+// 5. Botón de Ajustes (Engrane ⚙️)
+function openSettings() {
+    const modal = document.getElementById('duckieActionModal');
+    document.getElementById('actionModalTitle').innerText = "Ajustes del Sistema";
+    document.getElementById('actionModalBody').innerHTML = `
+        <p style="margin-bottom:10px;"><label><input type="checkbox" checked /> Notificaciones de Voz activas</label></p>
+        <p style="margin-bottom:10px;"><label><input type="checkbox" checked /> Modo Oscuro Cifrado</label></p>
+        <button onclick="clearChatLog()" style="background:#dc3545; border:none; color:white; padding:8px; border-radius:5px;">Limpiar Historial</button>
+    `;
+    modal.style.display = 'flex';
+}
+// 6. Botón de Estado del Sistema (🟢 DuckieTalkPro Active)
+function openSystemStatus() {
+    const modal = document.getElementById('duckieActionModal');
+    document.getElementById('actionModalTitle').innerText = "Estado de DuckieTalkPro";
+    document.getElementById('actionModalBody').innerHTML = `
+        <p style="color:#28a745; font-weight:bold;">¡Canal verificado seguro Amado!</p>
+        <p>Sistema VoIP y comandos activos en tiempo real.</p>
+        <p style="font-size:12px; color:#888;">Optimización de batería y persistencia habilitadas.</p>
+    `;
+    modal.style.display = 'flex';
+}
 
     function clearChatLog() {
         const chatLog = document.getElementById('chatLog');
