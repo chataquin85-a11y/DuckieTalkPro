@@ -332,25 +332,29 @@ async function handleSendMessage() {
         modal.style.display = 'flex';
     }
 
-// 5. Botón de Ajustes (Engrane ⚙️)
+ // 5. Botón de Ajustes (Engrane ⚙️ -> Configuración & Ajustes)
 function openSettings() {
     const modal = document.getElementById('duckieActionModal');
-    document.getElementById('actionModalTitle').innerText = "Ajustes del Sistema";
+    document.getElementById('actionModalTitle').innerText = "Configuración & Ajustes";
     document.getElementById('actionModalBody').innerHTML = `
-        <p style="margin-bottom:10px;"><label><input type="checkbox" checked /> Notificaciones de Voz activas</label></p>
-        <p style="margin-bottom:10px;"><label><input type="checkbox" checked /> Modo Oscuro Cifrado</label></p>
-        <button onclick="clearChatLog()" style="background:#dc3545; border:none; color:white; padding:8px; border-radius:5px;">Limpiar Historial</button>
+        <button style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left;">📁 Media, Links and Duck</button>
+        <button style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left;">🛒 Manage Store</button>
+        <button style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left;">👥 Add Contacts & VoIP Call</button>
+        <button style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left;">🔔 Notificaciones</button>
+        <button style="width:100%; margin-bottom:8px; padding:10px; background:#dc3545; color:white; border:none; border-radius:5px; text-align:left;">🗑️ Borrar Cuenta</button>
     `;
     modal.style.display = 'flex';
 }
-// 6. Botón de Estado del Sistema (🟢 DuckieTalkPro Active)
+
+// 6. Botón de Menú (🟢 DuckieTalkPro Active -> Menú Opciones)
 function openSystemStatus() {
     const modal = document.getElementById('duckieActionModal');
-    document.getElementById('actionModalTitle').innerText = "Estado de DuckieTalkPro";
+    document.getElementById('actionModalTitle').innerText = "Menú Opciones";
     document.getElementById('actionModalBody').innerHTML = `
-        <p style="color:#28a745; font-weight:bold;">¡Canal verificado seguro Amado!</p>
-        <p>Sistema VoIP y comandos activos en tiempo real.</p>
-        <p style="font-size:12px; color:#888;">Optimización de batería y persistencia habilitadas.</p>
+        <button style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left;">🛡️ Official Channel Verified</button>
+        <button style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left;">📄 Normas de Servicio y Privacidad</button>
+        <button style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left;">💬 Advanced Chat Privacy</button>
+        <button style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left;">🛠️ Soporte Técnico</button>
     `;
     modal.style.display = 'flex';
 }
