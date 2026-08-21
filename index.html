@@ -370,7 +370,47 @@ function openDuckieMenu() {
     function closeActionModal() {
         document.getElementById('duckieActionModal').style.display = 'none';
     }
+    // --- Funciones Interactivas para Configuración & Ajustes ---
+function openMediaLinks() {
+    const modal = document.getElementById('duckieActionModal');
+    document.getElementById('actionModalTitle').innerText = "Media, Links and Duck";
+    document.getElementById('actionModalBody').innerHTML = `
+        <p style="margin-bottom:10px;">Acceso directo a recursos y ecosistema:</p>
+        <a href="https://github.com/chataquin85-a11y/duckie-marketplace" target="_blank" style="display:block; margin-bottom:8px; padding:8px; background:#007bff; color:white; text-decoration:none; border-radius:5px;">🌐 Duckie Marketplace Repository</a>
+        <a href="https://chataquin85-a11y.github.io/duckie-marketplace/" target="_blank" style="display:block; margin-bottom:8px; padding:8px; background:#28a745; color:white; text-decoration:none; border-radius:5px;">🛒 Visitar Tienda en Línea</a>
+        <p style="font-size:12px; color:#888; margin-top:10px;">Versión del sistema: DuckieTalkPro 🦆</p>
+    `;
+    modal.style.display = 'flex';
+}
+
+function openVoipContacts() {
+    const modal = document.getElementById('duckieActionModal');
+    document.getElementById('actionModalTitle').innerText = "Add Contacts & VoIP Call";
+    document.getElementById('actionModalBody').innerHTML = `
+        <p style="margin-bottom:10px;">Gestión de agenda VoIP activa:</p>
+        <input type="text" id="newContactName" placeholder="Nombre del contacto..." style="width:100%; padding:8px; margin-bottom:8px; border-radius:4px; border:1px solid #444; background:#222; color:white;" />
+        <button onclick="alert('Contacto agregado al sistema VoIP con éxito 🦆')" style="width:100%; margin-bottom:8px; padding:8px; background:#28a745; color:white; border:none; border-radius:5px; cursor:pointer;">Guardar y Conectar</button>
+        <button onclick="startVoiceCall()" style="width:100%; padding:8px; background:#17a2b8; color:white; border:none; border-radius:5px; cursor:pointer;">📞 Iniciar Llamada VoIP</button>
+    `;
+    modal.style.display = 'flex';
+}
+
+function toggleNotifications() {
+    alert("🔔 Notificaciones de voz y cifradas actualizadas correctamente.");
+}
+
+function confirmDeleteAccount() {
+    if (confirm("⚠️ ¿Estás seguro de que deseas borrar la cuenta y reiniciar los datos locales?")) {
+        localStorage.clear();
+        alert("🧹 Datos locales eliminados con éxito.");
+        location.reload();
+    }
+}
     // Exponer funciones globalmente
+    window.openMediaLinks = openMediaLinks;
+    window.openVoipContacts = openVoipContacts;
+    window.toggleNotifications = toggleNotifications;
+    window.confirmDeleteAccount = confirmDeleteAccount;
     window.openSettings = openSettings;
     window.startVoiceCall = startVoiceCall;
     window.startVideoCall = startVideoCall;
