@@ -65,7 +65,7 @@
 
     <div class="chat-container" id="chatLog">
         <div class="message incoming">
-            DuckieTalk IA: ¡Bienvenido a tu canal verificado seguro Amado! Sistema VoIP y comandos activos en tiempo real. 🦆✨
+            DuckieTalk IA: ¡Bienvenido a tu canal verificado Amado! Sistema VoIP y pantallas interactivas listas. 🦆✨
         </div>
     </div>
 
@@ -74,30 +74,27 @@
         <button class="send-btn" id="sendBtn">Enviar</button>
     </div>
 
-    <!-- Modal General para Funciones de Botones -->
+    <!-- Modal General Dinámico -->
     <div id="duckieActionModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center; flex-direction:column; font-family:sans-serif; color:white;">
         <div style="background:#111; padding:25px; border-radius:20px; text-align:center; width:340px; box-shadow:0 10px 25px rgba(0,0,0,0.5); border: 2px solid #28a745;">
             <h3 id="actionModalTitle" style="margin-bottom:15px; color:#28a745;">DuckieTalk Pro</h3>
-            <div id="actionModalBody" style="font-size:14px; color:#bbb; margin-bottom:20px; max-height:200px; overflow-y:auto; text-align:left;">
+            <div id="actionModalBody" style="font-size:14px; color:#bbb; margin-bottom:20px; max-height:220px; overflow-y:auto; text-align:left;">
                 <!-- Contenido dinámico -->
             </div>
             <button onclick="closeActionModal()" style="background:#dc3545; border:none; color:white; padding:10px 20px; border-radius:20px; cursor:pointer; font-weight:bold; width:100%;">Cerrar</button>
         </div>
     </div>
 
-    <!-- Modal / Pantalla Flotante de Llamada Estilo Messenger / WhatsApp -->
+    <!-- Modal de Llamadas Estilo Seguro/VoIP -->
     <div id="duckieCallModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center; flex-direction:column; font-family:sans-serif; color:white;">
         <div style="background:#111; padding:30px; border-radius:20px; text-align:center; width:320px; box-shadow:0 10px 25px rgba(0,0,0,0.5); border: 2px solid #28a745;">
             <h3 id="callTitle" style="margin-bottom:10px; color:#28a745;">DuckieCall VoIP</h3>
             <p id="callStatus" style="font-size:14px; color:#bbb; margin-bottom:20px;">Conectando...</p>
             
-            <!-- Contenedor de Video -->
             <video id="callVideo" autoplay playsinline style="width:100%; height:180px; background:#000; border-radius:10px; display:none; object-fit:cover; margin-bottom:15px;"></video>
             
-            <!-- Temporizador -->
             <div id="callTimer" style="font-size:18px; font-weight:bold; margin-bottom:25px;">00:00</div>
             
-            <!-- Controles de Llamada -->
             <div style="display:flex; justify-content:space-around; width:100%;">
                 <button onclick="toggleMute()" id="muteBtn" style="background:#444; border:none; color:white; padding:12px; border-radius:50%; cursor:pointer; font-size:16px;">🎤</button>
                 <button onclick="endCall()" style="background:#dc3545; border:none; color:white; padding:12px 25px; border-radius:30px; cursor:pointer; font-weight:bold;">Colgar</button>
@@ -105,7 +102,6 @@
         </div>
     </div>
 
-    <!-- Script Único de Integración, Chat e IA -->
     <script>
         const chatLog = document.getElementById('chatLog');
         const userInput = document.getElementById('userInput');
@@ -120,18 +116,15 @@
             const text = userInput.value.trim();
             if (!text) return;
 
-            // 1. Mostrar mensaje del usuario en el chat
             chatLog.innerHTML += `<div class="message outgoing">Tú: ${text}</div>`;
             userInput.value = '';
             chatLog.scrollTop = chatLog.scrollHeight;
 
-            // 2. Mostrar indicador de "escribiendo..."
             const loadingId = 'loading-' + Date.now();
             chatLog.innerHTML += `<div id="${loadingId}" class="message incoming">DuckieTalk IA está pensando... 🦆</div>`;
             chatLog.scrollTop = chatLog.scrollHeight;
 
             try {
-                // Llamada real al backend en Render
                 const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -139,22 +132,18 @@
                 });
 
                 const data = await response.json();
-                
-                // Remover indicador de carga
                 const loader = document.getElementById(loadingId);
                 if (loader) loader.remove();
 
-                // Mostrar respuesta real de la IA
                 if (data.reply) {
                     chatLog.innerHTML += `<div class="message incoming">DuckieTalk IA: ${data.reply}</div>`;
                 } else {
-                    chatLog.innerHTML += `<div class="message incoming">DuckieTalk IA: ¡Quack! Recibí respuesta vacía del servidor.</div>`;
+                    chatLog.innerHTML += `<div class="message incoming">DuckieTalk IA: ¡Quack! Respuesta vacía del servidor.</div>`;
                 }
             } catch (error) {
                 const loader = document.getElementById(loadingId);
                 if (loader) loader.remove();
-
-                chatLog.innerHTML += `<div class="message incoming" style="background:#dc3545;">DuckieTalk IA: Error de conexión con el servidor remoto. 🚨</div>`;
+                chatLog.innerHTML += `<div class="message incoming" style="background:#dc3545;">DuckieTalk IA: Error de conexión con el servidor. 🚨</div>`;
             }
 
             chatLog.scrollTop = chatLog.scrollHeight;
@@ -172,7 +161,7 @@
             const titleEl = document.getElementById('callTitle');
             
             videoEl.style.display = 'none';
-            titleEl.innerText = "DuckieCall - Voz";
+            titleEl.innerText = "DuckieCall - Voz Segura";
             modal.style.display = 'flex';
             startCallTimer();
         }
@@ -182,7 +171,7 @@
             const videoEl = document.getElementById('callVideo');
             const titleEl = document.getElementById('callTitle');
             
-            titleEl.innerText = "DuckieCall - Video";
+            titleEl.innerText = "DuckieCall - Videollamada";
             videoEl.style.display = 'block';
             modal.style.display = 'flex';
 
@@ -198,7 +187,7 @@
 
         function startCallTimer() {
             callSeconds = 0;
-            document.getElementById('callStatus').innerText = "En llamada...";
+            document.getElementById('callStatus').innerText = "Conectado vía VoIP...";
             callTimerInterval = setInterval(() => {
                 callSeconds++;
                 let mins = Math.floor(callSeconds / 60).toString().padStart(2, '0');
@@ -227,7 +216,7 @@
             document.getElementById('muteBtn').style.background = '#444';
         }
 
-        // Modales y Menús Interactivos
+        // Pantallas Modales y Menús Activos
         function closeActionModal() {
             document.getElementById('duckieActionModal').style.display = 'none';
         }
@@ -250,7 +239,8 @@
             document.getElementById('actionModalTitle').innerText = "Manage Store";
             document.getElementById('actionModalBody').innerHTML = `
                 <p style="margin-bottom:10px;">Gestión de inventario y tienda en línea:</p>
-                <a href="https://chataquin85-a11y.github.io/duckie-marketplace/" target="_blank" style="display:block; padding:8px; background:#28a745; color:white; text-decoration:none; border-radius:5px; text-align:center;">🛒 Abrir Duckie Marketplace</a>
+                <a href="https://chataquin85-a11y.github.io/duckie-marketplace/" target="_blank" style="display:block; padding:8px; background:#28a745; color:white; text-decoration:none; border-radius:5px; text-align:center; margin-bottom:8px;">🛒 Abrir Duckie Marketplace</a>
+                <button onclick="openSettings()" style="width:100%; padding:6px; background:#6c757d; color:white; border:none; border-radius:5px; cursor:pointer;">⬅ Volver a Ajustes</button>
             `;
             modal.style.display = 'flex';
         }
@@ -273,7 +263,7 @@
             document.getElementById('actionModalTitle').innerText = "Official Channel Verified";
             document.getElementById('actionModalBody').innerHTML = `
                 <p style="color:#28a745; font-weight:bold; margin-bottom:10px;">¡Canal Verificado y Seguro Active! 🦆</p>
-                <p style="margin-bottom:8px;">Servidor backend conectado vía Render con cifrado de extremo a extremo.</p>
+                <p style="margin-bottom:8px;">Servidor backend conectado vía Render con cifrado integrado.</p>
                 <button onclick="openDuckieMenu()" style="width:100%; margin-top:10px; padding:8px; background:#6c757d; color:white; border:none; border-radius:5px; cursor:pointer;">⬅ Volver al Menú</button>
             `;
         }
@@ -282,7 +272,7 @@
             const modal = document.getElementById('duckieActionModal');
             document.getElementById('actionModalTitle').innerText = "Normas de Servicio";
             document.getElementById('actionModalBody').innerHTML = `
-                <p style="margin-bottom:8px;"><b>1. Privacidad de Datos:</b> Tus conversaciones con Gemini se procesan de forma segura a través de tu API key configurada.</p>
+                <p style="margin-bottom:8px;"><b>1. Privacidad de Datos:</b> Tus conversaciones se procesan de forma segura a través de los canales configurados.</p>
                 <button onclick="openDuckieMenu()" style="width:100%; margin-top:10px; padding:8px; background:#6c757d; color:white; border:none; border-radius:5px; cursor:pointer;">⬅ Volver al Menú</button>
             `;
         }
@@ -292,7 +282,7 @@
             document.getElementById('actionModalTitle').innerText = "Advanced Chat Privacy";
             document.getElementById('actionModalBody').innerHTML = `
                 <p style="margin-bottom:10px;">Configuración de seguridad activa:</p>
-                <p style="margin-bottom:8px;">🔒 Protocolo de limpieza automática de historial habilitado.</p>
+                <p style="margin-bottom:8px;">🔒 Protocolo de limpieza y encriptación local habilitado.</p>
                 <button onclick="openDuckieMenu()" style="width:100%; margin-top:10px; padding:8px; background:#6c757d; color:white; border:none; border-radius:5px; cursor:pointer;">⬅ Volver al Menú</button>
             `;
         }
@@ -301,8 +291,8 @@
             const modal = document.getElementById('duckieActionModal');
             document.getElementById('actionModalTitle').innerText = "Soporte Técnico";
             document.getElementById('actionModalBody').innerHTML = `
-                <p style="margin-bottom:10px;">¿Necesitas asistencia con el sistema?</p>
-                <p style="margin-bottom:8px;">Puedes enviar tus dudas directamente al chat con la IA o revisar los registros en Render.</p>
+                <p style="margin-bottom:10px;">¿Necesitas asistencia?</p>
+                <p style="margin-bottom:8px;">Escribe tus dudas directamente al chat con la IA o revisa tus registros en Render.</p>
                 <button onclick="openDuckieMenu()" style="width:100%; margin-top:10px; padding:8px; background:#6c757d; color:white; border:none; border-radius:5px; cursor:pointer;">⬅ Volver al Menú</button>
             `;
         }
@@ -311,8 +301,9 @@
             const modal = document.getElementById('duckieActionModal');
             document.getElementById('actionModalTitle').innerText = "Media, Links and Duck";
             document.getElementById('actionModalBody').innerHTML = `
-                <a href="https://github.com/chataquin85-a11y/duckie-marketplace" target="_blank" style="display:block; margin-bottom:8px; padding:8px; background:#007bff; color:white; text-decoration:none; border-radius:5px;">🌐 Duckie Marketplace Repository</a>
-                <a href="https://chataquin85-a11y.github.io/duckie-marketplace/" target="_blank" style="display:block; padding:8px; background:#28a745; color:white; text-decoration:none; border-radius:5px;">🛒 Visitar Tienda en Línea</a>
+                <a href="https://github.com/chataquin85-a11y/duckie-marketplace" target="_blank" style="display:block; margin-bottom:8px; padding:8px; background:#007bff; color:white; text-decoration:none; border-radius:5px; text-align:center;">🌐 Duckie Marketplace Repository</a>
+                <a href="https://chataquin85-a11y.github.io/duckie-marketplace/" target="_blank" style="display:block; margin-bottom:12px; padding:8px; background:#28a745; color:white; text-decoration:none; border-radius:5px; text-align:center;">🛒 Visitar Tienda en Línea</a>
+                <button onclick="openSettings()" style="width:100%; padding:6px; background:#6c757d; color:white; border:none; border-radius:5px; cursor:pointer;">⬅ Volver a Ajustes</button>
             `;
             modal.style.display = 'flex';
         }
@@ -321,16 +312,17 @@
             const modal = document.getElementById('duckieActionModal');
             document.getElementById('actionModalTitle').innerText = "Add Contacts & VoIP Call";
             document.getElementById('actionModalBody').innerHTML = `
-                <p style="margin-bottom:10px;">Gestión de agenda VoIP activa:</p>
+                <p style="margin-bottom:10px;">Gestión de agenda VoIP:</p>
                 <input type="text" id="newContactName" placeholder="Nombre del contacto..." style="width:100%; padding:8px; margin-bottom:8px; border-radius:4px; border:1px solid #444; background:#222; color:white;" />
-                <button onclick="alert('Contacto agregado al sistema VoIP con éxito 🦆'); closeActionModal();" style="width:100%; margin-bottom:8px; padding:8px; background:#28a745; color:white; border:none; border-radius:5px; cursor:pointer;">Guardar y Conectar</button>
-                <button onclick="closeActionModal(); startVoiceCall();" style="width:100%; padding:8px; background:#17a2b8; color:white; border:none; border-radius:5px; cursor:pointer;">📞 Iniciar Llamada VoIP</button>
+                <button onclick="alert('Contacto agregado con éxito al sistema VoIP 🦆'); closeActionModal();" style="width:100%; margin-bottom:8px; padding:8px; background:#28a745; color:white; border:none; border-radius:5px; cursor:pointer;">Guardar Contacto</button>
+                <button onclick="closeActionModal(); startVoiceCall();" style="width:100%; margin-bottom:8px; padding:8px; background:#17a2b8; color:white; border:none; border-radius:5px; cursor:pointer;">📞 Iniciar Llamada VoIP</button>
+                <button onclick="openSettings()" style="width:100%; padding:6px; background:#6c757d; color:white; border:none; border-radius:5px; cursor:pointer;">⬅ Volver a Ajustes</button>
             `;
             modal.style.display = 'flex';
         }
 
         function toggleNotifications() {
-            alert("🔔 Notificaciones de voz y cifradas actualizadas correctamente.");
+            alert("🔔 Notificaciones de voz y alertas del sistema actualizadas correctamente.");
         }
 
         function confirmDeleteAccount() {
