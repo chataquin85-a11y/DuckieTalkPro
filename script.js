@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+Document.addEventListener("DOMContentLoaded", () => {
     console.log("[DuckieTalkPro] Sistema completo al 100%: VoIP, IA y Ads activos. 🦆🚀");
 
     const chatContainer = document.getElementById("chat-container");
@@ -22,39 +22,43 @@ document.addEventListener("DOMContentLoaded", () => {
         settingsModal.style.display = "none";
     };
 
-    // --- INTELIGENCIA ARTIFICIAL AVANZADA Y RESPUESTAS EN TIEMPO REAL ---
-    function sendMessage() {
-const text = userInput.value.trim();
-    if (!text) return;
-    appendMessage(text, "user");
-    userInput.value = "";
-    //Indicador visual de que la IA esta pensando
-       const loadingId = 'loading-' + Date.now();
-       appendMessage("Pensando respuesta...🦆", "ai");
-       
-      fetch('/api/chat', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ message: text })
-})
-.then(response => response.json())
-.then(data => {
-    // Muestra la respuesta real generada por Gemini desde tu servidor
-    const aiResponse = data.reply || "¡Quack! Recibí tu mensaje, pero no obtuve respuesta.";
-    appendMessage(aiResponse, "ai");
-})
-.catch(error => {
-    console.error("Error al conectar con el servidor:", error);
-    appendMessage("¡Quack! Ocurrió un error al conectar con el servidor seguro.", "ai");
-});  
+    // Función auxiliar para agregar mensajes al chat (fuera de sendMessage para evitar errores)
     function appendMessage(text, sender) {
         const msgDiv = document.createElement("div");
         msgDiv.className = `message ${sender}`;
         msgDiv.innerHTML = sender === "ai" ? `<strong>DuckieTalk IA:</strong> ${text}` : `<strong>Tú:</strong> ${text}`;
         chatContainer.appendChild(msgDiv);
         chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    // --- INTELIGENCIA ARTIFICIAL AVANZADA Y RESPUESTAS EN TIEMPO REAL ---
+    function sendMessage() {
+        const text = userInput.value.trim();
+        if (!text) return;
+        appendMessage(text, "user");
+        userInput.value = "";
+        
+        // Indicador visual de que la IA está pensando
+        const loadingId = 'loading-' + Date.now();
+        appendMessage("Pensando respuesta...🦆", "ai");
+       
+        fetch('/api/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message: text })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Muestra la respuesta real generada por Gemini desde tu servidor
+            const aiResponse = data.reply || "¡Quack! Recibí tu mensaje, pero no obtuve respuesta.";
+            appendMessage(aiResponse, "ai");
+        })
+        .catch(error => {
+            console.error("Error al conectar con el servidor:", error);
+            appendMessage("¡Quack! Ocurrió un error al conectar con el servidor seguro.", "ai");
+        });  
     }
 
     btnSend.addEventListener("click", sendMessage);
@@ -99,7 +103,7 @@ const text = userInput.value.trim();
         if (phoneNumber) {
             appendMessage(`📞 Llamada VoIP / Videollamada iniciada de forma segura con: ${phoneNumber}. Conectando servidores...`, "ai");
             setTimeout(() => {
-                alert(`Conectando con ${phoneNumber} (Estilo WhatsApp / Messenger VoIP activo)...`);
+                alert(`Conectando con ${phoneNumber} (Estilo VoIP activo)...`);
             }, 500);
         }
     });
