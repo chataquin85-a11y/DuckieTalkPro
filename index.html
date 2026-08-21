@@ -54,7 +54,7 @@
         </div>
     </header>
 
-    <div class="store-banner" onclick="openSystemStatus()" style="cursor: pointer;">
+    <div class="store-banner" onclick="openDuckieMenu()" style="cursor: pointer;">
         🦆 DuckieTalkPro - VoIP y Sistema Seguro Activo
     </div>
     
@@ -332,22 +332,22 @@ async function handleSendMessage() {
         modal.style.display = 'flex';
     }
 
- // 5. Botón de Ajustes (Engrane ⚙️ -> Configuración & Ajustes)
+  // 5. Botón de Ajustes (Engrane ⚙️ -> Configuración & Ajustes)
 function openSettings() {
     const modal = document.getElementById('duckieActionModal');
     document.getElementById('actionModalTitle').innerText = "Configuración & Ajustes";
     document.getElementById('actionModalBody').innerHTML = `
-        <button style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left;">📁 Media, Links and Duck</button>
-        <button style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left;">🛒 Manage Store</button>
-        <button style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left;">👥 Add Contacts & VoIP Call</button>
-        <button style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left;">🔔 Notificaciones</button>
-        <button style="width:100%; margin-bottom:8px; padding:10px; background:#dc3545; color:white; border:none; border-radius:5px; text-align:left;">🗑️ Borrar Cuenta</button>
+        <button onclick="openMediaLinks()" style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left; cursor:pointer;">📁 Media, Links and Duck</button>
+        <button onclick="openManageStore()" style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left; cursor:pointer;">🛒 Manage Store</button>
+        <button onclick="openVoipContacts()" style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left; cursor:pointer;">👥 Add Contacts & VoIP Call</button>
+        <button onclick="toggleNotifications()" style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left; cursor:pointer;">🔔 Notificaciones</button>
+        <button onclick="confirmDeleteAccount()" style="width:100%; margin-bottom:8px; padding:10px; background:#dc3545; color:white; border:none; border-radius:5px; text-align:left; cursor:pointer;">🗑️ Borrar Cuenta</button>
     `;
     modal.style.display = 'flex';
 }
 
-// 6. Botón de Menú (🟢 DuckieTalkPro Active -> Menú Opciones)
-function openSystemStatus() {
+// 6. Botón de Menú Principal (🟢 Banner DuckieTalkPro -> Menú Opciones)
+function openDuckieMenu() {
     const modal = document.getElementById('duckieActionModal');
     document.getElementById('actionModalTitle').innerText = "Menú Opciones";
     document.getElementById('actionModalBody').innerHTML = `
