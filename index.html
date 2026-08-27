@@ -16,41 +16,54 @@ body { background-color: #0b2e13; color: #ffffff; height: 100vh; display: flex; 
 /* Header */
 header { background: #07220e; padding: 10px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #14451f; z-index: 10; }
 .header-left { display: flex; align-items: center; gap: 10px; }
-.header-logo { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; }
-.header-title { font-size: 1.1em; font-weight: bold; color: #4ec9b0; }
-.header-subtitle { font-size: 0.75em; color: #858585; }
+.menu-btn { background: none; border: none; color: #ffffff; font-size: 1.4em; cursor: pointer; }
+.header-logo { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+.header-title { font-size: 1.05em; font-weight: bold; color: #ffffff; }
 .header-actions { display: flex; gap: 12px; align-items: center; }
 .header-actions button { background: none; border: none; color: #ffffff; font-size: 1.2em; cursor: pointer; }
 
 /* Store / Partner Banner */
-.store-banner { background: #14451f; padding: 6px 15px; font-size: 0.75em; color: #ffeb3b; text-align: center; border-bottom: 1px solid #1f5e2b; }
+.store-banner { background: #14451f; padding: 5px 15px; font-size: 0.75em; color: #ffeb3b; text-align: center; border-bottom: 1px solid #1f5e2b; }
+
+/* Action Buttons Bar */
+.action-bar { background: #0b2e13; padding: 8px; display: flex; gap: 10px; justify-content: center; border-bottom: 1px solid #14451f; }
+.action-bar button { border: none; padding: 7px 14px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.85em; display: flex; align-items: center; gap: 5px; color: white; }
+.btn-voice { background: #28a745; }
+.btn-video { background: #007bff; }
 
 /* Chat Container */
-.chat-container { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; background: #0b2e13; }
+.chat-container { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; background: #0b2e13; position: relative; }
 .message { max-width: 85%; padding: 12px 16px; border-radius: 12px; font-size: 0.95em; line-height: 1.4; word-wrap: break-word; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 .incoming { background-color: #14451f; align-self: flex-start; border-top-left-radius: 0; }
 .outgoing { background-color: #1b5e20; align-self: flex-end; border-top-right-radius: 0; }
+.error-msg { background-color: #a72828 !important; color: #ffffff; }
 
 /* Input Controls Area */
-.input-area { background: #07220e; padding: 10px 15px; display: flex; align-items: center; gap: 8px; border-top: 1px solid #14451f; }
-.input-area input { flex: 1; background: #14451f; border: 1px solid #1f5e2b; border-radius: 20px; padding: 10px 15px; color: #fff; font-size: 0.95em; outline: none; }
-.input-area input::placeholder { color: #858585; }
-.send-btn { background: #2e7d32; border: none; color: white; padding: 10px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; }
+.input-area { background: #07220e; padding: 10px 15px; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #14451f; }
+.input-tools { display: flex; gap: 15px; color: #858585; font-size: 1.1em; padding-left: 5px; cursor: pointer; }
+.input-tools span:hover { color: #ffffff; }
+.input-row { display: flex; align-items: center; gap: 8px; }
+.input-row input { flex: 1; background: #14451f; border: 1px solid #1f5e2b; border-radius: 20px; padding: 10px 15px; color: #fff; font-size: 0.95em; outline: none; }
+.input-row input::placeholder { color: #858585; }
+.send-btn { background: #2e7d32; border: none; color: white; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; font-size: 1em; }
 .send-btn:active { background: #1b5e20; }
+
+/* Pestaña Flotante (Mockup style) */
+.floating-tab { position: absolute; top: 15px; right: 15px; background: rgba(20, 35, 25, 0.95); border: 1px solid #28a745; border-radius: 12px; padding: 15px; width: 240px; box-shadow: 0 5px 15px rgba(0,0,0,0.4); z-index: 20; display: none; }
+.floating-tab h4 { font-size: 0.9em; text-align: center; margin-bottom: 10px; color: #fff; }
+.floating-tab button { width: 100%; margin-bottom: 8px; padding: 8px; border-radius: 6px; border: none; font-weight: bold; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.85em; }
 </style>
 </head>
 <body>
 
 <header>
 <div class="header-left">
+<button class="menu-btn" onclick="openDuckieMenu()">☰</button>
 <img src="IMG_1101.png" alt="Logo" class="header-logo">
-<div>
-<div class="header-title">DuckieTalkPro</div>
-<div class="header-subtitle">DuckieTalk ^+^ /</div>
-</div>
+<div class="header-title">DuckieTalkPro ^+^ /</div>
 </div>
 <div class="header-actions">
-<button title="Ajustes" onclick="openSettings()">⚙️</button>
+<button title="Configuración y ajustes" onclick="openSettings()">></button>
 </div>
 </header>
 
@@ -58,34 +71,48 @@ header { background: #07220e; padding: 10px 15px; display: flex; align-items: ce
 🦆 DuckieTalkPro - VoIP y Sistema Seguro Activo
 </div>
 
-<div style="padding: 10px; background: #111; display: flex; gap: 10px; justify-content: center;">
-<button onclick="startVoiceCall()" style="background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">📞 Llamada de Voz</button>
-<button onclick="startVideoCall()" style="background: #007bff; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">📹 Videollamada</button>
+<div class="action-bar">
+<button class="btn-voice" onclick="startVoiceCall()">📞 Llamada de Voz</button>
+<button class="btn-video" onclick="startVideoCall()">📹 Videollamada</button>
 </div>
 
 <div class="chat-container" id="chatLog">
+    <!-- Pestaña Flotante Simulada -->
+    <div class="floating-tab" id="floatingTab">
+        <h4>Pestaña Flotante</h4>
+        <button class="btn-video" onclick="startVideoCall()">📹 Videollamada</button>
+        <button class="btn-voice" onclick="startVoiceCall()">📞 Llamada de Voz</button>
+    </div>
+
 <div class="message incoming">
-DuckieTalk IA: ¡Bienvenido a tu canal verificado seguro Amado! Sistema VoIP y comandos activos en tiempo real. 🦆✨
+DuckieTalk IA: ¡Bienvenido a tu canal verificado Amado! Sistema VoIP y pantallas interactivas listas. 🦆✨
 </div>
 </div>
 
 <div class="input-area">
-<input type="text" id="userInput" placeholder="Escribe un mensaje seguro...">
-<button class="send-btn" id="sendBtn">Enviar</button>
+<div class="input-tools">
+<span onclick="insertEmoji('😊')">😊</span>
+<span onclick="triggerMedia()">🎬</span>
+<span onclick="triggerCamera()">📷</span>
+<span onclick="startVoiceCall()">🎤</span>
+<span onclick="openDuckieMenu()">＋</span>
+</div>
+<div class="input-row">
+<input type="text" id="userInput" placeholder="Escribe texto (Mensaje)...">
+<button class="send-btn" id="sendBtn">➤</button>
+</div>
 </div>
 
-<!-- Modal General para Funciones de Botones -->
+<!-- Modal General -->
 <div id="duckieActionModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center; flex-direction:column; font-family:sans-serif; color:white;">
 <div style="background:#111; padding:25px; border-radius:20px; text-align:center; width:340px; box-shadow:0 10px 25px rgba(0,0,0,0.5); border: 2px solid #28a745;">
 <h3 id="actionModalTitle" style="margin-bottom:15px; color:#28a745;">DuckieTalk Pro</h3>
-<div id="actionModalBody" style="font-size:14px; color:#bbb; margin-bottom:20px; max-height:200px; overflow-y:auto; text-align:left;">
-<!-- Contenido dinámico -->
-</div>
+<div id="actionModalBody" style="font-size:14px; color:#bbb; margin-bottom:20px; max-height:200px; overflow-y:auto; text-align:left;"></div>
 <button onclick="closeActionModal()" style="background:#dc3545; border:none; color:white; padding:10px 20px; border-radius:20px; cursor:pointer; font-weight:bold; width:100%;">Cerrar</button>
 </div>
 </div>
 
-<!-- Modal / Pantalla Flotante de Llamada -->
+<!-- Modal Llamadas -->
 <div id="duckieCallModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center; flex-direction:column; font-family:sans-serif; color:white;">
 <div style="background:#111; padding:30px; border-radius:20px; text-align:center; width:320px; box-shadow:0 10px 25px rgba(0,0,0,0.5); border: 2px solid #28a745;">
 <h3 id="callTitle" style="margin-bottom:10px; color:#28a745;">DuckieCall VoIP</h3>
@@ -99,7 +126,6 @@ DuckieTalk IA: ¡Bienvenido a tu canal verificado seguro Amado! Sistema VoIP y c
 </div>
 </div>
 
-<!-- Script de Integración Completa -->
 <script>
 const chatLog = document.getElementById('chatLog');
 const userInput = document.getElementById('userInput');
@@ -109,7 +135,6 @@ async function handleSendMessage() {
     const text = userInput.value.trim();
     if (!text) return;
 
-    // 1. Mostrar mensaje del usuario
     const userDiv = document.createElement('div');
     userDiv.className = 'message outgoing';
     userDiv.textContent = 'Tú: ' + text;
@@ -117,7 +142,6 @@ async function handleSendMessage() {
     userInput.value = '';
     chatLog.scrollTop = chatLog.scrollHeight;
 
-    // 2. Indicador de "Pensando..."
     const loadingId = 'loading-' + Date.now();
     const waitingDiv = document.createElement('div');
     waitingDiv.className = 'message incoming';
@@ -127,13 +151,11 @@ async function handleSendMessage() {
     chatLog.scrollTop = chatLog.scrollHeight;
 
     try {
-        // Llamada real al backend en Render
         const response = await fetch('https://duckietalkpro.onrender.com/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: text })
         });
-
         const data = await response.json();
         document.getElementById(loadingId).remove();
 
@@ -141,57 +163,43 @@ async function handleSendMessage() {
         replyDiv.className = 'message incoming';
         replyDiv.textContent = 'DuckieTalk IA: ' + (data.reply || '¡Quack! Recibí tu mensaje.');
         chatLog.appendChild(replyDiv);
-
     } catch (error) {
         const loader = document.getElementById(loadingId);
         if (loader) loader.remove();
 
         const errorDiv = document.createElement('div');
-        errorDiv.className = 'message incoming';
-        errorDiv.style.backgroundColor = '#dc3545';
-        errorDiv.textContent = 'DuckieTalk IA: Error de conexión con el servidor remoto. 🚨';
+        errorDiv.className = 'message incoming error-msg';
+        errorDiv.textContent = 'DuckieTalk IA: Error de conexión con el servidor. El servicio de Render está en plan gratuito y puede tardar en responder. Por favor reintenta.';
         chatLog.appendChild(errorDiv);
     }
-
     chatLog.scrollTop = chatLog.scrollHeight;
 }
 
 sendBtn.addEventListener('click', handleSendMessage);
-userInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') handleSendMessage();
-});
+userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSendMessage(); });
 
-// --- Lógica de Llamadas VoIP ---
-let callTimerInterval;
-let callSeconds = 0;
-let localStream = null;
-let isMuted = false;
+function insertEmoji(emoji) { userInput.value += emoji; }
+function triggerMedia() { alert("🎬 Seleccionar archivo multimedia..."); }
+function triggerCamera() { alert("📷 Abriendo cámara segura..."); }
+
+let callTimerInterval, callSeconds = 0, localStream = null, isMuted = false;
 
 function startVoiceCall() {
-    const modal = document.getElementById('duckieCallModal');
-    const videoEl = document.getElementById('callVideo');
-    const titleEl = document.getElementById('callTitle');
-    videoEl.style.display = 'none';
-    titleEl.innerText = "DuckieCall - Voz";
-    modal.style.display = 'flex';
+    document.getElementById('callVideo').style.display = 'none';
+    document.getElementById('callTitle').innerText = "DuckieCall - Voz";
+    document.getElementById('duckieCallModal').style.display = 'flex';
     startCallTimer();
 }
 
 async function startVideoCall() {
-    const modal = document.getElementById('duckieCallModal');
+    document.getElementById('callTitle').innerText = "DuckieCall - Video";
     const videoEl = document.getElementById('callVideo');
-    const titleEl = document.getElementById('callTitle');
-    titleEl.innerText = "DuckieCall - Video";
     videoEl.style.display = 'block';
-    modal.style.display = 'flex';
-
+    document.getElementById('duckieCallModal').style.display = 'flex';
     try {
         localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         videoEl.srcObject = localStream;
-    } catch (error) {
-        console.error("Error al acceder a la cámara:", error);
-        alert("No se pudo acceder a la cámara o micrófono.");
-    }
+    } catch (e) { console.error(e); }
     startCallTimer();
 }
 
@@ -208,114 +216,69 @@ function startCallTimer() {
 
 function toggleMute() {
     isMuted = !isMuted;
-    if (localStream) {
-        localStream.getAudioTracks().forEach(track => track.enabled = !isMuted);
-    }
+    if (localStream) localStream.getAudioTracks().forEach(t => t.enabled = !isMuted);
     document.getElementById('muteBtn').style.background = isMuted ? '#dc3545' : '#444';
 }
 
 function endCall() {
     clearInterval(callTimerInterval);
-    if (localStream) {
-        localStream.getTracks().forEach(track => track.stop());
-        localStream = null;
-    }
+    if (localStream) { localStream.getTracks().forEach(t => t.stop()); localStream = null; }
     document.getElementById('duckieCallModal').style.display = 'none';
     document.getElementById('callVideo').srcObject = null;
-    isMuted = false;
-    document.getElementById('muteBtn').style.background = '#444';
 }
 
-// --- Ajustes y Modales del Sistema ---
 function openSettings() {
     const modal = document.getElementById('duckieActionModal');
-    document.getElementById('actionModalTitle').innerText = "Configuración & Ajustes";
+    document.getElementById('actionModalTitle').innerText = "Configuración y ajustes";
     document.getElementById('actionModalBody').innerHTML = `
+        <button onclick="toggleFloatingTab()" style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left; cursor:pointer;">🪟 Mostrar/Ocultar Pestaña Flotante</button>
         <button onclick="openMediaLinks()" style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left; cursor:pointer;">📁 Media, Links and Duck</button>
-        <button onclick="openVoipContacts()" style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left; cursor:pointer;">👥 Add Contacts & VoIP Call</button>
-        <button onclick="toggleNotifications()" style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left; cursor:pointer;">🔔 Notificaciones</button>
-        <button onclick="confirmDeleteAccount()" style="width:100%; margin-bottom:8px; padding:10px; background:#dc3545; color:white; border:none; border-radius:5px; text-align:left; cursor:pointer;">🗑️ Borrar Cuenta</button>
+        <button onclick="confirmDeleteAccount()" style="width:100%; margin-bottom:8px; padding:10px; background:#dc3545; color:white; border:none; border-radius:5px; text-align:left; cursor:pointer;">🗑️ Borrar Datos Locales</button>
     `;
     modal.style.display = 'flex';
 }
 
 function openDuckieMenu() {
     const modal = document.getElementById('duckieActionModal');
-    document.getElementById('actionModalTitle').innerText = "Menú Opciones";
+    document.getElementById('actionModalTitle').innerText = "Menú de Opciones";
     document.getElementById('actionModalBody').innerHTML = `
-        <p style="margin-bottom:10px; color:#aaa;">Selecciona una opción de sistema:</p>
         <button onclick="showOfficialChannel()" style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left; cursor:pointer;">🛡️ Official Channel Verified</button>
         <button onclick="showPrivacyTerms()" style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left; cursor:pointer;">📄 Normas de Servicio y Privacidad</button>
-        <button onclick="showChatPrivacy()" style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left; cursor:pointer;">💬 Advanced Chat Privacy</button>
         <button onclick="showTechSupport()" style="width:100%; margin-bottom:8px; padding:10px; background:#28a745; color:white; border:none; border-radius:5px; text-align:left; cursor:pointer;">🛠️ Soporte Técnico</button>
     `;
     modal.style.display = 'flex';
 }
 
+function toggleFloatingTab() {
+    const tab = document.getElementById('floatingTab');
+    tab.style.display = tab.style.display === 'block' ? 'none' : 'block';
+    closeActionModal();
+}
+
 function showOfficialChannel() {
     document.getElementById('actionModalTitle').innerText = "Official Channel Verified";
-    document.getElementById('actionModalBody').innerHTML = `
-        <p style="color:#28a745; font-weight:bold; margin-bottom:10px;">¡Canal Verificado y Seguro Active! 🦆</p>
-        <p style="margin-bottom:8px;">Servidor backend conectado vía Render con cifrado de extremo a extremo.</p>
-        <button onclick="openDuckieMenu()" style="width:100%; margin-top:10px; padding:8px; background:#6c757d; color:white; border:none; border-radius:5px; cursor:pointer;">⬅ Volver al Menú</button>
-    `;
+    document.getElementById('actionModalBody').innerHTML = `<p style="color:#28a745; font-weight:bold;">Canal seguro y verificado activo 🦆</p>`;
 }
 
 function showPrivacyTerms() {
     document.getElementById('actionModalTitle').innerText = "Normas de Servicio";
-    document.getElementById('actionModalBody').innerHTML = `
-        <p style="margin-bottom:8px;"><b>1. Privacidad de Datos:</b> Tus conversaciones con la IA se procesan de forma segura.</p>
-        <p style="margin-bottom:8px;"><b>2. Uso del Sistema:</b> DuckieTalkPro opera bajo estándares de alta seguridad local.</p>
-        <button onclick="openDuckieMenu()" style="width:100%; margin-top:10px; padding:8px; background:#6c757d; color:white; border:none; border-radius:5px; cursor:pointer;">⬅ Volver al Menú</button>
-    `;
-}
-
-function showChatPrivacy() {
-    document.getElementById('actionModalTitle').innerText = "Advanced Chat Privacy";
-    document.getElementById('actionModalBody').innerHTML = `
-        <p style="margin-bottom:10px;">Configuración de seguridad activa:</p>
-        <p style="margin-bottom:8px;">🔒 Protocolo de cifrado habilitado.</p>
-        <button onclick="openDuckieMenu()" style="width:100%; margin-top:10px; padding:8px; background:#6c757d; color:white; border:none; border-radius:5px; cursor:pointer;">⬅ Volver al Menú</button>
-    `;
+    document.getElementById('actionModalBody').innerHTML = `<p>Privacidad de datos y cifrado local activo en DuckieTalkPro.</p>`;
 }
 
 function showTechSupport() {
     document.getElementById('actionModalTitle').innerText = "Soporte Técnico";
-    document.getElementById('actionModalBody').innerHTML = `
-        <p style="margin-bottom:10px;">¿Necesitas asistencia con el sistema?</p>
-        <p style="margin-bottom:8px;">Escribe tus dudas directamente en el chat principal.</p>
-        <button onclick="openDuckieMenu()" style="width:100%; margin-top:10px; padding:8px; background:#6c757d; color:white; border:none; border-radius:5px; cursor:pointer;">⬅ Volver al Menú</button>
-    `;
+    document.getElementById('actionModalBody').innerHTML = `<p>Asistencia activa desde el chat principal.</p>`;
 }
 
 function openMediaLinks() {
-    document.getElementById('actionModalTitle').innerText = "Media, Links and Duck";
+    document.getElementById('actionModalTitle').innerText = "Media & Links";
     document.getElementById('actionModalBody').innerHTML = `
-        <p style="margin-bottom:10px;">Acceso directo al ecosistema:</p>
-        <a href="https://github.com/chataquin85-a11y/duckie-marketplace" target="_blank" style="display:block; margin-bottom:8px; padding:8px; background:#007bff; color:white; text-decoration:none; border-radius:5px;">🌐 GitHub Repository</a>
-        <a href="https://chataquin85-a11y.github.io/duckie-marketplace/" target="_blank" style="display:block; margin-bottom:8px; padding:8px; background:#28a745; color:white; text-decoration:none; border-radius:5px;">🛒 Visitar Tienda en Línea</a>
+        <a href="https://chataquin85-a11y.github.io/duckie-marketplace/" target="_blank" style="display:block; padding:8px; background:#28a745; color:white; text-decoration:none; border-radius:5px; text-align:center;">🛒 Ir a Duckie Marketplace</a>
     `;
-}
-
-function openVoipContacts() {
-    document.getElementById('actionModalTitle').innerText = "Add Contacts & VoIP";
-    document.getElementById('actionModalBody').innerHTML = `
-        <p style="margin-bottom:10px;">Gestión de agenda VoIP activa:</p>
-        <input type="text" id="newContactName" placeholder="Nombre del contacto..." style="width:100%; padding:8px; margin-bottom:8px; border-radius:4px; border:1px solid #444; background:#222; color:white;" />
-        <button onclick="alert('Contacto agregado con éxito 🦆')" style="width:100%; margin-bottom:8px; padding:8px; background:#28a745; color:white; border:none; border-radius:5px; cursor:pointer;">Guardar Contacto</button>
-    `;
-}
-
-function toggleNotifications() {
-    alert("🔔 Notificaciones actualizadas correctamente.");
 }
 
 function confirmDeleteAccount() {
-    if (confirm("⚠️ ¿Estás seguro de que deseas borrar la cuenta y reiniciar los datos locales?")) {
-        localStorage.clear();
-        alert("🧹 Datos locales eliminados con éxito.");
-        location.reload();
-    }
+    if (confirm("¿Borrar datos locales?")) { localStorage.clear(); location.reload(); }
 }
 
 function closeActionModal() {
