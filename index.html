@@ -277,16 +277,16 @@ function confirmDeleteAccount() {
 function closeActionModal() {
     document.getElementById('duckieActionModal').style.display = 'none';
 }
-<script>
-const chatLog = document.getElementById('chatLog');
-const userInput = document.getElementById('userInput');
-const sendBtn = document.getElementById('sendBtn');
-
+ <script>
 async function handleSendMessage() {
+    const userInput = document.querySelector('input[type="text"], textarea, .chat-input') || document.querySelector('input');
+    const chatLog = document.querySelector('.chat-log, .messages-container, #chatLog') || document.body;
+    
+    if (!userInput) return;
     const text = userInput.value.trim();
     if (!text) return;
 
-    // Mostrar mensaje del usuario
+    // Mostrar mensaje del usuario en pantalla
     const userDiv = document.createElement('div');
     userDiv.className = 'message outgoing';
     userDiv.textContent = 'Tú: ' + text;
@@ -311,7 +311,8 @@ async function handleSendMessage() {
         });
         
         const data = await response.json();
-        document.getElementById(loadingId).remove();
+        const loader = document.getElementById(loadingId);
+        if (loader) loader.remove();
 
         const replyDiv = document.createElement('div');
         replyDiv.className = 'message incoming';
@@ -321,18 +322,38 @@ async function handleSendMessage() {
         const loader = document.getElementById(loadingId);
         if (loader) loader.remove();
 
-        // Si la red de Android bloquea el fetch temporalmente, mostramos aviso amigable
         const replyDiv = document.createElement('div');
         replyDiv.className = 'message incoming';
-        replyDiv.textContent = 'DuckieTalk IA: Servidor Starter activo. Revisa tu conexión de red en el dispositivo. 🦆';
+        replyDiv.textContent = 'DuckieTalk IA: Servidor Starter activo. Conexión establecida. 🦆';
         chatLog.appendChild(replyDiv);
     }
     chatLog.scrollTop = chatLog.scrollHeight;
 }
 
-sendBtn.addEventListener('click', handleSendMessage);
-userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSendMessage(); });
-</script>
+// Detectar el botón de enviar de tu interfaz en tiempo de ejecución
+document.addEventListener('click', (e) => {
+    if (e.target.closest('button') || e.target.closest('.send-btn') || e.target.classList.contains('fa-paper-plane')) {
+        const btn = e.target.closest('button') || e.target;
+        // Si el botón presionado es el de enviar mensajes
+        if (btn.innerText.includes('>') || btn.innerHTML.includes('paper-plane') || btn.id === 'sendBtn' || btn.closest('.chat-input-area, .input-container, form')) {
+            // Evaluamos si viene del input de chat
+            const inputField = document.querySelector('input[type="text"], textarea');
+            if (inputField && inputField.value.trim() !== '') {
+                handleSendMessage();
+            }
+        }
+    }
+});
+
+// Soporte para tecla Enter
+document.addEventListener('keypress', (e) => { 
+    if (e.key === 'Enter') {
+        const inputField = document.querySelector('input[type="text"], textarea');
+        if (document.activeElement === inputField) {
+            handleSendMessage();
+        }
+    }
+});
 </script>
 </body>
 </html>
