@@ -48,7 +48,7 @@ header { background: #07220e; padding: 10px 15px; display: flex; align-items: ce
 .send-btn { background: #2e7d32; border: none; color: white; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; font-size: 1em; }
 .send-btn:active { background: #1b5e20; }
 
-/* Pestaña Flotante (Mockup style) */
+/* Pestaña Flotante */
 .floating-tab { position: absolute; top: 15px; right: 15px; background: rgba(20, 35, 25, 0.95); border: 1px solid #28a745; border-radius: 12px; padding: 15px; width: 240px; box-shadow: 0 5px 15px rgba(0,0,0,0.4); z-index: 20; display: none; }
 .floating-tab h4 { font-size: 0.9em; text-align: center; margin-bottom: 10px; color: #fff; }
 .floating-tab button { width: 100%; margin-bottom: 8px; padding: 8px; border-radius: 6px; border: none; font-weight: bold; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.85em; }
@@ -68,24 +68,24 @@ header { background: #07220e; padding: 10px 15px; display: flex; align-items: ce
 </header>
 
 <div class="store-banner" onclick="openDuckieMenu()" style="cursor: pointer;">
-🦆 DuckieTalkPro - VoIP y Sistema Seguro Activo
+🦆 DuckieTalkPro - VoIP y Servidor Starter Activo
 </div>
 
 <div class="action-bar">
 <button class="btn-voice" onclick="startVoiceCall()">📞 Llamada de Voz</button>
-<button class="btn-video" onclick="startVideoCall()">📹 Videollamada</button>
+<button class="btn-video" onclick="startVideocall()">📹 Videollamada</button>
 </div>
 
 <div class="chat-container" id="chatLog">
-    <!-- Pestaña Flotante Simulada -->
+    <!-- Pestaña Flotante -->
     <div class="floating-tab" id="floatingTab">
         <h4>Pestaña Flotante</h4>
-        <button class="btn-video" onclick="startVideoCall()">📹 Videollamada</button>
+        <button class="btn-video" onclick="startVideocall()">📹 Videollamada</button>
         <button class="btn-voice" onclick="startVoiceCall()">📞 Llamada de Voz</button>
     </div>
 
 <div class="message incoming">
-DuckieTalk IA: ¡Bienvenido a tu canal verificado Amado! Sistema VoIP y pantallas interactivas listas. 🦆✨
+DuckieTalk IA: ¡Bienvenido a tu canal verificado Amado! Sistema VoIP y servidor Starter activo. 🦆✨
 </div>
 </div>
 
@@ -146,7 +146,7 @@ async function handleSendMessage() {
     const waitingDiv = document.createElement('div');
     waitingDiv.className = 'message incoming';
     waitingDiv.id = loadingId;
-    waitingDiv.textContent = 'DuckieTalk IA está pensando... 🦆';
+    waitingDiv.textContent = 'DuckieTalk IA está procesando... 🦆';
     chatLog.appendChild(waitingDiv);
     chatLog.scrollTop = chatLog.scrollHeight;
 
@@ -169,7 +169,7 @@ async function handleSendMessage() {
 
         const errorDiv = document.createElement('div');
         errorDiv.className = 'message incoming error-msg';
-        errorDiv.textContent = 'DuckieTalk IA: Error de conexión con el servidor. El servicio de Render está en plan gratuito y puede tardar en responder. Por favor reintenta.';
+        errorDiv.textContent = 'DuckieTalk IA: Nota de red: Verificando conexión con el servidor Starter ($7). Por favor reintenta en un momento.';
         chatLog.appendChild(errorDiv);
     }
     chatLog.scrollTop = chatLog.scrollHeight;
@@ -191,7 +191,7 @@ function startVoiceCall() {
     startCallTimer();
 }
 
-async function startVideoCall() {
+async function startVideocall() {
     document.getElementById('callTitle').innerText = "DuckieCall - Video";
     const videoEl = document.getElementById('callVideo');
     videoEl.style.display = 'block';
@@ -257,12 +257,12 @@ function toggleFloatingTab() {
 
 function showOfficialChannel() {
     document.getElementById('actionModalTitle').innerText = "Official Channel Verified";
-    document.getElementById('actionModalBody').innerHTML = `<p style="color:#28a745; font-weight:bold;">Canal seguro y verificado activo 🦆</p>`;
+    document.getElementById('actionModalBody').innerHTML = `<p style="color:#28a745; font-weight:bold;">Canal seguro y verificado activo (Servidor Starter) 🦆</p>`;
 }
 
 function showPrivacyTerms() {
     document.getElementById('actionModalTitle').innerText = "Normas de Servicio";
-    document.getElementById('actionModalBody').innerHTML = `<p>Privacidad de datos y cifrado local activo en DuckieTalkPro.</p>`;
+    document.getElementById('actionModalBody').innerHTML = `<p>Privacidad de datos y servidor dedicado activo en DuckieTalkPro.</p>`;
 }
 
 function showTechSupport() {
