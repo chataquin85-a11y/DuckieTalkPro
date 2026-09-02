@@ -1,4 +1,4 @@
-package com.amado.duckietalk;
+package com.amado.duckietalkpro;
 
 import com.getcapacitor.BridgeActivity;
 

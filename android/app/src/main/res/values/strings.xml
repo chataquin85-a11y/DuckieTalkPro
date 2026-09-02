@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">duckietalkpro</string>
-    <string name="title_activity_main">duckietalkpro</string>
-    <string name="package_name">com.amado.duckietalk</string>
-    <string name="custom_url_scheme">com.amado.duckietalk</string>
+    <string name="app_name">Duckie Duck Pro</string>
+    <string name="title_activity_main">Duckie Duck Pro</string>
+    <string name="package_name">com.amado.duckietalkpro</string>
+    <string name="custom_url_scheme">com.amado.duckietalkpro</string>
 </resources>

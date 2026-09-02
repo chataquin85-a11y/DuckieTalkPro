@@ -1,7 +1,7 @@
 {
-  "appId": "com.duckiethemu.app",
-  "appName": "Duckiethemu's",
-  "webDir": "public",
+  "appId": "com.amado.duckietalkpro",
+  "appName": "Duckie Duck Pro",
+  "webDir": "www",
   "bundledWebRuntime": false,
   "server": {
     "androidScheme": "https"
