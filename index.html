@@ -291,7 +291,11 @@
 
     <!-- 2. VISTA LLAMADAS -->
     <div id="tab-calls" class="tab-view">
-      <h3 style="color: var(--accent-green); border-bottom: 2px solid var(--accent-green); padding-bottom: 5px;">Calls</h3>
+      <h3 style="color: var(--accent-green); border-bottom: 2px solid var(--accent-green); padding-bottom: 5px;">Calls & Keypad</h3>
+      <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <button onclick="openModal('keypadModal')" style="flex:1; padding:10px; background:#222; border:1px solid var(--accent-green); color:var(--accent-green); border-radius:6px; font-weight:bold; cursor:pointer;">⌨️ Keypad</button>
+        <button onclick="alert('Abriendo Favoritos')" style="flex:1; padding:10px; background:#222; border:1px solid var(--accent-green); color:var(--accent-green); border-radius:6px; font-weight:bold; cursor:pointer;">⭐ Favoritos</button>
+      </div>
       <div style="background: #151515; padding: 12px; margin-top: 10px; border-radius: 8px; border-left: 4px solid var(--accent-green);">
         <div style="display: flex; justify-content: space-between;"><strong>DuckieTalkPro</strong> <span style="font-size: 0.8rem; color: #aaa;">1:45 pm</span></div>
         <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: var(--accent-green);">↗ Outgoing</p>
@@ -302,7 +306,7 @@
       </div>
     </div>
 
-    <!-- 3. VISTA AI CHAT (Conectado a Render) -->
+    <!-- 3. VISTA AI CHAT (Conectado a Render / Firebase) -->
     <div id="tab-ai-chat" class="tab-view active">
       <div class="ai-chat-container">
         <div style="background-color: #264d38; padding: 6px 10px; border-radius: 8px; text-align: center; margin-bottom: 8px; font-weight: bold; border: 1px solid #387052; flex-shrink: 0; font-size: 0.85rem;">
@@ -314,9 +318,9 @@
         </div>
 
         <div class="chat-input-area">
-          <button onclick="alert('Opciones adicionales con botón +')" style="background: #222; border: 1px solid var(--accent-green); border-radius: 50%; width: 36px; height: 36px; color: var(--accent-green); font-weight: bold; cursor: pointer; flex-shrink: 0;">+</button>
+          <button onclick="openModal('aiOptionsModal')" style="background: #222; border: 1px solid var(--accent-green); border-radius: 50%; width: 36px; height: 36px; color: var(--accent-green); font-weight: bold; cursor: pointer; flex-shrink: 0;">+</button>
           <input type="text" class="search-box" id="ai-input-field" placeholder="Ask Duckie Guai-fai'v...">
-          <button onclick="alert('Grabando audio...')" style="background: #222; border: 1px solid var(--accent-green); border-radius: 50%; width: 36px; height: 36px; color: var(--accent-green); cursor: pointer; flex-shrink: 0;">🎙️</button>
+          <button onclick="alert('Grabando audio interactivo...')" style="background: #222; border: 1px solid var(--accent-green); border-radius: 50%; width: 36px; height: 36px; color: var(--accent-green); cursor: pointer; flex-shrink: 0;">🎙️</button>
           <button id="ai-send-btn" style="background: var(--accent-green); border: none; border-radius: 50%; width: 38px; height: 38px; color: #000; font-weight: bold; cursor: pointer; flex-shrink: 0;">✔</button>
         </div>
       </div>
@@ -325,12 +329,12 @@
     <!-- 4. VISTA CHATS / MESSAGES -->
     <div id="tab-chats" class="tab-view">
       <h3 style="color: var(--accent-green); border-bottom: 2px solid var(--accent-green); padding-bottom: 5px;">Chats/Messages</h3>
-      <div style="background: #151515; padding: 12px; margin-top: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-        <div><strong>DUCKIETALKPRO</strong></div>
+      <div style="background: #151515; padding: 12px; margin-top: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; cursor:pointer;" onclick="switchTab('tab-ai-chat', 'Duckie Guai-fai\'v', document.querySelector('.nav-bar button:nth-child(3)'))">
+        <div><strong>DUCKIETALKPRO</strong><br><small style="color:var(--dim-text);">Chat activo con asistente</small></div>
         <span style="font-size: 0.8rem; color: #aaa;">2:35 pm</span>
       </div>
       <div style="background: #151515; padding: 12px; margin-top: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-        <div><strong>Duckie Dough</strong></div>
+        <div><strong>Duckie Dough</strong><br><small style="color:var(--dim-text);">Sincronizado</small></div>
         <span style="font-size: 0.8rem; color: #aaa;">3:13 pm</span>
       </div>
     </div>
@@ -339,19 +343,19 @@
     <div id="tab-status" class="tab-view">
       <h3 style="color: var(--accent-green); border-bottom: 2px solid var(--accent-green); padding-bottom: 5px;">Add Status</h3>
       <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 15px;">
-        <div onclick="alert('Modo Texto seleccionado')" style="background: #151515; padding: 20px; border-radius: 8px; text-align: center; border: 1px solid var(--accent-green); cursor: pointer;">
+        <div onclick="openModal('statusTextModal')" style="background: #151515; padding: 20px; border-radius: 8px; text-align: center; border: 1px solid var(--accent-green); cursor: pointer;">
           <div style="font-size: 1.5rem;">📝</div>
           <div style="margin-top: 8px; font-weight: bold;">Text Status</div>
         </div>
-        <div onclick="alert('Modo Layout seleccionado')" style="background: #151515; padding: 20px; border-radius: 8px; text-align: center; border: 1px solid var(--accent-green); cursor: pointer;">
+        <div onclick="openModal('statusLayoutModal')" style="background: #151515; padding: 20px; border-radius: 8px; text-align: center; border: 1px solid var(--accent-green); cursor: pointer;">
           <div style="font-size: 1.5rem;">🖼️</div>
           <div style="margin-top: 8px; font-weight: bold;">Layout</div>
         </div>
-        <div onclick="alert('Modo Voice seleccionado')" style="background: #151515; padding: 20px; border-radius: 8px; text-align: center; border: 1px solid var(--accent-green); cursor: pointer;">
+        <div onclick="openModal('statusVoiceModal')" style="background: #151515; padding: 20px; border-radius: 8px; text-align: center; border: 1px solid var(--accent-green); cursor: pointer;">
           <div style="font-size: 1.5rem;">🎙️</div>
           <div style="margin-top: 8px; font-weight: bold;">Voice</div>
         </div>
-        <div onclick="alert('Modo AI Images seleccionado')" style="background: #151515; padding: 20px; border-radius: 8px; text-align: center; border: 1px solid var(--accent-green); cursor: pointer;">
+        <div onclick="openModal('statusAiImagesModal')" style="background: #151515; padding: 20px; border-radius: 8px; text-align: center; border: 1px solid var(--accent-green); cursor: pointer;">
           <div style="font-size: 1.5rem;">✨</div>
           <div style="margin-top: 8px; font-weight: bold;">AI Images</div>
         </div>
@@ -383,7 +387,7 @@
     </nav>
   </div>
 
-  <!-- MODALES -->
+  <!-- MODALES EXISTENTES Y NUEVOS PARA INTERACCIÓN NATIVA -->
   <div id="supportModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('supportModal')">&times;</span><h3 style="color:var(--accent-green);">Soporte técnico</h3><p>Atención directa para usuarios de DuckieTalkPro.</p></div></div>
   <div id="privacyModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('privacyModal')">&times;</span><h3 style="color:var(--accent-green);">Normas de Servicio y Privacidad</h3><p>Tus datos están protegidos bajo estrictas normas de seguridad.</p></div></div>
   <div id="loginSecurityModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('loginSecurityModal')">&times;</span><h3 style="color:var(--accent-green);">Login y security</h3><input type="email" placeholder="Correo" style="width:100%; padding:8px; margin:8px 0; background:#000; color:#fff; border:1px solid var(--accent-green); border-radius:6px; box-sizing:border-box;"><button onclick="alert('Guardado'); closeModal('loginSecurityModal');" style="width:100%; padding:10px; background:var(--accent-green); border:none; font-weight:bold; border-radius:6px; cursor:pointer;">Guardar</button></div></div>
@@ -393,31 +397,39 @@
   <div id="twoStepVerificationModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('twoStepVerificationModal')">&times;</span><h3 style="color:var(--accent-green);">Two-step Verification</h3><p>2FA Activo mediante token seguro.</p></div></div>
   <div id="changeColorChatModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('changeColorChatModal')">&times;</span><h3 style="color:var(--accent-green);">Cambiar color de chat</h3><div style="display:flex; justify-content:space-around; margin:15px 0;"><div onclick="document.documentElement.style.setProperty('--accent-green', '#2ecc71'); closeModal('changeColorChatModal');" style="width:35px;height:35px;background:#2ecc71;border-radius:50%;cursor:pointer;"></div><div onclick="document.documentElement.style.setProperty('--accent-green', '#3498db'); closeModal('changeColorChatModal');" style="width:35px;height:35px;background:#3498db;border-radius:50%;cursor:pointer;"></div><div onclick="document.documentElement.style.setProperty('--accent-green', '#e74c3c'); closeModal('changeColorChatModal');" style="width:35px;height:35px;background:#e74c3c;border-radius:50%;cursor:pointer;"></div></div></div></div>
 
-  <!-- SCRIPT CONECTADO A RENDER -->
+  <!-- MODALES DE APOYO PARA STATUS Y KEYPAD -->
+  <div id="keypadModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('keypadModal')">&times;</span><h3 style="color:var(--accent-green);">Keypad Numérico</h3><input type="text" id="dialerInput" placeholder="Número..." style="width:100%; padding:10px; margin-bottom:10px; background:#000; color:#fff; border:1px solid var(--accent-green); border-radius:6px; text-align:center; font-size:1.2rem;"><button onclick="alert('Llamando a: ' + document.getElementById('dialerInput').value); closeModal('keypadModal');" style="width:100%; padding:10px; background:var(--accent-green); border:none; font-weight:bold; border-radius:6px; cursor:pointer;">Llamar</button></div></div>
+  <div id="aiOptionsModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('aiOptionsModal')">&times;</span><h3 style="color:var(--accent-green);">Opciones AI Chat</h3><p>Adjuntar archivos, documentos o consultas rápidas a Duckie Guai-fai'v.</p></div></div>
+  <div id="statusTextModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('statusTextModal')">&times;</span><h3 style="color:var(--accent-green);">Text Status</h3><textarea placeholder="¿Qué estás pensando pariente?" style="width:100%; height:80px; padding:8px; background:#000; color:#fff; border:1px solid var(--accent-green); border-radius:6px; box-sizing:border-box;"></textarea><button onclick="alert('Estado de texto publicado'); closeModal('statusTextModal');" style="width:100%; margin-top:10px; padding:10px; background:var(--accent-green); border:none; font-weight:bold; border-radius:6px; cursor:pointer;">Publicar</button></div></div>
+  <div id="statusLayoutModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('statusLayoutModal')">&times;</span><h3 style="color:var(--accent-green);">Layout Selector</h3><p>Configurando diseño de tarjeta y colores para el estado.</p></div></div>
+  <div id="statusVoiceModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('statusVoiceModal')">&times;</span><h3 style="color:var(--accent-green);">Voice Status</h3><p>Grabando nota de voz para estado...</p><button onclick="alert('Nota de voz guardada'); closeModal('statusVoiceModal');" style="width:100%; margin-top:10px; padding:10px; background:var(--accent-green); border:none; font-weight:bold; border-radius:6px; cursor:pointer;">Guardar Voz</button></div></div>
+  <div id="statusAiImagesModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('statusAiImagesModal')">&times;</span><h3 style="color:var(--accent-green);">AI Images Generator</h3><input type="text" placeholder="Describe tu imagen AI..." style="width:100%; padding:8px; margin-bottom:8px; background:#000; color:#fff; border:1px solid var(--accent-green); border-radius:6px; box-sizing:border-box;"><button onclick="alert('Generando imagen con IA...'); closeModal('statusAiImagesModal');" style="width:100%; padding:10px; background:var(--accent-green); border:none; font-weight:bold; border-radius:6px; cursor:pointer;">Generar</button></div></div>
+
+  <!-- SCRIPT CONECTADO A RENDER / FIREBASE Y FLUJOS NATIVOS -->
   <script>
    const API_URL = "https://us-central1-duckie-guai-faiv-app.cloudfunctions.net/api";
 
-async function sendMessageToDuckie(userMessage) {
-  try {
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ message: userMessage })
-    });
+   async function sendMessageToDuckie(userMessage) {
+     try {
+       const response = await fetch(API_URL, {
+         method: 'POST',
+         headers: {
+           'Content-Type': 'application/json'
+         },
+         body: JSON.stringify({ message: userMessage })
+       });
 
-    const data = await response.json();
-    if (data && data.reply) {
-      return data.reply;
-    } else {
-      return "¡Quack! No recibí una respuesta válida del servidor.";
-    }
-  } catch (error) {
-    console.error("Error de conexión:", error);
-    return `¡Entendido pariente, procesando tu solicitud sobre: "${userMessage}" (Modo offline/Fallback)`;
-  }
-}
+       const data = await response.json();
+       if (data && data.reply) {
+         return data.reply;
+       } else {
+         return "¡Quack! No recibí una respuesta válida del servidor.";
+       }
+     } catch (error) {
+       console.error("Error de conexión:", error);
+       return `¡Entendido pariente, procesando tu solicitud sobre: "${userMessage}" (Modo offline/Fallback)`;
+     }
+   }
 
     function switchTab(tabId, subtitleText, element) {
       document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
@@ -538,24 +550,8 @@ async function sendMessageToDuckie(userMessage) {
       chatHistory.appendChild(aiMsgDiv);
       chatHistory.scrollTop = chatHistory.scrollHeight;
 
-      try {
-        const response = await fetch(BACKEND_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ message: userText })
-        });
-
-        if (!response.ok) {
-          throw new Error('Error en la conexión con el servidor');
-        }
-
-        const data = await response.json();
-        aiMsgDiv.textContent = data.reply || data.message || JSON.stringify(data);
-      } catch (error) {
-        aiMsgDiv.textContent = `Entendido pariente, procesando tu solicitud sobre: "${userText}" (Modo offline/Fallback)`;
-      }
+      const replyText = await sendMessageToDuckie(userText);
+      aiMsgDiv.textContent = replyText;
       chatHistory.scrollTop = chatHistory.scrollHeight;
     }
 
