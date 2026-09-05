@@ -314,7 +314,7 @@
             background-color: #4e9a63;
         }
 
-        /* Barra de Navegación Inferior (Nuevos botones y secuencia agregados sin borrar nada) */
+        /* Barra de Navegación Inferior */
         .bottom-nav {
             display: flex;
             justify-content: space-around;
@@ -509,25 +509,25 @@
             <button class="send-btn" onclick="sendUserMessage()">✔</button>
         </div>
 
-        <!-- BARRA DE NAVEGACIÓN INFERIOR (Con secuencia de interacción integrada) -->
+        <!-- BARRA DE NAVEGACIÓN INFERIOR -->
         <nav class="bottom-nav">
-            <button class="nav-item" onclick="switchView('contactos', this)">
+            <button class="nav-item" onclick="handleNavDependency('contactos', this)">
                 <span class="icon">👥</span>
                 <span>Contactos</span>
             </button>
-            <button class="nav-item" onclick="switchView('llamadas', this)">
+            <button class="nav-item" onclick="handleNavDependency('llamadas', this)">
                 <span class="icon">📞</span>
                 <span>Llamadas</span>
             </button>
-            <button class="nav-item active" onclick="switchView('ai', this)">
+            <button class="nav-item active" onclick="handleNavDependency('ai', this)">
                 <span class="icon">🦆</span>
                 <span>AI Chat</span>
             </button>
-            <button class="nav-item" onclick="switchView('chats', this)">
+            <button class="nav-item" onclick="handleNavDependency('chats', this)">
                 <span class="icon">💬</span>
                 <span>Chats</span>
             </button>
-            <button class="nav-item" onclick="switchView('status', this)">
+            <button class="nav-item" onclick="handleNavDependency('status', this)">
                 <span class="icon">📊</span>
                 <span>Status</span>
             </button>
@@ -568,14 +568,30 @@
     <input type="file" id="hiddenFileInput" onchange="processSelectedFile(this)">
 
     <script>
+        // --- SECUENCIA DE DEPENDENCIA DE CADA BOTÓN AL SER PRESIONADO ---
+        let buttonStateSequence = [];
+
+        function registerButtonDependency(buttonName) {
+            const timestamp = new Date().toLocaleTimeString();
+            const dependencyStep = {
+                button: buttonName,
+                time: timestamp,
+                sequenceIndex: buttonStateSequence.length + 1
+            };
+            buttonStateSequence.push(dependencyStep);
+            console.log(`[Dependencia de Botón Secuencial] Paso #${dependencyStep.sequenceIndex} -> Botón: ${buttonName} presionado a las ${timestamp}`);
+        }
+
         // --- LÓGICA DE INTERFAZ Y PANELES LATERALES ---
         function toggleLeftMenu() {
+            registerButtonDependency('Menu Lateral Izquierdo (☰)');
             const menu = document.getElementById('leftMenu');
             menu.classList.toggle('hidden-left');
             closeAllPopovers();
         }
 
         function toggleRightMenu() {
+            registerButtonDependency('Configuración / Settings (⚙️)');
             const menu = document.getElementById('rightMenu');
             menu.classList.toggle('hidden-right');
             closeAllPopovers();
@@ -584,6 +600,12 @@
         function closeAllPopovers() {
             document.getElementById('plusPopover').style.display = 'none';
             document.getElementById('loginPopover').style.display = 'none';
+        }
+
+        // --- SECUENCIA DE DEPENDENCIA PARA LA BARRA DE NAVEGACIÓN INFERIOR ---
+        function handleNavDependency(viewId, btnElement) {
+            registerButtonDependency(`Navegación Inferior [${viewId.toUpperCase()}]`);
+            switchView(viewId, btnElement);
         }
 
         // --- LÓGICA DE CAMBIO DE VISTA EN BARRA INFERIOR ---
@@ -622,6 +644,7 @@
 
         // --- LÓGICA DE POPUP LOGIN / OPCIONES SUPERIORES ---
         function toggleLoginMenu() {
+            registerButtonDependency('Log in Menu');
             const popover = document.getElementById('loginPopover');
             const isVisible = popover.style.display === 'block';
             closeAllPopovers();
@@ -631,6 +654,7 @@
         }
 
         function handleLoginAction(action) {
+            registerButtonDependency(`Login Action: ${action}`);
             closeAllPopovers();
             if (action === 'settings') {
                 toggleRightMenu();
@@ -644,6 +668,7 @@
         // --- LÓGICA DE POPUP MULTIMEDIA / PLUS ---
         function togglePlusPopover(event) {
             event.stopPropagation();
+            registerButtonDependency('Plus Button (+)');
             const popover = document.getElementById('plusPopover');
             const btn = document.getElementById('plusMenuBtn');
             const rect = btn.getBoundingClientRect();
@@ -660,6 +685,7 @@
         }
 
         function handlePlusAction(type) {
+            registerButtonDependency(`Plus Action Option: ${type}`);
             closeAllPopovers();
             const fileInput = document.getElementById('hiddenFileInput');
             
@@ -689,6 +715,7 @@
 
         // --- LÓGICA DE BOTÓN INSTANT / VOZ ---
         function triggerInstantVoice() {
+            registerButtonDependency('Instant / Voice Input (🎙️)');
             appendSystemMessage("Duckie Guai-fai'v: Escuchando comando de voz instantáneo...");
             setTimeout(() => {
                 appendSystemMessage("Comando de voz procesado con éxito.");
@@ -703,6 +730,7 @@
         }
 
         function sendUserMessage() {
+            registerButtonDependency('Send Message Button (✔)');
             const input = document.getElementById('chatInput');
             const text = input.value.trim();
             if (!text) return;
