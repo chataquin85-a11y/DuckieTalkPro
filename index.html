@@ -1141,7 +1141,6 @@
 
         function renderSavedContacts() {
             const container = document.getElementById('contactsContainer');
-            // Mantener fijos o reconstruir con persistidos
             let html = `
                 <div class="content-card contact-card-item" data-name="duckie support team">
                     <div style="display: flex; gap: 12px; align-items: center;">
@@ -1211,7 +1210,6 @@
             if (bubble) { bubble.remove(); alert("Mensaje eliminado."); }
         }
 
-        // Status functions with persistence
         function addStatusText() {
             registerButtonDependency('Status: Add status text');
             const txt = prompt("Escriba el texto para su Status:");
@@ -1241,7 +1239,6 @@
             }
         }
 
-        // Navegación
         function toggleLeftMenu() { registerButtonDependency('Menú Lateral Izquierdo (☰)'); document.getElementById('leftMenu').classList.toggle('hidden-left'); closeAllPopovers(); }
         function toggleRightMenu() { registerButtonDependency('Configuración / Settings (⚙️)'); document.getElementById('rightMenu').classList.toggle('hidden-right'); closeAllPopovers(); }
         function closeAllPopovers() { document.getElementById('plusPopover').style.display = 'none'; document.getElementById('loginPopover').style.display = 'none'; }
@@ -1337,10 +1334,8 @@
             recognition.onerror = function() { appendSystemMessage("Error al capturar audio."); };
         }
 
-        // Render Chat Historial persistido
         function renderChatHistoryOnLoad() {
             const list = document.getElementById('messagesList');
-            // Limpiar si hay más de los iniciales
             if(chatMessagesHistory.length > 2) {
                 list.innerHTML = '';
                 chatMessagesHistory.forEach(m => {
@@ -1367,8 +1362,6 @@
             saveDataToLocalStorage();
 
             const typingId = showTypingIndicator();
-
-            // Usar API real o fallback local
             const aiResponseText = await fetchRealAIResponse(text);
 
             removeTypingIndicator(typingId);
