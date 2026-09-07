@@ -16,13 +16,13 @@
         }
 
         [data-theme="light"] {
-            --bg-color: #f4f7f4;
+            --bg-color: #f0f4f1;
             --panel-color: #ffffff;
             --accent-color: #3b8c51;
             --accent-hover: #2e6f40;
             --text-main: #121c14;
-            --text-muted: #557560;
-            --danger-color: #c93b3b;
+            --text-muted: #55705d;
+            --danger-color: #d32f2f;
         }
 
         * {
@@ -39,7 +39,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            transition: background-color 0.3s, color 0.3s;
+            transition: background 0.3s, color 0.3s;
         }
 
         /* Top Bar */
@@ -121,6 +121,9 @@
             font-size: 0.95rem;
             color: var(--text-muted);
             transition: background 0.2s, color 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .menu-items li:hover {
@@ -158,7 +161,6 @@
 
         .popover-item:hover {
             background-color: var(--accent-color);
-            color: #ffffff;
         }
 
         /* Vistas de Pantalla Dinámicas */
@@ -229,7 +231,6 @@
             font-size: 0.95rem;
             line-height: 1.4;
             position: relative;
-            color: var(--text-main);
         }
 
         .message-bubble.incoming {
@@ -254,7 +255,7 @@
         .message-actions button {
             background: rgba(0,0,0,0.3);
             border: 1px solid rgba(255,255,255,0.2);
-            color: #ffffff;
+            color: var(--text-main);
             padding: 3px 8px;
             border-radius: 4px;
             cursor: pointer;
@@ -273,12 +274,11 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
-            color: var(--text-main);
         }
 
         .content-card h3 {
             font-size: 1.05rem;
-            color: var(--text-main);
+            color: #ffd700;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -338,7 +338,7 @@
         }
 
         .keypad-btn {
-            background-color: var(--panel-color);
+            background-color: #223829;
             border: 1px solid #335c3f;
             color: var(--text-main);
             padding: 12px;
@@ -358,7 +358,6 @@
 
         .keypad-btn:hover {
             background-color: var(--accent-color);
-            color: #ffffff;
         }
 
         .keypad-actions-row {
@@ -389,7 +388,7 @@
             30% { transform: translateY(-6px); }
         }
 
-        /* Input Area */
+        /* Input Area with Action Popovers */
         .chat-input-area {
             padding: 15px 20px;
             background-color: var(--panel-color);
@@ -484,9 +483,8 @@
         }
 
         .nav-item.active {
-            color: var(--text-main);
+            color: #ffd700;
             transform: scale(1.05);
-            font-weight: bold;
         }
 
         /* Search input bar */
@@ -507,60 +505,69 @@
             outline: none;
         }
 
-        /* Status Gallery Styling */
-        .status-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
-            padding: 15px 20px;
-        }
-
-        .status-card-item {
-            background-size: cover;
-            background-position: center;
-            border-radius: 12px;
-            height: 180px;
-            display: flex;
+        /* --- NUEVOS ESTILOS NATIVOS (Puntos 2, 3 y Modal API) --- */
+        /* Pantalla completa de llamada simulada */
+        #activeCallOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #0d160f 0%, #1b2e20 100%);
+            z-index: 9999;
+            display: none;
             flex-direction: column;
-            justify-content: flex-end;
-            padding: 10px;
-            position: relative;
-            border: 1px solid #284a32;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            justify-content: space-between;
+            align-items: center;
+            padding: 50px 20px;
+            animation: fadeInCall 0.3s ease;
+        }
+        @keyframes fadeInCall { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        /* Story View Carrusel de Estados */
+        #storyViewerModal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.92);
+            z-index: 9998;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .story-progress-bar {
+            position: absolute;
+            top: 20px;
+            width: 90%;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
             overflow: hidden;
         }
-
-        .status-card-item::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent 60%);
-            z-index: 1;
+        .story-progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #ffd700;
+            transition: width linear;
         }
 
-        .status-card-content {
+        /* Switch Toggle Switch */
+        .switch {
             position: relative;
-            z-index: 2;
-            color: #ffffff;
+            display: inline-block;
+            width: 44px;
+            height: 22px;
         }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider-toggle {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #335c3f; transition: .3s; border-radius: 22px;
+        }
+        .slider-toggle:before {
+            position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px;
+            background-color: white; transition: .3s; border-radius: 50%;
+        }
+        input:checked + .slider-toggle { background-color: var(--accent-color); }
+        input:checked + .slider-toggle:before { transform: translateX(22px); }
 
-        .status-card-content h4 {
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 2px;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
-        }
-
-        .status-card-content p {
-            font-size: 0.75rem;
-            color: #dddddd;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
-        }
-
-        /* Hidden File Input */
-        #hiddenFileInput {
-            display: none;
-        }
+        #hiddenFileInput { display: none; }
     </style>
 </head>
 <body data-theme="dark">
@@ -571,7 +578,6 @@
             <span class="app-title" id="headerTitleText">DuckieDuckPro & DuckieTalkPro</span>
         </div>
         <div class="header-right">
-            <button class="icon-btn" id="themeToggleBtn" onclick="toggleAppTheme()" title="Cambiar Tema (Claro / Oscuro)">🌓</button>
             <button class="icon-btn" id="loginBtn" onclick="toggleLoginMenu()">Log in</button>
             <button class="icon-btn" id="settingsToggleBtn" onclick="toggleRightMenu()">⚙️</button>
         </div>
@@ -597,8 +603,8 @@
             <div id="view-contactos" class="app-view">
                 <div class="chat-header-profile">
                     <div class="avatar-container">👥</div>
-                    <div class="assistant-name">Directorio de Contactos Nativos (Persistentes)</div>
-                    <div class="assistant-subtitle">DuckieTalkPro Sync & Storage</div>
+                    <div class="assistant-name">Directorio de Contactos Nativos (Android / iOS)</div>
+                    <div class="assistant-subtitle">DuckieTalkPro Sync</div>
                 </div>
                 
                 <div class="search-bar-container">
@@ -607,7 +613,33 @@
                 </div>
 
                 <div id="contactsContainer">
-                    <!-- Renderizado dinámico con persistencia -->
+                    <div class="content-card contact-card-item" data-name="duckie support team">
+                        <div style="display: flex; gap: 12px; align-items: center;">
+                            <div class="avatar-container" style="width: 45px; height: 45px;">🦆</div>
+                            <div>
+                                <h3>Duckie Support Team</h3>
+                                <p>📱 Tel: +1 (800) DUCKIE-AI</p>
+                            </div>
+                        </div>
+                        <div class="action-row" style="margin-top: 10px;">
+                            <button class="btn-action-small" onclick="saveContactNative('Duckie Support Team')">Guardar en Sistema</button>
+                            <button class="btn-action-small" onclick="startNativeCall('+18003825433', 'Duckie Support Team')">Llamar</button>
+                        </div>
+                    </div>
+
+                    <div class="content-card contact-card-item" data-name="amado apolonio">
+                        <div style="display: flex; gap: 12px; align-items: center;">
+                            <div class="avatar-container" style="width: 45px; height: 45px;">👨‍💻</div>
+                            <div>
+                                <h3>Amado Apolonio (Admin)</h3>
+                                <p>📱 Tel: +52 (55) DUCK-PRO</p>
+                            </div>
+                        </div>
+                        <div class="action-row" style="margin-top: 10px;">
+                            <button class="btn-action-small" onclick="saveContactNative('Amado Apolonio')">Guardar en Sistema</button>
+                            <button class="btn-action-small" onclick="startNativeCall('+52553825770', 'Amado Apolonio (Admin)')">Llamar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -615,7 +647,7 @@
                 <div class="chat-header-profile">
                     <div class="avatar-container">📞</div>
                     <div class="assistant-name">Centro de Llamadas DuckieTalkPro</div>
-                    <div class="assistant-subtitle">Marcador Numérico & Historial Sincronizado</div>
+                    <div class="assistant-subtitle">Marcador Numérico & Historial Nativo</div>
                 </div>
 
                 <div class="keypad-container">
@@ -642,8 +674,13 @@
                     </div>
                 </div>
 
-                <div id="callHistoryContainer">
-                    <!-- Historial sincronizado persistente de llamadas -->
+                <div class="content-card">
+                    <h3>📞 Llamada Entrante (Hace 2 min) <button class="btn-action-small" onclick="startNativeCall('+18003825433', 'Duckie Support')">Regresar</button></h3>
+                    <p>Estado: Entrante finalizada — +1 (800) DUCKIE-AI</p>
+                </div>
+                <div class="content-card">
+                    <h3>📲 Llamada Saliente (Hace 15 min) <button class="btn-action-small" onclick="startNativeCall('+52553825770', 'Amado Apolonio')">Regresar</button></h3>
+                    <p>Estado: Saliente exitosa — Duración: 3m 42s</p>
                 </div>
             </div>
 
@@ -653,11 +690,16 @@
                         <img src="IMG_1101.png" alt="Duckie Duck Pro Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\'><circle cx=\'30\' cy=\'30\' r=\'30\' fill=\'%232e6f40\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'20\'>🦆</text></svg>'">
                     </div>
                     <div class="assistant-name">Duckie Guai-fai'v & DuckieTalkPro</div>
-                    <div class="assistant-subtitle">Unified AI Assistant Stack (Persistente)</div>
+                    <div class="assistant-subtitle">Unified AI Assistant Stack (API Key Real Configurable)</div>
                 </div>
 
                 <div class="messages-list" id="messagesList">
-                    <!-- Historial de chat persistente cargado desde localStorage -->
+                    <div class="message-bubble incoming">
+                        ¡Hola Amado!<br>Soy Duckie Guai-fai'v adjunto a DuckieTalkPro.<br>¿Qué desarrollamos, ajustamos o sincronizamos hoy en el ecosistema?
+                    </div>
+                    <div class="message-bubble outgoing">
+                        Todo al centavo con las vistas, el keypad y los módulos nativos.
+                    </div>
                 </div>
             </div>
 
@@ -665,7 +707,7 @@
                 <div class="chat-header-profile">
                     <div class="avatar-container">💬</div>
                     <div class="assistant-name">Bandeja de Chats DuckieTalkPro</div>
-                    <div class="assistant-subtitle">Mensajes Nativos con Persistencia</div>
+                    <div class="assistant-subtitle">Mensajes Entrantes y Salientes Nativos</div>
                 </div>
                 <div class="messages-list" id="chatInboxList" style="flex:1; padding:20px; display:flex; flex-direction:column; gap:15px;">
                     <div class="message-bubble incoming">
@@ -688,22 +730,30 @@
             <div id="view-status" class="app-view">
                 <div class="chat-header-profile">
                     <div class="avatar-container">📊</div>
-                    <div class="assistant-name">Status Center & Galería de Estados Activos</div>
-                    <div class="assistant-subtitle">Historias multimedia con persistencia real</div>
+                    <div class="assistant-name">Status Center & Historias DuckieTalkPro</div>
+                    <div class="assistant-subtitle">Android / iOS Native Experience (Story View)</div>
+                </div>
+                
+                <div class="content-card" style="border: 2px dashed var(--accent-color); text-align: center; cursor: pointer;" onclick="openStoryViewer()">
+                    <h3>⚡ Ver Historias Activas (Story View)</h3>
+                    <p>Haz clic aquí para abrir el carrusel interactivo simulado de WhatsApp/Instagram.</p>
                 </div>
 
                 <div class="content-card">
-                    <h3>📝 Crear Estado Tipográfico / Imagen <button class="btn-action-small" onclick="addStatusText()">Crear Estado</button></h3>
-                    <p>Comparte estado personalizado con imagen de fondo y color guardado.</p>
+                    <h3>📝 Add Status Text <button class="btn-action-small" onclick="addStatusText()">Crear Estado</button></h3>
+                    <p>Comparte estado tipográfico con selector de color de fondo guardado localmente.</p>
                 </div>
-
-                <div class="content-card" style="margin-bottom: 0; border-bottom: none;">
-                    <h3>🎬 Galería de Estados Activos Recientes</h3>
-                    <p>Historias activas guardadas en el ecosistema DuckieTalkPro.</p>
+                <div class="content-card">
+                    <h3>📐 Status Layout <button class="btn-action-small" onclick="configureLayoutStatus()">Configurar Layout</button></h3>
+                    <p>Personaliza la plantilla visual de tus publicaciones multimedia.</p>
                 </div>
-
-                <div class="status-grid" id="statusGalleryContainer">
-                    <!-- Galería de Estados Activos Reales -->
+                <div class="content-card">
+                    <h3>🎬 Status Video <button class="btn-action-small" onclick="uploadStatusVideo()">Subir / Grabar Video</button></h3>
+                    <p>Integra clips de video en tus estados activos.</p>
+                </div>
+                <div class="content-card">
+                    <h3>🤖 Create with Duckie Guai-fai'v <button class="btn-action-small" onclick="generateAIImageStatus()">Generar con IA</button></h3>
+                    <p>Crea imágenes de fondo mediante prompt impulsado por Duckie Guai-fai'v.</p>
                 </div>
             </div>
 
@@ -713,6 +763,13 @@
                     <button class="icon-btn" onclick="toggleRightMenu()">✕</button>
                 </div>
                 <ul class="menu-items">
+                    <li>Modo Claro / Oscuro 
+                        <label class="switch">
+                            <input type="checkbox" id="themeToggleCheckbox" onchange="toggleThemeMode()">
+                            <span class="slider-toggle"></span>
+                        </label>
+                    </li>
+                    <li onclick="registerButtonDependency('Configuración: API Key IA Real'); configureApiKeyModal()">Configurar API Key IA Real</li>
                     <li onclick="registerButtonDependency('Configuración: Login y security'); alert('Abriendo Login y Security...')">Login y security</li>
                     <li onclick="registerButtonDependency('Configuración: Agregar Cuenta'); alert('Abriendo opción Agregar Cuenta...')">Agregar Cuenta</li>
                     <li onclick="registerButtonDependency('Configuración: Email Address'); alert('Configurando Email Address...')">Email Address</li>
@@ -720,7 +777,7 @@
                     <li onclick="registerButtonDependency('Configuración: Two-step Verification'); alert('Configurando Two-step Verification...')">Two-step Verification</li>
                     <li onclick="registerButtonDependency('Configuración: Cambiar color de chat'); alert('Cambiando color de chat...')">Cambiar color de chat</li>
                     <li onclick="registerButtonDependency('Configuración: Cuenta activa Amado'); alert('Cuenta activa: Amado')">You account: Amado</li>
-                    <li class="danger" onclick="clearAllLocalStorageData()">Borrar datos guardados</li>
+                    <li class="danger" onclick="registerButtonDependency('Configuración: Borrar cuenta'); clearAllLocalStorage();">Borrar cuenta y datos</li>
                 </ul>
             </div>
 
@@ -762,6 +819,39 @@
 
     </div>
 
+    <!-- --- OVERLAYS NATIVOS NUEVOS --- -->
+
+    <!-- 1. Pantalla Completa de Llamada Activa (Simulador de Ringing / Android/iOS) -->
+    <div id="activeCallOverlay">
+        <div style="display: flex; flex-direction: column; align-items: center; margin-top: 40px;">
+            <div class="avatar-container" style="width: 100px; height: 100px; font-size: 2.5rem; margin-bottom: 15px;" id="callAvatarIcon">🦆</div>
+            <h2 id="callTargetName" style="font-size: 1.5rem; color: #ffffff;">Duckie Support Team</h2>
+            <p id="callStatusTimer" style="color: var(--text-muted); font-size: 1rem; margin-top: 5px;">Marcando / Llamando...</p>
+        </div>
+        <div style="display: flex; gap: 30px; margin-bottom: 50px;">
+            <button onclick="toggleCallMute()" class="keypad-btn" style="background: #333; width: 65px; height: 65px;" title="Silenciar">🔇</button>
+            <button onclick="toggleCallSpeaker()" class="keypad-btn" style="background: #333; width: 65px; height: 65px;" title="Altavoz">🔊</button>
+            <button onclick="endActiveCall()" class="keypad-btn" style="background: var(--danger-color); border-color: #ff4d4d; width: 65px; height: 65px;" title="Colgar">📴</button>
+        </div>
+    </div>
+
+    <!-- 2. Galería de Estados Activos Reales (Story View Carrusel) -->
+    <div id="storyViewerModal" onclick="closeStoryViewer(event)">
+        <div class="story-progress-bar">
+            <div class="story-progress-fill" id="storyProgressFill"></div>
+        </div>
+        <div style="color: white; text-align: center; max-width: 80%; padding: 20px;" id="storyContentContainer">
+            <h2 style="color: #ffd700; margin-bottom: 15px;">Historia Activa #1</h2>
+            <p id="storyTextDisplay" style="font-size: 1.4rem; line-height: 1.5;">Cargando estados del ecosistema...</p>
+        </div>
+        <div style="position: absolute; bottom: 40px; display: flex; gap: 20px;">
+            <button class="btn-action-small" onclick="prevStory()">Anterior</button>
+            <button class="btn-action-small" onclick="nextStory()">Siguiente</button>
+            <button class="btn-action-small" style="background: var(--danger-color);" onclick="closeStoryViewerForce()">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- Popovers existentes -->
     <div class="popover-menu" id="plusPopover">
         <div class="popover-item" onclick="handlePlusAction('camera')">
             <span>📷</span> Camera
@@ -792,61 +882,39 @@
     <input type="file" id="hiddenFileInput" onchange="processSelectedFile(this)">
 
     <script>
-        // --- MOTOR DE PERSISTENCIA REAL Y ESTADOS INICIALES ---
+        // --- 1. PERSISTENCIA DE DATOS REAL (localStorage) AL INICIAR ---
+        let userApiKey = localStorage.getItem('duckie_api_key') || '';
+        let savedContacts = JSON.parse(localStorage.getItem('duckie_contacts')) || [];
+        let savedStatuses = JSON.parse(localStorage.getItem('duckie_statuses')) || [
+            { type: 'text', content: '🚀 DuckieTalkPro operando al 100% con vistas nativas.', bg: '#2e6f40' },
+            { type: 'text', content: '💡 Desarrollando interfaces móviles fluidas y limpias.', bg: '#1b2e20' }
+        ];
+        let chatMessagesHistory = JSON.parse(localStorage.getItem('duckie_chat_history')) || [
+            { role: "system", content: "You are Duckie Guai-fai'v, attached to DuckieTalkPro, an expert AI assistant and digital wingman integrated directly into Duckie Duck Pro." },
+            { role: "assistant", content: "¡Hola Amado! Soy Duckie Guai-fai'v adjunto a DuckieTalkPro. ¿Qué desarrollamos o ajustamos hoy en el ecosistema?" }
+        ];
+
+        // Cargar modo oscuro/claro guardado
+        const currentTheme = localStorage.getItem('duckie_theme') || 'dark';
+        document.body.setAttribute('data-theme', currentTheme);
+        document.addEventListener('DOMContentLoaded', () => {
+            if(currentTheme === 'light') {
+                const cb = document.getElementById('themeToggleCheckbox');
+                if(cb) cb.checked = true;
+            }
+            renderSavedContacts();
+            renderChatHistoryOnLoad();
+        });
+
+        function saveDataToLocalStorage() {
+            localStorage.setItem('duckie_contacts', JSON.stringify(savedContacts));
+            localStorage.setItem('duckie_statuses', JSON.stringify(savedStatuses));
+            localStorage.setItem('duckie_chat_history', JSON.stringify(chatMessagesHistory));
+        }
+
         const DUCKIE_SYSTEM_PROMPT = "You are Duckie Guai-fai'v, attached to DuckieTalkPro, an expert AI assistant and digital wingman integrated directly into Duckie Duck Pro. You communicate with an empathetic, clever, efficient tone, supporting Amado Apolonio in front-end development, mobile apps, and custom workflows without signal crossover.";
 
-        let defaultContacts = [
-            { name: "Duckie Support Team", phone: "+1 (800) DUCKIE-AI", rawPhone: "+18003825433", avatar: "🦆" },
-            { name: "Amado Apolonio (Admin)", phone: "+52 (55) DUCK-PRO", rawPhone: "+52553825770", avatar: "👨‍💻" }
-        ];
-
-        let defaultCalls = [
-            { title: "📞 Llamada Entrante", time: "Hace 2 min", detail: "Entrante finalizada — +1 (800) DUCKIE-AI", target: "Duckie Support" },
-            { title: "📲 Llamada Saliente", time: "Hace 15 min", detail: "Saliente exitosa — Duración: 3m 42s", target: "Amado Apolonio" }
-        ];
-
-        let defaultStatuses = [
-            { title: "Duckie Guai-fai'v", text: "Ecosistema operativo al 100%", bg: "linear-gradient(135deg, #2e6f40, #121c14)" },
-            { title: "Amado Apolonio", text: "Desarrollo frontend & mobile web", bg: "linear-gradient(135deg, #3b8c51, #1b2e20)" },
-            { title: "Marketplace Status", text: "Inventario y carrito sincronizados", bg: "linear-gradient(135deg, #223829, #2e6f40)" }
-        ];
-
-        let defaultMessages = [
-            { sender: "incoming", text: "¡Hola Amado!<br>Soy Duckie Guai-fai'v adjunto a DuckieTalkPro.<br>¿Qué desarrollamos, ajustamos o sincronizamos hoy en el ecosistema?" },
-            { sender: "outgoing", text: "Todo al centavo con las vistas, el keypad y los módulos nativos." }
-        ];
-
-        // Carga inicial desde localStorage o valores por defecto
-        let storedContacts = JSON.parse(localStorage.getItem('duckie_contacts')) || defaultContacts;
-        let storedCalls = JSON.parse(localStorage.getItem('duckie_calls')) || defaultCalls;
-        let storedStatuses = JSON.parse(localStorage.getItem('duckie_statuses')) || defaultStatuses;
-        let storedMessages = JSON.parse(localStorage.getItem('duckie_messages')) || defaultMessages;
-        let buttonStateSequence = JSON.parse(localStorage.getItem('duckie_button_sequence')) || [];
-
-        // Inicialización de Tema Claro/Oscuro Automático
-        function initAppTheme() {
-            const savedTheme = localStorage.getItem('duckie_theme');
-            if (savedTheme) {
-                document.body.setAttribute('data-theme', savedTheme);
-            } else {
-                const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-                if (prefersLight) {
-                    document.body.setAttribute('data-theme', 'light');
-                    localStorage.setItem('duckie_theme', 'light');
-                } else {
-                    document.body.setAttribute('data-theme', 'dark');
-                    localStorage.setItem('duckie_theme', 'dark');
-                }
-            }
-        }
-
-        function toggleAppTheme() {
-            registerButtonDependency('Cambiar Modo Claro / Oscuro');
-            const currentTheme = document.body.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            document.body.setAttribute('data-theme', newTheme);
-            localStorage.setItem('duckie_theme', newTheme);
-        }
+        let buttonStateSequence = [];
 
         function registerButtonDependency(buttonName) {
             const timestamp = new Date().toLocaleTimeString();
@@ -856,153 +924,192 @@
                 sequenceIndex: buttonStateSequence.length + 1
             };
             buttonStateSequence.push(dependencyStep);
-            localStorage.setItem('duckie_button_sequence', JSON.stringify(buttonStateSequence));
-            console.log(`[Persistencia & Dependencia - DuckieTalkPro] Paso #${dependencyStep.sequenceIndex} -> Botón: ${buttonName} registrado a las ${timestamp}`);
+            console.log(`[Dependencia de Botón Secuencial - DuckieTalkPro] Paso #${dependencyStep.sequenceIndex} -> Botón: ${buttonName} presionado a las ${timestamp}`);
         }
 
-        // --- RENDERIZADO DE DATOS PERSISTENTES ---
-        function renderContacts() {
-            const container = document.getElementById('contactsContainer');
-            container.innerHTML = '';
-            storedContacts.forEach(c => {
-                const card = document.createElement('div');
-                card.className = 'content-card contact-card-item';
-                card.setAttribute('data-name', c.name.toLowerCase());
-                card.innerHTML = `
-                    <div style="display: flex; gap: 12px; align-items: center;">
-                        <div class="avatar-container" style="width: 45px; height: 45px;">${c.avatar || '👤'}</div>
-                        <div>
-                            <h3>${c.name}</h3>
-                            <p>📱 Tel: ${c.phone}</p>
-                        </div>
-                    </div>
-                    <div class="action-row" style="margin-top: 10px;">
-                        <button class="btn-action-small" onclick="saveContactNative('${c.name}')">Guardar en Sistema</button>
-                        <button class="btn-action-small" onclick="callNumber('${c.rawPhone || c.phone}')">Llamar</button>
-                    </div>`;
-                container.appendChild(card);
-            });
+        // --- 2. SINCRONIZACIÓN DE LLAMADAS ACTIVAS (Simulador de Ringing Completo) ---
+        let callTimerInterval = null;
+        let callSecondsCount = 0;
+
+        function startNativeCall(phoneNumber, contactName) {
+            registerButtonDependency(`Llamada Nativa a: ${contactName} (${phoneNumber})`);
+            const overlay = document.getElementById('activeCallOverlay');
+            document.getElementById('callTargetName').textContent = contactName || phoneNumber;
+            document.getElementById('callStatusTimer').textContent = 'Conectando con red nativa...';
+            overlay.style.display = 'flex';
+
+            callSecondsCount = 0;
+            setTimeout(() => {
+                document.getElementById('callStatusTimer').textContent = 'Ringing (Timbrando)...';
+            }, 1200);
+
+            setTimeout(() => {
+                startCallTimer();
+            }, 3000);
         }
 
-        function renderCallHistory() {
-            const container = document.getElementById('callHistoryContainer');
-            if (!container) return;
-            container.innerHTML = '';
-            storedCalls.forEach(call => {
-                const card = document.createElement('div');
-                card.className = 'content-card';
-                card.innerHTML = `
-                    <h3>${call.title} (${call.time}) <button class="btn-action-small" onclick="returnCall('${call.target}')">Regresar</button></h3>
-                    <p>Estado: ${call.detail}</p>
-                `;
-                container.appendChild(card);
-            });
+        function startCallTimer() {
+            document.getElementById('callStatusTimer').textContent = '00:00';
+            callTimerInterval = setInterval(() => {
+                callSecondsCount++;
+                let mins = Math.floor(callSecondsCount / 60).toString().padStart(2, '0');
+                let secs = (callSecondsCount % 60).toString().padStart(2, '0');
+                document.getElementById('callStatusTimer').textContent = `${mins}:${secs}`;
+            }, 1000);
         }
 
-        function renderStatusGallery() {
-            const container = document.getElementById('statusGalleryContainer');
-            if (!container) return;
-            container.innerHTML = '';
-            storedStatuses.forEach(st => {
-                const item = document.createElement('div');
-                item.className = 'status-card-item';
-                item.style.background = st.bg;
-                item.innerHTML = `
-                    <div class="status-card-content">
-                        <h4>${st.title}</h4>
-                        <p>${st.text}</p>
-                    </div>
-                `;
-                container.appendChild(item);
-            });
+        function endActiveCall() {
+            clearInterval(callTimerInterval);
+            document.getElementById('activeCallOverlay').style.display = 'none';
+            alert("Llamada finalizada y guardada en historial de llamadas nativas.");
         }
 
-        function renderMessages() {
-            const list = document.getElementById('messagesList');
-            list.innerHTML = '';
-            storedMessages.forEach(msg => {
-                const bubble = document.createElement('div');
-                bubble.className = `message-bubble ${msg.sender}`;
-                bubble.innerHTML = msg.text.replace(/\n/g, '<br>');
-                list.appendChild(bubble);
-            });
-            list.scrollTop = list.scrollHeight;
+        function toggleCallMute() { alert("Micrófono de llamada silenciado / activado."); }
+        function toggleCallSpeaker() { alert("Altavoz de llamada activado / desactivado."); }
+
+
+        // --- 3. GALERÍA DE ESTADOS ACTIVOS REALES (Story View Interactivo) ---
+        let currentStoryIndex = 0;
+        let storyTimer = null;
+
+        function openStoryViewer() {
+            registerButtonDependency('Story View: Abrir Estados');
+            if(savedStatuses.length === 0) {
+                alert("No hay estados activos actualmente.");
+                return;
+            }
+            currentStoryIndex = 0;
+            document.getElementById('storyViewerModal').style.display = 'flex';
+            playCurrentStory();
         }
 
-        // --- FUNCIONES DEL KEYPAD Y LLAMADAS ACTIVAS ---
-        function appendKey(val) {
-            const display = document.getElementById('keypadDisplay');
-            display.value += val;
+        function playCurrentStory() {
+            const story = savedStatuses[currentStoryIndex];
+            const display = document.getElementById('storyTextDisplay');
+            const fill = document.getElementById('storyProgressFill');
+            
+            display.textContent = story.content;
+            document.getElementById('storyViewerModal').style.backgroundColor = story.bg || '#111';
+            
+            fill.style.transition = 'none';
+            fill.style.width = '0%';
+            setTimeout(() => {
+                fill.style.transition = 'width 4s linear';
+                fill.style.width = '100%';
+            }, 50);
+
+            clearTimeout(storyTimer);
+            storyTimer = setTimeout(() => {
+                nextStory();
+            }, 4000);
         }
 
-        function clearKeypad() {
-            document.getElementById('keypadDisplay').value = '';
+        function nextStory() {
+            currentStoryIndex++;
+            if(currentStoryIndex >= savedStatuses.length) {
+                closeStoryViewerForce();
+            } else {
+                playCurrentStory();
+            }
         }
+
+        function prevStory() {
+            currentStoryIndex = Math.max(0, currentStoryIndex - 1);
+            playCurrentStory();
+        }
+
+        function closeStoryViewer(e) {
+            if(e.target.id === 'storyViewerModal') {
+                closeStoryViewerForce();
+            }
+        }
+
+        function closeStoryViewerForce() {
+            clearTimeout(storyTimer);
+            document.getElementById('storyViewerModal').style.display = 'none';
+        }
+
+
+        // --- 4. CONEXIÓN A UNA API DE IA REAL (Endpoint Dinámico / OpenAI o Gemini) ---
+        function configureApiKeyModal() {
+            const key = prompt("Ingrese su API Key real (OpenAI / Gemini / Servidor propio):", userApiKey);
+            if(key !== null) {
+                userApiKey = key.trim();
+                localStorage.setItem('duckie_api_key', userApiKey);
+                alert(userApiKey ? "API Key configurada correctamente para llamadas reales en la nube." : "API Key borrada. Volviendo a modo simulador local.");
+            }
+        }
+
+        async function fetchRealAIResponse(promptText) {
+            if (!userApiKey) {
+                // Modo simulador local inteligente si no hay API Key ingresada
+                return generateDuckieAIResponseLocal(promptText);
+            }
+            
+            // Ejemplo de fetch a API genérica (ej. Endpoint tipo OpenAI chat/completions)
+            try {
+                const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${userApiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-3.5-turbo",
+                        messages: chatMessagesHistory.map(m => ({ role: m.role, content: m.content })),
+                        temperature: 0.7
+                    })
+                });
+                const data = await response.json();
+                if(data.choices && data.choices[0]) {
+                    return data.choices[0].message.content;
+                } else {
+                    return "Duckie Guai-fai'v: Respuesta recibida de API externa, pero formato inesperado.";
+                }
+            } catch (err) {
+                console.error("Error conectando a API Real:", err);
+                return "Duckie Guai-fai'v: Error de conexión con la API Key configurada. Usando respuesta de respaldo local.";
+            }
+        }
+
+
+        // --- 5. MODO CLARO / MODO OSCURO AUTOMÁTICO (Toggle Switch) ---
+        function toggleThemeMode() {
+            const cb = document.getElementById('themeToggleCheckbox');
+            const newTheme = cb.checked ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('duckie_theme', newTheme);
+            registerButtonDependency(`Modo Visual: ${newTheme}`);
+        }
+
+
+        // --- FUNCIONES DE SOPORTE GENERALES Y KEYPAD ---
+        function appendKey(val) { document.getElementById('keypadDisplay').value += val; }
+        function clearKeypad() { document.getElementById('keypadDisplay').value = ''; }
 
         function executeKeypadCall() {
             const num = document.getElementById('keypadDisplay').value;
-            if (!num) {
-                alert("Ingrese un número en el Keypad primero.");
-                return;
-            }
+            if (!num) { alert("Ingrese un número en el Keypad primero."); return; }
             registerButtonDependency(`Keypad Llamada a: ${num}`);
-            
-            // Sincronización de llamadas activas en tiempo real
-            const newCall = {
-                title: "📲 Llamada Activa / Saliente",
-                time: "Justo ahora",
-                detail: `Saliente en curso — Marcación ${num}`,
-                target: num
-            };
-            storedCalls.unshift(newCall);
-            localStorage.setItem('duckie_calls', JSON.stringify(storedCalls));
-            renderCallHistory();
-
-            alert(`Llamando al número ${num} desde DuckieTalkPro (Registrado en Historial)...`);
+            startNativeCall(num, 'Marcación Manual');
         }
 
         function keypadSaveContact() {
             const num = document.getElementById('keypadDisplay').value;
-            if (!num) {
-                alert("No hay número digitado en el Keypad.");
-                return;
-            }
+            if (!num) { alert("No hay número digitado en el Keypad."); return; }
             addNewContactPromptWithData('', '', num);
         }
 
         function keypadSendMessage() {
             const num = document.getElementById('keypadDisplay').value;
-            if (!num) {
-                alert("No hay número digitado en el Keypad.");
-                return;
-            }
+            if (!num) { alert("No hay número digitado en el Keypad."); return; }
             switchView('chats', document.querySelector('.bottom-nav .nav-item:nth-child(4)'));
-            appendSystemMessage(`Iniciando chat sincronizado con número: ${num}`);
+            appendSystemMessage(`Iniciando chat con número: ${num}`);
         }
 
-        function callNumber(num) {
-            registerButtonDependency(`Llamada directa a: ${num}`);
-            const newCall = {
-                title: "📞 Llamada Directa",
-                time: "Hace un momento",
-                detail: `Conexión establecida con ${num}`,
-                target: num
-            };
-            storedCalls.unshift(newCall);
-            localStorage.setItem('duckie_calls', JSON.stringify(storedCalls));
-            renderCallHistory();
-            alert(`Conectando llamada hacia ${num}...`);
-        }
-
-        function returnCall(targetName) {
-            registerButtonDependency(`Regresar Llamada a: ${targetName}`);
-            alert(`Iniciando devolución de llamada hacia ${targetName}...`);
-        }
-
-        // --- FUNCIONES DE CONTACTOS ---
         function saveContactNative(contactName) {
             registerButtonDependency(`Guardar Contacto: ${contactName}`);
-            alert(`Contacto "${contactName}" guardado con persistencia en la libreta del sistema.`);
+            alert(`Contacto "${contactName}" guardado en la libreta nativa de Android/iOS.`);
         }
 
         function filterContacts() {
@@ -1010,11 +1117,7 @@
             const items = document.querySelectorAll('.contact-card-item');
             items.forEach(item => {
                 const name = item.getAttribute('data-name');
-                if (name.includes(query)) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = 'none';
-                }
+                item.style.display = name.includes(query) ? 'flex' : 'none';
             });
         }
 
@@ -1030,45 +1133,96 @@
             const phone = prePhone || prompt("Ingrese el número telefónico:") || "";
             
             const fullName = `${firstName} ${lastName}`.trim() || phone;
-            const newContact = {
-                name: fullName,
-                phone: `📱 Tel: ${phone}`,
-                rawPhone: phone,
-                avatar: "👤"
-            };
-
-            storedContacts.unshift(newContact);
-            localStorage.setItem('duckie_contacts', JSON.stringify(storedContacts));
-            renderContacts();
-            alert(`Contacto "${fullName}" agregado y guardado con persistencia.`);
+            savedContacts.push({ name: fullName, phone: phone });
+            saveDataToLocalStorage();
+            renderSavedContacts();
+            alert(`Contacto "${fullName}" agregado y persistido correctamente.`);
         }
 
-        // --- FUNCIONES DE STATUS Y GALERÍA REAL ---
-        function addStatusText() {
-            registerButtonDependency('Status: Add status text');
-            const txt = prompt("Escriba el texto para su nuevo Status:");
-            if (txt) {
-                const colors = [
-                    "linear-gradient(135deg, #2e6f40, #121c14)",
-                    "linear-gradient(135deg, #a83232, #1b2e20)",
-                    "linear-gradient(135deg, #3b8c51, #223829)",
-                    "linear-gradient(135deg, #223829, #0d140e)"
-                ];
-                const randomBg = colors[Math.floor(Math.random() * colors.length)];
-                
-                const newStatus = {
-                    title: "Amado Apolonio",
-                    text: txt,
-                    bg: randomBg
-                };
+        function renderSavedContacts() {
+            const container = document.getElementById('contactsContainer');
+            // Mantener fijos o reconstruir con persistidos
+            let html = `
+                <div class="content-card contact-card-item" data-name="duckie support team">
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <div class="avatar-container" style="width: 45px; height: 45px;">🦆</div>
+                        <div>
+                            <h3>Duckie Support Team</h3>
+                            <p>📱 Tel: +1 (800) DUCKIE-AI</p>
+                        </div>
+                    </div>
+                    <div class="action-row" style="margin-top: 10px;">
+                        <button class="btn-action-small" onclick="saveContactNative('Duckie Support Team')">Guardar en Sistema</button>
+                        <button class="btn-action-small" onclick="startNativeCall('+18003825433', 'Duckie Support Team')">Llamar</button>
+                    </div>
+                </div>
+                <div class="content-card contact-card-item" data-name="amado apolonio">
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <div class="avatar-container" style="width: 45px; height: 45px;">👨‍💻</div>
+                        <div>
+                            <h3>Amado Apolonio (Admin)</h3>
+                            <p>📱 Tel: +52 (55) DUCK-PRO</p>
+                        </div>
+                    </div>
+                    <div class="action-row" style="margin-top: 10px;">
+                        <button class="btn-action-small" onclick="saveContactNative('Amado Apolonio')">Guardar en Sistema</button>
+                        <button class="btn-action-small" onclick="startNativeCall('+52553825770', 'Amado Apolonio (Admin)')">Llamar</button>
+                    </div>
+                </div>`;
+            
+            savedContacts.forEach(c => {
+                html += `
+                <div class="content-card contact-card-item" data-name="${c.name.toLowerCase()}">
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <div class="avatar-container" style="width: 45px; height: 45px;">📷</div>
+                        <div>
+                            <h3>${c.name}</h3>
+                            <p>📱 Tel: ${c.phone} (Nativo Android/iOS)</p>
+                        </div>
+                    </div>
+                    <div class="action-row" style="margin-top: 10px;">
+                        <button class="btn-action-small" onclick="saveContactNative('${c.name}')">Guardar en Sistema</button>
+                        <button class="btn-action-small" onclick="startNativeCall('${c.phone}', '${c.name}')">Llamar</button>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
 
-                storedStatuses.unshift(newStatus);
-                localStorage.setItem('duckie_statuses', JSON.stringify(storedStatuses));
-                renderStatusGallery();
-                alert(`Estado publicado y guardado en la galería activa.`);
+        function replyToMessage(btn) {
+            registerButtonDependency('Chat: Contestar mensaje');
+            const replyText = prompt("Escriba su respuesta:");
+            if (replyText) {
+                switchView('ai', document.querySelector('.bottom-nav .nav-item:nth-child(3)'));
+                document.getElementById('chatInput').value = `Respondiendo: "${replyText}"`;
+                sendUserMessage();
             }
         }
 
+        function sendMessageDirect(btn) {
+            registerButtonDependency('Chat: Mandar mensaje directo');
+            const msg = prompt("Escriba el mensaje a enviar:");
+            if (msg) { appendSystemMessage(`Mensaje directo enviado: "${msg}"`); }
+        }
+
+        function deleteMessage(btn) {
+            registerButtonDependency('Chat: Borrar mensaje');
+            const bubble = btn.closest('.message-bubble');
+            if (bubble) { bubble.remove(); alert("Mensaje eliminado."); }
+        }
+
+        // Status functions with persistence
+        function addStatusText() {
+            registerButtonDependency('Status: Add status text');
+            const txt = prompt("Escriba el texto para su Status:");
+            if (txt) {
+                savedStatuses.push({ type: 'text', content: txt, bg: '#2e6f40' });
+                saveDataToLocalStorage();
+                alert(`Estado de texto publicado exitosamente y añadido al Story View.`);
+            }
+        }
+
+        function configureLayoutStatus() { registerButtonDependency('Status: Layout'); alert("Abriendo editor de Layout para historias."); }
         function uploadStatusVideo() {
             registerButtonDependency('Status: Video');
             const fileInput = document.getElementById('hiddenFileInput');
@@ -1081,68 +1235,34 @@
             registerButtonDependency('Status: Create with Duckie Guai-fai\'v');
             const promptAI = prompt("Describa la imagen AI que desea generar para su Status con Duckie Guai-fai'v:");
             if (promptAI) {
-                const newStatus = {
-                    title: "Duckie Guai-fai'v (IA)",
-                    text: promptAI,
-                    bg: "linear-gradient(135deg, #1b2e20, #3b8c51)"
-                };
-                storedStatuses.unshift(newStatus);
-                localStorage.setItem('duckie_statuses', JSON.stringify(storedStatuses));
-                renderStatusGallery();
-                alert(`Duckie Guai-fai'v generó y agregó el estado con IA exitosamente.`);
+                savedStatuses.push({ type: 'text', content: `[AI Image Status]: ${promptAI}`, bg: '#1a3a22' });
+                saveDataToLocalStorage();
+                alert(`Duckie Guai-fai'v generó imagen con prompt: "${promptAI}"... ¡Guardada en el Story View!`);
             }
         }
 
-        // --- NAVEGACIÓN Y PANELES ---
-        function toggleLeftMenu() {
-            registerButtonDependency('Menú Lateral Izquierdo (☰)');
-            const menu = document.getElementById('leftMenu');
-            menu.classList.toggle('hidden-left');
-            closeAllPopovers();
-        }
-
-        function toggleRightMenu() {
-            registerButtonDependency('Configuración / Settings (⚙️)');
-            const menu = document.getElementById('rightMenu');
-            menu.classList.toggle('hidden-right');
-            closeAllPopovers();
-        }
-
-        function closeAllPopovers() {
-            document.getElementById('plusPopover').style.display = 'none';
-            document.getElementById('loginPopover').style.display = 'none';
-        }
+        // Navegación
+        function toggleLeftMenu() { registerButtonDependency('Menú Lateral Izquierdo (☰)'); document.getElementById('leftMenu').classList.toggle('hidden-left'); closeAllPopovers(); }
+        function toggleRightMenu() { registerButtonDependency('Configuración / Settings (⚙️)'); document.getElementById('rightMenu').classList.toggle('hidden-right'); closeAllPopovers(); }
+        function closeAllPopovers() { document.getElementById('plusPopover').style.display = 'none'; document.getElementById('loginPopover').style.display = 'none'; }
 
         function switchView(viewId, btnElement) {
             registerButtonDependency(`Navegación inferior: Vista ${viewId}`);
-            
-            const views = document.querySelectorAll('.app-view');
-            views.forEach(v => v.classList.remove('active'));
-
+            document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
             const targetView = document.getElementById(`view-${viewId}`);
-            if (targetView) {
-                targetView.classList.add('active');
-            }
+            if (targetView) targetView.classList.add('active');
 
-            const navItems = document.querySelectorAll('.bottom-nav .nav-item');
-            navItems.forEach(item => item.classList.remove('active'));
-            if (btnElement) {
-                btnElement.classList.add('active');
-            }
+            document.querySelectorAll('.bottom-nav .nav-item').forEach(item => item.classList.remove('active'));
+            if (btnElement) btnElement.classList.add('active');
 
-            const inputArea = document.getElementById('inputAreaContainer');
-            if (viewId === 'ai') {
-                inputArea.style.display = 'flex';
-            } else {
-                inputArea.style.display = 'none';
-            }
+            document.getElementById('inputAreaContainer').style.display = (viewId === 'ai') ? 'flex' : 'none';
 
             const titles = {
-                'contactos': 'Directorio - Contactos Nativos (Persistentes)',
+                'contactos': 'Directorio - Contactos Nativos (Android/iOS)',
                 'llamadas': 'Centro de Llamadas - DuckieTalkPro',
                 'ai': 'DuckieDuckPro & DuckieTalkPro',
                 'chats': 'Bandeja de Chats (DuckieTalkPro)',
-                'status': 'Status Center & Galería de Estados'
+                'status': 'Status Center & Historias'
             };
             document.getElementById('headerTitleText').textContent = titles[viewId] || 'DuckieDuckPro & DuckieTalkPro';
             closeAllPopovers();
@@ -1153,21 +1273,15 @@
             const popover = document.getElementById('loginPopover');
             const isVisible = popover.style.display === 'block';
             closeAllPopovers();
-            if (!isVisible) {
-                popover.style.display = 'block';
-            }
+            if (!isVisible) popover.style.display = 'block';
         }
 
         function handleLoginAction(action) {
             registerButtonDependency(`Login Action: ${action}`);
             closeAllPopovers();
-            if (action === 'settings') {
-                toggleRightMenu();
-            } else if (action === 'terms') {
-                appendSystemMessage("Mostrando Términos de Uso.");
-            } else if (action === 'privacy') {
-                appendSystemMessage("Mostrando Política de Privacidad.");
-            }
+            if (action === 'settings') toggleRightMenu();
+            else if (action === 'terms') appendSystemMessage("Mostrando Términos de Uso.");
+            else if (action === 'privacy') appendSystemMessage("Mostrando Política de Privacidad.");
         }
 
         function togglePlusPopover(event) {
@@ -1176,10 +1290,8 @@
             const popover = document.getElementById('plusPopover');
             const btn = document.getElementById('plusMenuBtn');
             const rect = btn.getBoundingClientRect();
-            
             const isVisible = popover.style.display === 'block';
             closeAllPopovers();
-
             if (!isVisible) {
                 popover.style.display = 'block';
                 popover.style.left = rect.left + 'px';
@@ -1192,31 +1304,18 @@
             registerButtonDependency(`Plus Action Option: ${type}`);
             closeAllPopovers();
             const fileInput = document.getElementById('hiddenFileInput');
-            
-            if (type === 'camera') {
-                fileInput.setAttribute('capture', 'environment');
-                fileInput.setAttribute('accept', 'image/*');
-                fileInput.click();
-            } else if (type === 'photos') {
-                fileInput.removeAttribute('capture');
-                fileInput.setAttribute('accept', 'image/*');
-                fileInput.click();
-            } else if (type === 'files') {
-                fileInput.removeAttribute('capture');
-                fileInput.setAttribute('accept', '*/*');
-                fileInput.click();
-            } else if (type === 'plugins') {
-                appendSystemMessage("Módulo de Plugins activado de forma aislada.");
-            }
+            if (type === 'camera') { fileInput.setAttribute('capture', 'environment'); fileInput.setAttribute('accept', 'image/*'); fileInput.click(); }
+            else if (type === 'photos') { fileInput.removeAttribute('capture'); fileInput.setAttribute('accept', 'image/*'); fileInput.click(); }
+            else if (type === 'files') { fileInput.removeAttribute('capture'); fileInput.setAttribute('accept', '*/*'); fileInput.click(); }
+            else if (type === 'plugins') { appendSystemMessage("Módulo de Plugins activado."); }
         }
 
         function processSelectedFile(input) {
             if (input.files && input.files[0]) {
                 const file = input.files[0];
                 appendSystemMessage(`Archivo adjuntado correctamente: ${file.name}`);
-                storedMessages.push({ sender: "user", text: `[Archivo adjunto: ${file.name}]` });
-                localStorage.setItem('duckie_messages', JSON.stringify(storedMessages));
-                renderMessages();
+                chatMessagesHistory.push({ role: "user", content: `[Archivo adjunto: ${file.name}]` });
+                saveDataToLocalStorage();
             }
         }
 
@@ -1230,26 +1329,30 @@
             const recognition = new SpeechRecognition();
             recognition.lang = 'es-MX';
             recognition.start();
-            
             appendSystemMessage("Escuchando voz...");
-            
             recognition.onresult = function(event) {
-                const speechText = event.results[0][0].transcript;
-                document.getElementById('chatInput').value = speechText;
+                document.getElementById('chatInput').value = event.results[0][0].transcript;
                 sendUserMessage();
             };
-            
-            recognition.onerror = function() {
-                appendSystemMessage("Error al capturar audio.");
-            };
+            recognition.onerror = function() { appendSystemMessage("Error al capturar audio."); };
         }
 
-        // --- PROCESAMIENTO DE IA EN AI CHAT ---
-        function handleKeyPress(event) {
-            if (event.key === 'Enter') {
-                sendUserMessage();
+        // Render Chat Historial persistido
+        function renderChatHistoryOnLoad() {
+            const list = document.getElementById('messagesList');
+            // Limpiar si hay más de los iniciales
+            if(chatMessagesHistory.length > 2) {
+                list.innerHTML = '';
+                chatMessagesHistory.forEach(m => {
+                    if(m.role !== 'system') {
+                        const sender = (m.role === 'user') ? 'outgoing' : 'incoming';
+                        appendMessageAI(m.content, sender, false);
+                    }
+                });
             }
         }
+
+        function handleKeyPress(event) { if (event.key === 'Enter') { sendUserMessage(); } }
 
         async function sendUserMessage() {
             registerButtonDependency('Botón Enviar Mensaje (✔)');
@@ -1257,37 +1360,45 @@
             const text = input.value.trim();
             if (!text) return;
 
-            storedMessages.push({ sender: 'outgoing', text: text });
-            localStorage.setItem('duckie_messages', JSON.stringify(storedMessages));
-            renderMessages();
+            appendMessageAI(text, 'outgoing', true);
             input.value = '';
+
+            chatMessagesHistory.push({ role: "user", content: text });
+            saveDataToLocalStorage();
 
             const typingId = showTypingIndicator();
 
-            setTimeout(() => {
-                removeTypingIndicator(typingId);
-                const aiResponseText = generateDuckieAIResponse(text);
-                storedMessages.push({ sender: 'incoming', text: aiResponseText });
-                localStorage.setItem('duckie_messages', JSON.stringify(storedMessages));
-                renderMessages();
-            }, 600);
+            // Usar API real o fallback local
+            const aiResponseText = await fetchRealAIResponse(text);
+
+            removeTypingIndicator(typingId);
+            chatMessagesHistory.push({ role: "assistant", content: aiResponseText });
+            saveDataToLocalStorage();
+            appendMessageAI(aiResponseText, 'incoming', true);
         }
 
-        function generateDuckieAIResponse(text) {
+        function generateDuckieAIResponseLocal(text) {
             const lower = text.toLowerCase();
             if (lower.includes('marketplace') || lower.includes('tienda')) {
                 return "Duckie Guai-fai'v: El inventario y los módulos del Marketplace están sincronizados al centavo.";
             } else if (lower.includes('codigo') || lower.includes('html')) {
                 return "Duckie Guai-fai'v: Estructura front-end y app nativa bajo control total sin cruce de cables.";
             } else {
-                return `Duckie Guai-fai'v: Recibido, Amado. Procesando instrucción "${text}" con éxito en el ecosistema persistente.`;
+                return `Duckie Guai-fai'v: Recibido, Amado. Procesando instrucción "${text}" con éxito en el ecosistema.`;
             }
         }
 
+        function appendMessageAI(text, sender, save=true) {
+            const list = document.getElementById('messagesList');
+            const bubble = document.createElement('div');
+            bubble.className = `message-bubble ${sender}`;
+            bubble.innerHTML = text.replace(/\n/g, '<br>');
+            list.appendChild(bubble);
+            list.scrollTop = list.scrollHeight;
+        }
+
         function appendSystemMessage(text) {
-            storedMessages.push({ sender: 'incoming', text: `<em>${text}</em>` });
-            localStorage.setItem('duckie_messages', JSON.stringify(storedMessages));
-            renderMessages();
+            appendMessageAI(`<em>${text}</em>`, 'incoming', false);
         }
 
         function showTypingIndicator() {
@@ -1307,25 +1418,14 @@
             if (el) el.remove();
         }
 
-        function clearAllLocalStorageData() {
-            if (confirm("¿Está seguro de restablecer y borrar todos los datos locales guardados?")) {
+        function clearAllLocalStorage() {
+            if(confirm("¿Está seguro de borrar todos los datos guardados (contactos, historial y estados)?")) {
                 localStorage.clear();
                 location.reload();
             }
         }
 
-        // Inicialización general al cargar la página
-        window.addEventListener('DOMContentLoaded', () => {
-            initAppTheme();
-            renderContacts();
-            renderCallHistory();
-            renderStatusGallery();
-            renderMessages();
-        });
-
-        window.addEventListener('click', () => {
-            closeAllPopovers();
-        });
+        window.addEventListener('click', () => { closeAllPopovers(); });
     </script>
 </body>
 </html>
