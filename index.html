@@ -1045,8 +1045,7 @@
         // Modo simulador local si no hay API Key ingresada
         return generateDuckieAIResponseLocal(promptText);
     }
-
-    try {
+      try {
         const response = await fetch("https://duckie-backend-xgvs.onrender.com/api/chat", {
             method: "POST",
             headers: {
@@ -1054,23 +1053,25 @@
                 "Authorization": `Bearer ${userApiKey}`
             },
             body: JSON.stringify({
-                prompt: promptText,
+                prompt: promptText, // O 'message': promptText según reciba tu backend
                 history: chatMessagesHistory
             })
         });
 
         const data = await response.json();
         
-        if (data && (data.reply || data.response)) {
-            return data.reply || data.response;
+        // Validamos la respuesta que regresa tu servidor de Render (ej. data.reply o data.response)
+        if (data && (data.reply || data.response || data.message)) {
+            return data.reply || data.response || data.message;
+        } else if (data.choices && data.choices[0]) {
+            return data.choices[0].message.content;
         } else {
-            return "Respuesta de la nube recibida, pero sin contenido estructurado.";
+            return "Duckie Guai-fai'v: Respuesta recibida de Render, pero formato no reconocido.";
         }
-    } catch (error) {
-        console.error("Error al conectar con Render:", error);
-        return "Error de red con el backend de Render. Revisa la conexión.";
+    } catch (err) {
+        console.error("Error conectando a Render:", err);
+        return "Duckie Guai-fai'v: Error de conexión con el backend en la nube."
     }
-        }
 
         // --- 5. MODO CLARO / MODO OSCURO AUTOMÁTICO (Toggle Switch) ---
         function toggleThemeMode() {
