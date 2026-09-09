@@ -1199,24 +1199,30 @@
         }
 
         // --- STREAMING IA ---
-        async function fetchRealAIResponse(promptText, onChunkReceived) {
-            const fullText = generateDuckieAIResponseLocal(promptText);
-            let currentStr = "";
-            for (let i = 0; i < fullText.length; i++) {
-                currentStr += fullText[i];
-                if (onChunkReceived) onChunkReceived(currentStr);
-                await new Promise(r => setTimeout(r, 15));
-            }
-            return fullText;
+async function fetchRealAIResponse(promptText, onChunkReceived) {
+    try {
+        const response = await fetch('http://localhost:3000/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: promptText })
+        });
+        
+        const data = await response.json();
+        const fullText = data.reply || "Respuesta recibida del ecosistema.";
+        
+        // Simula el efecto de escritura fluida con la respuesta real de la IA
+        let currentStr = "";
+        for (let i = 0; i < fullText.length; i++) {
+            currentStr += fullText[i];
+            if (onChunkReceived) onChunkReceived(currentStr);
+            await new Promise(r => setTimeout(r, 15));
         }
-
-        function toggleThemeMode() {
-            const cb = document.getElementById('themeToggleCheckbox');
-            const newTheme = cb.checked ? 'light' : 'dark';
-            document.body.setAttribute('data-theme', newTheme);
-            localStorage.setItem('duckie_theme', newTheme);
-            registerButtonDependency(`Modo Visual: ${newTheme}`);
-        }
+        return fullText;
+    } catch (error) {
+        console.error("Error conectando al backend:", error);
+        return generateDuckieAIResponseLocal(promptText); // Respaldo solo si falla el servidor
+    }
+}
 
         // --- SOPORTE Y KEYPAD ---
         function appendKey(val) { document.getElementById('keypadDisplay').value += val; }
