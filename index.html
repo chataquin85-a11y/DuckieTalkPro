@@ -1045,7 +1045,7 @@
             document.getElementById('storyViewerModal').style.display = 'none';
         }
 
-        // --- API IA ---
+        // --- API IA (CON SOPORTE SSE / getReader PARA STREAMING EN TIEMPO REAL) ---
         function configureApiKeyModal() {
             const key = prompt("Ingrese su API Key real (OpenAI / Gemini / Servidor propio):", userApiKey);
             if(key !== null) {
@@ -1055,24 +1055,93 @@
             }
         }
 
-        async function fetchRealAIResponse(promptText) {
-            if (!userApiKey) { return generateDuckieAIResponseLocal(promptText); }
+        async function fetchRealAIResponse(promptText, onChunkReceived) {
+            if (!userApiKey) { 
+                // Simulación local en streaming de texto simulado si no hay API Key
+                const fullText = generateDuckieAIResponseLocal(promptText);
+                let currentStr = "";
+                for (let i = 0; i < fullText.length; i++) {
+                    currentStr += fullText[i];
+                    if (onChunkReceived) onChunkReceived(currentStr);
+                    await new Promise(r => setTimeout(r, 15));
+                }
+                return fullText;
+            }
+
             try {
                 const response = await fetch("https://duckie-backend-xgvs.onrender.com/api/chat", {
                     method: "POST",
-                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${userApiKey}` },
+                    headers: { 
+                        "Content-Type": "application/json", 
+                        "Authorization": `Bearer ${userApiKey}` 
+                    },
                     body: JSON.stringify({
                         model: "gpt-3.5-turbo",
                         messages: chatMessagesHistory.map(m => ({ role: m.role, content: m.content })),
-                        temperature: 0.7
+                        temperature: 0.7,
+                        stream: true
                     })
                 });
-                const data = await response.json();
-                if(data.choices && data.choices[0]) { return data.choices[0].message.content; }
-                else { return "Duckie Guai-fai'v: Respuesta recibida de API externa, pero formato inesperado."; }
+
+                if (!response.body) {
+                    const data = await response.json();
+                    const text = data.choices && data.choices[0] ? data.choices[0].message.content : "Respuesta inesperada.";
+                    if (onChunkReceived) onChunkReceived(text);
+                    return text;
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder("utf-8");
+                let done = false;
+                let accumulatedText = "";
+
+                while (!done) {
+                    const { value, done: readerDone } = await reader.read();
+                    done = readerDone;
+                    if (value) {
+                        const chunkValue = decoder.decode(value, { stream: true });
+                        // Procesar Server-Sent Events (SSE) stream lines (ej. data: {...})
+                        const lines = chunkValue.split("\n");
+                        for (const line of lines) {
+                            const trimmed = line.trim();
+                            if (trimmed.startsWith("data:")) {
+                                const jsonStr = trimmed.replace("data:", "").trim();
+                                if (jsonStr === "[DONE]") {
+                                    done = true;
+                                    break;
+                                }
+                                try {
+                                    const parsed = JSON.parse(jsonStr);
+                                    const contentPiece = parsed.choices?.[0]?.delta?.content || "";
+                                    if (contentPiece) {
+                                        accumulatedText += contentPiece;
+                                        if (onChunkReceived) onChunkReceived(accumulatedText);
+                                    }
+                                } catch (e) {
+                                    // Si no es JSON puro, se acumula texto plano si viniera directo
+                                    accumulatedText += jsonStr;
+                                    if (onChunkReceived) onChunkReceived(accumulatedText);
+                                }
+                            } else if (trimmed && !trimmed.startsWith(":")) {
+                                // Por si el stream devuelve texto plano directamente sinprefijo data:
+                                accumulatedText += trimmed + " ";
+                                if (onChunkReceived) onChunkReceived(accumulatedText);
+                            }
+                        }
+                    }
+                }
+
+                if (!accumulatedText) {
+                    accumulatedText = "Duckie Guai-fai'v: Respuesta completada vacía.";
+                    if (onChunkReceived) onChunkReceived(accumulatedText);
+                }
+                return accumulatedText;
+
             } catch (err) {
-                console.error("Error conectando a API Real:", err);
-                return "Duckie Guai-fai'v: Error de conexión con la API Key configurada. Usando respuesta de respaldo local.";
+                console.error("Error conectando a API Real con SSE:", err);
+                const fallbackMsg = "Duckie Guai-fai'v: Error de conexión con la API Key configurada. Usando respuesta de respaldo local.";
+                if (onChunkReceived) onChunkReceived(fallbackMsg);
+                return fallbackMsg;
             }
         }
 
@@ -1362,12 +1431,24 @@
             saveDataToLocalStorage();
 
             const typingId = showTypingIndicator();
-            const aiResponseText = await fetchRealAIResponse(text);
-
+            
+            // Crear burbuja vacía para ir rellenando el streaming de texto en tiempo real
             removeTypingIndicator(typingId);
+            const liveBubbleId = 'live-bubble-' + Date.now();
+            const list = document.getElementById('messagesList');
+            const bubble = document.createElement('div');
+            bubble.className = 'message-bubble incoming';
+            bubble.id = liveBubbleId;
+            bubble.innerHTML = '';
+            list.appendChild(bubble);
+
+            const aiResponseText = await fetchRealAIResponse(text, (partialText) => {
+                document.getElementById(liveBubbleId).innerHTML = partialText.replace(/\n/g, '<br>');
+                list.scrollTop = list.scrollHeight;
+            });
+
             chatMessagesHistory.push({ role: "assistant", content: aiResponseText });
             saveDataToLocalStorage();
-            appendMessageAI(aiResponseText, 'incoming', true);
         }
 
         function generateDuckieAIResponseLocal(text) {
