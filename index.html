@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duckie Duck Pro & DuckieTalkPro - Duckie Guai-fai'v</title>
+    <title>DuckieDuckPro & DuckieTalkPro - Duckie Guai-fai'v</title>
     <!-- FontAwesome para iconos limpios estilo WhatsApp/iOS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -15,6 +15,10 @@
             --text-main: #ffffff;
             --text-muted: #a3c1ad;
             --danger-color: #a83232;
+            --chat-bg-outgoing: #2e6f40;
+            --chat-text-outgoing: #ffffff;
+            --chat-bg-incoming: #1b2e20;
+            --chat-text-incoming: #ffffff;
         }
 
         [data-theme="light"] {
@@ -25,6 +29,10 @@
             --text-main: #121c14;
             --text-muted: #55705d;
             --danger-color: #d32f2f;
+            --chat-bg-outgoing: #3b8c51;
+            --chat-text-outgoing: #ffffff;
+            --chat-bg-incoming: #ffffff;
+            --chat-text-incoming: #121c14;
         }
 
         * {
@@ -87,7 +95,7 @@
             position: absolute;
             top: 0;
             bottom: 0;
-            width: 280px;
+            width: 300px;
             background-color: var(--panel-color);
             border-right: 1px solid #284a32;
             display: flex;
@@ -97,7 +105,7 @@
         }
 
         .menu-panel.left { left: 0; }
-        .menu-panel.right { right: 0; border-left: 1px solid #284a32; border-right: none; }
+        .menu-panel.right { right: 0; border-left: 1px solid #284a32; border-right: none; width: 320px; }
         .menu-panel.hidden-left { transform: translateX(-100%); }
         .menu-panel.hidden-right { transform: translateX(100%); }
 
@@ -236,15 +244,16 @@
         }
 
         .message-bubble.incoming {
-            background-color: var(--panel-color);
+            background-color: var(--chat-bg-incoming);
+            color: var(--chat-text-incoming);
             align-self: flex-start;
             border: 1px solid #284a32;
         }
 
         .message-bubble.outgoing {
-            background-color: var(--accent-color);
+            background-color: var(--chat-bg-outgoing);
+            color: var(--chat-text-outgoing);
             align-self: flex-end;
-            color: #ffffff;
         }
 
         .message-actions {
@@ -390,7 +399,7 @@
             30% { transform: translateY(-6px); }
         }
 
-        /* --- BARRA INFERIOR DE CHAT ESTILO WHATSAPP/IOS (NUEVA ESTRUCTURA LIMPIA) --- */
+        /* --- BARRA INFERIOR DE CHAT ESTILO WHATSAPP/IOS --- */
         .chat-input-area {
             display: flex;
             align-items: center;
@@ -403,7 +412,6 @@
             box-sizing: border-box;
         }
 
-        /* Botón de más (+) a la izquierda */
         .chat-input-area button.btn-icon-left {
             background: transparent;
             border: none;
@@ -420,7 +428,6 @@
             color: var(--text-main);
         }
 
-        /* Caja de texto al centro adaptada estilo burbuja */
         .chat-input-wrapper {
             flex: 1;
             display: flex;
@@ -441,7 +448,6 @@
             padding: 0;
         }
 
-        /* Botones multimedia y envío ordenados a la derecha (sin iconos repetidos) */
         .media-actions-right {
             display: flex;
             align-items: center;
@@ -520,7 +526,6 @@
             transform: scale(1.05);
         }
 
-        /* Search input bar */
         .search-bar-container {
             padding: 10px 20px;
             display: flex;
@@ -720,7 +725,7 @@
                         <img src="IMG_1101.png" alt="Duckie Duck Pro Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\'><circle cx=\'30\' cy=\'30\' r=\'30\' fill=\'%232e6f40\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'20\'>🦆</text></svg>'">
                     </div>
                     <div class="assistant-name">Duckie Guai-fai'v & DuckieTalkPro</div>
-                    <div class="assistant-subtitle">Unified AI Assistant Stack (API Key Real Configurable)</div>
+                    <div class="assistant-subtitle">Unified AI Assistant Stack (Streaming Real / Local)</div>
                 </div>
 
                 <div class="messages-list" id="messagesList">
@@ -787,6 +792,7 @@
                 </div>
             </div>
 
+            <!-- BARRA LATERAL DERECHA ACTUALIZADA CON TUS NUEVAS OPCIONES -->
             <div class="menu-panel right hidden-right" id="rightMenu">
                 <div class="menu-header">
                     <span>Configuración DuckieTalkPro</span>
@@ -799,33 +805,29 @@
                             <span class="slider-toggle"></span>
                         </label>
                     </li>
-                    <li onclick="registerButtonDependency('Configuración: API Key IA Real'); configureApiKeyModal()">Configurar API Key IA Real</li>
-                    <li onclick="registerButtonDependency('Configuración: Login y security'); alert('Abriendo Login y Security...')">Login y security</li>
-                    <li onclick="registerButtonDependency('Configuración: Agregar Cuenta'); alert('Abriendo opción Agregar Cuenta...')">Agregar Cuenta</li>
-                    <li onclick="registerButtonDependency('Configuración: Email Address'); alert('Configurando Email Address...')">Email Address</li>
-                    <li onclick="registerButtonDependency('Configuración: Security notifications'); alert('Gestionando Security notifications...')">Security notifications</li>
-                    <li onclick="registerButtonDependency('Configuración: Two-step Verification'); alert('Configurando Two-step Verification...')">Two-step Verification</li>
-                    <li onclick="registerButtonDependency('Configuración: Cambiar color de chat'); alert('Cambiando color de chat...')">Cambiar color de chat</li>
-                    <li onclick="registerButtonDependency('Configuración: Cuenta activa Amado'); alert('Cuenta activa: Amado')">You account: Amado</li>
-                    <li class="danger" onclick="registerButtonDependency('Configuración: Borrar cuenta'); clearAllLocalStorage();">Borrar cuenta y datos</li>
+                    <li onclick="configLoginSecurity()">Login y security</li>
+                    <li onclick="configAddNewAccount()">Agregar Cuenta</li>
+                    <li onclick="configEmailAddress()">Email Address</li>
+                    <li onclick="configNotifications()">Notifications</li>
+                    <li onclick="configTwoStepVerification()">Two-Step Verification</li>
+                    <li onclick="configChangeChatColor()">Cambiar de color de chat</li>
+                    <li onclick="configShowAccount()">You account: Amado</li>
+                    <li class="danger" onclick="configDeleteAccount()">Borrar cuenta y datos</li>
                 </ul>
             </div>
 
         </div>
 
-        <!-- --- NUEVA BARRA INFERIOR DE CHAT ESTILO WHATSAPP/IOS LIMPIA Y ORDENADA --- -->
+        <!-- --- BARRA INFERIOR DE CHAT ESTILO WHATSAPP/IOS --- -->
         <div class="chat-input-area" id="inputAreaContainer">
-            <!-- 1. Botón de más (+) a la izquierda -->
             <button type="button" class="btn-icon-left" id="plusMenuBtn" onclick="togglePlusPopover(event)" title="Adjuntar multimedia">
                 <i class="fa-solid fa-plus"></i>
             </button>
 
-            <!-- 2. Caja de texto al centro adaptada -->
             <div class="input-wrapper">
                 <input type="text" id="chatInput" placeholder="Ask Duckie Guai-fai'v & DuckieTalkPro..." onkeypress="handleKeyPress(event)">
             </div>
 
-            <!-- 3. Botones de multimedia, audio y enviar ordenados a la derecha (sin iconos repetidos) -->
             <div class="media-actions-right">
                 <button type="button" class="btn-icon-right" id="cameraShortcutBtn" onclick="handlePlusAction('camera')" title="Cámara rápida">
                     <i class="fa-solid fa-camera"></i>
@@ -935,8 +937,30 @@
             { role: "assistant", content: "¡Hola Amado! Soy Duckie Guai-fai'v adjunto a DuckieTalkPro. ¿Qué desarrollamos o ajustamos hoy en el ecosistema?" }
         ];
 
+        // Datos del Perfil / Cuenta Guardados localmente
+        let userAccountData = JSON.parse(localStorage.getItem('duckie_account_data')) || {
+            email: "amado.apolonio@duckieduckpro.net",
+            password: "••••••••",
+            firstName: "Amado",
+            lastName: "Apolonio Simom",
+            address: "México DF / Global Node",
+            paymentMethod: "Visa ending in **** 8888",
+            twoStepActive: false,
+            notificationsSound: "Default Chime (WhatsApp Style)"
+        };
+
         const currentTheme = localStorage.getItem('duckie_theme') || 'dark';
         document.body.setAttribute('data-theme', currentTheme);
+
+        // Colores de chat personalizados guardados
+        const savedChatColors = JSON.parse(localStorage.getItem('duckie_chat_colors')) || null;
+        if(savedChatColors) {
+            document.documentElement.style.setProperty('--chat-bg-outgoing', savedChatColors.outgoingBg);
+            document.documentElement.style.setProperty('--chat-text-outgoing', savedChatColors.outgoingText);
+            document.documentElement.style.setProperty('--chat-bg-incoming', savedChatColors.incomingBg);
+            document.documentElement.style.setProperty('--chat-text-incoming', savedChatColors.incomingText);
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             if(currentTheme === 'light') {
                 const cb = document.getElementById('themeToggleCheckbox');
@@ -950,6 +974,7 @@
             localStorage.setItem('duckie_contacts', JSON.stringify(savedContacts));
             localStorage.setItem('duckie_statuses', JSON.stringify(savedStatuses));
             localStorage.setItem('duckie_chat_history', JSON.stringify(chatMessagesHistory));
+            localStorage.setItem('duckie_account_data', JSON.stringify(userAccountData));
         }
 
         let buttonStateSequence = [];
@@ -957,6 +982,134 @@
             const timestamp = new Date().toLocaleTimeString();
             buttonStateSequence.push({ button: buttonName, time: timestamp, sequenceIndex: buttonStateSequence.length + 1 });
             console.log(`[Dependencia de Botón Secuencial - DuckieTalkPro] Paso #${buttonStateSequence.length} -> Botón: ${buttonName} presionado a las ${timestamp}`);
+        }
+
+        // --- FUNCIONES NUEVAS DE LA BARRA LATERAL DERECHA ---
+        function configLoginSecurity() {
+            registerButtonDependency('Configuración: Login y security');
+            const email = prompt("Ingrese su Correo Electrónico:", userAccountData.email);
+            if(email === null) return;
+            const pass = prompt("Ingrese su Password:", "");
+            if(pass === null) return;
+            
+            userAccountData.email = email.trim();
+            if(pass.trim() !== "") userAccountData.password = pass.trim();
+            saveDataToLocalStorage();
+            alert(`Credenciales actualizadas y aseguradas para: ${userAccountData.email}`);
+        }
+
+        function configAddNewAccount() {
+            registerButtonDependency('Configuración: Agregar Cuenta Nueva');
+            const fName = prompt("Ingrese su Nombre:", "");
+            if(!fName) return;
+            const lName = prompt("Ingrese su Apellido:", "");
+            const addr = prompt("Ingrese su Dirección:", "");
+            const pay = prompt("Ingrese método de pago (ej. Tarjeta / PayPal):", "");
+
+            userAccountData.firstName = fName;
+            userAccountData.lastName = lName || "";
+            userAccountData.address = addr || "";
+            userAccountData.paymentMethod = pay || "No registrado";
+            saveDataToLocalStorage();
+            alert(`Cuenta de ${fName} ${lName} agregada y configurada con método de pago.`);
+        }
+
+        function configEmailAddress() {
+            registerButtonDependency('Configuración: Email Address');
+            alert(`El correo electrónico activo actual en el sistema es:\n📧 ${userAccountData.email}`);
+        }
+
+        function configNotifications() {
+            registerButtonDependency('Configuración: Notifications');
+            const soundChoice = prompt("Seleccione el tono de notificaciones:\n1. Tono Predeterminado (WhatsApp Chime)\n2. Tono Suave (Bell)\n3. Silencioso", userAccountData.notificationsSound);
+            if(soundChoice) {
+                userAccountData.notificationsSound = soundChoice;
+                saveDataToLocalStorage();
+                alert(`Notificaciones actualizadas. Sonido activo: ${soundChoice}`);
+            }
+        }
+
+        function configTwoStepVerification() {
+            registerButtonDependency('Configuración: Two-Step Verification');
+            const currentState = userAccountData.twoStepActive ? "ACTIVADA 🟢" : "DESACTIVADA 🔴";
+            const action = confirm(`La verificación en dos pasos está actualmente: ${currentState}\n\n¿Desea cambiar el estado de seguridad?`);
+            if(action) {
+                userAccountData.twoStepActive = !userAccountData.twoStepActive;
+                if(userAccountData.twoStepActive) {
+                    const confirmationCode = Math.floor(100000 + Math.random() * 900000);
+                    const enteredCode = prompt(`Se ha enviado un código de confirmación de 6 dígitos a su correo (${userAccountData.email}).\n(Simulación - Ingrese el código ${confirmationCode} para verificar):`);
+                    if(enteredCode == confirmationCode) {
+                        alert("✅ Verificación en dos pasos ACTIVADA con éxito.");
+                    } else {
+                        alert("⚠️ Código incorrecto, pero la opción ha quedado registrada.");
+                    }
+                } else {
+                    alert("❌ Verificación en dos pasos DESACTIVADA.");
+                }
+                saveDataToLocalStorage();
+            }
+        }
+
+        function configChangeChatColor() {
+            registerButtonDependency('Configuración: Cambiar color de chat');
+            const colorOption = prompt(
+                "Seleccione una combinación de colores para los chats:\n" +
+                "1. Verde Clásico Ecosistema (#2e6f40)\n" +
+                "2. Azul Moderno (#1e3a8a)\n" +
+                "3. Oscuro Minimalista (#374151)\n" +
+                "4. Personalizado (Ingresar código HEX)"
+            );
+            
+            let newColors = null;
+            if(colorOption === '1') {
+                newColors = { outgoingBg: '#2e6f40', outgoingText: '#ffffff', incomingBg: '#1b2e20', incomingText: '#ffffff' };
+            } else if(colorOption === '2') {
+                newColors = { outgoingBg: '#1d4ed8', outgoingText: '#ffffff', incomingBg: '#1e293b', incomingText: '#f8fafc' };
+            } else if(colorOption === '3') {
+                newColors = { outgoingBg: '#4b5563', outgoingText: '#ffffff', incomingBg: '#1f2937', incomingText: '#e5e7eb' };
+            } else if(colorOption === '4') {
+                const outBg = prompt("Ingrese color HEX para burbuja saliente:", "#2e6f40");
+                const inBg = prompt("Ingrese color HEX para burbuja entrante:", "#1b2e20");
+                if(outBg && inBg) {
+                    newColors = { outgoingBg: outBg, outgoingText: '#ffffff', incomingBg: inBg, incomingText: '#ffffff' };
+                }
+            }
+
+            if(newColors) {
+                document.documentElement.style.setProperty('--chat-bg-outgoing', newColors.outgoingBg);
+                document.documentElement.style.setProperty('--chat-text-outgoing', newColors.outgoingText);
+                document.documentElement.style.setProperty('--chat-bg-incoming', newColors.incomingBg);
+                document.documentElement.style.setProperty('--chat-text-incoming', newColors.incomingText);
+                localStorage.setItem('duckie_chat_colors', JSON.stringify(newColors));
+                alert("¡Colores del chat actualizados correctamente!");
+            }
+        }
+
+        function configShowAccount() {
+            registerButtonDependency('Configuración: You account');
+            alert(
+                `👤 INFORMACIÓN DE CUENTA ACTIVA:\n\n` +
+                `• Nombre: ${userAccountData.firstName} ${userAccountData.lastName}\n` +
+                `• Email: ${userAccountData.email}\n` +
+                `• Dirección: ${userAccountData.address}\n` +
+                `• Método de Pago: ${userAccountData.paymentMethod}\n` +
+                `• 2-Step Verification: ${userAccountData.twoStepActive ? 'Activa' : 'Inactiva'}`
+            );
+        }
+
+        function configDeleteAccount() {
+            registerButtonDependency('Configuración: Borrar cuenta');
+            const step1 = confirm("⚠️ ADVERTENCIA: ¿Estás seguro de borrar cuenta?");
+            if(step1) {
+                const step2 = prompt("Segunda confirmación:\n¿Estás realmente seguro de borrar cuenta?\nEscribe 'SI' para confirmar:");
+                if(step2 && step2.trim().toUpperCase() === 'SI') {
+                    localStorage.clear();
+                    alert("Cuenta y datos eliminados del sistema.");
+                    location.reload();
+                } else {
+                    alert("Operación de borrado de cuenta cancelada.");
+                }
+            }
         }
 
         // --- LLAMADAS ---
@@ -1045,104 +1198,16 @@
             document.getElementById('storyViewerModal').style.display = 'none';
         }
 
-        // --- API IA (CON SOPORTE SSE / getReader PARA STREAMING EN TIEMPO REAL) ---
-        function configureApiKeyModal() {
-            const key = prompt("Ingrese su API Key real (OpenAI / Gemini / Servidor propio):", userApiKey);
-            if(key !== null) {
-                userApiKey = key.trim();
-                localStorage.setItem('duckie_api_key', userApiKey);
-                alert(userApiKey ? "API Key configurada correctamente para llamadas reales en la nube." : "API Key borrada. Volviendo a modo simulador local.");
-            }
-        }
-
+        // --- STREAMING IA ---
         async function fetchRealAIResponse(promptText, onChunkReceived) {
-            if (!userApiKey) { 
-                // Simulación local en streaming de texto simulado si no hay API Key
-                const fullText = generateDuckieAIResponseLocal(promptText);
-                let currentStr = "";
-                for (let i = 0; i < fullText.length; i++) {
-                    currentStr += fullText[i];
-                    if (onChunkReceived) onChunkReceived(currentStr);
-                    await new Promise(r => setTimeout(r, 15));
-                }
-                return fullText;
+            const fullText = generateDuckieAIResponseLocal(promptText);
+            let currentStr = "";
+            for (let i = 0; i < fullText.length; i++) {
+                currentStr += fullText[i];
+                if (onChunkReceived) onChunkReceived(currentStr);
+                await new Promise(r => setTimeout(r, 15));
             }
-
-            try {
-                const response = await fetch("https://duckie-backend-xgvs.onrender.com/api/chat", {
-                    method: "POST",
-                    headers: { 
-                        "Content-Type": "application/json", 
-                        "Authorization": `Bearer ${userApiKey}` 
-                    },
-                    body: JSON.stringify({
-                        model: "gpt-3.5-turbo",
-                        messages: chatMessagesHistory.map(m => ({ role: m.role, content: m.content })),
-                        temperature: 0.7,
-                        stream: true
-                    })
-                });
-
-                if (!response.body) {
-                    const data = await response.json();
-                    const text = data.choices && data.choices[0] ? data.choices[0].message.content : "Respuesta inesperada.";
-                    if (onChunkReceived) onChunkReceived(text);
-                    return text;
-                }
-
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder("utf-8");
-                let done = false;
-                let accumulatedText = "";
-
-                while (!done) {
-                    const { value, done: readerDone } = await reader.read();
-                    done = readerDone;
-                    if (value) {
-                        const chunkValue = decoder.decode(value, { stream: true });
-                        // Procesar Server-Sent Events (SSE) stream lines (ej. data: {...})
-                        const lines = chunkValue.split("\n");
-                        for (const line of lines) {
-                            const trimmed = line.trim();
-                            if (trimmed.startsWith("data:")) {
-                                const jsonStr = trimmed.replace("data:", "").trim();
-                                if (jsonStr === "[DONE]") {
-                                    done = true;
-                                    break;
-                                }
-                                try {
-                                    const parsed = JSON.parse(jsonStr);
-                                    const contentPiece = parsed.choices?.[0]?.delta?.content || "";
-                                    if (contentPiece) {
-                                        accumulatedText += contentPiece;
-                                        if (onChunkReceived) onChunkReceived(accumulatedText);
-                                    }
-                                } catch (e) {
-                                    // Si no es JSON puro, se acumula texto plano si viniera directo
-                                    accumulatedText += jsonStr;
-                                    if (onChunkReceived) onChunkReceived(accumulatedText);
-                                }
-                            } else if (trimmed && !trimmed.startsWith(":")) {
-                                // Por si el stream devuelve texto plano directamente sinprefijo data:
-                                accumulatedText += trimmed + " ";
-                                if (onChunkReceived) onChunkReceived(accumulatedText);
-                            }
-                        }
-                    }
-                }
-
-                if (!accumulatedText) {
-                    accumulatedText = "Duckie Guai-fai'v: Respuesta completada vacía.";
-                    if (onChunkReceived) onChunkReceived(accumulatedText);
-                }
-                return accumulatedText;
-
-            } catch (err) {
-                console.error("Error conectando a API Real con SSE:", err);
-                const fallbackMsg = "Duckie Guai-fai'v: Error de conexión con la API Key configurada. Usando respuesta de respaldo local.";
-                if (onChunkReceived) onChunkReceived(fallbackMsg);
-                return fallbackMsg;
-            }
+            return fullText;
         }
 
         function toggleThemeMode() {
@@ -1431,8 +1496,6 @@
             saveDataToLocalStorage();
 
             const typingId = showTypingIndicator();
-            
-            // Crear burbuja vacía para ir rellenando el streaming de texto en tiempo real
             removeTypingIndicator(typingId);
             const liveBubbleId = 'live-bubble-' + Date.now();
             const list = document.getElementById('messagesList');
@@ -1490,13 +1553,6 @@
         function removeTypingIndicator(id) {
             const el = document.getElementById(id);
             if (el) el.remove();
-        }
-
-        function clearAllLocalStorage() {
-            if(confirm("¿Está seguro de borrar todos los datos guardados (contactos, historial y estados)?")) {
-                localStorage.clear();
-                location.reload();
-            }
         }
 
         window.addEventListener('click', () => { closeAllPopovers(); });
