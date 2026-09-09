@@ -9,14 +9,13 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.send('DuckieDuck Pro Backend funcionando al 100% 🚀');
-});
+// Servir la interfaz web estática desde la carpeta actual
+app.use(express.static(__dirname));
 
 app.post('/api/chat', async (req, res) => {
     try {
         const { message } = req.body;
-        
+
         if (!GEMINI_API_KEY) {
             return res.status(500).json({ error: "API key no configurada en el servidor" });
         }
