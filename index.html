@@ -1495,6 +1495,33 @@ async function fetchRealAIResponse(promptText, onChunkReceived) {
             const text = input.value.trim();
             if (!text) return;
 
+            // --- AISLAMIENTO DE PANTALLAS (NO BORRA NADA PREVIO) ---
+            const aiViewActive = document.getElementById('view-ai').classList.contains('active');
+            const chatsViewActive = document.getElementById('view-chats').classList.contains('active');
+
+            if (chatsViewActive) {
+                // Si estás en la Bandeja de Chats DuckieTalkPro, manda mensaje nativo/saliente aquí sin tocar la IA
+                const inboxList = document.getElementById('chatInboxList');
+                const newBubble = document.createElement('div');
+                newBubble.className = 'message-bubble outgoing';
+                newBubble.innerHTML = `<strong>Saliente:</strong> ${text}
+                    <div class="message-actions">
+                        <button onclick="deleteMessage(this)" style="color: #ff6b6b;">Borrar</button>
+                    </div>`;
+                inboxList.appendChild(newBubble);
+                inboxList.scrollTop = inboxList.scrollHeight;
+                input.value = '';
+                return; // Corta la ejecución para que no llegue a la IA
+            }
+
+            if (!aiViewActive) {
+                // Si estás en Contactos, Llamadas o Status, evita enviar al chat de IA
+                alert("Por favor cambia a la pestaña de AI Chat para enviar mensajes a Duckie Guai-fai'v.");
+                return;
+            }
+            // -----------------------------------------------------
+
+            // Flujo original intacto para Duckie Guai-fai'v (AI Chat)
             appendMessageAI(text, 'outgoing', true);
             input.value = '';
 
@@ -1519,7 +1546,6 @@ async function fetchRealAIResponse(promptText, onChunkReceived) {
             chatMessagesHistory.push({ role: "assistant", content: aiResponseText });
             saveDataToLocalStorage();
         }
-
         function generateDuckieAIResponseLocal(text) {
             const lower = text.toLowerCase();
             if (lower.includes('marketplace') || lower.includes('tienda')) {
