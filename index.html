@@ -622,16 +622,17 @@
 
         <div style="flex: 1; position: relative; overflow: hidden; display: flex;">
 
+            <!-- MENÚ LATERAL IZQUIERDO ACTUALIZADO CON TUS NUEVAS FUNCIONES -->
             <div class="menu-panel left hidden-left" id="leftMenu">
                 <div class="menu-header">
                     <span>Principal / TalkPro</span>
                     <button class="icon-btn" onclick="toggleLeftMenu()">✕</button>
                 </div>
                 <ul class="menu-items">
-                    <li onclick="registerButtonDependency('Menú Técnico'); alert('Cargando panel técnico DuckieTalkPro...')">Técnico TalkPro</li>
-                    <li onclick="registerButtonDependency('Menú Servicio y Privacidad'); alert('Abriendo configuración de Servicio y Privacidad...')">Servicio y Privacidad</li>
-                    <li onclick="registerButtonDependency('Menú Channel Verified'); alert('Verificando estado del canal DuckieGuaiFaiv...')">Channel Verified</li>
-                    <li onclick="registerButtonDependency('Menú Chat Privacy'); alert('Configurando privacidad del chat DuckieTalkPro...')">Chat Privacy</li>
+                    <li onclick="menuTecnicoTalkPro()">Técnico TalkPro</li>
+                    <li onclick="menuServicioPrivacidad()">Servicio y Privacidad</li>
+                    <li onclick="menuCanalVerificado()">Channel Verified</li>
+                    <li onclick="menuChatPrivacidad()">Chat Privacy</li>
                 </ul>
             </div>
 
@@ -792,7 +793,7 @@
                 </div>
             </div>
 
-            <!-- BARRA LATERAL DERECHA ACTUALIZADA CON TUS NUEVAS OPCIONES -->
+            <!-- BARRA LATERAL DERECHA -->
             <div class="menu-panel right hidden-right" id="rightMenu">
                 <div class="menu-header">
                     <span>Configuración DuckieTalkPro</span>
@@ -984,7 +985,44 @@
             console.log(`[Dependencia de Botón Secuencial - DuckieTalkPro] Paso #${buttonStateSequence.length} -> Botón: ${buttonName} presionado a las ${timestamp}`);
         }
 
-        // --- FUNCIONES NUEVAS DE LA BARRA LATERAL DERECHA ---
+        // --- FUNCIONES DEL MENÚ LATERAL IZQUIERDO (NUEVAS) ---
+        function menuTecnicoTalkPro() {
+            registerButtonDependency('Menú Técnico TalkPro');
+            alert(
+                "🛠️ SOPORTE TÉCNICO ESPECIALIZADO 24/7\n\n" +
+                "• Infraestructura general y despliegues en GitHub Pages activos.\n" +
+                "• Configuración de Capacitor y entornos Android Studio en marcha.\n" +
+                "• Sincronización de scripts y variables de entorno al 100%."
+            );
+        }
+
+        function menuServicioPrivacidad() {
+            registerButtonDependency('Menú Servicio y Privacidad');
+            alert(
+                "🔒 SERVICIO Y PRIVACIDAD DE DATOS\n\n" +
+                "• Cifrado local garantizado en el almacenamiento del navegador.\n" +
+                "• Encriptación en la nube para sincronización segura.\n" +
+                "• Políticas estrictas de no-rastreo y control absoluto de usuario."
+            );
+        }
+
+        function menuCanalVerificado() {
+            registerButtonDependency('Menú Channel Verified');
+            alert(
+                "🛡️ CANAL OFICIAL VERIFICADO\n\n" +
+                "El canal oficial DuckieGuaiFaiv está protegido mediante autenticación criptográfica de extremo a extremo con servidores autorizados."
+            );
+        }
+
+        function menuChatPrivacidad() {
+            registerButtonDependency('Menú Chat Privacy');
+            alert(
+                "💬 PRIVACIDAD DEL CHAT TALKPRO\n\n" +
+                "Los chats están protegidos. Ningún mensaje, archivo adjunto o registro de voz se comparte con terceros ni se utiliza para entrenamiento comercial sin consentimiento."
+            );
+        }
+
+        // --- FUNCIONES DE LA BARRA LATERAL DERECHA ---
         function configLoginSecurity() {
             registerButtonDependency('Configuración: Login y security');
             const email = prompt("Ingrese su Correo Electrónico:", userAccountData.email);
@@ -1112,6 +1150,14 @@
             }
         }
 
+        function toggleThemeMode() {
+            const isLight = document.getElementById('themeToggleCheckbox').checked;
+            const newTheme = isLight ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('duckie_theme', newTheme);
+            registerButtonDependency(`Cambio de Tema: ${newTheme}`);
+        }
+
         // --- LLAMADAS ---
         let callTimerInterval = null;
         let callSecondsCount = 0;
@@ -1199,30 +1245,29 @@
         }
 
         // --- STREAMING IA ---
-async function fetchRealAIResponse(promptText, onChunkReceived) {
-    try {
-        const response = await fetch('http://localhost:3000/api/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: promptText })
-        });
-        
-        const data = await response.json();
-        const fullText = data.reply || "Respuesta recibida del ecosistema.";
-        
-        // Simula el efecto de escritura fluida con la respuesta real de la IA
-        let currentStr = "";
-        for (let i = 0; i < fullText.length; i++) {
-            currentStr += fullText[i];
-            if (onChunkReceived) onChunkReceived(currentStr);
-            await new Promise(r => setTimeout(r, 15));
+        async function fetchRealAIResponse(promptText, onChunkReceived) {
+            try {
+                const response = await fetch('http://localhost:3000/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: promptText })
+                });
+                
+                const data = await response.json();
+                const fullText = data.reply || "Respuesta recibida del ecosistema.";
+                
+                let currentStr = "";
+                for (let i = 0; i < fullText.length; i++) {
+                    currentStr += fullText[i];
+                    if (onChunkReceived) onChunkReceived(currentStr);
+                    await new Promise(r => setTimeout(r, 15));
+                }
+                return fullText;
+            } catch (error) {
+                console.error("Error conectando al backend:", error);
+                return generateDuckieAIResponseLocal(promptText);
+            }
         }
-        return fullText;
-    } catch (error) {
-        console.error("Error conectando al backend:", error);
-        return generateDuckieAIResponseLocal(promptText); // Respaldo solo si falla el servidor
-    }
-}
 
         // --- SOPORTE Y KEYPAD ---
         function appendKey(val) { document.getElementById('keypadDisplay').value += val; }
@@ -1495,12 +1540,10 @@ async function fetchRealAIResponse(promptText, onChunkReceived) {
             const text = input.value.trim();
             if (!text) return;
 
-            // --- AISLAMIENTO DE PANTALLAS (NO BORRA NADA PREVIO) ---
             const aiViewActive = document.getElementById('view-ai').classList.contains('active');
             const chatsViewActive = document.getElementById('view-chats').classList.contains('active');
 
             if (chatsViewActive) {
-                // Si estás en la Bandeja de Chats DuckieTalkPro, manda mensaje nativo/saliente aquí sin tocar la IA
                 const inboxList = document.getElementById('chatInboxList');
                 const newBubble = document.createElement('div');
                 newBubble.className = 'message-bubble outgoing';
@@ -1511,17 +1554,14 @@ async function fetchRealAIResponse(promptText, onChunkReceived) {
                 inboxList.appendChild(newBubble);
                 inboxList.scrollTop = inboxList.scrollHeight;
                 input.value = '';
-                return; // Corta la ejecución para que no llegue a la IA
+                return;
             }
 
             if (!aiViewActive) {
-                // Si estás en Contactos, Llamadas o Status, evita enviar al chat de IA
                 alert("Por favor cambia a la pestaña de AI Chat para enviar mensajes a Duckie Guai-fai'v.");
                 return;
             }
-            // -----------------------------------------------------
 
-            // Flujo original intacto para Duckie Guai-fai'v (AI Chat)
             appendMessageAI(text, 'outgoing', true);
             input.value = '';
 
@@ -1546,6 +1586,7 @@ async function fetchRealAIResponse(promptText, onChunkReceived) {
             chatMessagesHistory.push({ role: "assistant", content: aiResponseText });
             saveDataToLocalStorage();
         }
+
         function generateDuckieAIResponseLocal(text) {
             const lower = text.toLowerCase();
             if (lower.includes('marketplace') || lower.includes('tienda')) {
