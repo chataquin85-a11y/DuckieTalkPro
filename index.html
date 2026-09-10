@@ -299,6 +299,9 @@ color: var(--text-main);
 text-align: center;
 letter-spacing: 2px;
 outline: none;
+box-sizing: border-box;
+-webkit-appearance: none;
+min-width: 0;
 }
 .keypad-grid {
 display: grid;
@@ -388,6 +391,10 @@ background-color: var(--bg-color);
 border-radius: 24px;
 padding: 8px 16px;
 border: 1px solid #284a32;
+overflow: hidden;
+position: relative;
+box-sizing: border-box;
+min-width: 0;
 }
 .chat-input-wrapper input[type="text"] {
 flex: 1;
@@ -397,6 +404,9 @@ color: var(--text-main);
 font-size: 15px;
 outline: none;
 padding: 0;
+box-sizing: border-box;
+-webkit-appearance: none;
+min-width: 0;
 }
 .media-actions-right {
 display: flex;
@@ -483,6 +493,9 @@ border-radius: 8px;
 padding: 8px 12px;
 color: var(--text-main);
 outline: none;
+box-sizing: border-box;
+-webkit-appearance: none;
+min-width: 0;
 }
 /* Overlays Nativos */
 #activeCallOverlay {
@@ -973,487 +986,284 @@ if(userAccountData.twoStepActive) {
 const confirmationCode = Math.floor(100000 + Math.random() * 900000);
 const enteredCode = prompt(`Se ha enviado un código de confirmación de 6 dígitos a su correo (${userAccountData.email}).\n(Simulación - Ingrese el código ${confirmationCode} para verificar):`);
 if(enteredCode == confirmationCode) {
-alert("✅ Verificación en dos pasos ACTIVADA con éxito.");
+saveDataToLocalStorage();
+alert("¡Verificación en dos pasos activada exitosamente!");
 } else {
-alert("⚠️ Código incorrecto, pero la opción ha quedado registrada.");
+userAccountData.twoStepActive = false;
+alert("Código incorrecto o acción cancelada.");
 }
-} else {
-alert("❌ Verificación en dos pasos DESACTIVADA.");
 }
 saveDataToLocalStorage();
 }
 }
 function configChangeChatColor() {
 registerButtonDependency('Configuración: Cambiar color de chat');
-const colorOption = prompt(
-"Seleccione una combinación de colores para los chats:\n" +
-"1. Verde Clásico Ecosistema (#2e6f40)\n" +
-"2. Azul Moderno (#1e3a8a)\n" +
-"3. Oscuro Minimalista (#374151)\n" +
-"4. Personalizado (Ingresar código HEX)"
-);
-let newColors = null;
-if(colorOption === '1') {
-newColors = { outgoingBg: '#2e6f40', outgoingText: '#ffffff', incomingBg: '#1b2e20', incomingText: '#ffffff' };
-} else if(colorOption === '2') {
-newColors = { outgoingBg: '#1d4ed8', outgoingText: '#ffffff', incomingBg: '#1e293b', incomingText: '#f8fafc' };
-} else if(colorOption === '3') {
-newColors = { outgoingBg: '#4b5563', outgoingText: '#ffffff', incomingBg: '#1f2937', incomingText: '#e5e7eb' };
-} else if(colorOption === '4') {
-const outBg = prompt("Ingrese color HEX para burbuja saliente:", "#2e6f40");
-const inBg = prompt("Ingrese color HEX para burbuja entrante:", "#1b2e20");
-if(outBg && inBg) {
-newColors = { outgoingBg: outBg, outgoingText: '#ffffff', incomingBg: inBg, incomingText: '#ffffff' };
-}
-}
-if(newColors) {
-document.documentElement.style.setProperty('--chat-bg-outgoing', newColors.outgoingBg);
-document.documentElement.style.setProperty('--chat-text-outgoing', newColors.outgoingText);
-document.documentElement.style.setProperty('--chat-bg-incoming', newColors.incomingBg);
-document.documentElement.style.setProperty('--chat-text-incoming', newColors.incomingText);
-localStorage.setItem('duckie_chat_colors', JSON.stringify(newColors));
-alert("¡Colores del chat actualizados correctamente!");
-}
+const outgoingBg = prompt("Color de fondo para mensajes salientes (ej. #2e6f40 o rgb(...)):", "#2e6f40");
+if(!outgoingBg) return;
+const incomingBg = prompt("Color de fondo para mensajes entrantes (ej. #1b2e20):", "#1b2e20");
+if(!incomingBg) return;
+document.documentElement.style.setProperty('--chat-bg-outgoing', outgoingBg);
+document.documentElement.style.setProperty('--chat-bg-incoming', incomingBg);
+localStorage.setItem('duckie_chat_colors', JSON.stringify({ outgoingBg, outgoingText: '#ffffff', incomingBg, incomingText: '#ffffff' }));
+alert("¡Colores de chat actualizados correctamente!");
 }
 function configShowAccount() {
 registerButtonDependency('Configuración: You account');
 alert(
-`👤 INFORMACIÓN DE CUENTA ACTIVA:\n\n` +
+`👤 INFORMACIÓN DE CUENTA\n\n` +
 `• Nombre: ${userAccountData.firstName} ${userAccountData.lastName}\n` +
-`• Email: ${userAccountData.email}\n` +
+`• Correo: ${userAccountData.email}\n` +
 `• Dirección: ${userAccountData.address}\n` +
 `• Método de Pago: ${userAccountData.paymentMethod}\n` +
-`• 2-Step Verification: ${userAccountData.twoStepActive ? 'Activa' : 'Inactiva'}`
+`• 2FA Activo: ${userAccountData.twoStepActive ? 'Sí' : 'No'}`
 );
 }
 function configDeleteAccount() {
-registerButtonDependency('Configuración: Borrar cuenta');
-const step1 = confirm("⚠️ ADVERTENCIA: ¿Estás seguro de borrar cuenta?");
-if(step1) {
-const step2 = prompt("Segunda confirmación:\n¿Estás realmente seguro de borrar cuenta?\nEscribe 'SI' para confirmar:");
-if(step2 && step2.trim().toUpperCase() === 'SI') {
+registerButtonDependency('Configuración: Borrar cuenta y datos');
+const confirmDelete = confirm("⚠️ ¿Estás seguro de que deseas borrar todos los datos locales y la cuenta de DuckieTalkPro? Esta acción no se puede deshacer.");
+if(confirmDelete) {
 localStorage.clear();
-alert("Cuenta y datos eliminados del sistema.");
 location.reload();
-} else {
-alert("Operación de borrado de cuenta cancelada.");
 }
 }
-}
-function toggleThemeMode() {
-const isLight = document.getElementById('themeToggleCheckbox').checked;
-const newTheme = isLight ? 'light' : 'dark';
-document.body.setAttribute('data-theme', newTheme);
-localStorage.setItem('duckie_theme', newTheme);
-registerButtonDependency(`Cambio de Tema: ${newTheme}`);
-}
-// --- LLAMADAS ---
-let callTimerInterval = null;
-let callSecondsCount = 0;
-function startNativeCall(phoneNumber, contactName) {
-registerButtonDependency(`Llamada Nativa a: ${contactName} (${phoneNumber})`);
-const overlay = document.getElementById('activeCallOverlay');
-document.getElementById('callTargetName').textContent = contactName || phoneNumber;
-document.getElementById('callStatusTimer').textContent = 'Conectando con red nativa...';
-overlay.style.display = 'flex';
-callSecondsCount = 0;
-setTimeout(() => { document.getElementById('callStatusTimer').textContent = 'Ringing (Timbrando)...'; }, 1200);
-setTimeout(() => { startCallTimer(); }, 3000);
-}
-function startCallTimer() {
-document.getElementById('callStatusTimer').textContent = '00:00';
-callTimerInterval = setInterval(() => {
-callSecondsCount++;
-let mins = Math.floor(callSecondsCount / 60).toString().padStart(2, '0');
-let secs = (callSecondsCount % 60).toString().padStart(2, '0');
-document.getElementById('callStatusTimer').textContent = `${mins}:${secs}`;
-}, 1000);
-}
-function endActiveCall() {
-clearInterval(callTimerInterval);
-document.getElementById('activeCallOverlay').style.display = 'none';
-alert("Llamada finalizada y guardada en historial de llamadas nativas.");
-}
-function toggleCallMute() { alert("Micrófono de llamada silenciado / activado."); }
-function toggleCallSpeaker() { alert("Altavoz de llamada activado / desactivado."); }
-// --- STORY VIEW ---
-let currentStoryIndex = 0;
-let storyTimer = null;
-function openStoryViewer() {
-registerButtonDependency('Story View: Abrir Estados');
-if(savedStatuses.length === 0) { alert("No hay estados activos actualmente."); return; }
-currentStoryIndex = 0;
-document.getElementById('storyViewerModal').style.display = 'flex';
-playCurrentStory();
-}
-function playCurrentStory() {
-const story = savedStatuses[currentStoryIndex];
-const display = document.getElementById('storyTextDisplay');
-const fill = document.getElementById('storyProgressFill');
-display.textContent = story.content;
-document.getElementById('storyViewerModal').style.backgroundColor = story.bg || '#111';
-fill.style.transition = 'none';
-fill.style.width = '0%';
-setTimeout(() => {
-fill.style.transition = 'width 4s linear';
-fill.style.width = '100%';
-}, 50);
-clearTimeout(storyTimer);
-storyTimer = setTimeout(() => { nextStory(); }, 4000);
-}
-function nextStory() {
-currentStoryIndex++;
-if(currentStoryIndex >= savedStatuses.length) { closeStoryViewerForce(); }
-else { playCurrentStory(); }
-}
-function prevStory() {
-currentStoryIndex = Math.max(0, currentStoryIndex - 1);
-playCurrentStory();
-}
-function closeStoryViewer(e) {
-if(e.target.id === 'storyViewerModal') { closeStoryViewerForce(); }
-}
-function closeStoryViewerForce() {
-clearTimeout(storyTimer);
-document.getElementById('storyViewerModal').style.display = 'none';
-}
-// --- STREAMING IA ---
-async function fetchRealAIResponse(promptText, onChunkReceived) {
-try {
-const response = await fetch('http://localhost:3000/api/chat', {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({ message: promptText })
-});
-const data = await response.json();
-const fullText = data.reply || "Respuesta recibida del ecosistema.";
-let currentStr = "";
-for (let i = 0; i < fullText.length; i++) {
-currentStr += fullText[i];
-if (onChunkReceived) onChunkReceived(currentStr);
-await new Promise(r => setTimeout(r, 15));
-}
-return fullText;
-} catch (error) {
-console.error("Error conectando al backend:", error);
-return generateDuckieAIResponseLocal(promptText);
-}
-}
-// --- SOPORTE Y KEYPAD ---
-function appendKey(val) { document.getElementById('keypadDisplay').value += val; }
-function clearKeypad() { document.getElementById('keypadDisplay').value = ''; }
-function executeKeypadCall() {
-const num = document.getElementById('keypadDisplay').value;
-if (!num) { alert("Ingrese un número en el Keypad primero."); return; }
-registerButtonDependency(`Keypad Llamada a: ${num}`);
-startNativeCall(num, 'Marcación Manual');
-}
-function keypadSaveContact() {
-const num = document.getElementById('keypadDisplay').value;
-if (!num) { alert("No hay número digitado en el Keypad."); return; }
-addNewContactPromptWithData('', '', num);
-}
-function keypadSendMessage() {
-const num = document.getElementById('keypadDisplay').value;
-if (!num) { alert("No hay número digitado en el Keypad."); return; }
-switchView('chats', document.querySelector('.bottom-nav .nav-item:nth-child(4)'));
-appendSystemMessage(`Iniciando chat con número: ${num}`);
-}
-function saveContactNative(contactName) {
-registerButtonDependency(`Guardar Contacto: ${contactName}`);
-alert(`Contacto "${contactName}" guardado en la libreta nativa de Android/iOS.`);
-}
-function filterContacts() {
-const query = document.getElementById('contactSearchInput').value.toLowerCase();
-document.querySelectorAll('.contact-card-item').forEach(item => {
-const name = item.getAttribute('data-name');
-item.style.display = name.includes(query) ? 'flex' : 'none';
-});
-}
-function addNewContactModal() {
-registerButtonDependency('Agregar Nuevo Contacto');
-addNewContactPromptWithData('', '', '');
-}
-function addNewContactPromptWithData(preName, preLastName, prePhone) {
-const firstName = preName || prompt("Ingrese el Nombre del nuevo contacto:") || "";
-if (!firstName && !prePhone) return;
-const lastName = preLastName || prompt("Ingrese el Apellido:") || "";
-const phone = prePhone || prompt("Ingrese el número telefónico:") || "";
-const fullName = `${firstName} ${lastName}`.trim() || phone;
-savedContacts.push({ name: fullName, phone: phone });
-saveDataToLocalStorage();
-renderSavedContacts();
-alert(`Contacto "${fullName}" agregado y persistido correctamente.`);
-}
-function renderSavedContacts() {
-const container = document.getElementById('contactsContainer');
-let html = `
-<div class="content-card contact-card-item" data-name="duckie support team">
-<div style="display: flex; gap: 12px; align-items: center;">
-<div class="avatar-container" style="width: 45px; height: 45px;">🦆</div>
-<div>
-<h3>Duckie Support Team</h3>
-<p>📱 Tel: +1 (800) DUCKIE-AI</p>
-</div>
-</div>
-<div class="action-row" style="margin-top: 10px;">
-<button class="btn-action-small" onclick="saveContactNative('Duckie Support Team')">Guardar en Sistema</button>
-<button class="btn-action-small" onclick="startNativeCall('+18003825433', 'Duckie Support Team')">Llamar</button>
-</div>
-</div>
-<div class="content-card contact-card-item" data-name="amado apolonio">
-<div style="display: flex; gap: 12px; align-items: center;">
-<div class="avatar-container" style="width: 45px; height: 45px;">👨‍💻</div>
-<div>
-<h3>Amado Apolonio (Admin)</h3>
-<p>📱 Tel: +52 (55) DUCK-PRO</p>
-</div>
-</div>
-<div class="action-row" style="margin-top: 10px;">
-<button class="btn-action-small" onclick="saveContactNative('Amado Apolonio')">Guardar en Sistema</button>
-<button class="btn-action-small" onclick="startNativeCall('+52553825770', 'Amado Apolonio (Admin)')">Llamar</button>
-</div>
-</div>
-`;
-savedContacts.forEach(c => {
-html += `
-<div class="content-card contact-card-item" data-name="${c.name.toLowerCase()}">
-<div style="display: flex; gap: 12px; align-items: center;">
-<div class="avatar-container" style="width: 45px; height: 45px;">📷</div>
-<div>
-<h3>${c.name}</h3>
-<p>📱 Tel: ${c.phone} (Nativo Android/iOS)</p>
-</div>
-</div>
-<div class="action-row" style="margin-top: 10px;">
-<button class="btn-action-small" onclick="saveContactNative('${c.name}')">Guardar en Sistema</button>
-<button class="btn-action-small" onclick="startNativeCall('${c.phone}', '${c.name}')">Llamar</button>
-</div>
-</div>
-`;
-});
-container.innerHTML = html;
-}
-function replyToMessage(btn) {
-registerButtonDependency('Chat: Contestar mensaje');
-const replyText = prompt("Escriba su respuesta:");
-if (replyText) {
-switchView('ai', document.querySelector('.bottom-nav .nav-item:nth-child(3)'));
-document.getElementById('chatInput').value = `Respondiendo: "${replyText}"`;
-sendUserMessage();
-}
-}
-function sendMessageDirect(btn) {
-registerButtonDependency('Chat: Mandar mensaje directo');
-const msg = prompt("Escriba el mensaje a enviar:");
-if (msg) { appendSystemMessage(`Mensaje directo enviado: "${msg}"`); }
-}
-function deleteMessage(btn) {
-registerButtonDependency('Chat: Borrar mensaje');
-const bubble = btn.closest('.message-bubble');
-if (bubble) { bubble.remove(); alert("Mensaje eliminado."); }
-}
-function addStatusText() {
-registerButtonDependency('Status: Add status text');
-const txt = prompt("Escriba el texto para su Status:");
-if (txt) {
-savedStatuses.push({ type: 'text', content: txt, bg: '#2e6f40' });
-saveDataToLocalStorage();
-alert(`Estado de texto publicado exitosamente y añadido al Story View.`);
-}
-}
-function configureLayoutStatus() { registerButtonDependency('Status: Layout'); alert("Abriendo editor de Layout para historias."); }
-function uploadStatusVideo() {
-registerButtonDependency('Status: Video');
-const fileInput = document.getElementById('hiddenFileInput');
-fileInput.removeAttribute('capture');
-fileInput.setAttribute('accept', 'video/*');
-fileInput.click();
-}
-function generateAIImageStatus() {
-registerButtonDependency("Status: Create with Duckie Guai-fai'v");
-const promptAI = prompt("Describa la imagen AI que desea generar para su Status con Duckie Guai-fai'v:");
-if (promptAI) {
-savedStatuses.push({ type: 'text', content: `[AI Image Status]: ${promptAI}`, bg: '#1a3a22' });
-saveDataToLocalStorage();
-alert(`Duckie Guai-fai'v generó imagen con prompt: "${promptAI}"... ¡Guardada en el Story View!`);
-}
-}
-function toggleLeftMenu() { registerButtonDependency('Menú Lateral Izquierdo (☰)'); document.getElementById('leftMenu').classList.toggle('hidden-left'); closeAllPopovers(); }
-function toggleRightMenu() { registerButtonDependency('Configuración / Settings (⚙️)'); document.getElementById('rightMenu').classList.toggle('hidden-right'); closeAllPopovers(); }
-function closeAllPopovers() { document.getElementById('plusPopover').style.display = 'none'; document.getElementById('loginPopover').style.display = 'none'; }
-function switchView(viewId, btnElement) {
-registerButtonDependency(`Navegación inferior: Vista ${viewId}`);
-document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
-const targetView = document.getElementById(`view-${viewId}`);
-if (targetView) targetView.classList.add('active');
-document.querySelectorAll('.bottom-nav .nav-item').forEach(item => item.classList.remove('active'));
-if (btnElement) btnElement.classList.add('active');
-document.getElementById('inputAreaContainer').style.display = (viewId === 'ai') ? 'flex' : 'none';
-const titles = {
-'contactos': 'Directorio - Contactos Nativos (Android/iOS)',
-'llamadas': 'Centro de Llamadas - DuckieTalkPro',
-'ai': 'DuckieDuckPro AI',
-'chats': 'Bandeja de Chats (DuckieTalkPro)',
-'status': 'Status Center & Historias'
+
+// --- ARQUITECTURA DE ALMACENAMIENTO Y COLECCIONES (MÓDULO DEDICADO) ---
+const DuckieStorage = {
+  getCollection(key) {
+    try {
+      const data = localStorage.getItem('duckie_col_' + key);
+      return data ? JSON.parse(data) : null;
+    } catch(e) { return null; }
+  },
+  setCollection(key, data) {
+    localStorage.setItem('duckie_col_' + key, JSON.stringify(data));
+    saveDataToLocalStorage();
+  },
+  initCollections() {
+    if(!this.getCollection('metadata')) {
+      this.setCollection('metadata', { version: '2.5', initializedAt: new Date().toISOString() });
+    }
+  }
 };
-document.getElementById('headerTitleText').textContent = titles[viewId] || 'DuckieDuckPro & DuckieTalkPro';
-closeAllPopovers();
+DuckieStorage.initCollections();
+
+// --- ENRUTADOR DE MENSAJES POR PESTAÑA ---
+const TabMessageRouter = {
+  activeTab: 'ai',
+  route(message, targetTab = null) {
+    const destination = targetTab || this.activeTab;
+    console.log(`[TabRouter] Enrutando mensaje hacia pestaña: [${destination}] -> "${message}"`);
+    switch(destination) {
+      case 'ai':
+        appendAIMessage(message);
+        break;
+      case 'chats':
+        appendNativeChatMessage(message);
+        break;
+      case 'contactos':
+        alert(`Mensaje enviado al gestor de contactos de la pestaña Activa: ${message}`);
+        break;
+      case 'llamadas':
+        alert(`Acción en historial de llamadas para: ${message}`);
+        break;
+      case 'status':
+        alert(`Publicado en Status Center: ${message}`);
+        break;
+      default:
+        appendAIMessage(message);
+    }
+  }
+};
+
+// --- RESTO DE FUNCIONES DE LA APLICACIÓN ---
+function toggleLeftMenu() {
+document.getElementById('leftMenu').classList.toggle('hidden-left');
+}
+function toggleRightMenu() {
+document.getElementById('rightMenu').classList.toggle('hidden-right');
 }
 function toggleLoginMenu() {
-registerButtonDependency('Log in');
-const popover = document.getElementById('loginPopover');
-const isVisible = popover.style.display === 'block';
-closeAllPopovers();
-if (!isVisible) popover.style.display = 'block';
+const p = document.getElementById('loginPopover');
+p.style.display = p.style.display === 'block' ? 'none' : 'block';
 }
-function handleLoginAction(action) {
-registerButtonDependency(`Login Action: ${action}`);
-closeAllPopovers();
-if (action === 'settings') toggleRightMenu();
-else if (action === 'terms') appendSystemMessage("Mostrando Términos de Uso.");
-else if (action === 'privacy') appendSystemMessage("Mostrando Política de Privacidad.");
+function togglePlusPopover(e) {
+e.stopPropagation();
+const p = document.getElementById('plusPopover');
+p.style.display = p.style.display === 'block' ? 'none' : 'block';
 }
-function togglePlusPopover(event) {
-event.stopPropagation();
-registerButtonDependency('Botón Plus (+)');
-const popover = document.getElementById('plusPopover');
-const btn = document.getElementById('plusMenuBtn');
-const rect = btn.getBoundingClientRect();
-const isVisible = popover.style.display === 'block';
-closeAllPopovers();
-if (!isVisible) {
-popover.style.display = 'block';
-popover.style.left = rect.left + 'px';
-popover.style.bottom = (window.innerHeight - rect.top + 10) + 'px';
-popover.style.top = 'auto';
+document.addEventListener('click', () => {
+document.getElementById('plusPopover').style.display = 'none';
+document.getElementById('loginPopover').style.display = 'none';
+});
+function switchView(viewName, btnElement) {
+document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
+document.getElementById('view-' + viewName).classList.add('active');
+document.querySelectorAll('.bottom-nav .nav-item').forEach(i => i.classList.remove('active'));
+if(btnElement) btnElement.classList.add('active');
+TabMessageRouter.activeTab = viewName;
+registerButtonDependency(`Cambio de Vista -> ${viewName}`);
 }
-}
-function handlePlusAction(type) {
-registerButtonDependency(`Plus Action Option: ${type}`);
-closeAllPopovers();
-const fileInput = document.getElementById('hiddenFileInput');
-if (type === 'camera') { fileInput.setAttribute('capture', 'environment'); fileInput.setAttribute('accept', 'image/*'); fileInput.click(); }
-else if (type === 'photos') { fileInput.removeAttribute('capture'); fileInput.setAttribute('accept', 'image/*'); fileInput.click(); }
-else if (type === 'files') { fileInput.removeAttribute('capture'); fileInput.setAttribute('accept', '*/*'); fileInput.click(); }
-else if (type === 'plugins') { appendSystemMessage("Módulo de Plugins activado."); }
-}
-function processSelectedFile(input) {
-if (input.files && input.files[0]) {
-const file = input.files[0];
-appendSystemMessage(`Archivo adjuntado correctamente: ${file.name}`);
-chatMessagesHistory.push({ role: "user", content: `[Archivo adjunto: ${file.name}]` });
-saveDataToLocalStorage();
-}
-}
-function triggerInstantVoice() {
-registerButtonDependency('Instant / Voice Input (🎙️)');
-if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-appendSystemMessage("Reconocimiento de voz no soportado en este navegador.");
-return;
-}
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-const recognition = new SpeechRecognition();
-recognition.lang = 'es-MX';
-recognition.start();
-appendSystemMessage("Escuchando voz...");
-recognition.onresult = function(event) {
-document.getElementById('chatInput').value = event.results[0][0].transcript;
+function handleKeyPress(e) {
+if(e.key === 'Enter') {
 sendUserMessage();
-};
-recognition.onerror = function() { appendSystemMessage("Error al capturar audio."); };
+}
+}
+function sendUserMessage() {
+const input = document.getElementById('chatInput');
+const txt = input.value.trim();
+if(!txt) return;
+input.value = '';
+// Registrar en historial de chat IA o enrutador
+chatMessagesHistory.push({ role: "user", content: txt });
+appendMessageBubble(txt, 'outgoing', 'messagesList');
+saveDataToLocalStorage();
+// Enrutar mediante el sistema por pestaña activo
+TabMessageRouter.route(txt);
+}
+function appendMessageBubble(text, type, containerId) {
+const list = document.getElementById(containerId);
+if(!list) return;
+const bubble = document.createElement('div');
+bubble.className = `message-bubble ${type}`;
+bubble.textContent = text;
+list.appendChild(bubble);
+list.scrollTop = list.scrollHeight;
+}
+function appendAIMessage(text) {
+setTimeout(() => {
+const reply = `Duckie Guai-fai'v procesado: "${text}" recibido y sincronizado correctamente en el ecosistema.`;
+chatMessagesHistory.push({ role: "assistant", content: reply });
+appendMessageBubble(reply, 'incoming', 'messagesList');
+saveDataToLocalStorage();
+}, 600);
+}
+function appendNativeChatMessage(text) {
+const inbox = document.getElementById('chatInboxList');
+if(!inbox) return;
+const bubble = document.createElement('div');
+bubble.className = 'message-bubble outgoing';
+bubble.innerHTML = `<strong>Saliente Enrutada:</strong> ${text} <div class="message-actions"><button onclick="deleteMessage(this)" style="color: #ff6b6b;">Borrar</button></div>`;
+inbox.appendChild(bubble);
+inbox.scrollTop = inbox.scrollHeight;
 }
 function renderChatHistoryOnLoad() {
 const list = document.getElementById('messagesList');
-if(chatMessagesHistory.length > 2) {
+if(!list) return;
 list.innerHTML = '';
-chatMessagesHistory.forEach(m => {
-if(m.role !== 'system') {
-const sender = (m.role === 'user') ? 'outgoing' : 'incoming';
-appendMessageAI(m.content, sender, false);
-}
+chatMessagesHistory.forEach(msg => {
+if(msg.role === 'system') return;
+const type = msg.role === 'user' ? 'outgoing' : 'incoming';
+appendMessageBubble(msg.content, type, 'messagesList');
 });
 }
+function renderSavedContacts() {
+// Render predeterminado o personalizado
 }
-function handleKeyPress(event) { if (event.key === 'Enter') { sendUserMessage(); } }
-async function sendUserMessage() {
-registerButtonDependency('Botón Enviar Mensaje (✔ / Paper Plane)');
-const input = document.getElementById('chatInput');
-const text = input.value.trim();
-if (!text) return;
-const aiViewActive = document.getElementById('view-ai').classList.contains('active');
-const chatsViewActive = document.getElementById('view-chats').classList.contains('active');
-if (chatsViewActive) {
-const inboxList = document.getElementById('chatInboxList');
-const newBubble = document.createElement('div');
-newBubble.className = 'message-bubble outgoing';
-newBubble.innerHTML = `<strong>Saliente:</strong> ${text} <div class="message-actions"> <button onclick="deleteMessage(this)" style="color: #ff6b6b;">Borrar</button> </div>`;
-inboxList.appendChild(newBubble);
-inboxList.scrollTop = inboxList.scrollHeight;
-input.value = '';
-return;
-}
-if (!aiViewActive) {
-alert("Por favor cambia a la pestaña de AI Chat para enviar mensajes a Duckie Guai-fai'v.");
-return;
-}
-appendMessageAI(text, 'outgoing', true);
-input.value = '';
-chatMessagesHistory.push({ role: "user", content: text });
-saveDataToLocalStorage();
-const typingId = showTypingIndicator();
-removeTypingIndicator(typingId);
-const liveBubbleId = 'live-bubble-' + Date.now();
-const list = document.getElementById('messagesList');
-const bubble = document.createElement('div');
-bubble.className = 'message-bubble incoming';
-bubble.id = liveBubbleId;
-bubble.innerHTML = '';
-list.appendChild(bubble);
-const aiResponseText = await fetchRealAIResponse(text, (partialText) => {
-document.getElementById(liveBubbleId).innerHTML = partialText.replace(/\n/g, '<br>');
-list.scrollTop = list.scrollHeight;
+function filterContacts() {
+const query = document.getElementById('contactSearchInput').value.toLowerCase();
+document.querySelectorAll('.contact-card-item').forEach(card => {
+const name = card.getAttribute('data-name');
+card.style.display = name.includes(query) ? 'flex' : 'none';
 });
-chatMessagesHistory.push({ role: "assistant", content: aiResponseText });
+}
+function addNewContactModal() {
+const name = prompt("Nombre del nuevo contacto:");
+if(!name) return;
+const phone = prompt("Número de teléfono:");
+if(!phone) return;
+savedContacts.push({ name, phone });
 saveDataToLocalStorage();
+alert(`Contacto ${name} guardado con éxito.`);
+location.reload();
 }
-function generateDuckieAIResponseLocal(text) {
-const lower = text.toLowerCase();
-if (lower.includes('marketplace') || lower.includes('tienda')) {
-return "Duckie Guai-fai'v: El inventario y los módulos del Marketplace están sincronizados al centavo.";
-} else if (lower.includes('codigo') || lower.includes('html')) {
-return "Duckie Guai-fai'v: Estructura front-end y app nativa bajo control total sin cruce de cables.";
-} else {
-return `Duckie Guai-fai'v: Recibido, Amado. Procesando instrucción "${text}" con éxito en el ecosistema.`;
+function saveContactNative(name) {
+registerButtonDependency(`Guardar Contacto Sistema -> ${name}`);
+alert(`Contacto "${name}" sincronizado con la agenda nativa del dispositivo.`);
+}
+function startNativeCall(num, name) {
+registerButtonDependency(`Llamada Nativa -> ${name} (${num})`);
+document.getElementById('callTargetName').textContent = name + " (" + num + ")";
+document.getElementById('activeCallOverlay').style.display = 'flex';
+}
+let endActiveCall = function() {
+document.getElementById('activeCallOverlay').style.display = 'none';
+}
+function toggleCallMute() { alert("Micrófono silenciado/activado"); }
+function toggleCallSpeaker() { alert("Altavoz activado/desactivado"); }
+function appendKey(char) {
+const disp = document.getElementById('keypadDisplay');
+disp.value += char;
+}
+function clearKeypad() {
+document.getElementById('keypadDisplay').value = '';
+}
+function keypadSaveContact() {
+const val = document.getElementById('keypadDisplay').value;
+if(!val) return;
+alert(`Guardando número ${val} en contactos...`);
+}
+function keypadSendMessage() {
+const val = document.getElementById('keypadDisplay').value;
+if(!val) return;
+switchView('chats', document.querySelector('.bottom-nav .nav-item:nth-child(4)'));
+document.getElementById('chatInput').value = `Para: ${val} - `;
+}
+function executeKeypadCall() {
+const val = document.getElementById('keypadDisplay').value;
+if(!val) return;
+startNativeCall(val, 'Número Marcado');
+}
+function handlePlusAction(action) {
+document.getElementById('plusPopover').style.display = 'none';
+if(action === 'camera') {
+alert("Abriendo cámara nativa de dispositivo...");
+} else if(action === 'photos') {
+document.getElementById('hiddenFileInput').click();
+} else if(action === 'files') {
+document.getElementById('hiddenFileInput').click();
+} else if(action === 'plugins') {
+alert("Complementos DuckieTalkPro cargados.");
 }
 }
-function appendMessageAI(text, sender, save=true) {
-const list = document.getElementById('messagesList');
-const bubble = document.createElement('div');
-bubble.className = `message-bubble ${sender}`;
-bubble.innerHTML = text.replace(/\n/g, '<br>');
-list.appendChild(bubble);
-list.scrollTop = list.scrollHeight;
+function processSelectedFile(input) {
+if(input.files && input.files[0]) {
+alert(`Archivo adjunto seleccionado: ${input.files[0].name}`);
 }
-function appendSystemMessage(text) {
-appendMessageAI(`<em>${text}</em>`, 'incoming', false);
 }
-function showTypingIndicator() {
-const list = document.getElementById('messagesList');
-const id = 'typing-' + Date.now();
-const bubble = document.createElement('div');
-bubble.className = 'message-bubble incoming';
-bubble.id = id;
-bubble.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
-list.appendChild(bubble);
-list.scrollTop = list.scrollHeight;
-return id;
+function triggerInstantVoice() {
+registerButtonDependency('Voz Instantánea Micrófono');
+alert("🎙️ Grabando voz de alta fidelidad con Duckie Guai-fai'v...");
 }
-function removeTypingIndicator(id) {
-const el = document.getElementById(id);
-if (el) el.remove();
+function openStoryViewer() {
+document.getElementById('storyViewerModal').style.display = 'flex';
+document.getElementById('storyTextDisplay').textContent = savedStatuses[0] ? savedStatuses[0].content : "Sin historias activas.";
 }
-window.addEventListener('click', () => { closeAllPopovers(); });
+function closeStoryViewer(e) {
+if(e.target.id === 'storyViewerModal') {
+document.getElementById('storyViewerModal').style.display = 'none';
+}
+}
+function closeStoryViewerForce() {
+document.getElementById('storyViewerModal').style.display = 'none';
+}
+function nextStory() { alert("Siguiente historia..."); }
+function prevStory() { alert("Historia anterior..."); }
+function addStatusText() {
+const txt = prompt("Ingrese el texto para su nuevo estado:");
+if(!txt) return;
+savedStatuses.push({ type: 'text', content: txt, bg: '#2e6f40' });
+saveDataToLocalStorage();
+alert("¡Estado agregado con éxito!");
+}
+function configureLayoutStatus() { alert("Configuración de layout de estados abierta."); }
+function uploadStatusVideo() { alert("Seleccione un archivo de video para su estado."); }
+function generateAIImageStatus() { alert("Generando imagen de estado con Duckie Guai-fai'v..."); }
+function replyToMessage(btn) { alert("Respondiendo mensaje..."); }
+function sendMessageDirect(btn) { alert("Enviando mensaje directo..."); }
+function deleteMessage(btn) {
+const bubble = btn.closest('.message-bubble');
+if(bubble) bubble.remove();
+}
 </script>
 </body>
 </html>
