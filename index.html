@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DuckieDuckPro AI</title>
 <!-- FontAwesome para iconos limpios estilo WhatsApp/iOS -->
-<link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 :root {
 --bg-color: #121c14;
@@ -650,7 +650,7 @@ input:checked + .slider-toggle:before { transform: translateX(22px); }
 <div id="view-ai" class="app-view active">
 <div class="chat-header-profile">
 <div class="avatar-container">
-<img src="IMG_1101.png" alt="Duckie Duck Pro Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)\' width=\'60\' height=\'60\'><circle cx=\'30\' cy=\'30\' r=\'30\' fill=\'%232e6f40\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'20\'>🦆</text></svg>'">
+<img src="IMG_1101.png" alt="Duckie Duck Pro Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\'><circle cx=\'30\' cy=\'30\' r=\'30\' fill=\'%232e6f40\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'20\'>🦆</text></svg>'">
 </div>
 <div class="assistant-name">Duckie Guai-fai'v</div>
 <div class="assistant-subtitle">Unified AI Assistant Stack (Streaming Real / Local)</div>
@@ -889,7 +889,7 @@ let buttonStateSequence = [];
 function registerButtonDependency(buttonName) {
 const timestamp = new Date().toLocaleTimeString();
 buttonStateSequence.push({ button: buttonName, time: timestamp, sequenceIndex: buttonStateSequence.length + 1 });
-console.log(⁠[Dependencia de Botón Secuencial - DuckieTalkPro] Paso #${buttonStateSequence.length} -> Botón: ${buttonName} presionado a las ${timestamp}⁠);
+console.log(`[Dependencia de Botón Secuencial - DuckieTalkPro] Paso #${buttonStateSequence.length} -> Botón: ${buttonName} presionado a las ${timestamp}`);
 }
 // --- FUNCIONES DEL MENÚ LATERAL IZQUIERDO ---
 function menuTecnicoTalkPro() {
@@ -934,7 +934,7 @@ if(pass === null) return;
 userAccountData.email = email.trim();
 if(pass.trim() !== "") userAccountData.password = pass.trim();
 saveDataToLocalStorage();
-alert(⁠Credenciales actualizadas y aseguradas para: ${userAccountData.email}⁠);
+alert(`Credenciales actualizadas y aseguradas para: ${userAccountData.email}`);
 }
 function configAddNewAccount() {
 registerButtonDependency('Configuración: Agregar Cuenta Nueva');
@@ -948,11 +948,11 @@ userAccountData.lastName = lName || "";
 userAccountData.address = addr || "";
 userAccountData.paymentMethod = pay || "No registrado";
 saveDataToLocalStorage();
-alert(⁠Cuenta de ${fName} ${lName} agregada y configurada con método de pago.⁠);
+alert(`Cuenta de ${fName} ${lName} agregada y configurada con método de pago.`);
 }
 function configEmailAddress() {
 registerButtonDependency('Configuración: Email Address');
-alert(⁠El correo electrónico activo actual en el sistema es:\n📧 ${userAccountData.email}⁠);
+alert(`El correo electrónico activo actual en el sistema es:\n📧 ${userAccountData.email}`);
 }
 function configNotifications() {
 registerButtonDependency('Configuración: Notifications');
@@ -960,18 +960,18 @@ const soundChoice = prompt("Seleccione el tono de notificaciones:\n1. Tono Prede
 if(soundChoice) {
 userAccountData.notificationsSound = soundChoice;
 saveDataToLocalStorage();
-alert(⁠Notificaciones actualizadas. Sonido activo: ${soundChoice}⁠);
+alert(`Notificaciones actualizadas. Sonido activo: ${soundChoice}`);
 }
 }
 function configTwoStepVerification() {
 registerButtonDependency('Configuración: Two-Step Verification');
 const currentState = userAccountData.twoStepActive ? "ACTIVADA 🟢" : "DESACTIVADA 🔴";
-const action = confirm(⁠La verificación en dos pasos está actualmente: ${currentState}\n\n¿Desea cambiar el estado de seguridad?⁠);
+const action = confirm(`La verificación en dos pasos está actualmente: ${currentState}\n\n¿Desea cambiar el estado de seguridad?`);
 if(action) {
 userAccountData.twoStepActive = !userAccountData.twoStepActive;
 if(userAccountData.twoStepActive) {
 const confirmationCode = Math.floor(100000 + Math.random() * 900000);
-const enteredCode = prompt(⁠Se ha enviado un código de confirmación de 6 dígitos a su correo (${userAccountData.email}).\n(Simulación - Ingrese el código ${confirmationCode} para verificar):⁠);
+const enteredCode = prompt(`Se ha enviado un código de confirmación de 6 dígitos a su correo (${userAccountData.email}).\n(Simulación - Ingrese el código ${confirmationCode} para verificar):`);
 if(enteredCode == confirmationCode) {
 alert("✅ Verificación en dos pasos ACTIVADA con éxito.");
 } else {
@@ -1018,12 +1018,12 @@ alert("¡Colores del chat actualizados correctamente!");
 function configShowAccount() {
 registerButtonDependency('Configuración: You account');
 alert(
-⁠👤 INFORMACIÓN DE CUENTA ACTIVA:\n\n⁠ +
-⁠• Nombre: ${userAccountData.firstName} ${userAccountData.lastName}\n⁠ +
-⁠• Email: ${userAccountData.email}\n⁠ +
-⁠• Dirección: ${userAccountData.address}\n⁠ +
-⁠• Método de Pago: ${userAccountData.paymentMethod}\n⁠ +
-⁠• 2-Step Verification: ${userAccountData.twoStepActive ? 'Activa' : 'Inactiva'}⁠
+`👤 INFORMACIÓN DE CUENTA ACTIVA:\n\n` +
+`• Nombre: ${userAccountData.firstName} ${userAccountData.lastName}\n` +
+`• Email: ${userAccountData.email}\n` +
+`• Dirección: ${userAccountData.address}\n` +
+`• Método de Pago: ${userAccountData.paymentMethod}\n` +
+`• 2-Step Verification: ${userAccountData.twoStepActive ? 'Activa' : 'Inactiva'}`
 );
 }
 function configDeleteAccount() {
@@ -1045,13 +1045,13 @@ const isLight = document.getElementById('themeToggleCheckbox').checked;
 const newTheme = isLight ? 'light' : 'dark';
 document.body.setAttribute('data-theme', newTheme);
 localStorage.setItem('duckie_theme', newTheme);
-registerButtonDependency(⁠Cambio de Tema: ${newTheme}⁠);
+registerButtonDependency(`Cambio de Tema: ${newTheme}`);
 }
 // --- LLAMADAS ---
 let callTimerInterval = null;
 let callSecondsCount = 0;
 function startNativeCall(phoneNumber, contactName) {
-registerButtonDependency(⁠Llamada Nativa a: ${contactName} (${phoneNumber})⁠);
+registerButtonDependency(`Llamada Nativa a: ${contactName} (${phoneNumber})`);
 const overlay = document.getElementById('activeCallOverlay');
 document.getElementById('callTargetName').textContent = contactName || phoneNumber;
 document.getElementById('callStatusTimer').textContent = 'Conectando con red nativa...';
@@ -1066,7 +1066,7 @@ callTimerInterval = setInterval(() => {
 callSecondsCount++;
 let mins = Math.floor(callSecondsCount / 60).toString().padStart(2, '0');
 let secs = (callSecondsCount % 60).toString().padStart(2, '0');
-document.getElementById('callStatusTimer').textContent = ⁠${mins}:${secs}⁠;
+document.getElementById('callStatusTimer').textContent = `${mins}:${secs}`;
 }, 1000);
 }
 function endActiveCall() {
@@ -1145,7 +1145,7 @@ function clearKeypad() { document.getElementById('keypadDisplay').value = ''; }
 function executeKeypadCall() {
 const num = document.getElementById('keypadDisplay').value;
 if (!num) { alert("Ingrese un número en el Keypad primero."); return; }
-registerButtonDependency(⁠Keypad Llamada a: ${num}⁠);
+registerButtonDependency(`Keypad Llamada a: ${num}`);
 startNativeCall(num, 'Marcación Manual');
 }
 function keypadSaveContact() {
@@ -1157,11 +1157,11 @@ function keypadSendMessage() {
 const num = document.getElementById('keypadDisplay').value;
 if (!num) { alert("No hay número digitado en el Keypad."); return; }
 switchView('chats', document.querySelector('.bottom-nav .nav-item:nth-child(4)'));
-appendSystemMessage(⁠Iniciando chat con número: ${num}⁠);
+appendSystemMessage(`Iniciando chat con número: ${num}`);
 }
 function saveContactNative(contactName) {
-registerButtonDependency(⁠Guardar Contacto: ${contactName}⁠);
-alert(⁠Contacto "${contactName}" guardado en la libreta nativa de Android/iOS.⁠);
+registerButtonDependency(`Guardar Contacto: ${contactName}`);
+alert(`Contacto "${contactName}" guardado en la libreta nativa de Android/iOS.`);
 }
 function filterContacts() {
 const query = document.getElementById('contactSearchInput').value.toLowerCase();
@@ -1179,17 +1179,58 @@ const firstName = preName || prompt("Ingrese el Nombre del nuevo contacto:") || 
 if (!firstName && !prePhone) return;
 const lastName = preLastName || prompt("Ingrese el Apellido:") || "";
 const phone = prePhone || prompt("Ingrese el número telefónico:") || "";
-const fullName = ⁠${firstName} ${lastName}⁠.trim() || phone;
+const fullName = `${firstName} ${lastName}`.trim() || phone;
 savedContacts.push({ name: fullName, phone: phone });
 saveDataToLocalStorage();
 renderSavedContacts();
-alert(⁠Contacto "${fullName}" agregado y persistido correctamente.⁠);
+alert(`Contacto "${fullName}" agregado y persistido correctamente.`);
 }
 function renderSavedContacts() {
 const container = document.getElementById('contactsContainer');
-let html = ⁠ <div class="content-card contact-card-item" data-name="duckie support team"> <div style="display: flex; gap: 12px; align-items: center;"> <div class="avatar-container" style="width: 45px; height: 45px;">🦆</div> <div> <h3>Duckie Support Team</h3> <p>📱 Tel: +1 (800) DUCKIE-AI</p> </div> </div> <div class="action-row" style="margin-top: 10px;"> <button class="btn-action-small" onclick="saveContactNative('Duckie Support Team')">Guardar en Sistema</button> <button class="btn-action-small" onclick="startNativeCall('+18003825433', 'Duckie Support Team')">Llamar</button> </div> </div> <div class="content-card contact-card-item" data-name="amado apolonio"> <div style="display: flex; gap: 12px; align-items: center;"> <div class="avatar-container" style="width: 45px; height: 45px;">👨‍💻</div> <div> <h3>Amado Apolonio (Admin)</h3> <p>📱 Tel: +52 (55) DUCK-PRO</p> </div> </div> <div class="action-row" style="margin-top: 10px;"> <button class="btn-action-small" onclick="saveContactNative('Amado Apolonio')">Guardar en Sistema</button> <button class="btn-action-small" onclick="startNativeCall('+52553825770', 'Amado Apolonio (Admin)')">Llamar</button> </div> </div>⁠;
+let html = `
+<div class="content-card contact-card-item" data-name="duckie support team">
+<div style="display: flex; gap: 12px; align-items: center;">
+<div class="avatar-container" style="width: 45px; height: 45px;">🦆</div>
+<div>
+<h3>Duckie Support Team</h3>
+<p>📱 Tel: +1 (800) DUCKIE-AI</p>
+</div>
+</div>
+<div class="action-row" style="margin-top: 10px;">
+<button class="btn-action-small" onclick="saveContactNative('Duckie Support Team')">Guardar en Sistema</button>
+<button class="btn-action-small" onclick="startNativeCall('+18003825433', 'Duckie Support Team')">Llamar</button>
+</div>
+</div>
+<div class="content-card contact-card-item" data-name="amado apolonio">
+<div style="display: flex; gap: 12px; align-items: center;">
+<div class="avatar-container" style="width: 45px; height: 45px;">👨‍💻</div>
+<div>
+<h3>Amado Apolonio (Admin)</h3>
+<p>📱 Tel: +52 (55) DUCK-PRO</p>
+</div>
+</div>
+<div class="action-row" style="margin-top: 10px;">
+<button class="btn-action-small" onclick="saveContactNative('Amado Apolonio')">Guardar en Sistema</button>
+<button class="btn-action-small" onclick="startNativeCall('+52553825770', 'Amado Apolonio (Admin)')">Llamar</button>
+</div>
+</div>
+`;
 savedContacts.forEach(c => {
-html += ⁠ <div class="content-card contact-card-item" data-name="${c.name.toLowerCase()}"> <div style="display: flex; gap: 12px; align-items: center;"> <div class="avatar-container" style="width: 45px; height: 45px;">📷</div> <div> <h3>${c.name}</h3> <p>📱 Tel: ${c.phone} (Nativo Android/iOS)</p> </div> </div> <div class="action-row" style="margin-top: 10px;"> <button class="btn-action-small" onclick="saveContactNative('${c.name}')">Guardar en Sistema</button> <button class="btn-action-small" onclick="startNativeCall('${c.phone}', '${c.name}')">Llamar</button> </div> </div>⁠;
+html += `
+<div class="content-card contact-card-item" data-name="${c.name.toLowerCase()}">
+<div style="display: flex; gap: 12px; align-items: center;">
+<div class="avatar-container" style="width: 45px; height: 45px;">📷</div>
+<div>
+<h3>${c.name}</h3>
+<p>📱 Tel: ${c.phone} (Nativo Android/iOS)</p>
+</div>
+</div>
+<div class="action-row" style="margin-top: 10px;">
+<button class="btn-action-small" onclick="saveContactNative('${c.name}')">Guardar en Sistema</button>
+<button class="btn-action-small" onclick="startNativeCall('${c.phone}', '${c.name}')">Llamar</button>
+</div>
+</div>
+`;
 });
 container.innerHTML = html;
 }
@@ -1198,14 +1239,14 @@ registerButtonDependency('Chat: Contestar mensaje');
 const replyText = prompt("Escriba su respuesta:");
 if (replyText) {
 switchView('ai', document.querySelector('.bottom-nav .nav-item:nth-child(3)'));
-document.getElementById('chatInput').value = ⁠Respondiendo: "${replyText}"⁠;
+document.getElementById('chatInput').value = `Respondiendo: "${replyText}"`;
 sendUserMessage();
 }
 }
 function sendMessageDirect(btn) {
 registerButtonDependency('Chat: Mandar mensaje directo');
 const msg = prompt("Escriba el mensaje a enviar:");
-if (msg) { appendSystemMessage(⁠Mensaje directo enviado: "${msg}"⁠); }
+if (msg) { appendSystemMessage(`Mensaje directo enviado: "${msg}"`); }
 }
 function deleteMessage(btn) {
 registerButtonDependency('Chat: Borrar mensaje');
@@ -1218,7 +1259,7 @@ const txt = prompt("Escriba el texto para su Status:");
 if (txt) {
 savedStatuses.push({ type: 'text', content: txt, bg: '#2e6f40' });
 saveDataToLocalStorage();
-alert(⁠Estado de texto publicado exitosamente y añadido al Story View.⁠);
+alert(`Estado de texto publicado exitosamente y añadido al Story View.`);
 }
 }
 function configureLayoutStatus() { registerButtonDependency('Status: Layout'); alert("Abriendo editor de Layout para historias."); }
@@ -1230,21 +1271,21 @@ fileInput.setAttribute('accept', 'video/*');
 fileInput.click();
 }
 function generateAIImageStatus() {
-registerButtonDependency('Status: Create with Duckie Guai-fai'v');
+registerButtonDependency("Status: Create with Duckie Guai-fai'v");
 const promptAI = prompt("Describa la imagen AI que desea generar para su Status con Duckie Guai-fai'v:");
 if (promptAI) {
-savedStatuses.push({ type: 'text', content: ⁠[AI Image Status]: ${promptAI}⁠, bg: '#1a3a22' });
+savedStatuses.push({ type: 'text', content: `[AI Image Status]: ${promptAI}`, bg: '#1a3a22' });
 saveDataToLocalStorage();
-alert(⁠Duckie Guai-fai'v generó imagen con prompt: "${promptAI}"... ¡Guardada en el Story View!⁠);
+alert(`Duckie Guai-fai'v generó imagen con prompt: "${promptAI}"... ¡Guardada en el Story View!`);
 }
 }
 function toggleLeftMenu() { registerButtonDependency('Menú Lateral Izquierdo (☰)'); document.getElementById('leftMenu').classList.toggle('hidden-left'); closeAllPopovers(); }
 function toggleRightMenu() { registerButtonDependency('Configuración / Settings (⚙️)'); document.getElementById('rightMenu').classList.toggle('hidden-right'); closeAllPopovers(); }
 function closeAllPopovers() { document.getElementById('plusPopover').style.display = 'none'; document.getElementById('loginPopover').style.display = 'none'; }
 function switchView(viewId, btnElement) {
-registerButtonDependency(⁠Navegación inferior: Vista ${viewId}⁠);
+registerButtonDependency(`Navegación inferior: Vista ${viewId}`);
 document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
-const targetView = document.getElementById(⁠view-${viewId}⁠);
+const targetView = document.getElementById(`view-${viewId}`);
 if (targetView) targetView.classList.add('active');
 document.querySelectorAll('.bottom-nav .nav-item').forEach(item => item.classList.remove('active'));
 if (btnElement) btnElement.classList.add('active');
@@ -1267,7 +1308,7 @@ closeAllPopovers();
 if (!isVisible) popover.style.display = 'block';
 }
 function handleLoginAction(action) {
-registerButtonDependency(⁠Login Action: ${action}⁠);
+registerButtonDependency(`Login Action: ${action}`);
 closeAllPopovers();
 if (action === 'settings') toggleRightMenu();
 else if (action === 'terms') appendSystemMessage("Mostrando Términos de Uso.");
@@ -1289,19 +1330,19 @@ popover.style.top = 'auto';
 }
 }
 function handlePlusAction(type) {
-registerButtonDependency(⁠Plus Action Option: ${type}⁠);
+registerButtonDependency(`Plus Action Option: ${type}`);
 closeAllPopovers();
 const fileInput = document.getElementById('hiddenFileInput');
-if (type === 'camera') { fileInput.setAttribute('capture', 'environment'); fileInput.setAttribute('accept', 'image/'); fileInput.click(); }
-else if (type === 'photos') { fileInput.removeAttribute('capture'); fileInput.setAttribute('accept', 'image/'); fileInput.click(); }
-else if (type === 'files') { fileInput.removeAttribute('capture'); fileInput.setAttribute('accept', '/'); fileInput.click(); }
+if (type === 'camera') { fileInput.setAttribute('capture', 'environment'); fileInput.setAttribute('accept', 'image/*'); fileInput.click(); }
+else if (type === 'photos') { fileInput.removeAttribute('capture'); fileInput.setAttribute('accept', 'image/*'); fileInput.click(); }
+else if (type === 'files') { fileInput.removeAttribute('capture'); fileInput.setAttribute('accept', '*/*'); fileInput.click(); }
 else if (type === 'plugins') { appendSystemMessage("Módulo de Plugins activado."); }
 }
 function processSelectedFile(input) {
 if (input.files && input.files[0]) {
 const file = input.files[0];
-appendSystemMessage(⁠Archivo adjuntado correctamente: ${file.name}⁠);
-chatMessagesHistory.push({ role: "user", content: ⁠[Archivo adjunto: ${file.name}]⁠ });
+appendSystemMessage(`Archivo adjuntado correctamente: ${file.name}`);
+chatMessagesHistory.push({ role: "user", content: `[Archivo adjunto: ${file.name}]` });
 saveDataToLocalStorage();
 }
 }
@@ -1346,7 +1387,7 @@ if (chatsViewActive) {
 const inboxList = document.getElementById('chatInboxList');
 const newBubble = document.createElement('div');
 newBubble.className = 'message-bubble outgoing';
-newBubble.innerHTML = ⁠<strong>Saliente:</strong> ${text} <div class="message-actions"> <button onclick="deleteMessage(this)" style="color: #ff6b6b;">Borrar</button> </div>⁠;
+newBubble.innerHTML = `<strong>Saliente:</strong> ${text} <div class="message-actions"> <button onclick="deleteMessage(this)" style="color: #ff6b6b;">Borrar</button> </div>`;
 inboxList.appendChild(newBubble);
 inboxList.scrollTop = inboxList.scrollHeight;
 input.value = '';
@@ -1370,8 +1411,7 @@ bubble.id = liveBubbleId;
 bubble.innerHTML = '';
 list.appendChild(bubble);
 const aiResponseText = await fetchRealAIResponse(text, (partialText) => {
-document.getElementById(liveBubbleId).innerHTML = partialText.replace(/\n/g, '
-');
+document.getElementById(liveBubbleId).innerHTML = partialText.replace(/\n/g, '<br>');
 list.scrollTop = list.scrollHeight;
 });
 chatMessagesHistory.push({ role: "assistant", content: aiResponseText });
@@ -1384,20 +1424,19 @@ return "Duckie Guai-fai'v: El inventario y los módulos del Marketplace están s
 } else if (lower.includes('codigo') || lower.includes('html')) {
 return "Duckie Guai-fai'v: Estructura front-end y app nativa bajo control total sin cruce de cables.";
 } else {
-return ⁠Duckie Guai-fai'v: Recibido, Amado. Procesando instrucción "${text}" con éxito en el ecosistema.⁠;
+return `Duckie Guai-fai'v: Recibido, Amado. Procesando instrucción "${text}" con éxito en el ecosistema.`;
 }
 }
 function appendMessageAI(text, sender, save=true) {
 const list = document.getElementById('messagesList');
 const bubble = document.createElement('div');
-bubble.className = ⁠message-bubble ${sender}⁠;
-bubble.innerHTML = text.replace(/\n/g, '
-');
+bubble.className = `message-bubble ${sender}`;
+bubble.innerHTML = text.replace(/\n/g, '<br>');
 list.appendChild(bubble);
 list.scrollTop = list.scrollHeight;
 }
 function appendSystemMessage(text) {
-appendMessageAI(⁠<em>${text}</em>⁠, 'incoming', false);
+appendMessageAI(`<em>${text}</em>`, 'incoming', false);
 }
 function showTypingIndicator() {
 const list = document.getElementById('messagesList');
