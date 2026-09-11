@@ -26,13 +26,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (settingsModal) settingsModal.style.display = "none";
     };
 
-    // Función auxiliar para agregar mensajes al chat con la identidad correcta
+    // --- Función auxiliar para agregar mensajes al chat con la identidad correcta ---
     function appendMessage(text, sender) {
         if (!chatContainer) return;
         const msgDiv = document.createElement("div");
         msgDiv.className = `message ${sender}`;
-        msgDiv.innerHTML = sender === "ai" 
-            ? `<strong>Duckie Guai-fai'v 🧠:</strong> ${text}` 
+        msgDiv.innerHTML = sender === "ai"
+            ? `<strong>Duckie Guai-fai'v 🦆:</strong> ${text}`
             : `<strong>Tú:</strong> ${text}`;
         chatContainer.appendChild(msgDiv);
         chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -42,12 +42,12 @@ document.addEventListener("DOMContentLoaded", () => {
     function sendMessage() {
         const text = userInput.value.trim();
         if (!text) return;
-        
+
         appendMessage(text, "user");
         userInput.value = "";
 
-        // Petición directa al servidor local para aislar el AI Chat con el cerebro de Gemini
-        fetch('/api/chat', {
+        // Petición directa al servidor en Render para el AI Chat con el cerebro de Gemini
+        fetch('https://duckietalkpro.onrender.com/api/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -61,14 +61,14 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(error => {
             console.error("Error al conectar con el servidor:", error);
-            appendMessage("¡Quack! Ocurrió un error al conectar con Duckie Guai-fai'v en el servidor local.", "ai");
+            appendMessage("¡Quack! Ocurrió un error al conectar con Duckie Guai-fai'v en el servidor de Render.", "ai");
         });
     }
 
     if (btnSend) {
         btnSend.addEventListener("click", sendMessage);
     }
-    
+
     if (userInput) {
         userInput.addEventListener("keypress", (e) => {
             if (e.key === "Enter") sendMessage();
