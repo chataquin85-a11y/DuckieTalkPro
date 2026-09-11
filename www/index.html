@@ -844,7 +844,7 @@ async function askGuaiFai(text, onChunk) {
         body: JSON.stringify({
             messages: [
                 { role: "system", content: "Eres Duckie Guai-fai'v 🧠. El fiel asistente de Amado Apolonio Simom. Responde directo, empático, con tono norteño y servicial." },
-                { role: "user", content: text }
+                { role: "user", parts: [{ text: text }] }
             ]
         })
     });
