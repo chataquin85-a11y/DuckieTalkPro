@@ -1,10 +1,25 @@
 const express = require('express');
 const cors = require('cors');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+
 const app = express();
-app.use(cors({ origin: '*', methods: ['GET', 'POST', 'OPTIONS'], allowedHeaders: ['Content-Type'] }));
+
+app.use(cors({
+  origin: [
+    "https://duckie-guai-faiv-app.web.app",
+    "https://www.duckiethemus.com",
+    "http://localhost:3000",
+    "http://localhost:5173"
+  ],
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+app.options('*', cors());
 app.use(express.json());
+
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
 app.post('/api/chat', async (req, res) => {
 try {
 console.log("Body que llegó:", req.body);
@@ -28,6 +43,7 @@ console.error("ERROR GEMINI:", e);
 res.status(500).json({ error: e.message });
 }
 });
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
 console.log("Servidor Duckie Backend corriendo en puerto " + PORT);
