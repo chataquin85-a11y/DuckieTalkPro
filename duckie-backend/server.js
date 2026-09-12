@@ -58,7 +58,7 @@ app.post('/api/chat', async (req, res) => {
     const fullPrompt = "Eres Duckie Guai-fai'v 🧠. El fiel asistente de Amado Apolonio Simom. Responde directo, empático, con tono norteño y servicial.\n\nUsuario: " + userPrompt;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-2.5-flash',
       contents: fullPrompt,
     });
 
