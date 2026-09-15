@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("[DuckieTalkPro] Sistema completo al 100%: VOIP, IA y Ads activos. 🦆🚀");
+    console.log("[DuckieTalkPro] Sistema completo al 100%: VOIP, IA y Ads activos. 🦆");
 
     const chatContainer = document.getElementById("chat-container");
     const userInput = document.getElementById("user-input");
@@ -9,10 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const settingsModal = document.getElementById("settings-modal");
     const menuBurger = document.getElementById("menu-burger");
     const btnSettings = document.getElementById("btn-settings");
-
-    const btnClip = document.getElementById("btn-clip");
-    const btnEmoji = document.getElementById("btn-emoji");
-    const btnMic = document.getElementById("btn-mic");
 
     if (menuBurger) {
         menuBurger.addEventListener("click", () => burgerModal.style.display = "flex");
@@ -31,8 +27,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!chatContainer) return;
         const msgDiv = document.createElement("div");
         msgDiv.className = `message ${sender}`;
-        msgDiv.innerHTML = sender === "ai"
-            ? `<strong>Duckie Guai-fai'v 🦆:</strong> ${text}`
+        msgDiv.innerHTML = sender === "ai" 
+            ? `<strong>Duckie Guai-fai'v 🦆:</strong> ${text}` 
             : `<strong>Tú:</strong> ${text}`;
         chatContainer.appendChild(msgDiv);
         chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -46,13 +42,19 @@ document.addEventListener("DOMContentLoaded", () => {
         appendMessage(text, "user");
         userInput.value = "";
 
+        // Recupera el rol guardado (vip_patron o standard) para enviarlo al servidor
+        const userRole = localStorage.getItem("duckie_role") || "standard";
+
         // Petición directa al servidor en Render para el AI Chat con el cerebro de Gemini
         fetch('https://duckietalkpro.onrender.com/api/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ message: text })
+            body: JSON.stringify({ 
+                message: text,
+                role: userRole 
+            })
         })
         .then(response => response.json())
         .then(data => {
