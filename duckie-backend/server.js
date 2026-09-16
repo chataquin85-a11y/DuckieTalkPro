@@ -1,8 +1,12 @@
 const express = require('express');
+const http = require('http');
+const WebSocket = require('ws');
 const cors = require('cors');
 const { GoogleGenAI } = require('@google/genai');
 
 const app = express();
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
 
 // Configuración de CORS
 app.use(cors({
@@ -60,9 +64,9 @@ app.post('/api/chat', async (req, res) => {
         let systemInstruction = "";
 
         if (userRole === "vip_patron") {
-            systemInstruction = "Eres Duckie Guai-fai'v 🦆. El fiel asistente y mano derecha de Amado Apolonio Simom. Respondes con trato de confianza, jerga norteña, lealtad absoluta, humor entrón y acceso total al patrón.";
+            systemInstruction = "Eres Duckie Guai-fai'v 🧠. El fiel asistente y mano derecha de Amado Apolonio Simom. Respondes con trato de confianza, jerga norteña, lealtad absoluta, humor entrón y acceso total al patrón.";
         } else {
-            systemInstruction = "Eres Duckie Guai-fai'v 🦆, un asistente digital servicial, educado, neutral y profesional. Mantén un tono seguro y asegúrate de cumplir estrictamente con las políticas de contenido de las tiendas de aplicaciones móviles (Play Store y App Store).";
+            systemInstruction = "Eres Duckie Guai-fai'v 🧠, un asistente digital servicial, educado, neutral y profesional. Mantén un tono seguro y asegúrate de cumplir estrictamente con las políticas de contenido de las tiendas de aplicaciones móviles (Play Store y App Store).";
         }
 
         const fullPrompt = systemInstruction + "\n\nUsuario: " + userPrompt;
@@ -80,7 +84,51 @@ app.post('/api/chat', async (req, res) => {
     }
 });
 
+// ==========================================
+// --- SERVIDOR DE SEÑALIZACIÓN WEBSOCKETS ---
+// ==========================================
+const connectedUsers = new Map();
+
+wss.on('connection', (ws) => {
+    let currentUser = null;
+    console.log('[WebSocket] Nuevo dispositivo conectado al canal de señalización VoIP.');
+
+    ws.on('message', (message) => {
+        try {
+            const data = JSON.parse(message);
+
+            if (data.type === 'register') {
+                currentUser = data.userId;
+                connectedUsers.set(currentUser, ws);
+                console.log(`[Signaling] Usuario registrado exitosamente: ${currentUser}`);
+            } 
+            else if (data.type === 'offer' || data.type === 'answer' || data.type === 'candidate') {
+                const targetSocket = connectedUsers.get(data.target);
+                if (targetSocket && targetSocket.readyState === WebSocket.OPEN) {
+                    targetSocket.send(JSON.stringify({
+                        type: data.type,
+                        from: currentUser,
+                        payload: data.payload
+                    }));
+                    console.log(`[Signaling] Paquete [${data.type}] enrutado con éxito hacia: ${data.target}`);
+                } else {
+                    console.log(`[Signaling] Destinatario no encontrado o desconectado: ${data.target}`);
+                }
+            }
+        } catch (err) {
+            console.error("[WebSocket Error] No se pudo procesar el mensaje:", err);
+        }
+    });
+
+    ws.on('close', () => {
+        if (currentUser) {
+            connectedUsers.delete(currentUser);
+            console.log(`[Signaling] Usuario desconectado: ${currentUser}`);
+        }
+    });
+});
+
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log("Servidor Duckie Backend corriendo en puerto " + PORT);
+server.listen(PORT, () => {
+    console.log("Servidor Duckie Backend unificado (HTTP + WebSockets VoIP) corriendo en puerto " + PORT);
 });

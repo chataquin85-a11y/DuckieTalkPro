@@ -497,7 +497,7 @@ animation: fadeInCall 0.3s ease;
 #storyViewerModal {
 position: fixed;
 top: 0; left: 0; width: 100%; height: 100%;
-background: rgba(0,0,0,0.92);
+background: rgba(0,0,0,0.95);
 z-index: 9998;
 display: none;
 flex-direction: column;
@@ -556,7 +556,7 @@ input:checked + .slider-toggle:before { transform: translateX(22px); }
 <div class="menu-panel left hidden-left" id="leftMenu">
 <div class="menu-header">
 <span>Navegación / Archivo</span>
-<button class="icon-btn" id="menuToggleBtn" onclick="togglePestanaSidebar()">☰</button>
+<button class="icon-btn" id="menuToggleBtn" onclick="toggleLeftMenu()">✕</button>
 </div>
 <ul class="menu-items">
 <li onclick="menuActionFile('Chats')">Chats</li>
@@ -584,7 +584,9 @@ input:checked + .slider-toggle:before { transform: translateX(22px); }
 <div id="contactsContainer">
 <div class="content-card contact-card-item" data-name="duckie support team">
 <div style="display: flex; gap: 12px; align-items: center;">
-<div class="avatar-container" style="width: 45px; height: 45px;">🦆</div>
+<div class="avatar-container" style="width: 45px; height: 45px;">
+<img src="IMG_1101.png" alt="Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'45\' height=\'45\'><circle cx=\'22\' cy=\'22\' r=\'22\' fill=\'%232e6f40\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'16\'>🦆</text></svg>'">
+</div>
 <div>
 <h3>Duckie Support Team</h3>
 <p>📱 Tel: +1 (800) DUCKIE-AI</p>
@@ -592,7 +594,7 @@ input:checked + .slider-toggle:before { transform: translateX(22px); }
 </div>
 <div class="action-row" style="margin-top: 10px;">
 <button class="btn-action-small" onclick="saveContactNative('Duckie Support Team')">Guardar en Sistema</button>
-<button class="btn-action-small" onclick="startNativeCall('+18003825433', 'Duckie Support Team')">Llamar</button>
+<button class="btn-action-small" onclick="startWebRTCWebCall('duckie_support', 'Duckie Support Team')">Llamar VoIP</button>
 </div>
 </div>
 <div class="content-card contact-card-item" data-name="amado apolonio">
@@ -605,19 +607,21 @@ input:checked + .slider-toggle:before { transform: translateX(22px); }
 </div>
 <div class="action-row" style="margin-top: 10px;">
 <button class="btn-action-small" onclick="saveContactNative('Amado Apolonio')">Guardar en Sistema</button>
-<button class="btn-action-small" onclick="startNativeCall('+52553825770', 'Amado Apolonio (Admin)')">Llamar</button>
+<button class="btn-action-small" onclick="startWebRTCWebCall('amado_admin', 'Amado Apolonio (Admin)')">Llamar VoIP</button>
 </div>
 </div>
 </div>
 </div>
 <div id="view-llamadas" class="app-view">
 <div class="chat-header-profile">
-<div class="avatar-container">📞</div>
-<div class="assistant-name">Centro de Llamadas DuckieTalkPro</div>
-<div class="assistant-subtitle">Marcador Numérico & Historial Nativo</div>
+<div class="avatar-container">
+<img src="IMG_1101.png" alt="Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\'><circle cx=\'30\' cy=\'30\' r=\'30\' fill=\'%232e6f40\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'20\'>📞</text></svg>'">
+</div>
+<div class="assistant-name">Centro de Llamadas WebRTC DuckieTalkPro</div>
+<div class="assistant-subtitle">Marcador VoIP & Streaming de Datos en Tiempo Real</div>
 </div>
 <div class="keypad-container">
-<input type="text" id="keypadDisplay" class="keypad-display" placeholder="Ingresar número..." readonly>
+<input type="text" id="keypadDisplay" class="keypad-display" placeholder="Ingresar ID o número..." readonly>
 <div class="keypad-grid">
 <button class="keypad-btn" onclick="appendKey('1')">1</button>
 <button class="keypad-btn" onclick="appendKey('2')">2</button>
@@ -636,16 +640,12 @@ input:checked + .slider-toggle:before { transform: translateX(22px); }
 <button class="btn-action-small" onclick="clearKeypad()">Borrar</button>
 <button class="btn-action-small" onclick="keypadSaveContact()">Guardar Contacto</button>
 <button class="btn-action-small" onclick="keypadSendMessage()">Mandar Mensaje</button>
-<button class="btn-action-small" style="background-color: var(--accent-hover);" onclick="executeKeypadCall()">📞 Llamar</button>
+<button class="btn-action-small" style="background-color: var(--accent-hover);" onclick="executeWebRTCCallFromKeypad()">🌐 Llamada VoIP WebRTC</button>
 </div>
 </div>
 <div class="content-card">
-<h3>📞 Llamada Entrante (Hace 2 min) <button class="btn-action-small" onclick="startNativeCall('+18003825433', 'Duckie Support')">Regresar</button></h3>
-<p>Estado: Entrante finalizada — +1 (800) DUCKIE-AI</p>
-</div>
-<div class="content-card">
-<h3>📲 Llamada Saliente (Hace 15 min) <button class="btn-action-small" onclick="startNativeCall('+52553825770', 'Amado Apolonio')">Regresar</button></h3>
-<p>Estado: Saliente exitosa — Duración: 3m 42s</p>
+<h3>📞 Videollamada P2P Activa <button class="btn-action-small" onclick="initWebRTCSignalingSocket()">Conectar WebSocket</button></h3>
+<p>Estado del Canal: Listo para negociar flujos de audio y video vía STUN.</p>
 </div>
 </div>
 <!-- VISTA DE CHAT DE IA (view-ai con messagesList) -->
@@ -669,7 +669,9 @@ Todo al centavo con las vistas, el keypad y los módulos nativos.
 <!-- BANDEJA DE CHATS NATIVOS (view-chats con chatInboxList) -->
 <div id="view-chats" class="app-view">
 <div class="chat-header-profile">
-<div class="avatar-container">💬</div>
+<div class="avatar-container">
+<img src="IMG_1101.png" alt="Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\'><circle cx=\'30\' cy=\'30\' r=\'30\' fill=\'%232e6f40\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'20\'>💬</text></svg>'">
+</div>
 <div class="assistant-name">Bandeja de Chats DuckieTalkPro</div>
 <div class="assistant-subtitle">Mensajes Entrantes y Salientes Nativos</div>
 </div>
@@ -690,27 +692,26 @@ Todo al centavo con las vistas, el keypad y los módulos nativos.
 </div>
 </div>
 </div>
+<!-- VISTA DE STATUS / HISTORIAS (Con cobro de vida multimedia) -->
 <div id="view-status" class="app-view">
 <div class="chat-header-profile">
-<div class="avatar-container">📊</div>
+<div class="avatar-container">
+<img src="IMG_1101.png" alt="Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\'><circle cx=\'30\' cy=\'30\' r=\'30\' fill=\'%232e6f40\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'20\'>📊</text></svg>'">
+</div>
 <div class="assistant-name">Status Center & Historias DuckieTalkPro</div>
 <div class="assistant-subtitle">Android / iOS Native Experience (Story View)</div>
 </div>
 <div class="content-card" style="border: 2px dashed var(--accent-color); text-align: center; cursor: pointer;" onclick="openStoryViewer()">
 <h3>⚡ Ver Historias Activas (Story View)</h3>
-<p>Haz clic aquí para abrir el carrusel interactivo simulado de WhatsApp/Instagram.</p>
+<p>Haz clic aquí para abrir el carrusel interactivo multimedia de estados.</p>
 </div>
 <div class="content-card">
 <h3>📝 Add Status Text <button class="btn-action-small" onclick="addStatusText()">Crear Estado</button></h3>
 <p>Comparte estado tipográfico con selector de color de fondo guardado localmente.</p>
 </div>
 <div class="content-card">
-<h3>📐 Status Layout <button class="btn-action-small" onclick="configureLayoutStatus()">Configurar Layout</button></h3>
-<p>Personaliza la plantilla visual de tus publicaciones multimedia.</p>
-</div>
-<div class="content-card">
-<h3>🎬 Status Video <button class="btn-action-small" onclick="uploadStatusVideo()">Subir / Grabar Video</button></h3>
-<p>Integra clips de video en tus estados activos.</p>
+<h3>🎬 Status Video & Fotos <button class="btn-action-small" onclick="triggerStatusMediaUpload()">Subir / Tomar Multimedia</button></h3>
+<p>Integra fotos o clips de video directamente desde tu dispositivo o cámara.</p>
 </div>
 <div class="content-card">
 <h3>🤖 Create with Duckie Guai-fai'v <button class="btn-action-small" onclick="generateAIImageStatus()">Generar con IA</button></h3>
@@ -786,31 +787,40 @@ Todo al centavo con las vistas, el keypad y los módulos nativos.
 </div>
 <!-- --- OVERLAYS NATIVOS --- -->
 <div id="activeCallOverlay">
-<div style="display: flex; flex-direction: column; align-items: center; margin-top: 40px;">
-<div class="avatar-container" style="width: 100px; height: 100px; font-size: 2.5rem; margin-bottom: 15px;" id="callAvatarIcon">🦆</div>
-<h2 id="callTargetName" style="font-size: 1.5rem; color: #ffffff;">Duckie Support Team</h2>
-<p id="callStatusTimer" style="color: var(--text-muted); font-size: 1rem; margin-top: 5px;">Marcando / Llamando...</p>
+<div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">
+<div class="avatar-container" style="width: 80px; height: 80px; font-size: 2rem; margin-bottom: 10px;" id="callAvatarIcon">
+<img src="IMG_1101.png" alt="Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\'><circle cx=\'40\' cy=\'40\' r=\'40\' fill=\'%232e6f40\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'24\'>🦆</text></svg>'">
 </div>
-<div style="display: flex; gap: 30px; margin-bottom: 50px;">
-<button onclick="toggleCallMute()" class="keypad-btn" style="background: #333; width: 65px; height: 65px;" title="Silenciar">🔇</button>
-<button onclick="toggleCallSpeaker()" class="keypad-btn" style="background: #333; width: 65px; height: 65px;" title="Altavoz">🔊</button>
-<button onclick="endActiveCall()" class="keypad-btn" style="background: var(--danger-color); border-color: #ff4d4d; width: 65px; height: 65px;" title="Colgar">📴</button>
+<h2 id="callTargetName" style="font-size: 1.3rem; color: #ffffff;">Duckie Support Team</h2>
+<p id="callStatusTimer" style="color: var(--text-muted); font-size: 0.9rem; margin-top: 2px;">Iniciando WebRTC P2P...</p>
+</div>
+<!-- Contenedor de video en tiempo real WebRTC -->
+<div style="display: flex; gap: 15px; margin: 10px 0; justify-content: center; align-items: center;">
+<video id="localVideo" autoplay muted playsinline style="width: 140px; height: 100px; border-radius: 8px; border: 2px solid var(--accent-color); background: #000; object-fit: cover;"></video>
+<video id="remoteVideo" autoplay playsinline style="width: 140px; height: 100px; border-radius: 8px; border: 2px solid #ffd700; background: #000; object-fit: cover;"></video>
+</div>
+<div style="display: flex; gap: 20px; margin-bottom: 20px;">
+<button onclick="toggleCallMute()" class="keypad-btn" style="background: #333; width: 55px; height: 55px;" title="Silenciar">🔇</button>
+<button onclick="toggleCallSpeaker()" class="keypad-btn" style="background: #333; width: 55px; height: 55px;" title="Altavoz">🔊</button>
+<button onclick="endActiveCall()" class="keypad-btn" style="background: var(--danger-color); border-color: #ff4d4d; width: 55px; height: 55px;" title="Colgar">📴</button>
 </div>
 </div>
+
 <div id="storyViewerModal" onclick="closeStoryViewer(event)">
 <div class="story-progress-bar">
 <div class="story-progress-fill" id="storyProgressFill"></div>
 </div>
-<div style="color: white; text-align: center; max-width: 80%; padding: 20px;" id="storyContentContainer">
-<h2 style="color: #ffd700; margin-bottom: 15px;">Historia Activa #1</h2>
-<p id="storyTextDisplay" style="font-size: 1.4rem; line-height: 1.5;">Cargando estados del ecosistema...</p>
+<div style="color: white; text-align: center; max-width: 90%; max-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center;" id="storyContentContainer">
+<h2 style="color: #ffd700; margin-bottom: 15px;" id="storyTitleIndicator">Historia Activa</h2>
+<div id="storyMediaDisplay" style="width: 100%; display: flex; justify-content: center; align-items: center;"></div>
 </div>
-<div style="position: absolute; bottom: 40px; display: flex; gap: 20px;">
+<div style="position: absolute; bottom: 40px; display: flex; gap: 20px; z-index: 999;">
 <button class="btn-action-small" onclick="prevStory()">Anterior</button>
 <button class="btn-action-small" onclick="nextStory()">Siguiente</button>
 <button class="btn-action-small" style="background: var(--danger-color);" onclick="closeStoryViewerForce()">Cerrar</button>
 </div>
 </div>
+
 <div class="popover-menu" id="plusPopover">
 <div class="popover-item" onclick="handlePlusAction('camera')">
 <span>📷</span> Camera
@@ -836,17 +846,17 @@ Todo al centavo con las vistas, el keypad y los módulos nativos.
 <span>🔒</span> Privacy Policy
 </div>
 </div>
-<input type="file" id="hiddenFileInput" onchange="processSelectedFile(this)">
+
+<!-- Input oculto para multimedia y cámara -->
+<input type="file" id="hiddenFileInput" accept="image/*,video/*" capture="environment" onchange="processSelectedFile(this)">
+
 <script>
 // --- SERVICIO DEL CEREBRO (duckieBrain conectado a Render) ---
 async function askGuaiFai(text, onChunk) {
     const backendUrl = "https://duckietalkpro.onrender.com/api/chat";
-
     const response = await fetch(backendUrl, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             messages: [
                 { role: "system", content: "Eres Duckie Guai-fai'v 🧠. El fiel asistente de Amado Apolonio Simom. Responde directo, empático, con tono norteño y servicial." },
@@ -854,17 +864,10 @@ async function askGuaiFai(text, onChunk) {
             ]
         })
     });
-
-    if (!response.ok) {
-        throw new Error("Error al conectar con el servidor backend en Render.");
-    }
-
+    if (!response.ok) throw new Error("Error al conectar con el servidor backend en Render.");
     const data = await response.json();
     const replyText = data.reply || data.choices?.[0]?.message?.content || "Respuesta recibida del backend.";
-    
-    if (onChunk) {
-        onChunk(replyText);
-    }
+    if (onChunk) onChunk(replyText);
 }
 
 // --- PERSISTENCIA Y ESTADO ---
@@ -890,35 +893,30 @@ notificationsSound: "Default Chime (WhatsApp Style)"
 };
 const currentTheme = localStorage.getItem('duckie_theme') || 'dark';
 document.body.setAttribute('data-theme', currentTheme);
-const savedChatColors = JSON.parse(localStorage.getItem('duckie_chat_colors')) || null;
-if(savedChatColors) {
-document.documentElement.style.setProperty('--chat-bg-outgoing', savedChatColors.outgoingBg);
-document.documentElement.style.setProperty('--chat-text-outgoing', savedChatColors.outgoingText);
-document.documentElement.style.setProperty('--chat-bg-incoming', savedChatColors.incomingBg);
-document.documentElement.style.setProperty('--chat-text-incoming', savedChatColors.incomingText);
-}
+
 document.addEventListener('DOMContentLoaded', () => {
 if(currentTheme === 'light') {
 const cb = document.getElementById('themeToggleCheckbox');
 if(cb) cb.checked = true;
 }
-renderSavedContacts();
 renderChatHistoryOnLoad();
 });
+
 function saveDataToLocalStorage() {
 localStorage.setItem('duckie_contacts', JSON.stringify(savedContacts));
 localStorage.setItem('duckie_statuses', JSON.stringify(savedStatuses));
 localStorage.setItem('duckie_chat_history', JSON.stringify(chatMessagesHistory));
 localStorage.setItem('duckie_account_data', JSON.stringify(userAccountData));
 }
+
 let buttonStateSequence = [];
 function registerButtonDependency(buttonName) {
 const timestamp = new Date().toLocaleTimeString();
 buttonStateSequence.push({ button: buttonName, time: timestamp, sequenceIndex: buttonStateSequence.length + 1 });
-console.log(`[Dependencia de Botón Secuencial - DuckieTalkPro] Paso #${buttonStateSequence.length} -> Botón: ${buttonName} presionado a las ${timestamp}`);
+console.log(`[Dependencia de Botón Secuencial] Paso #${buttonStateSequence.length} -> ${buttonName}`);
 }
 
-// --- FUNCIONES DEL MENÚ IZQUIERDO (Nuevas opciones de archivo solicitadas) ---
+// --- FUNCIONES DE MENÚS Y ARCHIVOS ---
 function menuActionFile(actionName) {
 registerButtonDependency(`Menú Archivo -> ${actionName}`);
 toggleLeftMenu();
@@ -928,30 +926,14 @@ switchView('chats', document.querySelector('.bottom-nav .nav-item:nth-child(4)')
 switchView('ai', document.querySelector('.bottom-nav .nav-item:nth-child(3)'));
 document.getElementById('chatInput').focus();
 } else {
-alert(`📁 Módulo [${actionName}] seleccionado.\nSincronizando registros del espacio de trabajo.`);
+alert(`📁 Módulo [${actionName}] seleccionado.`);
 }
 }
+function menuTecnicoTalkPro() { alert("🛠️ SOPORTE TÉCNICO 24/7 ACTIVO"); toggleLeftMenu(); }
+function menuServicioPrivacidad() { alert("🔒 PRIVACIDAD Y SEGURIDAD LOCAL"); toggleLeftMenu(); }
+function menuCanalVerificado() { alert("🛡️ CANAL OFICIAL VERIFICADO"); toggleLeftMenu(); }
+function menuChatPrivacidad() { alert("💬 CHAT PROTEGIDO"); toggleLeftMenu(); }
 
-function menuTecnicoTalkPro() {
-registerButtonDependency('Menú Técnico TalkPro');
-toggleLeftMenu();
-alert("🛠️ SOPORTE TÉCNICO ESPECIALIZADO 24/7\n\n• Infraestructura general y despliegues en GitHub Pages activos.\n• Configuración de Capacitor y entornos Android Studio en marcha.\n• Sincronización de scripts y variables de entorno al 100%.");
-}
-function menuServicioPrivacidad() {
-registerButtonDependency('Menú Servicio y Privacidad');
-toggleLeftMenu();
-alert("🔒 SERVICIO Y PRIVACIDAD DE DATOS\n\n• Cifrado local garantizado en el almacenamiento del navegador.\n• Encriptación en la nube para sincronización segura.\n• Políticas estrictas de no-rastreo y control absoluto de usuario.");
-}
-function menuCanalVerificado() {
-registerButtonDependency('Menú Channel Verified');
-toggleLeftMenu();
-alert("🛡️ CANAL OFICIAL VERIFICADO\n\nEl canal oficial DuckieGuaiFaiv está protegido mediante autenticación criptográfica de extremo a extremo con servidores autorizados.");
-}
-function menuChatPrivacidad() {
-registerButtonDependency('Menú Chat Privacy');
-toggleLeftMenu();
-alert("💬 PRIVACIDAD DEL CHAT TALKPRO\n\nLos chats están protegidos. Ningún mensaje, archivo adjunto o registro de voz se comparte con terceros ni se utiliza para entrenamiento comercial sin consentimiento.");
-}
 function configLoginSecurity() {
 registerButtonDependency('Configuración: Login y security');
 const email = prompt("Ingrese su Correo Electrónico:", userAccountData.email);
@@ -961,115 +943,38 @@ if(pass === null) return;
 userAccountData.email = email.trim();
 if(pass.trim() !== "") userAccountData.password = pass.trim();
 saveDataToLocalStorage();
-alert(`Credenciales actualizadas y aseguradas para: ${userAccountData.email}`);
+alert(`Credenciales actualizadas para: ${userAccountData.email}`);
 }
 function configAddNewAccount() {
-registerButtonDependency('Configuración: Agregar Cuenta Nueva');
+registerButtonDependency('Configuración: Agregar Cuenta');
 const fName = prompt("Ingrese su Nombre:", "");
 if(!fName) return;
 const lName = prompt("Ingrese su Apellido:", "");
 const addr = prompt("Ingrese su Dirección:", "");
-const pay = prompt("Ingrese método de pago (ej. Tarjeta / PayPal):", "");
+const pay = prompt("Ingrese método de pago:", "");
 userAccountData.firstName = fName;
 userAccountData.lastName = lName || "";
 userAccountData.address = addr || "";
 userAccountData.paymentMethod = pay || "No registrado";
 saveDataToLocalStorage();
-alert(`Cuenta de ${fName} ${lName} agregada y configurada con método de pago.`);
+alert(`Cuenta de ${fName} agregada.`);
 }
-function configEmailAddress() {
-registerButtonDependency('Configuración: Email Address');
-alert(`El correo electrónico activo actual en el sistema es:\n📧 ${userAccountData.email}`);
-}
+function configEmailAddress() { alert(`Correo activo: ${userAccountData.email}`); }
 function configNotifications() {
-registerButtonDependency('Configuración: Notifications');
-const soundChoice = prompt("Seleccione el tono de notificaciones:\n1. Tono Predeterminado (WhatsApp Chime)\n2. Tono Suave (Bell)\n3. Silencioso", userAccountData.notificationsSound);
-if(soundChoice) {
-userAccountData.notificationsSound = soundChoice;
-saveDataToLocalStorage();
-alert(`Notificaciones actualizadas. Sonido activo: ${soundChoice}`);
-}
+const s = prompt("Seleccione tono de notificaciones:", userAccountData.notificationsSound);
+if(s) { userAccountData.notificationsSound = s; saveDataToLocalStorage(); }
 }
 function configTwoStepVerification() {
-registerButtonDependency('Configuración: Two-Step Verification');
-const currentState = userAccountData.twoStepActive ? "ACTIVADA 🟢" : "DESACTIVADA 🔴";
-const action = confirm(`La verificación en dos pasos está actualmente: ${currentState}\n\n¿Desea cambiar el estado de seguridad?`);
-if(action) {
 userAccountData.twoStepActive = !userAccountData.twoStepActive;
-if(userAccountData.twoStepActive) {
-const confirmationCode = Math.floor(100000 + Math.random() * 900000);
-const enteredCode = prompt(`Se ha enviado un código de confirmación de 6 dígitos a su correo (${userAccountData.email}).\n(Simulación - Ingrese el código ${confirmationCode} para verificar):`);
-if(enteredCode == confirmationCode) {
 saveDataToLocalStorage();
-alert("¡Verificación en dos pasos activada exitosamente!");
-} else {
-userAccountData.twoStepActive = false;
-alert("Código incorrecto o acción cancelada.");
-}
-}
-saveDataToLocalStorage();
-}
+alert(`2FA Activo: ${userAccountData.twoStepActive ? 'Sí' : 'No'}`);
 }
 function configChangeChatColor() {
-registerButtonDependency('Configuración: Cambiar color de chat');
-const outgoingBg = prompt("Color de fondo para mensajes salientes (ej. #2e6f40 o rgb(...)):", "#2e6f40");
-if(!outgoingBg) return;
-const incomingBg = prompt("Color de fondo para mensajes entrantes (ej. #1b2e20):", "#1b2e20");
-if(!incomingBg) return;
-document.documentElement.style.setProperty('--chat-bg-outgoing', outgoingBg);
-document.documentElement.style.setProperty('--chat-bg-incoming', incomingBg);
-localStorage.setItem('duckie_chat_colors', JSON.stringify({ outgoingBg, outgoingText: '#ffffff', incomingBg, incomingText: '#ffffff' }));
-alert("¡Colores de chat actualizados correctamente!");
+const bg = prompt("Color de fondo saliente:", "#2e6f40");
+if(bg) document.documentElement.style.setProperty('--chat-bg-outgoing', bg);
 }
-function configShowAccount() {
-registerButtonDependency('Configuración: You account');
-alert(`👤 INFORMACIÓN DE CUENTA\n\n• Nombre: ${userAccountData.firstName} ${userAccountData.lastName}\n• Correo: ${userAccountData.email}\n• Dirección: ${userAccountData.address}\n• Método de Pago: ${userAccountData.paymentMethod}\n• 2FA Activo: ${userAccountData.twoStepActive ? 'Sí' : 'No'}`);
-}
-function configDeleteAccount() {
-registerButtonDependency('Configuración: Borrar cuenta y datos');
-const confirmDelete = confirm("⚠️ ¿Estás seguro de que deseas borrar todos los datos locales y la cuenta de DuckieTalkPro? Esta acción no se puede deshacer.");
-if(confirmDelete) {
-localStorage.clear();
-location.reload();
-}
-}
-
-const DuckieStorage = {
-  getCollection(key) {
-    try {
-      const data = localStorage.getItem('duckie_col_' + key);
-      return data ? JSON.parse(data) : null;
-    } catch(e) { return null; }
-  },
-  setCollection(key, data) {
-    localStorage.setItem('duckie_col_' + key, JSON.stringify(data));
-    saveDataToLocalStorage();
-  },
-  initCollections() {
-    if(!this.getCollection('metadata')) {
-      this.setCollection('metadata', { version: '2.5', initializedAt: new Date().toISOString() });
-    }
-  }
-};
-DuckieStorage.initCollections();
-
-const TabMessageRouter = {
-  activeTab: 'ai',
-  route(message, targetTab = null) {
-    const destination = targetTab || this.activeTab;
-    console.log(`[TabRouter] Enrutando mensaje hacia pestaña: [${destination}] -> "${message}"`);
-    switch(destination) {
-      case 'ai':
-        sendUserMessageToAI(message);
-        break;
-      case 'chats':
-        appendNativeChatMessage(message);
-        break;
-      default:
-        sendUserMessageToAI(message);
-    }
-  }
-};
+function configShowAccount() { alert(`👤 ${userAccountData.firstName} ${userAccountData.lastName}\n📧 ${userAccountData.email}`); }
+function configDeleteAccount() { if(confirm("⚠️ ¿Borrar todos los datos locales?")) { localStorage.clear(); location.reload(); } }
 
 function toggleLeftMenu() { document.getElementById('leftMenu').classList.toggle('hidden-left'); }
 function toggleRightMenu() { document.getElementById('rightMenu').classList.toggle('hidden-right'); }
@@ -1087,43 +992,30 @@ document.getElementById('plusPopover').style.display = 'none';
 document.getElementById('loginPopover').style.display = 'none';
 });
 
-// --- CONTROL DINÁMICO DE TÍTULOS SUPERIORES Y VISTAS ---
 function switchView(viewName, btnElement) {
 document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
 document.getElementById('view-' + viewName).classList.add('active');
 document.querySelectorAll('.bottom-nav .nav-item').forEach(i => i.classList.remove('active'));
 if(btnElement) btnElement.classList.add('active');
-TabMessageRouter.activeTab = viewName;
 
-// Cambio dinámico de título superior solicitado
 const headerTitle = document.getElementById('headerTitleText');
-if(viewName === 'ai') {
-headerTitle.textContent = "DuckieDuckPro";
-} else if(viewName === 'contactos') {
-headerTitle.textContent = "Directorio de Contactos";
-} else if(viewName === 'llamadas') {
-headerTitle.textContent = "Centro de Llamadas";
-} else if(viewName === 'chats') {
-headerTitle.textContent = "Bandeja de Chats";
-} else if(viewName === 'status') {
-headerTitle.textContent = "Status Center";
+if(viewName === 'ai') headerTitle.textContent = "DuckieDuckPro";
+else if(viewName === 'contactos') headerTitle.textContent = "Directorio de Contactos";
+else if(viewName === 'llamadas') headerTitle.textContent = "Centro de Llamadas";
+else if(viewName === 'chats') headerTitle.textContent = "Bandeja de Chats";
+else if(viewName === 'status') headerTitle.textContent = "Status Center";
+
+registerButtonDependency(`Vista -> ${viewName}`);
 }
 
-registerButtonDependency(`Cambio de Vista -> ${viewName}`);
-}
-
-function handleKeyPress(e) {
-if(e.key === 'Enter') {
-sendUserMessage();
-}
-}
+function handleKeyPress(e) { if(e.key === 'Enter') sendUserMessage(); }
 
 function sendUserMessage() {
 const input = document.getElementById('chatInput');
 const txt = input.value.trim();
 if(!txt) return;
 input.value = '';
-TabMessageRouter.route(txt);
+sendUserMessageToAI(txt);
 }
 
 function appendMessageBubble(text, type, containerId) {
@@ -1136,40 +1028,28 @@ list.appendChild(bubble);
 list.scrollTop = list.scrollHeight;
 }
 
-// --- CONEXIÓN EN TU PANTALLA DE AI CON STREAMING NEURONAL ---
 async function sendUserMessageToAI(userText) {
-    chatMessagesHistory.push({ role: "user", content: userText });
-    appendMessageBubble(userText, 'outgoing', 'messagesList');
-    saveDataToLocalStorage();
+chatMessagesHistory.push({ role: "user", content: userText });
+appendMessageBubble(userText, 'outgoing', 'messagesList');
+saveDataToLocalStorage();
 
-    // Burbuja temporal de pensamiento
-    const list = document.getElementById('messagesList');
-    const bubble = document.createElement('div');
-    bubble.className = 'message-bubble incoming';
-    bubble.textContent = '🧠 Pensando...';
-    list.appendChild(bubble);
-    list.scrollTop = list.scrollHeight;
-
-    try {
-        await askGuaiFai(userText, (streamedText) => {
-            bubble.textContent = streamedText;
-            list.scrollTop = list.scrollHeight;
-        });
-        chatMessagesHistory.push({ role: "assistant", content: bubble.textContent });
-        saveDataToLocalStorage();
-    } catch (error) {
-        bubble.textContent = '¡Quack! Ocurrió un error al conectar con el cerebro neuronal.';
-    }
-}
-
-function appendNativeChatMessage(text) {
-const inbox = document.getElementById('chatInboxList');
-if(!inbox) return;
+const list = document.getElementById('messagesList');
 const bubble = document.createElement('div');
-bubble.className = 'message-bubble outgoing';
-bubble.innerHTML = `<strong>Saliente Enrutada:</strong> ${text} <div class="message-actions"><button onclick="deleteMessage(this)" style="color: #ff6b6b;">Borrar</button></div>`;
-inbox.appendChild(bubble);
-inbox.scrollTop = inbox.scrollHeight;
+bubble.className = 'message-bubble incoming';
+bubble.textContent = '🧠 Pensando...';
+list.appendChild(bubble);
+list.scrollTop = list.scrollHeight;
+
+try {
+    await askGuaiFai(userText, (streamedText) => {
+        bubble.textContent = streamedText;
+        list.scrollTop = list.scrollHeight;
+    });
+    chatMessagesHistory.push({ role: "assistant", content: bubble.textContent });
+    saveDataToLocalStorage();
+} catch (error) {
+    bubble.textContent = '¡Quack! Error al conectar con el cerebro neuronal.';
+}
 }
 
 function renderChatHistoryOnLoad() {
@@ -1182,104 +1062,239 @@ const type = msg.role === 'user' ? 'outgoing' : 'incoming';
 appendMessageBubble(msg.content, type, 'messagesList');
 });
 }
-function renderSavedContacts() {}
-function filterContacts() {
-const query = document.getElementById('contactSearchInput').value.toLowerCase();
-document.querySelectorAll('.contact-card-item').forEach(card => {
-const name = card.getAttribute('data-name');
-card.style.display = name.includes(query) ? 'flex' : 'none';
-});
+
+// ==========================================
+// --- MÓDULO WEBRTC Y SEÑALIZACIÓN WEBSOCKET ---
+// ==========================================
+let localStream = null;
+let remoteStream = null;
+let peerConnection = null;
+let signalingSocket = null;
+
+const rtcConfig = {
+    iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+        { urls: 'stun:stun1.l.google.com:19302' }
+    ]
+};
+
+// Iniciar servidor de señalización WebSockets (Conéctalo a tu backend o instancia WS)
+function initWebRTCSignalingSocket() {
+    try {
+        signalingSocket = new WebSocket('wss://duckietalkpro.onrender.com'); // O tu endpoint WS
+        signalingSocket.onopen = () => console.log("[WebRTC] Conectado al servidor de señalización WebSocket.");
+        signalingSocket.onmessage = async (event) => {
+            const data = JSON.parse(event.data);
+            if (!peerConnection) createPeerConnectionForIncoming();
+            if (data.type === 'offer') {
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(data.payload));
+                const answer = await peerConnection.createAnswer();
+                await peerConnection.setLocalDescription(answer);
+                signalingSocket.send(JSON.stringify({ type: 'answer', target: data.from, payload: answer }));
+            } else if (data.type === 'answer') {
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(data.payload));
+            } else if (data.type === 'candidate') {
+                await peerConnection.addIceCandidate(new RTCIceCandidate(data.payload));
+            }
+        };
+        alert("🌐 Conexión de señalización WebSocket establecida.");
+    } catch(e) {
+        console.warn("Simulando canal local WebRTC debido a entorno sin socket dedicado.");
+    }
 }
-function addNewContactModal() {
-const name = prompt("Nombre del nuevo contacto:");
-if(!name) return;
-const phone = prompt("Número de teléfono:");
-if(!phone) return;
-savedContacts.push({ name, phone });
-saveDataToLocalStorage();
-alert(`Contacto ${name} guardado con éxito.`);
-location.reload();
+
+async function startWebRTCWebCall(targetId, targetName) {
+    registerButtonDependency(`Llamada WebRTC VoIP -> ${targetName}`);
+    document.getElementById('callTargetName').textContent = targetName;
+    document.getElementById('activeCallOverlay').style.display = 'flex';
+    document.getElementById('callStatusTimer').textContent = "Solicitando cámara y micrófono...";
+
+    try {
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        document.getElementById('localVideo').srcObject = localStream;
+        
+        peerConnection = new RTCPeerConnection(rtcConfig);
+        localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+        peerConnection.ontrack = (event) => {
+            remoteStream = event.streams[0];
+            document.getElementById('remoteVideo').srcObject = remoteStream;
+            document.getElementById('callStatusTimer').textContent = "¡Videollamada VoIP P2P en curso!";
+        };
+
+        peerConnection.onicecandidate = (event) => {
+            if (event.candidate && signalingSocket && signalingSocket.readyState === WebSocket.OPEN) {
+                signalingSocket.send(JSON.stringify({ type: 'candidate', target: targetId, payload: event.candidate }));
+            }
+        };
+
+        // Crear oferta WebRTC
+        const offer = await peerConnection.createOffer();
+        await peerConnection.setLocalDescription(offer);
+        document.getElementById('callStatusTimer').textContent = "Llamando por Internet (WebRTC STUN)...";
+
+        if (signalingSocket && signalingSocket.readyState === WebSocket.OPEN) {
+            signalingSocket.send(JSON.stringify({ type: 'offer', target: targetId, payload: offer }));
+        }
+    } catch (error) {
+        console.error("Error WebRTC:", error);
+        alert("No se pudo iniciar el canal multimedia WebRTC. Revisa los permisos de cámara.");
+    }
 }
-function saveContactNative(name) {
-registerButtonDependency(`Guardar Contacto Sistema -> ${name}`);
-alert(`Contacto "${name}" sincronizado con la agenda nativa del dispositivo.`);
+
+function createPeerConnectionForIncoming() {
+    peerConnection = new RTCPeerConnection(rtcConfig);
+    if(localStream) {
+        localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+    }
+    peerConnection.ontrack = (event) => {
+        remoteStream = event.streams[0];
+        document.getElementById('remoteVideo').srcObject = remoteStream;
+        document.getElementById('callStatusTimer').textContent = "¡Conectado!";
+    };
 }
-function startNativeCall(num, name) {
-registerButtonDependency(`Llamada Nativa -> ${name} (${num})`);
-document.getElementById('callTargetName').textContent = name + " (" + num + ")";
-document.getElementById('activeCallOverlay').style.display = 'flex';
+
+function endActiveCall() {
+    if(localStream) {
+        localStream.getTracks().forEach(track => track.stop());
+    }
+    if(peerConnection) {
+        peerConnection.close();
+        peerConnection = null;
+    }
+    document.getElementById('activeCallOverlay').style.display = 'none';
 }
-let endActiveCall = function() {
-document.getElementById('activeCallOverlay').style.display = 'none';
+
+function toggleCallMute() {
+    if(localStream) {
+        localStream.getAudioTracks()[0].enabled = !localStream.getAudioTracks()[0].enabled;
+        alert("Estado del micrófono alternado.");
+    }
 }
-function toggleCallMute() { alert("Micrófono silenciado/activado"); }
-function toggleCallSpeaker() { alert("Altavoz activado/desactivado"); }
+function toggleCallSpeaker() { alert("Altavoz activo."); }
+
+function executeWebRTCCallFromKeypad() {
+    const val = document.getElementById('keypadDisplay').value;
+    if(!val) { alert("Ingresa un número o ID de destino."); return; }
+    startWebRTCWebCall(val, 'Marcación VoIP Directa');
+}
+
+
+// ==========================================
+// --- MÓDULO DE STATUS Y MULTIMEDIA (Cámara/Historias) ---
+// ==========================================
+let currentStoryIndex = 0;
+
+function triggerStatusMediaUpload() {
+    registerButtonDependency('Status -> Subir Multimedia');
+    const fileInput = document.getElementById('hiddenFileInput');
+    fileInput.setAttribute('data-target-mode', 'status');
+    fileInput.click();
+}
+
+function handlePlusAction(action) {
+    document.getElementById('plusPopover').style.display = 'none';
+    const fileInput = document.getElementById('hiddenFileInput');
+    fileInput.setAttribute('data-target-mode', 'chat');
+    if(action === 'camera') {
+        alert("📷 Abriendo cámara nativa de dispositivo...");
+        fileInput.click();
+    } else if(action === 'photos' || action === 'files') {
+        fileInput.click();
+    } else if(action === 'plugins') {
+        console.log("Plugins cargados.");
+    }
+}
+
+function processSelectedFile(input) {
+    if(input.files && input.files[0]) {
+        const file = input.files[0];
+        const fileUrl = URL.createObjectURL(file);
+        const isVideo = file.type.startsWith('video');
+        const mode = input.getAttribute('data-target-mode');
+
+        if(mode === 'status') {
+            savedStatuses.push({ type: isVideo ? 'video' : 'image', content: fileUrl, name: file.name, bg: '#1b2e20' });
+            saveDataToLocalStorage();
+            alert(`¡Multimedia "${file.name}" agregada exitosamente a tus Status!`);
+        } else {
+            appendMessageBubble(`[Archivo adjunto: ${file.name}]`, 'outgoing', 'messagesList');
+            alert(`Archivo listo para enviar: ${file.name}`);
+        }
+    }
+}
+
+function openStoryViewer() {
+    if(savedStatuses.length === 0) { alert("No hay historias activas."); return; }
+    currentStoryIndex = 0;
+    document.getElementById('storyViewerModal').style.display = 'flex';
+    renderCurrentStory();
+}
+
+function renderCurrentStory() {
+    const story = savedStatuses[currentStoryIndex];
+    const titleEl = document.getElementById('storyTitleIndicator');
+    const mediaContainer = document.getElementById('storyMediaDisplay');
+
+    titleEl.textContent = `Historia ${currentStoryIndex + 1} de ${savedStatuses.length}`;
+    mediaContainer.innerHTML = '';
+
+    if(story.type === 'video') {
+        const videoEl = document.createElement('video');
+        videoEl.src = story.content; videoEl.controls = true; videoEl.autoplay = true;
+        videoEl.style.maxWidth = '100%'; videoEl.style.maxHeight = '60vh';
+        mediaContainer.appendChild(videoEl);
+    } else if(story.type === 'image') {
+        const imgEl = document.createElement('img');
+        imgEl.src = story.content;
+        imgEl.style.maxWidth = '100%'; imgEl.style.maxHeight = '60vh'; imgEl.style.objectFit = 'contain';
+        mediaContainer.appendChild(imgEl);
+    } else {
+        const textEl = document.createElement('p');
+        textEl.textContent = story.content;
+        textEl.style.fontSize = '1.4ln'; textEl.style.color = '#ffffff';
+        mediaContainer.appendChild(textEl);
+    }
+}
+
+function nextStory() {
+    currentStoryIndex++;
+    if(currentStoryIndex >= savedStatuses.length) closeStoryViewerForce();
+    else renderCurrentStory();
+}
+function prevStory() {
+    currentStoryIndex--;
+    if(currentStoryIndex < 0) currentStoryIndex = 0;
+    renderCurrentStory();
+}
+function closeStoryViewer(e) { if(e.target.id === 'storyViewerModal') closeStoryViewerForce(); }
+function closeStoryViewerForce() { document.getElementById('storyViewerModal').style.display = 'none'; }
+
+function addStatusText() {
+    const txt = prompt("Ingrese el texto para su nuevo estado:");
+    if(!txt) return;
+    savedStatuses.push({ type: 'text', content: txt, bg: '#2e6f40' });
+    saveDataToLocalStorage();
+    alert("¡Estado de texto agregado con éxito!");
+}
+
+function generateAIImageStatus() {
+    registerButtonDependency('Status -> IA');
+    const p = prompt("Describe la imagen que deseas generar con Duckie Guai-fai'v:");
+    if(p) alert(`🤖 Generando imagen con Duckie Guai-fai'v: "${p}"`);
+}
+
 function appendKey(char) { document.getElementById('keypadDisplay').value += char; }
 function clearKeypad() { document.getElementById('keypadDisplay').value = ''; }
-function keypadSaveContact() {
-const val = document.getElementById('keypadDisplay').value;
-if(!val) return;
-alert(`Guardando número ${val} en contactos...`);
-}
-function keypadSendMessage() {
-const val = document.getElementById('keypadDisplay').value;
-if(!val) return;
-switchView('chats', document.querySelector('.bottom-nav .nav-item:nth-child(4)'));
-document.getElementById('chatInput').value = `Para: ${val} - `;
-}
-function executeKeypadCall() {
-const val = document.getElementById('keypadDisplay').value;
-if(!val) return;
-startNativeCall(val, 'Número Marcado');
-}
-function handlePlusAction(action) {
-document.getElementById('plusPopover').style.display = 'none';
-if(action === 'camera') {
-alert("Abriendo cámara nativa de dispositivo...");
-} else if(action === 'photos' || action === 'files') {
-document.getElementById('hiddenFileInput').click();
-} else if(action === 'plugins') {
-console.log("Complementos DuckieTalkPro cargados.");
-}
-}
-function processSelectedFile(input) {
-if(input.files && input.files[0]) {
-alert(`Archivo adjunto seleccionado: ${input.files[0].name}`);
-}
-}
-<script src="pestana.js"></script>
-function triggerInstantVoice() {
-registerButtonDependency('Voz Instantánea Micrófono');
-alert("🎙️ Grabando voz de alta fidelidad con Duckie Guai-fai'v...");
-}
-function openStoryViewer() {
-document.getElementById('storyViewerModal').style.display = 'flex';
-document.getElementById('storyTextDisplay').textContent = savedStatuses[0] ? savedStatuses[0].content : "Sin historias activas.";
-}
-function closeStoryViewer(e) {
-if(e.target.id === 'storyViewerModal') {
-document.getElementById('storyViewerModal').style.display = 'none';
-}
-}
-function closeStoryViewerForce() { document.getElementById('storyViewerModal').style.display = 'none'; }
-function nextStory() { alert("Siguiente historia..."); }
-function prevStory() { alert("Historia anterior..."); }
-function addStatusText() {
-const txt = prompt("Ingrese el texto para su nuevo estado:");
-if(!txt) return;
-savedStatuses.push({ type: 'text', content: txt, bg: '#2e6f40' });
-saveDataToLocalStorage();
-alert("¡Estado agregado con éxito!");
-}
-function configureLayoutStatus() { alert("Configuración de layout de estados abierta."); }
-function uploadStatusVideo() { alert("Seleccione un archivo de video para su estado."); }
-function generateAIImageStatus() { alert("Generando imagen de estado con Duckie Guai-fai'v..."); }
-function replyToMessage(btn) { alert("Respondiendo mensaje..."); }
-function sendMessageDirect(btn) { alert("Enviando mensaje directo..."); }
-function deleteMessage(btn) {
-const bubble = btn.closest('.message-bubble');
-if(bubble) bubble.remove();
-}
+function keypadSaveContact() { alert("Guardando contacto..."); }
+function keypadSendMessage() { switchView('chats', document.querySelector('.bottom-nav .nav-item:nth-child(4)')); }
+function filterContacts() {}
+function addNewContactModal() { alert("Nuevo contacto"); }
+function saveContactNative(n) { alert(`Guardado en sistema: ${n}`); }
+function replyToMessage(b) { alert("Respondiendo..."); }
+function sendMessageDirect(b) { alert("Enviando..."); }
+function deleteMessage(b) { b.closest('.message-bubble').remove(); }
+function triggerInstantVoice() { alert("🎙️ Grabando voz con Duckie Guai-fai'v..."); }
 </script>
 </body>
 </html>
