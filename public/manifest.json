@@ -1,0 +1,17 @@
+{
+  "name": "Duckiethemu's",
+  "short_name": "Duckie",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0f17",
+  "theme_color": "#a855f7",
+  "description": "Worldwide Bilingual App - Pato Multiusos",
+  "icons": [
+    {
+      "src": "https://img.icons8.com/color/512/rubber-duck-toy.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DuckieDuckPro AI</title>
+<!-- FontAwesome para iconos limpios estilo WhatsApp/iOS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+--bg-color: #121c14;
+--panel-color: #1b2e20;
+--accent-color: #2e6f40;
+--accent-hover: #3b8c51;
+--text-main: #ffffff;
+--text-muted: #a3c1ad;
+--danger-color: #a83232;
+--chat-bg-outgoing: #2e6f40;
+--chat-text-outgoing: #ffffff;
+--chat-bg-incoming: #1b2e20;
+--chat-text-incoming: #ffffff;
+}
+[data-theme="light"] {
+--bg-color: #f0f4f1;
+--panel-color: #ffffff;
+--accent-color: #3b8c51;
+--accent-hover: #2e6f40;
+--text-main: #121c14;
+--text-muted: #55705d;
+--danger-color: #d32f2f;
+--chat-bg-outgoing: #3b8c51;
+--chat-text-outgoing: #ffffff;
+--chat-bg-incoming: #ffffff;
+--chat-text-incoming: #121c14;
+}
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+body {
+background-color: var(--bg-color);
+color: var(--text-main);
+height: 100vh;
+display: flex;
+flex-direction: column;
+overflow: hidden;
+transition: background 0.3s, color 0.3s;
+}
+/* Top Bar */
+header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+background-color: var(--panel-color);
+padding: 10px 20px;
+border-bottom: 1px solid #284a32;
+}
+.header-left, .header-right {
+display: flex;
+align-items: center;
+gap: 15px;
+}
+.icon-btn {
+background: none;
+border: none;
+color: var(--text-main);
+font-size: 1.2rem;
+cursor: pointer;
+}
+.app-title {
+font-size: 1.1rem;
+font-weight: 600;
+letter-spacing: 0.5px;
+}
+/* Main Workspace */
+.workspace {
+display: flex;
+flex: 1;
+position: relative;
+overflow: hidden;
+}
+/* Side Menus / Modals / Popups */
+.menu-panel {
+position: absolute;
+top: 0;
+bottom: 0;
+width: 300px;
+background-color: var(--panel-color);
+border-right: 1px solid #284a32;
+display: flex;
+flex-direction: column;
+z-index: 10;
+transition: transform 0.3s ease;
+}
+.menu-panel.left { left: 0; }
+.menu-panel.right { right: 0; border-left: 1px solid #284a32; border-right: none; width: 320px; }
+.menu-panel.hidden-left { transform: translateX(-100%); }
+.menu-panel.hidden-right { transform: translateX(100%); }
+.menu-header {
+padding: 15px 20px;
+font-weight: 700;
+display: flex;
+justify-content: space-between;
+align-items: center;
+border-bottom: 1px solid #284a32;
+}
+.menu-items {
+list-style: none;
+overflow-y: auto;
+flex: 1;
+}
+.menu-items li {
+padding: 12px 20px;
+border-bottom: 1px solid rgba(40, 74, 50, 0.4);
+cursor: pointer;
+font-size: 0.95rem;
+color: var(--text-muted);
+transition: background 0.2s, color 0.2s;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+.menu-items li:hover {
+background-color: rgba(46, 111, 64, 0.3);
+color: var(--text-main);
+}
+.menu-items li.danger {
+color: #ff6b6b;
+}
+/* Context Menus / Floating Popovers */
+.popover-menu {
+position: absolute;
+background-color: var(--panel-color);
+border-radius: 12px;
+box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+width: 220px;
+display: none;
+z-index: 100;
+border: 1px solid #335c3f;
+overflow: hidden;
+}
+.popover-item {
+padding: 12px 16px;
+display: flex;
+align-items: center;
+gap: 12px;
+font-size: 0.9rem;
+cursor: pointer;
+border-bottom: 1px solid rgba(255,255,255,0.05);
+color: var(--text-main);
+}
+.popover-item:hover {
+background-color: var(--accent-color);
+}
+/* Vistas de Pantalla Dinámicas */
+.app-view {
+flex: 1;
+display: none;
+flex-direction: column;
+background-color: var(--bg-color);
+position: relative;
+height: 100%;
+overflow-y: auto;
+}
+.app-view.active {
+display: flex;
+}
+.chat-header-profile {
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 20px;
+gap: 8px;
+border-bottom: 1px solid rgba(40, 74, 50, 0.3);
+}
+.avatar-container {
+width: 60px;
+height: 60px;
+border-radius: 50%;
+background-color: var(--accent-color);
+display: flex;
+justify-content: center;
+align-items: center;
+overflow: hidden;
+border: 2px solid #4e9a63;
+}
+.avatar-container img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+.assistant-name {
+font-weight: 600;
+font-size: 1.05rem;
+}
+.assistant-subtitle {
+font-size: 0.8rem;
+color: var(--text-muted);
+}
+.messages-list {
+flex: 1;
+overflow-y: auto;
+padding: 20px;
+display: flex;
+flex-direction: column;
+gap: 15px;
+}
+.message-bubble {
+max-width: 75%;
+padding: 12px 16px;
+border-radius: 12px;
+font-size: 0.95rem;
+line-height: 1.4;
+position: relative;
+}
+.message-bubble.incoming {
+background-color: var(--chat-bg-incoming);
+color: var(--chat-text-incoming);
+align-self: flex-start;
+border: 1px solid #284a32;
+}
+.message-bubble.outgoing {
+background-color: var(--chat-bg-outgoing);
+color: var(--chat-text-outgoing);
+align-self: flex-end;
+}
+.message-actions {
+display: flex;
+gap: 10px;
+margin-top: 6px;
+font-size: 0.75rem;
+}
+.message-actions button {
+background: rgba(0,0,0,0.3);
+border: 1px solid rgba(255,255,255,0.2);
+color: var(--text-main);
+padding: 3px 8px;
+border-radius: 4px;
+cursor: pointer;
+}
+.message-actions button:hover {
+background-color: var(--accent-hover);
+}
+.content-card {
+background-color: var(--panel-color);
+border: 1px solid #284a32;
+border-radius: 12px;
+padding: 16px;
+margin: 15px 20px;
+display: flex;
+flex-direction: column;
+gap: 8px;
+}
+.content-card h3 {
+font-size: 1.05rem;
+color: #ffd700;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+.content-card p {
+font-size: 0.9rem;
+color: var(--text-muted);
+}
+.btn-action-small {
+background-color: var(--accent-color);
+color: white;
+border: none;
+padding: 6px 12px;
+border-radius: 6px;
+cursor: pointer;
+font-size: 0.85rem;
+}
+.btn-action-small:hover {
+background-color: var(--accent-hover);
+}
+/* Keypad Styles */
+.keypad-container {
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 15px;
+background-color: var(--panel-color);
+border: 1px solid #284a32;
+border-radius: 12px;
+margin: 15px 20px;
+gap: 12px;
+}
+.keypad-display {
+width: 100%;
+background-color: var(--bg-color);
+border: 1px solid #284a32;
+border-radius: 8px;
+padding: 12px;
+font-size: 1.3rem;
+color: var(--text-main);
+text-align: center;
+letter-spacing: 2px;
+outline: none;
+box-sizing: border-box;
+-webkit-appearance: none;
+min-width: 0;
+}
+.keypad-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 10px;
+width: 100%;
+max-width: 260px;
+}
+.keypad-btn {
+background-color: #223829;
+border: 1px solid #335c3f;
+color: var(--text-main);
+padding: 12px;
+font-size: 1.1rem;
+font-weight: 600;
+border-radius: 50%;
+aspect-ratio: 1;
+cursor: pointer;
+transition: background 0.2s;
+display: flex;
+justify-content: center;
+align-items: center;
+margin: 0 auto;
+width: 55px;
+height: 55px;
+}
+.keypad-btn:hover {
+background-color: var(--accent-color);
+}
+.keypad-actions-row {
+display: flex;
+gap: 10px;
+width: 100%;
+justify-content: center;
+margin-top: 5px;
+flex-wrap: wrap;
+}
+/* --- BARRA INFERIOR DE CHAT ESTILO WHATSAPP/iOS --- */
+.chat-input-area {
+display: flex;
+align-items: center;
+background-color: var(--panel-color);
+padding: 10px 16px;
+gap: 12px;
+border-top: 1px solid #284a32;
+position: relative;
+width: 100%;
+box-sizing: border-box;
+}
+.chat-input-area button.btn-icon-left {
+background: transparent;
+border: none;
+color: var(--text-muted);
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 4px;
+font-size: 20px;
+transition: color 0.2s;
+}
+.chat-input-area button.btn-icon-left:hover {
+color: var(--text-main);
+}
+.chat-input-wrapper {
+flex: 1;
+display: flex;
+align-items: center;
+background-color: var(--bg-color);
+border-radius: 24px;
+padding: 8px 16px;
+border: 1px solid #284a32;
+overflow: hidden;
+position: relative;
+box-sizing: border-box;
+min-width: 0;
+}
+.chat-input-wrapper input[type="text"] {
+flex: 1;
+background: transparent;
+border: none;
+color: var(--text-main);
+font-size: 15px;
+outline: none;
+padding: 0;
+box-sizing: border-box;
+-webkit-appearance: none;
+min-width: 0;
+}
+.media-actions-right {
+display: flex;
+align-items: center;
+gap: 10px;
+}
+.btn-icon-right {
+background: transparent;
+border: none;
+color: var(--text-muted);
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 4px;
+font-size: 18px;
+transition: color 0.2s;
+}
+.btn-icon-right:hover {
+color: var(--text-main);
+}
+.send-btn-ios {
+background-color: var(--accent-color);
+border: none;
+color: #ffffff;
+width: 36px;
+height: 36px;
+border-radius: 50%;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 14px;
+box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+transition: transform 0.1s, background 0.2s;
+}
+.send-btn-ios:hover {
+background-color: var(--accent-hover);
+}
+.send-btn-ios:active {
+transform: scale(0.92);
+}
+/* Barra de Navegación Inferior */
+.bottom-nav {
+display: flex;
+justify-content: space-around;
+align-items: center;
+background-color: var(--panel-color);
+border-top: 1px solid #284a32;
+padding: 8px 5px;
+height: 65px;
+}
+.nav-item {
+background: none;
+border: none;
+color: var(--text-muted);
+cursor: pointer;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 4px;
+font-size: 0.75rem;
+flex: 1;
+transition: color 0.2s, transform 0.2s;
+}
+.nav-item span.icon {
+font-size: 1.2rem;
+}
+.nav-item.active {
+color: #ffd700;
+transform: scale(1.05);
+}
+.search-bar-container {
+padding: 10px 20px;
+display: flex;
+gap: 10px;
+align-items: center;
+}
+.search-bar-container input {
+flex: 1;
+background-color: var(--panel-color);
+border: 1px solid #284a32;
+border-radius: 8px;
+padding: 8px 12px;
+color: var(--text-main);
+outline: none;
+box-sizing: border-box;
+-webkit-appearance: none;
+min-width: 0;
+}
+/* Overlays Nativos */
+#activeCallOverlay {
+position: fixed;
+top: 0; left: 0; width: 100%; height: 100%;
+background: linear-gradient(135deg, #0d160f 0%, #1b2e20 100%);
+z-index: 9999;
+display: none;
+flex-direction: column;
+justify-content: space-between;
+align-items: center;
+padding: 50px 20px;
+animation: fadeInCall 0.3s ease;
+}
+@keyframes fadeInCall { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+#storyViewerModal {
+position: fixed;
+top: 0; left: 0; width: 100%; height: 100%;
+background: rgba(0,0,0,0.95);
+z-index: 9998;
+display: none;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+}
+.story-progress-bar {
+position: absolute;
+top: 20px;
+width: 90%;
+height: 4px;
+background: rgba(255,255,255,0.3);
+border-radius: 2px;
+overflow: hidden;
+}
+.story-progress-fill {
+width: 0%;
+height: 100%;
+background: #ffd700;
+transition: width linear;
+}
+.switch {
+position: relative;
+display: inline-block;
+width: 44px;
+height: 22px;
+}
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider-toggle {
+position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+background-color: #335c3f; transition: .3s; border-radius: 22px;
+}
+.slider-toggle:before {
+position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px;
+background-color: white; transition: .3s; border-radius: 50%;
+}
+input:checked + .slider-toggle { background-color: var(--accent-color); }
+input:checked + .slider-toggle:before { transform: translateX(22px); }
+#hiddenFileInput { display: none; }
+</style>
+</head>
+<body data-theme="dark">
+<header>
+<div class="header-left">
+<button class="icon-btn" id="menuToggleBtn" onclick="toggleLeftMenu()">☰</button>
+<span class="app-title" id="headerTitleText">DuckieDuckPro</span>
+</div>
+<div class="header-right">
+<button class="icon-btn" id="loginBtn" onclick="toggleLoginMenu()">Log in</button>
+<button class="icon-btn" id="settingsToggleBtn" onclick="toggleRightMenu()">⚙️</button>
+</div>
+</header>
+<div class="workspace" style="flex-direction: column;">
+<div style="flex: 1; position: relative; overflow: hidden; display: flex;">
+<!-- MENÚ LATERAL IZQUIERDO CON LAS OPCIONES SOLICITADAS -->
+<div class="menu-panel left hidden-left" id="leftMenu">
+<div class="menu-header">
+<span>Navegación / Archivo</span>
+<button class="icon-btn" id="menuToggleBtn" onclick="toggleLeftMenu()">✕</button>
+</div>
+<ul class="menu-items">
+<li onclick="menuActionFile('Chats')">Chats</li>
+<li onclick="menuActionFile('New chats')">New chats</li>
+<li onclick="menuActionFile('Media')">Media</li>
+<li onclick="menuActionFile('Schedules')">Schedules</li>
+<li onclick="menuActionFile('Library')">Library</li>
+<li onclick="menuActionFile('Projects')">Projects</li>
+<li onclick="menuTecnicoTalkPro()">Técnico TalkPro</li>
+<li onclick="menuServicioPrivacidad()">Servicio y Privacidad</li>
+<li onclick="menuCanalVerificado()">Channel Verified</li>
+<li onclick="menuChatPrivacidad()">Chat Privacy</li>
+</ul>
+</div>
+<div id="view-contactos" class="app-view">
+<div class="chat-header-profile">
+<div class="avatar-container">👥</div>
+<div class="assistant-name">Directorio de Contactos Nativos (Android / iOS)</div>
+<div class="assistant-subtitle">DuckieTalkPro Sync</div>
+</div>
+<div class="search-bar-container">
+<input type="text" id="contactSearchInput" placeholder="🔍 Buscar contacto por nombre o número..." onkeyup="filterContacts()">
+<button class="btn-action-small" onclick="addNewContactModal()">➕ Agregar</button>
+</div>
+<div id="contactsContainer">
+<div class="content-card contact-card-item" data-name="duckie support team">
+<div style="display: flex; gap: 12px; align-items: center;">
+<div class="avatar-container" style="width: 45px; height: 45px;">
+<img src="IMG_4685.png" alt="Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'45\' height=\'45\'><circle cx=\'22\' cy=\'22\' r=\'22\' fill=\'%232e6f40\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'16\'>🦆</text></svg>'">
+</div>
+<div>
+<h3>Duckie Support Team</h3>
+<p>📱 Tel: +1 (800) DUCKIE-AI</p>
+</div>
+</div>
+<div class="action-row" style="margin-top: 10px;">
+<button class="btn-action-small" onclick="saveContactNative('Duckie Support Team')">Guardar en Sistema</button>
+<button class="btn-action-small" onclick="startWebRTCWebCall('duckie_support', 'Duckie Support Team')">Llamar VoIP</button>
+</div>
+</div>
+<div class="content-card contact-card-item" data-name="amado apolonio">
+<div style="display: flex; gap: 12px; align-items: center;">
+<div class="avatar-container" style="width: 45px; height: 45px;">👨‍💻</div>
+<div>
+<h3>Amado Apolonio (Admin)</h3>
+<p>📱 Tel: +52 (55) DUCK-PRO</p>
+</div>
+</div>
+<div class="action-row" style="margin-top: 10px;">
+<button class="btn-action-small" onclick="saveContactNative('Amado Apolonio')">Guardar en Sistema</button>
+<button class="btn-action-small" onclick="startWebRTCWebCall('amado_admin', 'Amado Apolonio (Admin)')">Llamar VoIP</button>
+</div>
+</div>
+</div>
+</div>
+<div id="view-llamadas" class="app-view">
+<div class="chat-header-profile">
+<div class="avatar-container">
+<img src="IMG_1101.png" alt="Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\'><circle cx=\'30\' cy=\'30\' r=\'30\' fill=\'%232e6f40\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'20\'>📞</text></svg>'">
+</div>
+<div class="assistant-name">Centro de Llamadas WebRTC DuckieTalkPro</div>
+<div class="assistant-subtitle">Marcador VoIP & Streaming de Datos en Tiempo Real</div>
+</div>
+<div class="keypad-container">
+<input type="text" id="keypadDisplay" class="keypad-display" placeholder="Ingresar ID o número..." readonly>
+<div class="keypad-grid">
+<button class="keypad-btn" onclick="appendKey('1')">1</button>
+<button class="keypad-btn" onclick="appendKey('2')">2</button>
+<button class="keypad-btn" onclick="appendKey('3')">3</button>
+<button class="keypad-btn" onclick="appendKey('4')">4</button>
+<button class="keypad-btn" onclick="appendKey('5')">5</button>
+<button class="keypad-btn" onclick="appendKey('6')">6</button>
+<button class="keypad-btn" onclick="appendKey('7')">7</button>
+<button class="keypad-btn" onclick="appendKey('8')">8</button>
+<button class="keypad-btn" onclick="appendKey('9')">9</button>
+<button class="keypad-btn" onclick="appendKey('*')">*</button>
+<button class="keypad-btn" onclick="appendKey('0')">0</button>
+<button class="keypad-btn" onclick="appendKey('#')">#</button>
+</div>
+<div class="keypad-actions-row">
+<button class="btn-action-small" onclick="clearKeypad()">Borrar</button>
+<button class="btn-action-small" onclick="keypadSaveContact()">Guardar Contacto</button>
+<button class="btn-action-small" onclick="keypadSendMessage()">Mandar Mensaje</button>
+<button class="btn-action-small" style="background-color: var(--accent-hover);" onclick="executeWebRTCCallFromKeypad()">🌐 Llamada VoIP WebRTC</button>
+</div>
+</div>
+<div class="content-card">
+<h3>📞 Videollamada P2P Activa <button class="btn-action-small" onclick="initWebRTCSignalingSocket()">Conectar WebSocket</button></h3>
+<p>Estado del Canal: Listo para negociar flujos de audio y video vía STUN.</p>
+</div>
+</div>
+<!-- VISTA DE CHAT DE IA (view-ai con messagesList) -->
+<div id="view-ai" class="app-view active">
+<div class="chat-header-profile">
+<div class="avatar-container">
+<img src="IMG_1101.png" alt="Duckie Duck Pro Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\'><circle cx=\'30\' cy=\'30\' r=\'30\' fill=\'%232e6f40\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'20\'>🦆</text></svg>'">
+</div>
+<div class="assistant-name">Duckie Guai-fai'v</div>
+<div class="assistant-subtitle">Unified AI Assistant Stack (Streaming Real / Local)</div>
+</div>
+<div class="messages-list" id="messagesList">
+<div class="message-bubble incoming">
+¡Hola Amado! Soy Duckie Guai-fai'v 🧠. ¿Qué desarrollamos, ajustamos o sincronizamos el día de hoy?
+</div>
+<div class="message-bubble outgoing">
+Todo al centavo con las vistas, el keypad y los módulos nativos.
+</div>
+</div>
+</div>
+<!-- BANDEJA DE CHATS NATIVOS (view-chats con chatInboxList) -->
+<div id="view-chats" class="app-view">
+<div class="chat-header-profile">
+<div class="avatar-container">
+<img src="IMG_1101.png" alt="Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\'><circle cx=\'30\' cy=\'30\' r=\'30\' fill=\'%232e6f40\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'20\'>💬</text></svg>'">
+</div>
+<div class="assistant-name">Bandeja de Chats DuckieTalkPro</div>
+<div class="assistant-subtitle">Mensajes Entrantes y Salientes Nativos</div>
+</div>
+<div class="messages-list" id="chatInboxList" style="flex:1; padding:20px; display:flex; flex-direction:column; gap:15px;">
+<div class="message-bubble incoming">
+<strong>Entrante:</strong> Hola Amado, ¿está listo el repositorio marketplace?
+<div class="message-actions">
+<button onclick="replyToMessage(this)">Contestar</button>
+<button onclick="sendMessageDirect(this)">Mandar Mensaje</button>
+<button onclick="deleteMessage(this)" style="color: #ff6b6b;">Borrar</button>
+</div>
+</div>
+<div class="message-bubble outgoing">
+<strong>Saliente:</strong> Sí, acoplado al 100 sin cruce de cables.
+<div class="message-actions">
+<button onclick="deleteMessage(this)" style="color: #ff6b6b;">Borrar</button>
+</div>
+</div>
+</div>
+</div>
+<!-- VISTA DE STATUS / HISTORIAS (Con cobro de vida multimedia) -->
+<div id="view-status" class="app-view">
+<div class="chat-header-profile">
+<div class="avatar-container">
+<img src="IMG_4685.png" alt="Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\'><circle cx=\'30\' cy=\'30\' r=\'30\' fill=\'%232e6f40\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'20\'>📊</text></svg>'">
+</div>
+<div class="assistant-name">Status Center & Historias DuckieTalkPro</div>
+<div class="assistant-subtitle">Android / iOS Native Experience (Story View)</div>
+</div>
+<div class="content-card" style="border: 2px dashed var(--accent-color); text-align: center; cursor: pointer;" onclick="openStoryViewer()">
+<h3>⚡ Ver Historias Activas (Story View)</h3>
+<p>Haz clic aquí para abrir el carrusel interactivo multimedia de estados.</p>
+</div>
+<div class="content-card">
+<h3>📝 Add Status Text <button class="btn-action-small" onclick="addStatusText()">Crear Estado</button></h3>
+<p>Comparte estado tipográfico con selector de color de fondo guardado localmente.</p>
+</div>
+<div class="content-card">
+<h3>🎬 Status Video & Fotos <button class="btn-action-small" onclick="triggerStatusMediaUpload()">Subir / Tomar Multimedia</button></h3>
+<p>Integra fotos o clips de video directamente desde tu dispositivo o cámara.</p>
+</div>
+<div class="content-card">
+<h3>🤖 Create with Duckie Guai-fai'v <button class="btn-action-small" onclick="generateAIImageStatus()">Generar con IA</button></h3>
+<p>Crea imágenes de fondo mediante prompt impulsado por Duckie Guai-fai'v.</p>
+</div>
+</div>
+<!-- BARRA LATERAL DERECHA -->
+<div class="menu-panel right hidden-right" id="rightMenu">
+<div class="menu-header">
+<span>Configuración DuckieTalkPro</span>
+<button class="icon-btn" onclick="toggleRightMenu()">✕</button>
+</div>
+<ul class="menu-items">
+<li>Modo Claro / Oscuro
+<label class="switch">
+<input type="checkbox" id="themeToggleCheckbox" onchange="toggleThemeMode()">
+<span class="slider-toggle"></span>
+</label>
+</li>
+<li onclick="configLoginSecurity()">Login y security</li>
+<li onclick="configAddNewAccount()">Agregar Cuenta</li>
+<li onclick="configEmailAddress()">Email Address</li>
+<li onclick="configNotifications()">Notifications</li>
+<li onclick="configTwoStepVerification()">Two-Step Verification</li>
+<li onclick="configChangeChatColor()">Cambiar de color de chat</li>
+<li onclick="configShowAccount()">You account: Amado</li>
+<li class="danger" onclick="configDeleteAccount()">Borrar cuenta y datos</li>
+</ul>
+</div>
+</div>
+<!-- --- BARRA INFERIOR DE ENTRADA --- -->
+<div class="chat-input-area" id="inputAreaContainer">
+<button type="button" class="btn-icon-left" id="plusMenuBtn" onclick="togglePlusPopover(event)" title="Adjuntar multimedia">
+<i class="fa-solid fa-plus"></i>
+</button>
+<div class="chat-input-wrapper">
+<input type="text" id="chatInput" placeholder="Ask Duckie Guai-fai'v..." onkeypress="handleKeyPress(event)">
+</div>
+<div class="media-actions-right">
+<button type="button" class="btn-icon-right" id="cameraShortcutBtn" onclick="handlePlusAction('camera')" title="Cámara rápida">
+<i class="fa-solid fa-camera"></i>
+</button>
+<button type="button" class="btn-icon-right" id="micBtn" onclick="triggerInstantVoice()" title="Instant / Voice Input">
+<i class="fa-solid fa-microphone"></i>
+</button>
+<button type="button" class="send-btn-ios" onclick="sendUserMessage()" title="Enviar">
+<i class="fa-solid fa-paper-plane"></i>
+</button>
+</div>
+</div>
+<nav class="bottom-nav">
+<button class="nav-item" onclick="switchView('contactos', this)">
+<span class="icon">👥</span>
+<span>Contactos</span>
+</button>
+<button class="nav-item" onclick="switchView('llamadas', this)">
+<span class="icon">📞</span>
+<span>Llamadas</span>
+</button>
+<button class="nav-item active" onclick="switchView('ai', this)">
+<span class="icon">🦆</span>
+<span>AI Chat</span>
+</button>
+<button class="nav-item" onclick="switchView('chats', this)">
+<span class="icon">💬</span>
+<span>Chats</span>
+</button>
+<button class="nav-item" onclick="switchView('status', this)">
+<span class="icon">📊</span>
+<span>Status</span>
+</button>
+</nav>
+</div>
+<!-- --- OVERLAYS NATIVOS --- -->
+<div id="activeCallOverlay">
+<div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">
+<div class="avatar-container" style="width: 80px; height: 80px; font-size: 2rem; margin-bottom: 10px;" id="callAvatarIcon">
+<img src="IMG_1101.png" alt="Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\'><circle cx=\'40\' cy=\'40\' r=\'40\' fill=\'%232e6f40\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'24\'>🦆</text></svg>'">
+</div>
+<h2 id="callTargetName" style="font-size: 1.3rem; color: #ffffff;">Duckie Support Team</h2>
+<p id="callStatusTimer" style="color: var(--text-muted); font-size: 0.9rem; margin-top: 2px;">Iniciando WebRTC P2P...</p>
+</div>
+<!-- Contenedor de video en tiempo real WebRTC -->
+<div style="display: flex; gap: 15px; margin: 10px 0; justify-content: center; align-items: center;">
+<video id="localVideo" autoplay muted playsinline style="width: 140px; height: 100px; border-radius: 8px; border: 2px solid var(--accent-color); background: #000; object-fit: cover;"></video>
+<video id="remoteVideo" autoplay playsinline style="width: 140px; height: 100px; border-radius: 8px; border: 2px solid #ffd700; background: #000; object-fit: cover;"></video>
+</div>
+<div style="display: flex; gap: 20px; margin-bottom: 20px;">
+<button onclick="toggleCallMute()" class="keypad-btn" style="background: #333; width: 55px; height: 55px;" title="Silenciar">🔇</button>
+<button onclick="toggleCallSpeaker()" class="keypad-btn" style="background: #333; width: 55px; height: 55px;" title="Altavoz">🔊</button>
+<button onclick="endActiveCall()" class="keypad-btn" style="background: var(--danger-color); border-color: #ff4d4d; width: 55px; height: 55px;" title="Colgar">📴</button>
+</div>
+</div>
+
+<div id="storyViewerModal" onclick="closeStoryViewer(event)">
+<div class="story-progress-bar">
+<div class="story-progress-fill" id="storyProgressFill"></div>
+</div>
+<div style="color: white; text-align: center; max-width: 90%; max-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center;" id="storyContentContainer">
+<h2 style="color: #ffd700; margin-bottom: 15px;" id="storyTitleIndicator">Historia Activa</h2>
+<div id="storyMediaDisplay" style="width: 100%; display: flex; justify-content: center; align-items: center;"></div>
+</div>
+<div style="position: absolute; bottom: 40px; display: flex; gap: 20px; z-index: 999;">
+<button class="btn-action-small" onclick="prevStory()">Anterior</button>
+<button class="btn-action-small" onclick="nextStory()">Siguiente</button>
+<button class="btn-action-small" style="background: var(--danger-color);" onclick="closeStoryViewerForce()">Cerrar</button>
+</div>
+</div>
+
+<div class="popover-menu" id="plusPopover">
+<div class="popover-item" onclick="handlePlusAction('camera')">
+<span>📷</span> Camera
+</div>
+<div class="popover-item" onclick="handlePlusAction('photos')">
+<span>🖼️</span> Photos
+</div>
+<div class="popover-item" onclick="handlePlusAction('files')">
+<span>📁</span> Files
+</div>
+<div class="popover-item" onclick="handlePlusAction('plugins')">
+<span>🧩</span> Plugins
+</div>
+</div>
+<div class="popover-menu" id="loginPopover" style="width: 180px; right: 20px; top: 60px;">
+<div class="popover-item" onclick="handleLoginAction('settings')">
+<span>⚙️</span> Settings
+</div>
+<div class="popover-item" onclick="handleLoginAction('terms')">
+<span>📄</span> Terms of Use
+</div>
+<div class="popover-item" onclick="handleLoginAction('privacy')">
+<span>🔒</span> Privacy Policy
+</div>
+</div>
+
+<!-- Input oculto para multimedia y cámara -->
+<input type="file" id="hiddenFileInput" accept="image/*,video/*" capture="environment" onchange="processSelectedFile(this)">
+
+<script>
+// --- SERVICIO DEL CEREBRO (duckieBrain conectado a Render) ---
+async function askGuaiFai(text, onChunk) {
+    const backendUrl = "https://duckietalkpro.onrender.com/api/chat";
+    const response = await fetch(backendUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            messages: [
+                { role: "system", content: "Eres Duckie Guai-fai'v 🧠. El fiel asistente de Amado Apolonio Simom. Responde directo, empático, con tono norteño y servicial." },
+                { role: "user", content: text }
+            ]
+        })
+    });
+    if (!response.ok) throw new Error("Error al conectar con el servidor backend en Render.");
+    const data = await response.json();
+    const replyText = data.reply || data.choices?.[0]?.message?.content || "Respuesta recibida del backend.";
+    if (onChunk) onChunk(replyText);
+}
+
+// --- PERSISTENCIA Y ESTADO ---
+let userApiKey = localStorage.getItem('duckie_api_key') || '';
+let savedContacts = JSON.parse(localStorage.getItem('duckie_contacts')) || [];
+let savedStatuses = JSON.parse(localStorage.getItem('duckie_statuses')) || [
+{ type: 'text', content: '🚀 DuckieTalkPro operando al 100% con vistas nativas.', bg: '#2e6f40' },
+{ type: 'text', content: '💡 Desarrollando interfaces móviles fluidas y limpias.', bg: '#1b2e20' }
+];
+let chatMessagesHistory = JSON.parse(localStorage.getItem('duckie_chat_history')) || [
+{ role: "system", content: "You are Duckie Guai-fai'v, attached to DuckieTalkPro, an expert AI assistant and digital wingman integrated directly into Duckie Duck Pro." },
+{ role: "assistant", content: "¡Hola Amado!\nSoy Duckie Guai-fai'v 🧠, ¿Qué desarrollamos, ajustamos o sincronizamos el día de hoy?" }
+];
+let userAccountData = JSON.parse(localStorage.getItem('duckie_account_data')) || {
+email: "amado.apolonio@duckieduckpro.net",
+password: "••••••••",
+firstName: "Amado",
+lastName: "Apolonio Simom",
+address: "México DF / Global Node",
+paymentMethod: "Visa ending in **** 8888",
+twoStepActive: false,
+notificationsSound: "Default Chime (WhatsApp Style)"
+};
+const currentTheme = localStorage.getItem('duckie_theme') || 'dark';
+document.body.setAttribute('data-theme', currentTheme);
+
+document.addEventListener('DOMContentLoaded', () => {
+if(currentTheme === 'light') {
+const cb = document.getElementById('themeToggleCheckbox');
+if(cb) cb.checked = true;
+}
+renderChatHistoryOnLoad();
+});
+
+function saveDataToLocalStorage() {
+localStorage.setItem('duckie_contacts', JSON.stringify(savedContacts));
+localStorage.setItem('duckie_statuses', JSON.stringify(savedStatuses));
+localStorage.setItem('duckie_chat_history', JSON.stringify(chatMessagesHistory));
+localStorage.setItem('duckie_account_data', JSON.stringify(userAccountData));
+}
+
+let buttonStateSequence = [];
+function registerButtonDependency(buttonName) {
+const timestamp = new Date().toLocaleTimeString();
+buttonStateSequence.push({ button: buttonName, time: timestamp, sequenceIndex: buttonStateSequence.length + 1 });
+console.log(`[Dependencia de Botón Secuencial] Paso #${buttonStateSequence.length} -> ${buttonName}`);
+}
+
+// --- FUNCIONES DE MENÚS Y ARCHIVOS ---
+function menuActionFile(actionName) {
+registerButtonDependency(`Menú Archivo -> ${actionName}`);
+toggleLeftMenu();
+if(actionName === 'Chats') {
+switchView('chats', document.querySelector('.bottom-nav .nav-item:nth-child(4)'));
+} else if(actionName === 'New chats') {
+switchView('ai', document.querySelector('.bottom-nav .nav-item:nth-child(3)'));
+document.getElementById('chatInput').focus();
+} else {
+alert(`📁 Módulo [${actionName}] seleccionado.`);
+}
+}
+function menuTecnicoTalkPro() { alert("🛠️ SOPORTE TÉCNICO 24/7 ACTIVO"); toggleLeftMenu(); }
+function menuServicioPrivacidad() { alert("🔒 PRIVACIDAD Y SEGURIDAD LOCAL"); toggleLeftMenu(); }
+function menuCanalVerificado() { alert("🛡️ CANAL OFICIAL VERIFICADO"); toggleLeftMenu(); }
+function menuChatPrivacidad() { alert("💬 CHAT PROTEGIDO"); toggleLeftMenu(); }
+
+function configLoginSecurity() {
+registerButtonDependency('Configuración: Login y security');
+const email = prompt("Ingrese su Correo Electrónico:", userAccountData.email);
+if(email === null) return;
+const pass = prompt("Ingrese su Password:", "");
+if(pass === null) return;
+userAccountData.email = email.trim();
+if(pass.trim() !== "") userAccountData.password = pass.trim();
+saveDataToLocalStorage();
+alert(`Credenciales actualizadas para: ${userAccountData.email}`);
+}
+function configAddNewAccount() {
+registerButtonDependency('Configuración: Agregar Cuenta');
+const fName = prompt("Ingrese su Nombre:", "");
+if(!fName) return;
+const lName = prompt("Ingrese su Apellido:", "");
+const addr = prompt("Ingrese su Dirección:", "");
+const pay = prompt("Ingrese método de pago:", "");
+userAccountData.firstName = fName;
+userAccountData.lastName = lName || "";
+userAccountData.address = addr || "";
+userAccountData.paymentMethod = pay || "No registrado";
+saveDataToLocalStorage();
+alert(`Cuenta de ${fName} agregada.`);
+}
+function configEmailAddress() { alert(`Correo activo: ${userAccountData.email}`); }
+function configNotifications() {
+const s = prompt("Seleccione tono de notificaciones:", userAccountData.notificationsSound);
+if(s) { userAccountData.notificationsSound = s; saveDataToLocalStorage(); }
+}
+function configTwoStepVerification() {
+userAccountData.twoStepActive = !userAccountData.twoStepActive;
+saveDataToLocalStorage();
+alert(`2FA Activo: ${userAccountData.twoStepActive ? 'Sí' : 'No'}`);
+}
+function configChangeChatColor() {
+const bg = prompt("Color de fondo saliente:", "#2e6f40");
+if(bg) document.documentElement.style.setProperty('--chat-bg-outgoing', bg);
+}
+function configShowAccount() { alert(`👤 ${userAccountData.firstName} ${userAccountData.lastName}\n📧 ${userAccountData.email}`); }
+function configDeleteAccount() { if(confirm("⚠️ ¿Borrar todos los datos locales?")) { localStorage.clear(); location.reload(); } }
+
+function toggleLeftMenu() { document.getElementById('leftMenu').classList.toggle('hidden-left'); }
+function toggleRightMenu() { document.getElementById('rightMenu').classList.toggle('hidden-right'); }
+function toggleLoginMenu() {
+const p = document.getElementById('loginPopover');
+p.style.display = p.style.display === 'block' ? 'none' : 'block';
+}
+function togglePlusPopover(e) {
+e.stopPropagation();
+const p = document.getElementById('plusPopover');
+p.style.display = p.style.display === 'block' ? 'none' : 'block';
+}
+document.addEventListener('click', () => {
+document.getElementById('plusPopover').style.display = 'none';
+document.getElementById('loginPopover').style.display = 'none';
+});
+
+function switchView(viewName, btnElement) {
+document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
+document.getElementById('view-' + viewName).classList.add('active');
+document.querySelectorAll('.bottom-nav .nav-item').forEach(i => i.classList.remove('active'));
+if(btnElement) btnElement.classList.add('active');
+
+const headerTitle = document.getElementById('headerTitleText');
+if(viewName === 'ai') headerTitle.textContent = "DuckieDuckPro";
+else if(viewName === 'contactos') headerTitle.textContent = "Directorio de Contactos";
+else if(viewName === 'llamadas') headerTitle.textContent = "Centro de Llamadas";
+else if(viewName === 'chats') headerTitle.textContent = "Bandeja de Chats";
+else if(viewName === 'status') headerTitle.textContent = "Status Center";
+
+registerButtonDependency(`Vista -> ${viewName}`);
+}
+
+function handleKeyPress(e) { if(e.key === 'Enter') sendUserMessage(); }
+
+function sendUserMessage() {
+const input = document.getElementById('chatInput');
+const txt = input.value.trim();
+if(!txt) return;
+input.value = '';
+sendUserMessageToAI(txt);
+}
+
+function appendMessageBubble(text, type, containerId) {
+const list = document.getElementById(containerId);
+if(!list) return;
+const bubble = document.createElement('div');
+bubble.className = `message-bubble ${type}`;
+bubble.textContent = text;
+list.appendChild(bubble);
+list.scrollTop = list.scrollHeight;
+}
+
+async function sendUserMessageToAI(userText) {
+chatMessagesHistory.push({ role: "user", content: userText });
+appendMessageBubble(userText, 'outgoing', 'messagesList');
+saveDataToLocalStorage();
+
+const list = document.getElementById('messagesList');
+const bubble = document.createElement('div');
+bubble.className = 'message-bubble incoming';
+bubble.textContent = '🧠 Pensando...';
+list.appendChild(bubble);
+list.scrollTop = list.scrollHeight;
+
+try {
+    await askGuaiFai(userText, (streamedText) => {
+        bubble.textContent = streamedText;
+        list.scrollTop = list.scrollHeight;
+    });
+    chatMessagesHistory.push({ role: "assistant", content: bubble.textContent });
+    saveDataToLocalStorage();
+} catch (error) {
+    bubble.textContent = '¡Quack! Error al conectar con el cerebro neuronal.';
+}
+}
+
+function renderChatHistoryOnLoad() {
+const list = document.getElementById('messagesList');
+if(!list) return;
+list.innerHTML = '';
+chatMessagesHistory.forEach(msg => {
+if(msg.role === 'system') return;
+const type = msg.role === 'user' ? 'outgoing' : 'incoming';
+appendMessageBubble(msg.content, type, 'messagesList');
+});
+}
+
+// ==========================================
+// --- MÓDULO WEBRTC Y SEÑALIZACIÓN WEBSOCKET ---
+// ==========================================
+let localStream = null;
+let remoteStream = null;
+let peerConnection = null;
+let signalingSocket = null;
+
+const rtcConfig = {
+    iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+        { urls: 'stun:stun1.l.google.com:19302' }
+    ]
+};
+
+// Iniciar servidor de señalización WebSockets (Conéctalo a tu backend o instancia WS)
+function initWebRTCSignalingSocket() {
+    try {
+        signalingSocket = new WebSocket('wss://duckietalkpro.onrender.com'); // O tu endpoint WS
+        signalingSocket.onopen = () => console.log("[WebRTC] Conectado al servidor de señalización WebSocket.");
+        signalingSocket.onmessage = async (event) => {
+            const data = JSON.parse(event.data);
+            if (!peerConnection) createPeerConnectionForIncoming();
+            if (data.type === 'offer') {
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(data.payload));
+                const answer = await peerConnection.createAnswer();
+                await peerConnection.setLocalDescription(answer);
+                signalingSocket.send(JSON.stringify({ type: 'answer', target: data.from, payload: answer }));
+            } else if (data.type === 'answer') {
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(data.payload));
+            } else if (data.type === 'candidate') {
+                await peerConnection.addIceCandidate(new RTCIceCandidate(data.payload));
+            }
+        };
+        alert("🌐 Conexión de señalización WebSocket establecida.");
+    } catch(e) {
+        console.warn("Simulando canal local WebRTC debido a entorno sin socket dedicado.");
+    }
+}
+
+async function startWebRTCWebCall(targetId, targetName) {
+    registerButtonDependency(`Llamada WebRTC VoIP -> ${targetName}`);
+    document.getElementById('callTargetName').textContent = targetName;
+    document.getElementById('activeCallOverlay').style.display = 'flex';
+    document.getElementById('callStatusTimer').textContent = "Solicitando cámara y micrófono...";
+
+    try {
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        document.getElementById('localVideo').srcObject = localStream;
+        
+        peerConnection = new RTCPeerConnection(rtcConfig);
+        localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+        peerConnection.ontrack = (event) => {
+            remoteStream = event.streams[0];
+            document.getElementById('remoteVideo').srcObject = remoteStream;
+            document.getElementById('callStatusTimer').textContent = "¡Videollamada VoIP P2P en curso!";
+        };
+
+        peerConnection.onicecandidate = (event) => {
+            if (event.candidate && signalingSocket && signalingSocket.readyState === WebSocket.OPEN) {
+                signalingSocket.send(JSON.stringify({ type: 'candidate', target: targetId, payload: event.candidate }));
+            }
+        };
+
+        // Crear oferta WebRTC
+        const offer = await peerConnection.createOffer();
+        await peerConnection.setLocalDescription(offer);
+        document.getElementById('callStatusTimer').textContent = "Llamando por Internet (WebRTC STUN)...";
+
+        if (signalingSocket && signalingSocket.readyState === WebSocket.OPEN) {
+            signalingSocket.send(JSON.stringify({ type: 'offer', target: targetId, payload: offer }));
+        }
+    } catch (error) {
+        console.error("Error WebRTC:", error);
+        alert("No se pudo iniciar el canal multimedia WebRTC. Revisa los permisos de cámara.");
+    }
+}
+
+function createPeerConnectionForIncoming() {
+    peerConnection = new RTCPeerConnection(rtcConfig);
+    if(localStream) {
+        localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+    }
+    peerConnection.ontrack = (event) => {
+        remoteStream = event.streams[0];
+        document.getElementById('remoteVideo').srcObject = remoteStream;
+        document.getElementById('callStatusTimer').textContent = "¡Conectado!";
+    };
+}
+
+function endActiveCall() {
+    if(localStream) {
+        localStream.getTracks().forEach(track => track.stop());
+    }
+    if(peerConnection) {
+        peerConnection.close();
+        peerConnection = null;
+    }
+    document.getElementById('activeCallOverlay').style.display = 'none';
+}
+
+function toggleCallMute() {
+    if(localStream) {
+        localStream.getAudioTracks()[0].enabled = !localStream.getAudioTracks()[0].enabled;
+        alert("Estado del micrófono alternado.");
+    }
+}
+function toggleCallSpeaker() { alert("Altavoz activo."); }
+
+function executeWebRTCCallFromKeypad() {
+    const val = document.getElementById('keypadDisplay').value;
+    if(!val) { alert("Ingresa un número o ID de destino."); return; }
+    startWebRTCWebCall(val, 'Marcación VoIP Directa');
+}
+
+
+// ==========================================
+// --- MÓDULO DE STATUS Y MULTIMEDIA (Cámara/Historias) ---
+// ==========================================
+let currentStoryIndex = 0;
+
+function triggerStatusMediaUpload() {
+    registerButtonDependency('Status -> Subir Multimedia');
+    const fileInput = document.getElementById('hiddenFileInput');
+    fileInput.setAttribute('data-target-mode', 'status');
+    fileInput.click();
+}
+
+function handlePlusAction(action) {
+    document.getElementById('plusPopover').style.display = 'none';
+    const fileInput = document.getElementById('hiddenFileInput');
+    fileInput.setAttribute('data-target-mode', 'chat');
+    if(action === 'camera') {
+        alert("📷 Abriendo cámara nativa de dispositivo...");
+        fileInput.click();
+    } else if(action === 'photos' || action === 'files') {
+        fileInput.click();
+    } else if(action === 'plugins') {
+        console.log("Plugins cargados.");
+    }
+}
+
+function processSelectedFile(input) {
+    if(input.files && input.files[0]) {
+        const file = input.files[0];
+        const fileUrl = URL.createObjectURL(file);
+        const isVideo = file.type.startsWith('video');
+        const mode = input.getAttribute('data-target-mode');
+
+        if(mode === 'status') {
+            savedStatuses.push({ type: isVideo ? 'video' : 'image', content: fileUrl, name: file.name, bg: '#1b2e20' });
+            saveDataToLocalStorage();
+            alert(`¡Multimedia "${file.name}" agregada exitosamente a tus Status!`);
+        } else {
+            appendMessageBubble(`[Archivo adjunto: ${file.name}]`, 'outgoing', 'messagesList');
+            alert(`Archivo listo para enviar: ${file.name}`);
+        }
+    }
+}
+
+function openStoryViewer() {
+    if(savedStatuses.length === 0) { alert("No hay historias activas."); return; }
+    currentStoryIndex = 0;
+    document.getElementById('storyViewerModal').style.display = 'flex';
+    renderCurrentStory();
+}
+
+function renderCurrentStory() {
+    const story = savedStatuses[currentStoryIndex];
+    const titleEl = document.getElementById('storyTitleIndicator');
+    const mediaContainer = document.getElementById('storyMediaDisplay');
+
+    titleEl.textContent = `Historia ${currentStoryIndex + 1} de ${savedStatuses.length}`;
+    mediaContainer.innerHTML = '';
+
+    if(story.type === 'video') {
+        const videoEl = document.createElement('video');
+        videoEl.src = story.content; videoEl.controls = true; videoEl.autoplay = true;
+        videoEl.style.maxWidth = '100%'; videoEl.style.maxHeight = '60vh';
+        mediaContainer.appendChild(videoEl);
+    } else if(story.type === 'image') {
+        const imgEl = document.createElement('img');
+        imgEl.src = story.content;
+        imgEl.style.maxWidth = '100%'; imgEl.style.maxHeight = '60vh'; imgEl.style.objectFit = 'contain';
+        mediaContainer.appendChild(imgEl);
+    } else {
+        const textEl = document.createElement('p');
+        textEl.textContent = story.content;
+        textEl.style.fontSize = '1.4ln'; textEl.style.color = '#ffffff';
+        mediaContainer.appendChild(textEl);
+    }
+}
+
+function nextStory() {
+    currentStoryIndex++;
+    if(currentStoryIndex >= savedStatuses.length) closeStoryViewerForce();
+    else renderCurrentStory();
+}
+function prevStory() {
+    currentStoryIndex--;
+    if(currentStoryIndex < 0) currentStoryIndex = 0;
+    renderCurrentStory();
+}
+function closeStoryViewer(e) { if(e.target.id === 'storyViewerModal') closeStoryViewerForce(); }
+function closeStoryViewerForce() { document.getElementById('storyViewerModal').style.display = 'none'; }
+
+function addStatusText() {
+    const txt = prompt("Ingrese el texto para su nuevo estado:");
+    if(!txt) return;
+    savedStatuses.push({ type: 'text', content: txt, bg: '#2e6f40' });
+    saveDataToLocalStorage();
+    alert("¡Estado de texto agregado con éxito!");
+}
+
+function generateAIImageStatus() {
+    registerButtonDependency('Status -> IA');
+    const p = prompt("Describe la imagen que deseas generar con Duckie Guai-fai'v:");
+    if(p) alert(`🤖 Generando imagen con Duckie Guai-fai'v: "${p}"`);
+}
+
+function appendKey(char) { document.getElementById('keypadDisplay').value += char; }
+function clearKeypad() { document.getElementById('keypadDisplay').value = ''; }
+function keypadSaveContact() { alert("Guardando contacto..."); }
+function keypadSendMessage() { switchView('chats', document.querySelector('.bottom-nav .nav-item:nth-child(4)')); }
+function filterContacts() {}
+function addNewContactModal() { alert("Nuevo contacto"); }
+function saveContactNative(n) { alert(`Guardado en sistema: ${n}`); }
+function replyToMessage(b) { alert("Respondiendo..."); }
+function sendMessageDirect(b) { alert("Enviando..."); }
+function deleteMessage(b) { b.closest('.message-bubble').remove(); }
+function triggerInstantVoice() { alert("🎙️ Grabando voz con Duckie Guai-fai'v..."); }
+</script>
+</body>
+</html>

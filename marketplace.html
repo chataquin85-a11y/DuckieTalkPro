@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duckie Marketplace - DuckieTheMus.com - Pro</title>
+    <style>
+        *{box-sizing:border-box}
+        :root{
+            --bg:#0f1c2e; --header:#0b1526; --card:#1a2e4f; --card-border:#243a5e; --text:#e6edf3; --muted:#a8b3cf; --muted2:#7a8ab0; --accent:#ffc300; --green:#7ee081; --search:#1e2f4a; --pill:#1e2f4a;
+        }
+        body.light{
+            --bg:#f5f7fa; --header:#ffffff; --card:#ffffff; --card-border:#e5e8eb; --text:#0f1c2e; --muted:#5a6b8a; --muted2:#8a9ac0; --search:#f0f2f5; --pill:#eef1f4;
+        }
+        body { 
+            font-family: 'Inter', 'Segoe UI', sans-serif; 
+            background: var(--bg); 
+            margin: 0; padding: 0; color: var(--text);
+            transition: all 0.3s;
+        }
+        .header {
+            background: var(--header);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--card-border);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+        }
+        .brand { display: flex; align-items: center; gap: 12px; cursor:pointer; }
+        .brand img { 
+            width: 48px; height: 48px; 
+            border-radius: 12px; 
+            object-fit: cover; 
+            background: #fff; 
+            border: 2px solid var(--accent); 
+        }
+        .brand h1 { color: var(--text); font-size: 1.4em; margin: 0; letter-spacing: -0.5px; }
+        .brand h1 span { color: var(--accent); }
+        .header-actions { display: flex; align-items: center; gap: 10px; }
+        .icon-btn {
+            background: var(--search);
+            border: 1px solid var(--card-border);
+            color: var(--text);
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .cart-btn { position: relative; }
+        .cart-btn .badge {
+            position: absolute; top: -6px; right: -6px; background: #ff3b30; color: #fff; font-size: 11px; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        }
+        .sell-btn { background: var(--accent); color: #000; padding: 8px 16px; border-radius: 12px; font-weight: 800; border: none; cursor: pointer; }
+        .subheader { background: var(--header); padding: 15px 20px; border-bottom: 1px solid var(--card-border); }
+        .search-bar { width: 100%; max-width: 600px; margin: 0 auto 12px; display: flex; background: var(--search); border-radius: 12px; padding: 10px 14px; border: 1px solid var(--card-border); }
+        .search-bar input { flex: 1; background: transparent; border: none; color: var(--text); outline: none; font-size: 14px; }
+        .categories { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+        .cat-pill { background: var(--pill); color: var(--muted); padding: 6px 14px; border-radius: 20px; font-size: 13px; border: 1px solid var(--card-border); cursor: pointer; transition:0.2s; }
+        .cat-pill.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
+        .trust-bar { display: flex; justify-content: center; gap: 20px; padding: 12px; background: var(--bg); font-size: 12px; color: var(--green); }
+        .trust-bar span{cursor:pointer; padding:4px 8px; border-radius:8px; transition:0.2s;}
+        .trust-bar span:hover{background:var(--pill)}
+        .container { max-width: 1100px; margin: 20px auto; padding: 0 15px; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+        .product-card { background: var(--card); border-radius: 18px; overflow: hidden; border: 1px solid var(--card-border); box-shadow: 0 8px 20px rgba(0,0,0,0.15); transition: transform 0.2s; text-align: left; position:relative; }
+        .product-card:hover { transform: translateY(-4px); }
+        .gallery { display: flex; gap: 6px; padding: 10px; background: #fff; justify-content: center; }
+        .gallery img { width: 110px; height: 110px; object-fit: cover; border-radius: 10px; border: 1px solid #eee; cursor:pointer; transition:0.2s; }
+        .gallery img:hover{transform:scale(1.05)}
+        .card-body { padding: 14px 16px 16px; }
+        .card-body h3 { margin: 0 0 6px; font-size: 16px; color: var(--text); }
+        .badge-verified { display: inline-block; background: #0f3d1f; color: #7ee081; font-size: 10px; padding: 3px 8px; border-radius: 10px; margin-bottom: 6px; border: 1px solid #1a5c2a; }
+        body.light .badge-verified { background: #e6f4ea; color: #1a7a2e; border-color: #a3d9b1; }
+        .description { font-size: 13px; color: var(--muted); line-height: 1.4; margin: 6px 0; }
+        .price { font-size: 20px; color: #1a7a2e; font-weight: 800; margin: 8px 0; }
+        body:not(.light) .price { color: var(--green); }
+        .seller { font-size: 11px; color: var(--muted2); margin-bottom: 10px; cursor:pointer; }
+        .seller:hover{text-decoration:underline}
+        .pay-btn { display: block; background: var(--accent); padding: 12px; border-radius: 12px; font-weight: 800; text-decoration: none; color: #000; text-align: center; margin-bottom:8px; cursor:pointer; }
+        .add-cart-link{display:block; text-align:center; font-size:12px; color:var(--muted); cursor:pointer; text-decoration:underline; padding:4px;}
+        .wa-float { position: fixed; bottom: 20px; right: 20px; background-color: #25d366; color: white; padding: 14px 22px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 6px 16px rgba(0,0,0,0.4); z-index: 1000; font-size: 14px; }
+
+        /* === VIDA NUEVA - MODALES Y TOAST === */
+        .modal-overlay{position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(6px); z-index:2000; display:none; align-items:center; justify-content:center; padding:20px;}
+        .modal-overlay.show{display:flex}
+        .modal-box{background:var(--card); border:1px solid var(--card-border); border-radius:20px; width:100%; max-width:520px; max-height:90vh; overflow:auto; padding:24px; animation:pop 0.25s ease;}
+        @keyframes pop{from{transform:scale(0.9); opacity:0} to{transform:scale(1); opacity:1}}
+        .modal-header{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;}
+        .modal-header h2{margin:0; font-size:18px;}
+        .close-x{background:var(--pill); border:1px solid var(--card-border); color:var(--text); width:32px; height:32px; border-radius:10px; cursor:pointer; font-size:18px;}
+        .cart-item{display:flex; gap:12px; padding:12px 0; border-bottom:1px solid var(--card-border); align-items:center;}
+        .cart-item img{width:60px; height:60px; border-radius:10px; object-fit:cover; background:#fff;}
+        .cart-item-info{flex:1}
+        .cart-total{font-size:20px; font-weight:800; margin:16px 0; text-align:right;}
+        .btn-primary{width:100%; background:var(--accent); color:#000; border:none; padding:14px; border-radius:12px; font-weight:800; cursor:pointer; font-size:14px;}
+        .btn-secondary{width:100%; background:var(--pill); color:var(--text); border:1px solid var(--card-border); padding:12px; border-radius:12px; cursor:pointer; margin-top:8px;}
+        .form-input{width:100%; background:var(--search); border:1px solid var(--card-border); color:var(--text); padding:12px; border-radius:10px; margin:8px 0; font-size:14px;}
+        .toast{position:fixed; top:80px; left:50%; transform:translateX(-50%); background:var(--header); color:var(--text); border:1px solid var(--card-border); padding:12px 20px; border-radius:12px; z-index:3000; box-shadow:0 8px 20px rgba(0,0,0,0.4); display:none; animation:slideDown 0.3s;}
+        .toast.show{display:block}
+        @keyframes slideDown{from{transform:translate(-50%,-20px); opacity:0} to{transform:translate(-50%,0); opacity:1}}
+        .lightbox{position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:2500; display:none; align-items:center; justify-content:center;}
+        .lightbox.show{display:flex}
+        .lightbox img{max-width:90%; max-height:90%; border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,0.6);}
+        .empty-cart{text-align:center; padding:40px 20px; color:var(--muted)}
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="brand" onclick="showToast('🦆 Duckie Marketplace - Pro | San Diego 92105')">
+            <!-- AQUI ESTA TU LOGO IMG_4685.png -->
+            <img src="IMG_4685.png" alt="Duckie Logo" onerror="this.src='https://via.placeholder.com/48?text=🦆'">
+            <h1>Duckie<span>-Marketplace</span></h1>
+        </div>
+        <div class="header-actions">
+            <button class="icon-btn" onclick="toggleTheme()" title="Cambiar tema">🌗</button>
+            <button class="icon-btn cart-btn" id="cartBtn">🛒<span class="badge" id="cartBadge">0</span></button>
+            <button class="sell-btn" id="sellBtn">🛍️ Vender</button>
+        </div>
+    </div>
+
+    
+    <div style="background:linear-gradient(90deg,#ffc300 0%,#ff8c00 100%);color:#000;padding:10px 15px;text-align:center;font-weight:900;font-size:13px;position:sticky;top:56px;z-index:99;display:flex;justify-content:center;gap:15px;align-items:center;flex-wrap:wrap">
+        <span>🦆 BETA FUNDADORES - 0% COMISIÓN</span>
+        <span id="countdownBeta" style="background:#000;color:#ffc300;padding:4px 10px;border-radius:20px;font-size:12px">30 días - Termina: 22 Oct 2026</span>
+        <span>• Marketplace + AI Chat GRATIS • Solo 100 lugares</span>
+    </div>
+
+    <div class="subheader">
+        <div class="search-bar"><span>🔍</span>&nbsp;<input type="text" id="searchInput" placeholder="Buscar ropa, electrodomésticos, zapatos..."></div>
+        <div class="categories" id="categories"><span class="cat-pill active" data-cat="Todos">Todos</span><span class="cat-pill" data-cat="Ropa">Ropa</span><span class="cat-pill" data-cat="Zapatos">Zapatos</span><span class="cat-pill" data-cat="Electrodomésticos">Electrodomésticos</span><span class="cat-pill" data-cat="Electrónica">Electrónica</span></div>
+    </div>
+
+    <div class="trust-bar"><span onclick="showTrust('verified')">✓ Verificados</span><span onclick="showTrust('pago')">✓ Pago Protegido</span><span onclick="showTrust('entrega')">✓ Entrega en SD 92105</span></div>
+
+    <div class="container" id="productContainer">
+        <div class="product-card" data-category="Ropa" data-name="Guess Sweater"><div class="gallery"><img src="IMG_2441.jpeg" alt="Guess"><img src="IMG_2443.jpeg" alt="Guess"></div><div class="card-body"><span class="badge-verified">✓ Like New</span><h3>Guess Sweater</h3><p class="description">Soft gray knit, size L, Guess logo.<br><em>Chamarra gris talla L.</em></p><p class="seller" onclick="showSeller('Amado')">👤 Amado • San Diego • ⭐5.0</p><p class="price">$45.00 USD</p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=support@DuckieTheMus.com&item_name=Sueter+Guess&amount=45.00&currency_code=USD" class="pay-btn">Buy Now / Comprar</a><span class="add-cart-link" onclick="addToCart('Guess Sweater',45,'IMG_2441.jpeg')">+ Agregar al carrito</span></div></div>
+        <div class="product-card" data-category="Ropa" data-name="Zara Man Jacket"><div class="gallery"><img src="IMG_2444.jpeg"><img src="IMG_2445.jpeg"><img src="IMG_2446.jpeg"></div><div class="card-body"><span class="badge-verified">✓ Excelente</span><h3>Zara Man Jacket</h3><p class="description">Quilted Zara Man, modern elegant.<br><em>Chamarra acolchada impecable.</em></p><p class="seller" onclick="showSeller('Amado')">👤 Amado • San Diego • ⭐5.0</p><p class="price">$60.00 USD</p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=support@DuckieTheMus.com&item_name=Zara+Man&amount=60.00&currency_code=USD" class="pay-btn">Buy Now</a><span class="add-cart-link" onclick="addToCart('Zara Man Jacket',60,'IMG_2444.jpeg')">+ Agregar al carrito</span></div></div>
+        <div class="product-card" data-category="Ropa" data-name="H&M Sweatshirt"><div class="gallery"><img src="image1.jpeg"><img src="image2.jpeg"><img src="image3.jpeg"></div><div class="card-body"><span class="badge-verified">✓ Buen Estado</span><h3>H&M Sweatshirt</h3><p class="description">H&M size M, durable.<br><em>Talla M cómoda.</em></p><p class="seller" onclick="showSeller('Amado')">👤 Amado • San Diego • ⭐5.0</p><p class="price">$30.00 USD</p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=support@DuckieTheMus.com&item_name=Sudadera+HM&amount=30.00&currency_code=USD" class="pay-btn">Buy Now</a><span class="add-cart-link" onclick="addToCart('H&M Sweatshirt',30,'image1.jpeg')">+ Agregar al carrito</span></div></div>
+        <div class="product-card" data-category="Electrodomésticos" data-name="Nutribullet"><div class="gallery"><img src="image12.jpeg"><img src="image14.jpeg"></div><div class="card-body"><span class="badge-verified">✓ Como Nuevo</span><h3>Nutribullet</h3><p class="description">Powerful extractor for smoothies.<br><em>Potente y compacto.</em></p><p class="seller" onclick="showSeller('Amado')">👤 Amado • San Diego • ⭐5.0</p><p class="price">$80.00 USD</p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=support@DuckieTheMus.com&item_name=Nutribullet&amount=80.00&currency_code=USD" class="pay-btn">Buy Now</a><span class="add-cart-link" onclick="addToCart('Nutribullet',80,'image12.jpeg')">+ Agregar al carrito</span></div></div>
+        <div class="product-card" data-category="Ropa" data-name="Straight Fit Pants"><div class="gallery"><img src="image18.jpeg"><img src="image20.jpeg"></div><div class="card-body"><span class="badge-verified">✓ Excelente</span><h3>Straight Fit Pants</h3><p class="description">Size 36/34 classic cut.<br><em>Talla 36/34 clásico.</em></p><p class="seller" onclick="showSeller('Amado')">👤 Amado • San Diego • ⭐5.0</p><p class="price">$25.00 USD</p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=support@DuckieTheMus.com&item_name=Pantalon+Straight&amount=25.00&currency_code=USD" class="pay-btn">Buy Now</a><span class="add-cart-link" onclick="addToCart('Straight Fit Pants',25,'image18.jpeg')">+ Agregar al carrito</span></div></div>
+    </div>
+
+    <a href="https://wa.me/16198918186?text=Hola%20vi%20tu%20Duckie%20Marketplace" class="wa-float" target="_blank" onclick="showToast('💬 Abriendo WhatsApp con Amado...')">💬 Chat with me / Chatea conmigo</a>
+
+    <!-- CART MODAL -->
+    <div class="modal-overlay" id="cartModal">
+        <div class="modal-box">
+            <div class="modal-header"><h2>🛒 Tu Carrito</h2><button class="close-x" onclick="closeCart()">✕</button></div>
+            <div id="cartItems"></div>
+            <div class="cart-total" id="cartTotal">$0.00 USD</div>
+            <button class="btn-primary" onclick="checkoutCart()">Pagar con PayPal - Checkout</button>
+            <button class="btn-secondary" onclick="clearCart()">Vaciar carrito</button>
+            <button class="btn-secondary" onclick="closeCart()">Seguir comprando</button>
+        </div>
+    </div>
+
+    <!-- SELL MODAL -->
+    <div class="modal-overlay" id="sellModal">
+        <div class="modal-box">
+            <div class="modal-header"><h2>🛍️ Vender producto</h2><button class="close-x" onclick="closeSell()">✕</button></div>
+            <p style="color:var(--muted); font-size:13px; margin-top:0">Publica en segundos. Se guarda local y puedes copiar el PayPal link.</p>
+            <input id="sellName" class="form-input" placeholder="Nombre: Ej. Guess Sweater">
+            <input id="sellPrice" class="form-input" type="number" placeholder="Precio USD: Ej. 45">
+            <select id="sellCat" class="form-input"><option value="Ropa">Ropa</option><option value="Zapatos">Zapatos</option><option value="Electrodomésticos">Electrodomésticos</option><option value="Electrónica">Electrónica</option></select>
+            <input id="sellDesc" class="form-input" placeholder="Descripción breve">
+            <input id="sellImg" class="form-input" placeholder="Imagen URL o nombre (opcional)">
+            <button class="btn-primary" onclick="publishProduct()">Publicar ahora</button>
+            <button class="btn-secondary" onclick="closeSell()">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- TRUST MODAL -->
+    <div class="modal-overlay" id="trustModal">
+        <div class="modal-box" style="max-width:420px">
+            <div class="modal-header"><h2 id="trustTitle">Info</h2><button class="close-x" onclick="document.getElementById('trustModal').classList.remove('show')">✕</button></div>
+            <p id="trustText" style="color:var(--muted); line-height:1.5"></p>
+            <button class="btn-primary" onclick="document.getElementById('trustModal').classList.remove('show')">Entendido</button>
+        </div>
+    </div>
+
+    <div class="lightbox" id="lightbox" onclick="this.classList.remove('show')"><img id="lightboxImg" src=""></div>
+    <div class="toast" id="toast"></div>
+
+    <script>
+        function toggleTheme(){
+            document.body.classList.toggle('light');
+            localStorage.setItem('duckieTheme', document.body.classList.contains('light') ? 'light' : 'dark');
+            showToast(document.body.classList.contains('light') ? '☀️ Modo claro' : '🌙 Modo oscuro');
+        }
+        if(localStorage.getItem('duckieTheme') === 'light'){ document.body.classList.add('light'); }
+
+        // === CARRITO CON VIDA ===
+        let cart = JSON.parse(localStorage.getItem('duckieCart')||'[]');
+        function saveCart(){ localStorage.setItem('duckieCart', JSON.stringify(cart)); updateBadge(); }
+        function updateBadge(){ document.getElementById('cartBadge').textContent = cart.length; }
+        function addToCart(name,price,img){
+            cart.push({name,price,img, id:Date.now()});
+            saveCart();
+            showToast('✅ '+name+' agregado al carrito');
+        }
+        function openCart(){
+            const cont = document.getElementById('cartItems');
+            if(cart.length===0){ cont.innerHTML='<div class="empty-cart">Tu carrito está vacío<br>Agrega productos 🦆</div>'; }
+            else{
+                cont.innerHTML = cart.map((it,i)=>`<div class="cart-item"><img src="${it.img}" onerror="this.src='https://via.placeholder.com/60?text=🦆'"><div class="cart-item-info"><strong>${it.name}</strong><br><span style="color:var(--green)">$${it.price} USD</span></div><button class="close-x" onclick="removeFromCart(${i})">✕</button></div>`).join('');
+            }
+            document.getElementById('cartTotal').textContent = '$'+cart.reduce((s,it)=>s+Number(it.price),0).toFixed(2)+' USD';
+            document.getElementById('cartModal').classList.add('show');
+        }
+        function closeCart(){ document.getElementById('cartModal').classList.remove('show'); }
+        function removeFromCart(i){ cart.splice(i,1); saveCart(); openCart(); }
+        function clearCart(){ cart=[]; saveCart(); openCart(); showToast('🗑️ Carrito vaciado'); }
+        function checkoutCart(){
+            if(cart.length===0){ showToast('Carrito vacío'); return; }
+            const total = cart.reduce((s,it)=>s+Number(it.price),0);
+            const names = cart.map(c=>c.name).join(', ');
+            // PayPal multi? Usamos tu correo y total
+            window.open(`https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=support@DuckieTheMus.com&item_name=${encodeURIComponent(names)}&amount=${total}&currency_code=USD`, '_blank');
+            showToast('💳 Abriendo PayPal con $'+total);
+        }
+        document.getElementById('cartBtn').onclick = openCart;
+
+        // === VENDER CON VIDA ===
+        function openSell(){ document.getElementById('sellModal').classList.add('show'); }
+        function closeSell(){ document.getElementById('sellModal').classList.remove('show'); }
+        document.getElementById('sellBtn').onclick = openSell;
+        function publishProduct(){
+            const name=document.getElementById('sellName').value.trim();
+            const price=document.getElementById('sellPrice').value.trim();
+            const cat=document.getElementById('sellCat').value;
+            const desc=document.getElementById('sellDesc').value.trim()||'Producto Duckie';
+            const img=document.getElementById('sellImg').value.trim()||'IMG_4685.png';
+            if(!name||!price){ showToast('⚠️ Pon nombre y precio'); return; }
+            const container=document.getElementById('productContainer');
+            const card=document.createElement('div');
+            card.className='product-card';
+            card.dataset.category=cat;
+            card.dataset.name=name;
+            card.innerHTML=`<div class="gallery"><img src="${img}" onerror="this.src='https://via.placeholder.com/110?text=🦆'"></div><div class="card-body"><span class="badge-verified">✓ Nuevo</span><h3>${name}</h3><p class="description">${desc}</p><p class="seller" onclick="showSeller('Amado')">👤 Amado • San Diego • ⭐5.0</p><p class="price">$${price} USD</p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=support@DuckieTheMus.com&item_name=${encodeURIComponent(name)}&amount=${price}&currency_code=USD" class="pay-btn">Buy Now / Comprar</a><span class="add-cart-link" onclick="addToCart('${name.replace(/'/g,"\\'")}',${price},'${img}')">+ Agregar al carrito</span></div>`;
+            container.prepend(card);
+            attachImageListeners();
+            closeSell();
+            showToast('🎉 Publicado: '+name);
+            document.getElementById('sellName').value=''; document.getElementById('sellPrice').value=''; document.getElementById('sellDesc').value=''; document.getElementById('sellImg').value='';
+            saveProducts();
+        }
+
+        // === CATEGORIAS CON VIDA ===
+        document.querySelectorAll('.cat-pill').forEach(pill=>{
+            pill.onclick=()=>{
+                document.querySelectorAll('.cat-pill').forEach(p=>p.classList.remove('active'));
+                pill.classList.add('active');
+                const cat = pill.dataset.cat;
+                filterProducts();
+                showToast(cat==='Todos'?'👀 Mostrando todo':'🏷️ Filtrado: '+cat);
+            }
+        });
+        function filterProducts(){
+            const activeCat = document.querySelector('.cat-pill.active')?.dataset.cat || 'Todos';
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('.product-card').forEach(card=>{
+                const catMatch = activeCat==='Todos' || card.dataset.category===activeCat;
+                const name = card.dataset.name.toLowerCase();
+                const text = card.innerText.toLowerCase();
+                const searchMatch = !q || name.includes(q) || text.includes(q);
+                card.style.display = (catMatch && searchMatch) ? '' : 'none';
+            });
+        }
+
+        // === BUSCADOR CON VIDA ===
+        document.getElementById('searchInput').addEventListener('input', filterProducts);
+
+        // === GALERIA LIGHTBOX CON VIDA ===
+        function attachImageListeners(){
+            document.querySelectorAll('.gallery img').forEach(img=>{
+                img.onclick=()=>{ document.getElementById('lightboxImg').src=img.src; document.getElementById('lightbox').classList.add('show'); }
+            });
+        }
+        attachImageListeners();
+
+        // === TRUST BAR CON VIDA ===
+        function showTrust(type){
+            const modal=document.getElementById('trustModal');
+            const title=document.getElementById('trustTitle');
+            const text=document.getElementById('trustText');
+            if(type==='verified'){ title.textContent='✓ Verificados'; text.innerHTML='Todos los productos son revisados. Fotos reales, sin filtros. Estado honesto: Like New, Excelente, Buen Estado.<br><br>🦆 Duckie garantiza calidad.'; }
+            if(type==='pago'){ title.textContent='✓ Pago Protegido'; text.innerHTML='🚀 BETA FUNDADORES: 0% COMISIÓN por 30 días<br>Después: 10% transparente (tú ganas 90%)<br>Negocio: Duckie Marketplace - DuckieTheMus.com<br>Correo: support@DuckieTheMus.com<br>PayPal Business Verificado<br><br>Vende GRATIS hoy y seguimiento inmediato.'; }
+            if(type==='entrega'){ title.textContent='✓ Entrega en SD 92105'; text.innerHTML='Entrega local en San Diego 92105 y alrededores.<br>Envío nacional por USPS con costo extra.<br><br>WhatsApp: +1 619-891-8186'; }
+            modal.classList.add('show');
+        }
+        function showSeller(name){ showToast('👤 Vendedor: '+name+' • ⭐5.0 • San Diego • 100% confiable'); }
+        function showToast(msg){
+            const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._to); t._to=setTimeout(()=>t.classList.remove('show'),3000);
+        }
+
+        // Guardar productos nuevos
+        function saveProducts(){ localStorage.setItem('duckieMarketHTML', document.getElementById('productContainer').innerHTML); }
+        // Cargar si hay guardados
+        (function(){
+            const saved = localStorage.getItem('duckieMarketHTML');
+            if(saved && saved.length>100){ /* No auto-restore para no duplicar los 5 originales - opcional */ }
+            updateBadge();
+        })();
+
+        
+        // === BETA FUNDADORES COUNTDOWN 30 DIAS ===
+        (function(){
+            const endDate = new Date();
+            endDate.setDate(endDate.getDate() + 30);
+            localStorage.setItem('duckieBetaEnd', endDate.toISOString());
+            function updateCountdown(){
+                const now = new Date();
+                const diff = endDate - now;
+                const days = Math.floor(diff / (1000*60*60*24));
+                const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+                const el = document.getElementById('countdownBeta');
+                if(el){
+                    if(days <= 0) el.textContent = '¡Últimas horas BETA!';
+                    else el.textContent = days + ' días ' + hours + 'h - Termina: ' + endDate.toLocaleDateString('es-MX');
+                }
+            }
+            updateCountdown();
+            setInterval(updateCountdown, 3600000);
+            // Mostrar toast fundador
+            if(!localStorage.getItem('betaWelcome')){
+                setTimeout(()=>{ showToast('🦆 ¡Bienvenido Fundador! 0% comisión por 30 días en Duckie-Marketplace + AI Chat gratis'); localStorage.setItem('betaWelcome','1'); }, 1500);
+            }
+        })();
+
+        // Cerrar modales al click fuera
+        document.querySelectorAll('.modal-overlay').forEach(ov=>{
+            ov.addEventListener('click', e=>{ if(e.target===ov) ov.classList.remove('show'); });
+        });
+    </script>
+</body>
+</html>
