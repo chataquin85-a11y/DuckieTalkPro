@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DuckieDuckPro AI - VIVO FULL</title>
+<link rel="icon" type="image/png" href="IMG_4685.png">
+<link rel="shortcut icon" type="image/png" href="IMG_4685.png">
+<link rel="apple-touch-icon" href="IMG_4685.png">
+<link rel="apple-touch-icon" sizes="180x180" href="IMG_4685.png">
+<link rel="apple-touch-icon" sizes="192x192" href="IMG_4685.png">
+<link rel="apple-touch-icon" sizes="512x512" href="IMG_4685.png">
+<meta name="theme-color" content="#121c14">
+<meta name="msapplication-TileImage" content="IMG_4685.png">
+<meta name="msapplication-TileColor" content="#121c14">
+<link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 :root{--bg-color:#121c14;--panel-color:#1b2e20;--accent-color:#2e6f40;--accent-hover:#3b8c51;--text-main:#ffffff;--text-muted:#a3c1ad;--danger-color:#a83232;--chat-bg-outgoing:#2e6f40;--chat-text-outgoing:#ffffff;--chat-bg-incoming:#1b2e20;--chat-text-incoming:#ffffff}
@@ -37,28 +47,21 @@ header{display:flex;justify-content:space-between;align-items:center;background-
 .message-bubble{max-width:75%;padding:12px 16px;border-radius:12px;font-size:.95rem;line-height:1.4;position:relative}
 .message-bubble.incoming{background-color:var(--chat-bg-incoming);color:var(--chat-text-incoming);align-self:flex-start;border:1px solid #284a32}
 .message-bubble.outgoing{background-color:var(--chat-bg-outgoing);color:var(--chat-text-outgoing);align-self:flex-end}
-.message-actions{display:flex;gap:10px;margin-top:6px;font-size:.75rem}
-.message-actions button{background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.2);color:var(--text-main);padding:3px 8px;border-radius:4px;cursor:pointer}
 .content-card{background-color:var(--panel-color);border:1px solid #284a32;border-radius:12px;padding:16px;margin:15px 20px;display:flex;flex-direction:column;gap:8px}
 .content-card h3{font-size:1.05rem;color:#ffd700;display:flex;justify-content:space-between;align-items:center}
 .content-card p{font-size:.9rem;color:var(--text-muted)}
 .btn-action-small{background-color:var(--accent-color);color:white;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:.85rem}
-.btn-action-small:hover{background-color:var(--accent-hover)}
 .keypad-container{display:flex;flex-direction:column;align-items:center;padding:15px;background-color:var(--panel-color);border:1px solid #284a32;border-radius:12px;margin:15px 20px;gap:12px}
 .keypad-display{width:100%;background-color:var(--bg-color);border:1px solid #284a32;border-radius:8px;padding:12px;font-size:1.3rem;color:var(--text-main);text-align:center;letter-spacing:2px;outline:none}
 .keypad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:260px}
 .keypad-btn{background-color:#223829;border:1px solid #335c3f;color:var(--text-main);padding:12px;font-size:1.1rem;font-weight:600;border-radius:50%;aspect-ratio:1;cursor:pointer;display:flex;justify-content:center;align-items:center;margin:0 auto;width:55px;height:55px}
-.keypad-btn:hover{background-color:var(--accent-color)}
 .keypad-actions-row{display:flex;gap:10px;width:100%;justify-content:center;margin-top:5px;flex-wrap:wrap}
 .chat-input-area{display:flex;align-items:center;background-color:var(--panel-color);padding:10px 16px;gap:12px;border-top:1px solid #284a32;width:100%}
 .chat-input-wrapper{flex:1;display:flex;align-items:center;background-color:var(--bg-color);border-radius:24px;padding:8px 16px;border:1px solid #284a32;min-width:0}
 .chat-input-wrapper input[type="text"]{flex:1;background:transparent;border:none;color:var(--text-main);font-size:15px;outline:none;min-width:0}
-.media-actions-right{display:flex;align-items:center;gap:10px}
-.btn-icon-right{background:transparent;border:none;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:4px;font-size:18px}
 .send-btn-ios{background-color:var(--accent-color);border:none;color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px}
 .bottom-nav{display:flex;justify-content:space-around;align-items:center;background-color:var(--panel-color);border-top:1px solid #284a32;padding:8px 5px;height:65px}
-.nav-item{background:none;border:none;color:var(--text-muted);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:.75rem;flex:1;transition:color.2s,transform.2s}
-.nav-item span.icon{font-size:1.2rem}
+.nav-item{background:none;border:none;color:var(--text-muted);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:.75rem;flex:1}
 .nav-item.active{color:#ffd700;transform:scale(1.05)}
 .search-bar-container{padding:10px 20px;display:flex;gap:10px;align-items:center}
 .search-bar-container input{flex:1;background-color:var(--panel-color);border:1px solid #284a32;border-radius:8px;padding:8px 12px;color:var(--text-main);outline:none}
@@ -83,17 +86,13 @@ input:checked +.slider-toggle:before{transform:translateX(22px)}
 <button class="icon-btn" onclick="toggleRightMenu()">⚙</button>
 </div>
 </header>
-
 <div id="betaFundadoresBanner" style="background:linear-gradient(90deg,#ffc300 0%,#ff8c00 100%);color:#000;padding:10px 15px;text-align:center;font-weight:900;font-size:13px;display:flex;justify-content:center;gap:12px;align-items:center;flex-wrap:wrap;z-index:5">
 <span>🦆 BETA FUNDADORES - 30 DÍAS</span>
 <span id="countdownBetaFundadores" style="background:#000;color:#ffc300;padding:4px 10px;border-radius:20px;font-size:12px">30 días - 0% COMISIÓN</span>
 <span>• Duckie-Marketplace + DuckieTalkPro GRATIS • Solo 100 lugares • DuckieTheMus.com</span>
 </div>
-
 <div class="workspace" style="flex-direction:column;">
 <div style="flex:1;position:relative;overflow:hidden;display:flex;">
-
-<!-- IZQUIERDA: 6 ITEMS VIVO -->
 <div class="menu-panel left hidden-left" id="leftMenu">
 <div class="menu-header"><span>Menú Principal</span><button class="icon-btn" onclick="toggleLeftMenu()">✕</button></div>
 <ul class="menu-items">
@@ -109,20 +108,17 @@ input:checked +.slider-toggle:before{transform:translateX(22px)}
 <button class="btn-action-small" style="width:100%" onclick="goToMarketplacePage()">🛒 TIENDA 92105 VIVO</button>
 </div>
 </div>
-
-<!-- VISTAS CON VIDA REAL -->
 <div id="view-contactos" class="app-view active">
 <div class="chat-header-profile"><div class="avatar-container">👥</div><div class="assistant-name">Directorio de Contactos Nativos</div><div class="assistant-subtitle">DuckieTalkPro Sync • Búsqueda VIVA</div></div>
-<div class="search-bar-container"><input type="text" id="contactSearchInput" placeholder="🔍 Buscar contacto por nombre o número..." onkeyup="filterContacts()"><button class="btn-action-small" onclick="addNewContactModal()">➕ Agregar</button></div>
+<div class="search-bar-container"><input type="text" id="contactSearchInput" placeholder="🔍 Buscar contacto..." onkeyup="filterContacts()"><button class="btn-action-small" onclick="addNewContactModal()">➕ Agregar</button></div>
 <div id="contactsContainer">
 <div class="content-card contact-card-item" data-name="duckie support team"><div style="display:flex;gap:12px;align-items:center;"><div class="avatar-container" style="width:45px;height:45px;"><img src="IMG_4685.png" alt="Logo"></div><div><h3>Duckie Support Team</h3><p>📱 Tel: +1 (800) DUCKIE-AI</p></div></div><div style="margin-top:10px;display:flex;gap:8px"><button class="btn-action-small" onclick="saveContactNative('Duckie Support Team')">Guardar</button><button class="btn-action-small" onclick="startWebRTCWebCall('duckie_support','Duckie Support Team')">Llamar VoIP</button></div></div>
 <div class="content-card contact-card-item" data-name="amado apolonio"><div style="display:flex;gap:12px;align-items:center;"><div class="avatar-container" style="width:45px;height:45px;">👨💻</div><div><h3>Amado Apolonio (Admin)</h3><p>📱 Tel: +52 (55) DUCK-PRO</p></div></div><div style="margin-top:10px;display:flex;gap:8px"><button class="btn-action-small" onclick="saveContactNative('Amado Apolonio')">Guardar</button><button class="btn-action-small" onclick="startWebRTCWebCall('amado_admin','Amado Apolonio (Admin)')">Llamar VoIP</button></div></div>
 <div class="content-card contact-card-item" data-name="marketplace 92105"><div style="display:flex;gap:12px;align-items:center;"><div class="avatar-container" style="width:45px;height:45px;">🛍️</div><div><h3>Marketplace 92105</h3><p>📱 Soporte Tienda San Diego</p></div></div><div style="margin-top:10px;display:flex;gap:8px"><button class="btn-action-small" onclick="goToMarketplacePage()">Abrir Tienda</button><button class="btn-action-small" onclick="startWebRTCWebCall('market_92105','Marketplace 92105')">Llamar</button></div></div>
 </div>
 </div>
-
 <div id="view-llamadas" class="app-view">
-<div class="chat-header-profile"><div class="avatar-container"><img src="IMG_5468.png"></div><div class="assistant-name">Centro de Llamadas WebRTC</div><div class="assistant-subtitle">Marcador VoIP & Streaming P2P VIVO</div></div>
+<div class="chat-header-profile"><div class="avatar-container"><img src="IMG_5468.png" onerror="this.src='IMG_4685.png'"></div><div class="assistant-name">Centro de Llamadas WebRTC</div><div class="assistant-subtitle">Marcador VoIP & Streaming P2P VIVO</div></div>
 <div class="keypad-container">
 <input type="text" id="keypadDisplay" class="keypad-display" placeholder="Ingresar ID o número..." readonly>
 <div class="keypad-grid">
@@ -140,27 +136,23 @@ input:checked +.slider-toggle:before{transform:translateX(22px)}
 </div>
 <div class="content-card"><h3>📞 Videollamada P2P <button class="btn-action-small" onclick="initWebRTCSignalingSocket()">Conectar WebSocket</button></h3><p id="webrtcStatus">Estado: Listo para STUN Google • P2P directo</p></div>
 </div>
-
 <div id="view-ai" class="app-view">
-<div class="chat-header-profile"><div class="avatar-container"><img src="IMG_5468.png"></div><div class="assistant-name">Duckie Guai-fai'v</div><div class="assistant-subtitle">Ahora en pantalla propia ai-chat.html • Streaming VIVO</div></div>
+<div class="chat-header-profile"><div class="avatar-container"><img src="IMG_5468.png" onerror="this.src='IMG_4685.png'"></div><div class="assistant-name">Duckie Guai-fai'v</div><div class="assistant-subtitle">Ahora en pantalla propia ai-chat.html • Streaming VIVO</div></div>
 <div class="messages-list" id="messagesList"><div class="message-bubble incoming">¡Hola Amado! Soy Duckie Guai-fai'v 🧠. Presiona abajo en 🦆 AI Chats para abrir mi pantalla separada VIVO.</div></div>
 <div style="padding:12px;text-align:center"><button class="btn-action-small" style="background:#ffd700;color:#000;font-weight:800;padding:10px 18px" onclick="goToAiChat()">🦆 ABRIR AI CHAT SEPARADO VIVO</button></div>
 </div>
-
 <div id="view-chats" class="app-view">
-<div class="chat-header-profile"><div class="avatar-container"><img src="IMG_5468.png"></div><div class="assistant-name">Bandeja de Chats DuckieTalkPro</div><div class="assistant-subtitle">Mensajes Entrantes y Salientes VIVO</div></div>
+<div class="chat-header-profile"><div class="avatar-container"><img src="IMG_5468.png" onerror="this.src='IMG_4685.png'"></div><div class="assistant-name">Bandeja de Chats DuckieTalkPro</div><div class="assistant-subtitle">Mensajes Entrantes y Salientes VIVO</div></div>
 <div class="search-bar-container"><input type="text" id="chatSearchInput" placeholder="🔍 Buscar chat..." onkeyup="filterChats()"></div>
 <div class="messages-list" id="chatInboxList"><div class="message-bubble incoming" data-text="marketplace"><strong>Entrante:</strong> Hola Amado, ¿está listo el repositorio marketplace?<div class="message-actions"><button onclick="replyToMessage(this)">Contestar</button><button onclick="deleteMessage(this)" style="color:#ff6b6b;">Borrar</button></div></div><div class="message-bubble outgoing"><strong>Saliente:</strong> Sí, acoplado al 100 sin cruce de cables.</div></div>
 </div>
-
 <div id="view-status" class="app-view">
-<div class="chat-header-profile"><div class="avatar-container"><img src="IMG_5468.png"></div><div class="assistant-name">Status Center & Historias</div><div class="assistant-subtitle">Story View VIVO</div></div>
+<div class="chat-header-profile"><div class="avatar-container"><img src="IMG_5468.png" onerror="this.src='IMG_4685.png'"></div><div class="assistant-name">Status Center & Historias</div><div class="assistant-subtitle">Story View VIVO</div></div>
 <div class="content-card" style="border:2px dashed var(--accent-color);text-align:center;cursor:pointer;" onclick="openStoryViewer()"><h3>⚡ Ver Historias Activas (Story View)</h3><p>Haz clic aquí para abrir carrusel multimedia</p></div>
 <div class="content-card"><h3>📝 Add Status Text <button class="btn-action-small" onclick="addStatusText()">Crear Estado</button></h3><p id="statusTextList">Comparte estado tipográfico guardado localmente</p></div>
 <div class="content-card"><h3>🎬 Status Video & Fotos <button class="btn-action-small" onclick="triggerStatusMediaUpload()">Subir / Tomar</button></h3><p>Sube foto o video desde cámara o galería</p></div>
 <div class="content-card"><h3>🤖 Create with Duckie Guai-fai'v <button class="btn-action-small" onclick="generateAIImageStatus()">Generar con IA</button></h3><p>Crea fondo con prompt IA</p></div>
 </div>
-
 <div id="view-tecnico" class="app-view"><div style="padding:20px;display:flex;flex-direction:column;gap:15px"><h2 style="color:#ffd700">🛠 Técnico TalkPro 24/7</h2><div class="content-card"><h3>📞 Soporte Activo</h3><p><strong>Duckie Support Team</strong><br>Tel: +1 (800) DUCKIE-AI<br>Email: support@duckieduckpro.net<br>Stack: WebRTC + Firebase + Render</p><div style="display:flex;gap:8px;margin-top:10px"><button class="btn-action-small" onclick="startWebRTCWebCall('duckie_support','Soporte')">Llamar Soporte</button><button class="btn-action-small" onclick="goToAiChat()">Chat Soporte IA</button></div></div></div></div>
 <div id="view-privacidad" class="app-view"><div style="padding:20px"><h2 style="color:#ffd700">🔒 Servicio y Privacidad</h2><div class="content-card"><h3>📄 Términos</h3><p>DuckieTalkPro almacena datos solo localmente. WebRTC es P2P directo sin servidor intermedio. Mensajes en localStorage.</p></div><div class="content-card"><h3>🔒 Datos</h3><p>No se comparten datos con terceros. BETA 0% comisión 30 días.</p></div></div></div>
 <div id="view-verificado" class="app-view"><div style="padding:20px"><h2 style="color:#ffd700">✅ Canal Verificado</h2><div class="content-card" style="text-align:center;border:2px solid #ffd700"><div style="font-size:3rem">✅</div><h3 style="justify-content:center">Canal Oficial Verificado</h3><p>DuckieDuckPro AI<br>Propietario: Amado Apolonio Simom</p><div style="background:#ffd700;color:#000;padding:8px;border-radius:8px;margin-top:10px;font-weight:700">✔ VERIFICADO • EL PATITO MULTI USOS</div></div></div></div>
@@ -171,8 +163,6 @@ input:checked +.slider-toggle:before{transform:translateX(22px)}
 <div id="view-twostep" class="app-view"><div style="padding:20px"><h2 style="color:#ffd700">🔐 Two-Step Verification</h2><div class="content-card"><h3>2FA</h3><p>Verificación en 2 pasos con código SMS o Authenticator</p><button class="btn-action-small" onclick="enableTwoStep()">Activar 2FA</button><p id="twoStepStatus" style="margin-top:8px;color:var(--text-muted)">Estado: Inactivo</p></div></div></div>
 <div id="view-color" class="app-view"><div style="padding:20px"><h2 style="color:#ffd700">🎨 Theme, Color de chat</h2><div class="content-card"><h3>🎨 Personaliza</h3><p>Cambia tema claro/oscuro y color de burbujas</p><div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn-action-small" onclick="setAccentColor('#2e6f40')">Verde Duckie</button><button class="btn-action-small" onclick="setAccentColor('#3b82f6')">Azul</button><button class="btn-action-small" onclick="setAccentColor('#a855f7')">Morado</button><button class="btn-action-small" onclick="setAccentColor('#ef4444')">Rojo</button></div><button class="btn-action-small" style="margin-top:12px" onclick="toggleThemeMode()">🌗 Cambiar Modo Claro/Oscuro</button></div></div></div>
 <div id="view-account" class="app-view"><div style="padding:20px"><h2 style="color:#ffd700">👑 Your Account</h2><div class="content-card"><h3>👤 Amado Apolonio Simom</h3><p>Admin • Fundador DuckieTheMus.com<br>Email: atellez6 • San Diego 92105<br>Rol: Fundador BETA 0%</p><button class="btn-action-small" onclick="goToMarketplacePage()">Ver Tienda</button><button class="btn-action-small" onclick="goToAiChat()">Abrir AI Chat</button></div></div></div>
-
-<!-- DERECHA: 8 ITEMS VIVO -->
 <div class="menu-panel right hidden-right" id="rightMenu">
 <div class="menu-header"><span>Ajustes</span><button class="icon-btn" onclick="toggleRightMenu()">✕</button></div>
 <ul class="menu-items">
@@ -186,16 +176,12 @@ input:checked +.slider-toggle:before{transform:translateX(22px)}
 <li class="danger" onclick="configDeleteAccount()"><span>🗑 Borrar Cuenta</span><span>›</span></li>
 </ul>
 </div>
-
 </div>
-
 <div class="chat-input-area" id="inputAreaContainer">
 <button type="button" class="btn-icon-right" onclick="goToAiChat()" title="AI Chat" style="background:var(--accent-color);border-radius:50%;width:36px;height:36px;color:#fff;display:flex;align-items:center;justify-content:center;">🦆</button>
 <div class="chat-input-wrapper"><input type="text" id="chatInput" placeholder="Ask Duckie Guai-fai'v... (Abre ai-chat.html)" onkeypress="handleKeyPress(event)"></div>
 <div class="media-actions-right"><button type="button" class="btn-icon-right" onclick="goToAiChat()"><i class="fa-solid fa-robot"></i></button><button type="button" class="send-btn-ios" onclick="goToAiChat()"><i class="fa-solid fa-paper-plane"></i></button></div>
 </div>
-
-<!-- BOTTOM NAV VIVO: Contactos, Llamadas, Ai Chats, Chats, Status -->
 <nav class="bottom-nav">
 <button class="nav-item" id="nav-contactos" onclick="switchView('contactos', this)"><span class="icon">👥</span><span>Contactos</span></button>
 <button class="nav-item" id="nav-llamadas" onclick="switchView('llamadas', this)"><span class="icon">📞</span><span>Llamadas</span></button>
@@ -204,14 +190,9 @@ input:checked +.slider-toggle:before{transform:translateX(22px)}
 <button class="nav-item" id="nav-status" onclick="switchView('status', this)"><span class="icon">📊</span><span>Status</span></button>
 </nav>
 </div>
-
 <div id="comingSoonTab"><div class="coming-soon-badge">MARKETPLACE VIVO</div><div style="width:90px;height:90px;border-radius:50%;background:var(--accent-color);display:flex;align-items:center;justify-content:center;margin-bottom:15px;border:3px solid #ffc300;overflow:hidden;"><img src="IMG_4685.png" alt="Duckie" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='🦆'"></div><h2 style="color:#ffd700;font-size:1.6rem;margin-bottom:8px;">Duckie Marketplace</h2><h3 style="color:var(--text-main);font-size:1.1rem;margin-bottom:20px;">EL PATITO MULTI USOS</h3><div style="display:flex;gap:12px;"><button class="btn-action-small" onclick="closeComingSoonTab()">Cerrar</button><button class="btn-action-small" style="background:#ffc300;color:#000;font-weight:700;" onclick="goToMarketplacePage()">🛒 ABRIR TIENDA VIVO</button></div></div>
-
 <script>
-// BETA COUNTDOWN
 (function(){const end=new Date();end.setDate(end.getDate()+30);localStorage.setItem('duckieBetaEnd',end.toISOString());function upd(){const diff=end-new Date();const d=Math.floor(diff/(1000*60*60*24));const h=Math.floor((diff%(1000*60*60*24))/(1000*60*60));const el=document.getElementById('countdownBetaFundadores');if(el){el.textContent=(d<=0?'¡Últimas horas BETA!':d+' días '+h+'h - 0% COMISIÓN - Termina '+end.toLocaleDateString('es-MX'));}}upd();setInterval(upd,3600000);})();
-
-// NAVEGACION VIVA
 function goToMarketplacePage(){window.location.href='marketplace.html?v='+Date.now();}
 function goToAiChat(){window.location.href='ai-chat.html?v='+Date.now();}
 function openComingSoonTab(){goToMarketplacePage();}
@@ -234,8 +215,6 @@ function switchView(viewName, btnElement, closeMenus){
  const ht=document.getElementById('headerTitleText'); if(ht && titles[viewName]) ht.textContent=titles[viewName];
 }
 function handleKeyPress(e){ if(e.key==='Enter') goToAiChat(); }
-
-// CONTACTOS VIVO
 function filterContacts(){
  const q=document.getElementById('contactSearchInput').value.toLowerCase();
  document.querySelectorAll('.contact-card-item').forEach(card=>{
@@ -254,8 +233,6 @@ function addNewContactModal(){
  saveContactNative(name);
 }
 function saveContactNative(n){ let contacts=JSON.parse(localStorage.getItem('duckie_contacts')||'[]'); if(!contacts.includes(n)){contacts.push(n); localStorage.setItem('duckie_contacts',JSON.stringify(contacts));} alert('✅ Contacto guardado: '+n+' (localStorage)'); }
-
-// LLAMADAS VIVO
 function appendKey(char){ const d=document.getElementById('keypadDisplay'); if(d) d.value+=char; }
 function clearKeypad(){ const d=document.getElementById('keypadDisplay'); if(d) d.value=''; }
 function keypadSaveContact(){
@@ -283,8 +260,6 @@ function initWebRTCSignalingSocket(){
  alert('🌐 WebRTC Signaling Socket conectado (STUN Google)');
 }
 function startWebRTCWebCall(id,name){ alert('📞 Iniciando llamada VoIP WebRTC P2P a '+name+' (ID: '+id+')\nSTUN: stun.l.google.com:19302'); }
-
-// CHATS VIVO
 function filterChats(){
  const q=document.getElementById('chatSearchInput').value.toLowerCase();
  document.querySelectorAll('#chatInboxList.message-bubble').forEach(b=>{
@@ -297,8 +272,6 @@ function replyToMessage(btn){
 }
 function deleteMessage(btn){ const b=btn.closest('.message-bubble'); if(confirm('¿Borrar mensaje?')) b.remove(); }
 function clearChatHistory(){ if(confirm('¿Borrar historial de chats?')){ document.getElementById('chatInboxList').innerHTML=''; document.getElementById('messagesList').innerHTML='<div class="message-bubble incoming">Historial borrado 🦆</div>'; localStorage.removeItem('duckie_chat_history'); } }
-
-// STATUS VIVO
 function openStoryViewer(){ alert('📊 Story Viewer VIVO: Abriendo carrusel de historias multimedia\n(IMG_5468.png, IMG_4685.png)\nEstado: Activo'); }
 function addStatusText(){
  const txt=prompt('Texto para tu estado:'); if(!txt) return;
@@ -314,8 +287,6 @@ function generateAIImageStatus(){
  alert('🤖 Generando imagen con Duckie Guai-fai\'v: '+prompt+'\n\nAhora abre ai-chat.html para generar imagen real con IA');
  goToAiChat();
 }
-
-// THEME & CONFIG VIVO
 function toggleThemeMode(){
  const cur=document.body.getAttribute('data-theme'); const next=cur==='dark'?'light':'dark';
  document.body.setAttribute('data-theme',next); localStorage.setItem('duckie_theme',next);
@@ -324,8 +295,6 @@ function toggleThemeMode(){
 (function(){ const saved=localStorage.getItem('duckie_theme')||'dark'; document.body.setAttribute('data-theme',saved); const chk=document.getElementById('themeToggleCheckbox'); if(chk) chk.checked=(saved==='light'); })();
 function setAccentColor(color){ document.documentElement.style.setProperty('--accent-color',color); document.documentElement.style.setProperty('--chat-bg-outgoing',color); localStorage.setItem('duckie_accent',color); alert('🎨 Color cambiado a '+color); }
 (function(){ const c=localStorage.getItem('duckie_accent'); if(c){ document.documentElement.style.setProperty('--accent-color',c); document.documentElement.style.setProperty('--chat-bg-outgoing',c);} })();
-
-// LOGIN & ACCOUNTS VIVO
 function handleLogin(){
  const email=document.getElementById('loginEmail').value; const pass=document.getElementById('loginPass').value;
  if(!email||!pass){alert('Ingresa email y password');return;}
@@ -347,8 +316,6 @@ function enableTwoStep(){
  alert('🔐 Two-Step Verification activado');
 }
 function configDeleteAccount(){ if(confirm('¿Borrar cuenta y datos locales? Esto borra contactos, chats, status guardados.')){ localStorage.clear(); alert('🗑 Cuenta y datos borrados'); location.reload(); } }
-
-// ASK GUAI-FAI VIVO (para view-ai legacy)
 async function askGuaiFai(text,onChunk){
  const backendUrl="https://duckietalkpro.onrender.com/api/chat";
  try{
