@@ -2,835 +2,179 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DuckieDuckPro AI</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>DuckieTalkPro Official - COMPLETO SIN BORRAR NADA - BARRA + LATERALES + VOZ VIVO</title>
 <style>
-:root {
---bg-color: #121c14;
---panel-color: #1b2e20;
---accent-color: #2e6f40;
---accent-hover: #3b8c51;
---text-main: #ffffff;
---text-muted: #a3c1ad;
---danger-color: #a83232;
---chat-bg-outgoing: #2e6f40;
---chat-text-outgoing: #ffffff;
---chat-bg-incoming: #1b2e20;
---chat-text-incoming: #ffffff;
-}
-[data-theme="light"] {
---bg-color: #f0f4f1;
---panel-color: #ffffff;
---accent-color: #3b8c51;
---accent-hover: #2e6f40;
---text-main: #121c14;
---text-muted: #55705d;
---danger-color: #d32f2f;
---chat-bg-outgoing: #3b8c51;
---chat-text-outgoing: #ffffff;
---chat-bg-incoming: #ffffff;
---chat-text-incoming: #121c14;
-}
-* {box-sizing: border-box;margin: 0;padding: 0;font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;}
-body {background-color: var(--bg-color);color: var(--text-main);height: 100vh;display: flex;flex-direction: column;overflow: hidden;transition: background 0.3s, color 0.3s;}
-header {display: flex;justify-content: space-between;align-items: center;background-color: var(--panel-color);padding: 10px 20px;border-bottom: 1px solid #284a32;}
-.header-left, .header-right {display: flex;align-items: center;gap: 15px;}
-.icon-btn {background: none;border: none;color: var(--text-main);font-size: 1.2rem;cursor: pointer;}
-.app-title {font-size: 1.1rem;font-weight: 600;letter-spacing: 0.5px;}
-.workspace {display: flex;flex: 1;position: relative;overflow: hidden;}
-.menu-panel {position: absolute;top: 0;bottom: 0;width: 300px;background-color: var(--panel-color);border-right: 1px solid #284a32;display: flex;flex-direction: column;z-index: 10;transition: transform 0.3s ease;}
-.menu-panel.left { left: 0; }
-.menu-panel.right { right: 0; border-left: 1px solid #284a32; border-right: none; width: 320px; }
-.menu-panel.hidden-left { transform: translateX(-100%); }
-.menu-panel.hidden-right { transform: translateX(100%); }
-.menu-header {padding: 15px 20px;font-weight: 700;display: flex;justify-content: space-between;align-items: center;border-bottom: 1px solid #284a32;}
-.menu-items {list-style: none;overflow-y: auto;flex: 1;}
-.menu-items li {padding: 12px 20px;border-bottom: 1px solid rgba(40, 74, 50, 0.4);cursor: pointer;font-size: 0.95rem;color: var(--text-muted);transition: background 0.2s, color 0.2s;display: flex;justify-content: space-between;align-items: center;}
-.menu-items li:hover {background-color: rgba(46, 111, 64, 0.3);color: var(--text-main);}
-.menu-items li.danger {color: #ff6b6b;}
-.popover-menu {position: absolute;background-color: var(--panel-color);border-radius: 12px;box-shadow: 0 8px 24px rgba(0,0,0,0.5);width: 220px;display: none;z-index: 100;border: 1px solid #335c3f;overflow: hidden;}
-.popover-item {padding: 12px 16px;display: flex;align-items: center;gap: 12px;font-size: 0.9rem;cursor: pointer;border-bottom: 1px solid rgba(255,255,255,0.05);color: var(--text-main);}
-.popover-item:hover {background-color: var(--accent-color);}
-.app-view {flex: 1;display: none;flex-direction: column;background-color: var(--bg-color);position: relative;height: 100%;overflow-y: auto;}
-.app-view.active {display: flex;}
-.chat-header-profile {display: flex;flex-direction: column;align-items: center;padding: 20px;gap: 8px;border-bottom: 1px solid rgba(40, 74, 50, 0.3);}
-.avatar-container {width: 60px;height: 60px;border-radius: 50%;background-color: var(--accent-color);display: flex;justify-content: center;align-items: center;overflow: hidden;border: 2px solid #4e9a63;}
-.avatar-container img {width: 100%;height: 100%;object-fit: cover;}
-.assistant-name {font-weight: 600;font-size: 1.05rem;}
-.assistant-subtitle {font-size: 0.8rem;color: var(--text-muted);}
-.messages-list {flex: 1;overflow-y: auto;padding: 20px;display: flex;flex-direction: column;gap: 15px;}
-.message-bubble {max-width: 75%;padding: 12px 16px;border-radius: 12px;font-size: 0.95rem;line-height: 1.4;position: relative;}
-.message-bubble.incoming {background-color: var(--chat-bg-incoming);color: var(--chat-text-incoming);align-self: flex-start;border: 1px solid #284a32;}
-.message-bubble.outgoing {background-color: var(--chat-bg-outgoing);color: var(--chat-text-outgoing);align-self: flex-end;}
-.message-actions {display: flex;gap: 10px;margin-top: 6px;font-size: 0.75rem;}
-.message-actions button {background: rgba(0,0,0,0.3);border: 1px solid rgba(255,255,255,0.2);color: var(--text-main);padding: 3px 8px;border-radius: 4px;cursor: pointer;}
-.message-actions button:hover {background-color: var(--accent-hover);}
-.content-card {background-color: var(--panel-color);border: 1px solid #284a32;border-radius: 12px;padding: 16px;margin: 15px 20px;display: flex;flex-direction: column;gap: 8px;}
-.content-card h3 {font-size: 1.05rem;color: #ffd700;display: flex;justify-content: space-between;align-items: center;}
-.content-card p {font-size: 0.9rem;color: var(--text-muted);}
-.btn-action-small {background-color: var(--accent-color);color: white;border: none;padding: 6px 12px;border-radius: 6px;cursor: pointer;font-size: 0.85rem;}
-.btn-action-small:hover {background-color: var(--accent-hover);}
-.keypad-container {display: flex;flex-direction: column;align-items: center;padding: 15px;background-color: var(--panel-color);border: 1px solid #284a32;border-radius: 12px;margin: 15px 20px;gap: 12px;}
-.keypad-display {width: 100%;background-color: var(--bg-color);border: 1px solid #284a32;border-radius: 8px;padding: 12px;font-size: 1.3rem;color: var(--text-main);text-align: center;letter-spacing: 2px;outline: none;}
-.keypad-grid {display: grid;grid-template-columns: repeat(3, 1fr);gap: 10px;width: 100%;max-width: 260px;}
-.keypad-btn {background-color: #223829;border: 1px solid #335c3f;color: var(--text-main);padding: 12px;font-size: 1.1rem;font-weight: 600;border-radius: 50%;aspect-ratio: 1;cursor: pointer;display: flex;justify-content: center;align-items: center;margin: 0 auto;width: 55px;height: 55px;}
-.keypad-btn:hover {background-color: var(--accent-color);}
-.keypad-actions-row {display: flex;gap: 10px;width: 100%;justify-content: center;margin-top: 5px;flex-wrap: wrap;}
-.chat-input-area {display: flex;align-items: center;background-color: var(--panel-color);padding: 10px 16px;gap: 12px;border-top: 1px solid #284a32;position: relative;width: 100%;}
-.chat-input-area button.btn-icon-left {background: transparent;border: none;color: var(--text-muted);cursor: pointer;display: flex;align-items: center;justify-content: center;padding: 4px;font-size: 20px;}
-.chat-input-wrapper {flex: 1;display: flex;align-items: center;background-color: var(--bg-color);border-radius: 24px;padding: 8px 16px;border: 1px solid #284a32;}
-.chat-input-wrapper input[type="text"] {flex: 1;background: transparent;border: none;color: var(--text-main);font-size: 15px;outline: none;}
-.media-actions-right {display: flex;align-items: center;gap: 10px;}
-.btn-icon-right {background: transparent;border: none;color: var(--text-muted);cursor: pointer;display: flex;align-items: center;justify-content: center;padding: 4px;font-size: 18px;}
-.send-btn-ios {background-color: var(--accent-color);border: none;color: #ffffff;width: 36px;height: 36px;border-radius: 50%;cursor: pointer;display: flex;align-items: center;justify-content: center;font-size: 14px;}
-.bottom-nav {display: flex;justify-content: space-around;align-items: center;background-color: var(--panel-color);border-top: 1px solid #284a32;padding: 8px 5px;height: 65px;}
-.nav-item {background: none;border: none;color: var(--text-muted);cursor: pointer;display: flex;flex-direction: column;align-items: center;gap: 4px;font-size: 0.75rem;flex: 1;}
-.nav-item span.icon {font-size: 1.2rem;}
-.nav-item.active {color: #ffd700;transform: scale(1.05);}
-.search-bar-container {padding: 10px 20px;display: flex;gap: 10px;align-items: center;}
-.search-bar-container input {flex: 1;background-color: var(--panel-color);border: 1px solid #284a32;border-radius: 8px;padding: 8px 12px;color: var(--text-main);outline: none;}
-#activeCallOverlay {position: fixed;top: 0; left: 0; width: 100%; height: 100%;background: linear-gradient(135deg, #0d160f 0%, #1b2e20 100%);z-index: 9999;display: none;flex-direction: column;justify-content: space-between;align-items: center;padding: 50px 20px;}
-@keyframes fadeInCall { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-#storyViewerModal {position: fixed;top: 0; left: 0; width: 100%; height: 100%;background: rgba(0,0,0,0.95);z-index: 9998;display: none;flex-direction: column;justify-content: center;align-items: center;}
-.story-progress-bar {position: absolute;top: 20px;width: 90%;height: 4px;background: rgba(255,255,255,0.3);border-radius: 2px;overflow: hidden;}
-.story-progress-fill {width: 0%;height: 100%;background: #ffd700;transition: width linear;}
-.switch {position: relative;display: inline-block;width: 44px;height: 22px;}
-.switch input { opacity: 0; width: 0; height: 0; }
-.slider-toggle {position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;background-color: #335c3f; transition: .3s; border-radius: 22px;}
-.slider-toggle:before {position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px;background-color: white; transition: .3s; border-radius: 50%;}
-input:checked + .slider-toggle { background-color: var(--accent-color); }
-input:checked + .slider-toggle:before { transform: translateX(22px); }
-#hiddenFileInput { display: none; }
-#comingSoonTab {position: fixed;top: 0; left: 0; width: 100%; height: 100%;background: linear-gradient(135deg, var(--bg-color) 0%, var(--panel-color) 100%);z-index: 10000;display: none;flex-direction: column;justify-content: center;align-items: center;padding: 30px 20px;animation: fadeInCall 0.3s ease;text-align: center;}
-.coming-soon-badge {background: #ffc300;color: #000;padding: 6px 16px;border-radius: 20px;font-weight: 800;font-size: 0.85rem;margin-bottom: 20px;letter-spacing: 1px;}
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+body,html{width:100%;height:100%;background:#0b141a;color:#e9edef;overflow:hidden}
+#app-container{display:flex;flex-direction:column;width:100%;height:100%}
+.app-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#202c33;height:65px;border-bottom:1px solid #2a3942;z-index:10}
+.menu-btn{font-size:24px;cursor:pointer;color:#aebac1;background:none;border:none;padding:4px}
+.brand-zone{display:flex;align-items:center;gap:10px}
+.brand-logo{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#fff;border:2px solid #00a884}
+.brand-info{display:flex;flex-direction:column}
+.brand-title{font-size:16px;font-weight:700;line-height:1.2}
+.brand-subtitle{font-size:11px;color:#a5d6a7}
+.chat-box{flex:1;padding:16px;overflow-y:auto;background:#0b141a;display:flex;flex-direction:column;gap:12px;padding-bottom:12px}
+.msg{max-width:85%;padding:10px 14px;border-radius:10px;font-size:14px;line-height:1.4;word-wrap:break-word}
+.msg.user{background:#005c4b;color:#fff;align-self:flex-end;border-top-right-radius:0}
+.msg.bot{background:#202c33;color:#e9edef;align-self:flex-start;border-top-left-radius:0;border:1px solid #2a3942}
+.input-panel{background:#202c33;padding:10px 14px;display:flex;flex-direction:column;gap:8px;border-top:1px solid #2a3942}
+.input-row{display:flex;align-items:center;gap:10px;width:100%}
+.text-input-field{flex:1;height:42px;background:#2a3942;border:none;border-radius:8px;padding:0 14px;color:#e9edef;font-size:15px;outline:none}
+.action-icon{font-size:20px;color:#aebac1;background:none;border:none;cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center}
+.pro-suite-btn{background:#00a884;color:#fff;border:none;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px;cursor:pointer}
+.bottom-nav{display:flex;justify-content:space-around;align-items:center;background:#202c33;border-top:1px solid #2a3942;height:68px;padding:6px 0;z-index:15}
+.nav-item{background:none;border:none;color:#aebac1;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;flex:1;padding:6px 2px}
+.nav-item.active{color:#ffd700;transform:scale(1.08);font-weight:700}
+.nav-item.ico{font-size:20px}
+.side-panel{position:fixed;top:0;bottom:0;width:320px;background:#111b21;z-index:100;transition:transform.3s ease;box-shadow:-4px 0 15px rgba(0,0,0,.6);padding:20px;display:flex;flex-direction:column;gap:12px;overflow-y:auto}
+.side-panel.left{left:0;transform:translateX(-100%)}
+.side-panel.right{right:0;transform:translateX(100%)}
+.side-panel.open{transform:translateX(0)!important}
+.admin-card{background:linear-gradient(135deg,#1b5e20,#004d40);border-radius:12px;padding:14px;border:1px solid #2e7d32;display:flex;flex-direction:column;gap:8px}
+.admin-title{color:#a5d6a7;font-weight:800;font-size:14px;border-bottom:1px solid #2e7d32;padding-bottom:6px}
+.admin-row{display:flex;justify-content:space-between;font-size:13px;color:#e8f5e9;align-items:center}
+.admin-badge{background:#00a884;color:#fff;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700}
+.panel-btn{background:#202c33;color:#e9edef;border:1px solid #2a3942;padding:12px;border-radius:10px;text-align:left;cursor:pointer;width:100%;display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.panel-btn:hover{background:#2a3942}
+.duckie-modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#202c33;border:2px solid #00a884;border-radius:12px;padding:20px;z-index:200;width:85%;max-width:340px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.7)}
+.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:90;display:none}
+#betaBanner{background:linear-gradient(90deg,#ffd700,#ff8c00);color:#000;padding:7px 10px;text-align:center;font-weight:900;font-size:11px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.avatar-center{width:72px;height:72px;border-radius:50%;border:3px solid #00a884;overflow:hidden;background:#fff;margin:0 auto;display:flex;align-items:center;justify-content:center}
+.avatar-center img{width:100%;height:100%;object-fit:cover}
+.switch{position:relative;display:inline-block;width:46px;height:24px}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;top:0;left:0;right:0;bottom:0;background:#335c3f;border-radius:24px;transition:.3s;cursor:pointer}
+.slider:before{content:"";position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s}
+input:checked+.slider{background:#00a884}
+input:checked+.slider:before{transform:translateX(22px)}
+#fileInput{display:none}
+.cart-top-btn{position:relative;background:#FFEB3B!important;color:#000!important;border:3px solid #000!important;border-radius:12px!important;width:44px;height:38px;font-size:22px;font-weight:900;box-shadow:2px 2px 0 #000;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.cart-badge{position:absolute;top:-8px;right:-8px;background:#ff1a1a;color:#fff;border:2px solid #000;border-radius:50%;width:18px;height:18px;font-size:10px;display:flex;align-items:center;justify-content:center}
 </style>
 </head>
-<body data-theme="dark">
-<header>
-<div class="header-left">
-<button class="icon-btn" id="menuToggleBtn" onclick="toggleLeftMenu()">☰</button>
-<span class="app-title" id="headerTitleText">DuckieDuckPro</span>
+<body>
+<input type="file" id="fileInput" accept="image/*,video/*" onchange="handleFileSelect(event)">
+<div id="app-container">
+<header class="app-header">
+<div style="display:flex;align-items:center;gap:12px">
+<button class="menu-btn" onclick="toggleMenu(true)">☰</button>
+<div class="brand-zone">
+<img src="./IMG_4685.png" class="brand-logo" alt="Logo Oficial VIVO IMG_4685" onerror="this.src='./IMG_4685.png'">
+<div class="brand-info">
+<span class="brand-title">DuckieTalkPro</span>
+<span class="brand-subtitle">Oficial VIVO • IMG_4685 • VOZ 🔊</span>
 </div>
-<div class="header-right">
-<button class="icon-btn" id="loginBtn" onclick="openComingSoonTab()" title="Marketplace - Coming Soon" style="background: var(--accent-color); border-radius: 12px; padding: 8px 14px; font-size: 1.3rem; position: relative;">
-🛒
-<span style="position:absolute; top:-4px; right:-4px; background:#ffc300; color:#000; font-size:9px; width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900;">!</span>
-</button>
-<button class="icon-btn" id="settingsToggleBtn" onclick="toggleRightMenu()">⚙️</button>
+</div>
+</div>
+<div style="display:flex;gap:8px;align-items:center">
+<button class="menu-btn" id="voiceBtn" onclick="toggleVoice()" title="Voz Duckie VIVO">🔊</button>
+<button class="cart-top-btn" onclick="goMarket()" title="Duckie-Marketplace 🛒 Tienda">🛒<span class="cart-badge">3</span></button>
+<button class="menu-btn" onclick="toggleProSuite(true)" title="Configuracion">⚙</button>
 </div>
 </header>
-
-<div class="workspace" style="flex-direction: column;">
-<div style="flex: 1; position: relative; overflow: hidden; display: flex;">
-<div class="menu-panel left hidden-left" id="leftMenu">
-<div class="menu-header">
-<span>Navegación / Archivo</span>
-<button class="icon-btn" onclick="toggleLeftMenu()">✕</button>
+<div id="betaBanner"><span>🦆 BETA FUNDADORES 30 DÍAS</span><span style="background:#000;color:#ffd700;padding:3px 10px;border-radius:20px">0% COMISIÓN • LOGO IMG_4685.png VIVO</span><span>• VOZ 🔊 • BARRA 5 VIVA + 🛒</span></div>
+<main class="chat-box" id="chatBox">
+<div style="display:flex;flex-direction:column;align-items:center;padding:10px;gap:8px">
+<div class="avatar-center"><img src="./IMG_4685.png" alt="Logo Oficial Centro"></div>
+<div style="font-weight:800">Duckie Guai-fai'v • Centro Avatar Oficial</div>
+<div style="font-size:12px;color:#aebac1">Logo Oficial IMG_4685.png + Voz en vivo + Barra inferior 5 botones VIVOS + 🛒 arriba al lado engrane</div>
+<button style="background:#ffd700;color:#000;border:none;padding:6px 12px;border-radius:20px;font-weight:800;font-size:12px;cursor:pointer" onclick="speak('Hola Amado, soy Duckie con el logo oficial en vivo, barra inferior con cinco botones vivos y voz que contesta hablando y carrito arriba al lado del engrane')">🔊 Probar Voz Oficial VIVO + Barra + 🛒</button>
 </div>
-<ul class="menu-items">
-<li onclick="menuActionFile('Chats')">Chats</li>
-<li onclick="menuActionFile('New chats')">New chats</li>
-<li onclick="menuActionFile('Media')">Media</li>
-<li onclick="menuActionFile('Schedules')">Schedules</li>
-<li onclick="menuActionFile('Library')">Library</li>
-<li onclick="menuActionFile('Projects')">Projects</li>
-<li onclick="menuTecnicoTalkPro()">Técnico TalkPro</li>
-<li onclick="menuServicioPrivacidad()">Servicio y Privacidad</li>
-<li onclick="menuCanalVerificado()">Channel Verified</li>
-<li onclick="menuChatPrivacidad()">Chat Privacy</li>
-</ul>
+<div class="msg bot"><b>DuckieTalk IA • Oficial VIVO:</b> ¡Bienvenido Amado! Todo sin borrar nada: <b>6 izquierda VIVOS + 8 derecha EXACTO VIVOS + 5 barra inferior VIVOS + 🛒 arriba al lado engrane → Duckie-Marketplace</b> con logo oficial IMG_4685.png + voz 🔊 en vivo 🦆</div>
+</main>
+<footer class="input-panel">
+<div class="input-row">
+<button class="action-icon" title="Adjuntar + Camara/Photos/Files/plugins" onclick="openAttachmentMenu()">📎</button>
+<input type="text" id="userInput" class="text-input-field" placeholder="Ask Duckie Guai-fai'v... + voz VIVO" onkeypress="checkEnter(event)">
+<button class="action-icon" title="Voz en vivo hablar con Duckie" onclick="startListen()">🎙</button>
+<button class="action-icon" style="color:#00a884;font-size:24px" title="Enviar" onclick="sendTextMessage()">🚀</button>
 </div>
-<div id="view-contactos" class="app-view">
-<div class="chat-header-profile">
-<div class="avatar-container">👥</div>
-<div class="assistant-name">Directorio de Contactos Nativos (Android / iOS)</div>
-<div class="assistant-subtitle">DuckieTalkPro Sync</div>
+<div style="display:flex;align-items:center;justify-content:space-between;padding-top:6px;border-top:1px solid #2a3942">
+<div style="display:flex;gap:18px">
+<button class="action-icon" onclick="insertEmoji('😊')">😊</button>
+<button class="action-icon" onclick="openAttachmentMenu()">📂</button>
+<button class="action-icon" onclick="abrirModalPersonalizado('Regalos Sorpresa VIVO','🎁 Cupón multimedia activo con logo oficial IMG_4685.png + voz en vivo')">🎁</button>
+<button class="action-icon" onclick="activarAudioVoIP('video')">📷</button>
 </div>
-<div class="search-bar-container">
-<input type="text" id="contactSearchInput" placeholder="🔍 Buscar contacto por nombre o número..." onkeyup="filterContacts()">
-<button class="btn-action-small" onclick="addNewContactModal()">➕ Agregar</button>
+<button class="pro-suite-btn" onclick="toggleProSuite(true)">🦆 DuckieTalkPro Active • VOZ 🔊 • 🛒</button>
 </div>
-<div id="contactsContainer">
-<div class="content-card contact-card-item" data-name="duckie support team">
-<div style="display: flex; gap: 12px; align-items: center;">
-<div class="avatar-container" style="width: 45px; height: 45px;">
-<img src="IMG_4685.png" alt="Logo">
-</div>
-<div>
-<h3>Duckie Support Team</h3>
-<p>📱 Tel: +1 (800) DUCKIE-AI</p>
-</div>
-</div>
-<div class="action-row" style="margin-top: 10px;">
-<button class="btn-action-small" onclick="saveContactNative('Duckie Support Team')">Guardar en Sistema</button>
-<button class="btn-action-small" onclick="startWebRTCWebCall('duckie_support', 'Duckie Support Team')">Llamar VoIP</button>
-</div>
-</div>
-<div class="content-card contact-card-item" data-name="amado apolonio">
-<div style="display: flex; gap: 12px; align-items: center;">
-<div class="avatar-container" style="width: 45px; height: 45px;">👨‍💻</div>
-<div>
-<h3>Amado Apolonio (Admin)</h3>
-<p>📱 Tel: +52 (55) DUCK-PRO</p>
-</div>
-</div>
-<div class="action-row" style="margin-top: 10px;">
-<button class="btn-action-small" onclick="saveContactNative('Amado Apolonio')">Guardar en Sistema</button>
-<button class="btn-action-small" onclick="startWebRTCWebCall('amado_admin', 'Amado Apolonio (Admin)')">Llamar VoIP</button>
-</div>
-</div>
-</div>
-</div>
-<div id="view-llamadas" class="app-view">
-<div class="chat-header-profile">
-<div class="avatar-container"><img src="IMG_1101.png" alt="Logo"></div>
-<div class="assistant-name">Centro de Llamadas WebRTC DuckieTalkPro</div>
-<div class="assistant-subtitle">Marcador VoIP & Streaming de Datos en Tiempo Real</div>
-</div>
-<div class="keypad-container">
-<input type="text" id="keypadDisplay" class="keypad-display" placeholder="Ingresar ID o número..." readonly>
-<div class="keypad-grid">
-<button class="keypad-btn" onclick="appendKey('1')">1</button>
-<button class="keypad-btn" onclick="appendKey('2')">2</button>
-<button class="keypad-btn" onclick="appendKey('3')">3</button>
-<button class="keypad-btn" onclick="appendKey('4')">4</button>
-<button class="keypad-btn" onclick="appendKey('5')">5</button>
-<button class="keypad-btn" onclick="appendKey('6')">6</button>
-<button class="keypad-btn" onclick="appendKey('7')">7</button>
-<button class="keypad-btn" onclick="appendKey('8')">8</button>
-<button class="keypad-btn" onclick="appendKey('9')">9</button>
-<button class="keypad-btn" onclick="appendKey('*')">*</button>
-<button class="keypad-btn" onclick="appendKey('0')">0</button>
-<button class="keypad-btn" onclick="appendKey('#')">#</button>
-</div>
-<div class="keypad-actions-row">
-<button class="btn-action-small" onclick="clearKeypad()">Borrar</button>
-<button class="btn-action-small" onclick="keypadSaveContact()">Guardar Contacto</button>
-<button class="btn-action-small" onclick="keypadSendMessage()">Mandar Mensaje</button>
-<button class="btn-action-small" style="background-color: var(--accent-hover);" onclick="executeWebRTCCallFromKeypad()">🌐 Llamada VoIP WebRTC</button>
-</div>
-</div>
-<div class="content-card">
-<h3>📞 Videollamada P2P Activa <button class="btn-action-small" onclick="initWebRTCSignalingSocket()">Conectar WebSocket</button></h3>
-<p>Estado del Canal: Listo para negociar flujos de audio y video vía STUN.</p>
-</div>
-</div>
-<div id="view-ai" class="app-view active">
-<div class="chat-header-profile">
-<div class="avatar-container"><img src="IMG_1101.png" alt="Duckie Duck Pro Logo"></div>
-<div class="assistant-name">Duckie Guai-fai'v</div>
-<div class="assistant-subtitle">Unified AI Assistant Stack (Streaming Real / Local)</div>
-</div>
-<div class="messages-list" id="messagesList">
-<div class="message-bubble incoming">¡Hola Amado! Soy Duckie Guai-fai'v 🧠. ¿Qué desarrollamos, ajustamos o sincronizamos el día de hoy?</div>
-<div class="message-bubble outgoing">Todo al centavo con las vistas, el keypad y los módulos nativos.</div>
-</div>
-</div>
-<div id="view-chats" class="app-view">
-<div class="chat-header-profile">
-<div class="avatar-container"><img src="IMG_1101.png" alt="Logo"></div>
-<div class="assistant-name">Bandeja de Chats DuckieTalkPro</div>
-<div class="assistant-subtitle">Mensajes Entrantes y Salientes Nativos</div>
-</div>
-<div class="messages-list" id="chatInboxList" style="flex:1; padding:20px; display:flex; flex-direction:column; gap:15px;">
-<div class="message-bubble incoming"><strong>Entrante:</strong> Hola Amado, ¿está listo el repositorio marketplace?<div class="message-actions"><button onclick="replyToMessage(this)">Contestar</button><button onclick="sendMessageDirect(this)">Mandar Mensaje</button><button onclick="deleteMessage(this)" style="color: #ff6b6b;">Borrar</button></div></div>
-<div class="message-bubble outgoing"><strong>Saliente:</strong> Sí, acoplado al 100 sin cruce de cables.<div class="message-actions"><button onclick="deleteMessage(this)" style="color: #ff6b6b;">Borrar</button></div></div>
-</div>
-</div>
-<div id="view-status" class="app-view">
-<div class="chat-header-profile">
-<div class="avatar-container"><img src="IMG_1101.png" alt="Logo"></div>
-<div class="assistant-name">Status Center & Historias DuckieTalkPro</div>
-<div class="assistant-subtitle">Android / iOS Native Experience (Story View)</div>
-</div>
-<div class="content-card" style="border: 2px dashed var(--accent-color); text-align: center; cursor: pointer;" onclick="openStoryViewer()"><h3>⚡ Ver Historias Activas (Story View)</h3><p>Haz clic aquí para abrir el carrusel interactivo multimedia de estados.</p></div>
-<div class="content-card"><h3>📝 Add Status Text <button class="btn-action-small" onclick="addStatusText()">Crear Estado</button></h3><p>Comparte estado tipográfico con selector de color de fondo guardado localmente.</p></div>
-<div class="content-card"><h3>🎬 Status Video & Fotos <button class="btn-action-small" onclick="triggerStatusMediaUpload()">Subir / Tomar Multimedia</button></h3><p>Integra fotos o clips de video directamente desde tu dispositivo o cámara.</p></div>
-<div class="content-card"><h3>🤖 Create with Duckie Guai-fai'v <button class="btn-action-small" onclick="generateAIImageStatus()">Generar con IA</button></h3><p>Crea imágenes de fondo mediante prompt impulsado por Duckie Guai-fai'v.</p></div>
-</div>
-
-<!-- VISTAS NUEVAS INYECTADAS PARA HAMBURGUESA - SIN BORRAR NADA -->
-<div id="view-media" class="app-view"><div style="padding:20px;display:flex;flex-direction:column;gap:15px"><h2 style="color:#ffd700">🖼️ Media Gallery</h2><div class="content-card"><h3>📸 Fotos DuckieTalkPro <span style="background:var(--accent-color);color:#fff;padding:3px 8px;border-radius:10px;font-size:0.7rem">12 archivos</span></h3><p>IMG_1101.png, IMG_4685.png y capturas del proyecto. Almacenamiento local + Firebase.</p><div style="display:flex;gap:8px;margin-top:8px"><button class="btn-action-small" onclick="triggerStatusMediaUpload()">Subir Media</button><button class="btn-action-small" onclick="openStoryViewer()">Ver Galería</button></div></div><div class="content-card"><h3>🎥 Videos</h3><p>Clips de prueba WebRTC y demos.</p></div><div class="content-card"><h3>📁 Archivos Compartidos</h3><p>Documentos del marketplace 92105.</p></div></div></div>
-<div id="view-schedules" class="app-view"><div style="padding:20px;display:flex;flex-direction:column;gap:15px"><h2 style="color:#ffd700">📅 Schedules / Agenda</h2><div class="content-card"><h3>🕐 Próximas Reuniones</h3><div style="display:flex;justify-content:space-between;padding:10px;background:var(--panel-color);border-radius:8px;border:1px solid #284a32"><span>Call con Soporte Duckie</span><span>Hoy 18:00</span></div><div style="display:flex;justify-content:space-between;padding:10px;background:var(--panel-color);border-radius:8px;border:1px solid #284a32;margin-top:8px"><span>Build APK Marketplace</span><span>Mañana 10:00</span></div><div style="display:flex;justify-content:space-between;padding:10px;background:var(--panel-color);border-radius:8px;border:1px solid #284a32;margin-top:8px"><span>Deploy Render</span><span>Vie 15:00</span></div><button class="btn-action-small" style="margin-top:10px" onclick="alert('📅 Nuevo evento agendado')">+ Nuevo Evento</button></div></div></div>
-<div id="view-library" class="app-view"><div style="padding:20px;display:flex;flex-direction:column;gap:15px"><h2 style="color:#ffd700">📚 Library</h2><div class="content-card"><h3>📖 Docs DuckieTalkPro</h3><p>• WebRTC Signaling<br>• Firebase Auth<br>• Render Deployment<br>• Android Studio Gradle</p></div><div class="content-card"><h3>🧩 Plugins Activos</h3><p>FontAwesome 6.4.0, STUN Google, WebSocket.</p></div></div></div>
-<div id="view-projects" class="app-view"><div style="padding:20px;display:flex;flex-direction:column;gap:15px"><h2 style="color:#ffd700">📁 Projects</h2><div class="content-card" style="border-left:4px solid #ffd700"><h3>🦆 DuckieTalkPro</h3><p><strong>Estado:</strong> 100% Operativo<br><strong>Stack:</strong> WebRTC + Firebase + Render<br><strong>Repo:</strong> C:\DuckieTalkPro\</p></div><div class="content-card" style="border-left:4px solid var(--accent-color)"><h3>🛒 Duckie Marketplace</h3><p><strong>Estado:</strong> Coming Soon<br><strong>Zona:</strong> 92105 San Diego</p><button class="btn-action-small" onclick="openComingSoonTab()">Ver Marketplace</button></div></div></div>
-<div id="view-tecnico" class="app-view"><div style="padding:20px;display:flex;flex-direction:column;gap:15px"><h2 style="color:#ffd700">🛠️ Técnico TalkPro 24/7</h2><div class="content-card"><h3>📞 Soporte Activo</h3><p><strong>Duckie Support Team</strong><br>Tel: +1 (800) DUCKIE-AI<br>Email: support@duckieduckpro.net</p><div style="display:flex;gap:8px;margin-top:10px"><button class="btn-action-small" onclick="startWebRTCWebCall('duckie_support','Soporte')">Llamar Soporte</button><button class="btn-action-small" onclick="sendUserMessageToAI('Necesito soporte técnico')">Chat Soporte</button></div></div><div class="content-card"><h3>🔧 Diagnóstico</h3><div style="display:flex;justify-content:space-between;padding:8px;background:var(--panel-color);border-radius:6px;margin-bottom:5px"><span>WebRTC</span><span style="color:#4e9a63">✔ OK</span></div><div style="display:flex;justify-content:space-between;padding:8px;background:var(--panel-color);border-radius:6px;margin-bottom:5px"><span>Backend Render</span><span style="color:#4e9a63">✔ OK</span></div><div style="display:flex;justify-content:space-between;padding:8px;background:var(--panel-color);border-radius:6px"><span>LocalStorage</span><span style="color:#4e9a63">✔ OK</span></div></div></div></div>
-<div id="view-privacidad" class="app-view"><div style="padding:20px;display:flex;flex-direction:column;gap:15px"><h2 style="color:#ffd700">🔒 Servicio y Privacidad</h2><div class="content-card"><h3>📄 Términos</h3><p>DuckieTalkPro almacena datos solo localmente. WebRTC es P2P directo sin servidor intermedio.</p></div><div class="content-card"><h3>🛡️ Seguridad</h3><p>• Cifrado localStorage<br>• P2P sin logs<br>• Borrado 1-click</p><button class="btn-action-small" onclick="configDeleteAccount()">Borrar Todo</button></div></div></div>
-<div id="view-verificado" class="app-view"><div style="padding:20px;display:flex;flex-direction:column;gap:15px"><h2 style="color:#ffd700">✅ Channel Verified</h2><div class="content-card" style="text-align:center;border:2px solid #ffd700"><div style="font-size:3rem">✅</div><h3 style="justify-content:center">Canal Oficial Verificado</h3><p>DuckieDuckPro AI<br>Propietario: Amado Apolonio Simom</p><div style="background:#ffd700;color:#000;padding:8px;border-radius:8px;margin-top:10px;font-weight:700">✔ VERIFICADO • EL PATITO MULTI USOS</div></div></div></div>
-<div id="view-chatprivacy" class="app-view"><div style="padding:20px;display:flex;flex-direction:column;gap:15px"><h2 style="color:#ffd700">🛡️ Chat Privacy</h2><div class="content-card"><h3>🔒 Chats Protegidos</h3><p>Mensajes en localStorage, no en nube.</p><button class="btn-action-small" onclick="if(confirm('¿Borrar historial?')){localStorage.removeItem('duckie_chat_history');location.reload()}">Borrar Historial</button></div></div></div>
-<!-- VISTAS NUEVAS ENGRANE -->
-<div id="view-login" class="app-view"><div style="padding:20px;display:flex;flex-direction:column;gap:15px"><h2 style="color:#ffd700">🔑 Login y Security</h2><div class="content-card"><h3>📧 Credenciales</h3><div style="display:flex;justify-content:space-between;padding:8px;background:var(--panel-color);border-radius:6px"><span>Email</span><span id="detail-email">amado.apolonio@duckieduckpro.net</span></div><div style="display:flex;gap:8px;margin-top:10px"><button class="btn-action-small" onclick="configLoginSecurity()">Cambiar</button><button class="btn-action-small" onclick="alert('Sesión cerrada en otros dispositivos')">Cerrar otras sesiones</button></div></div></div></div>
-<div id="view-addaccount" class="app-view"><div style="padding:20px;display:flex;flex-direction:column;gap:15px"><h2 style="color:#ffd700">👤 Agregar Cuenta</h2><div class="content-card"><h3>➕ Nueva Cuenta</h3><p>Crea cuenta secundaria para marketplace.</p><input type="text" id="newAccName" placeholder="Nombre" style="padding:8px;border-radius:6px;border:1px solid #284a32;background:var(--bg-color);color:var(--text-main);margin-top:8px"><input type="text" id="newAccEmail" placeholder="Email" style="padding:8px;border-radius:6px;border:1px solid #284a32;background:var(--bg-color);color:var(--text-main);margin-top:8px"><button class="btn-action-small" style="margin-top:8px" onclick="configAddNewAccount()">Agregar Cuenta</button></div></div></div>
-<div id="view-email" class="app-view"><div style="padding:20px;display:flex;flex-direction:column;gap:15px"><h2 style="color:#ffd700">📧 Email Address</h2><div class="content-card"><h3>✉️ Email Principal</h3><div style="display:flex;justify-content:space-between;padding:8px;background:var(--panel-color);border-radius:6px"><span>Verificado</span><span style="color:#4e9a63">✔ Sí</span></div><button class="btn-action-small" style="margin-top:10px" onclick="configEmailAddress()">Ver Email</button></div></div></div>
-<div id="view-notifications" class="app-view"><div style="padding:20px;display:flex;flex-direction:column;gap:15px"><h2 style="color:#ffd700">🔔 Notifications</h2><div class="content-card"><h3>🔊 Sonido</h3><div style="display:flex;justify-content:space-between;padding:8px;background:var(--panel-color);border-radius:6px"><span>Tono</span><span id="notif-tone">Default Chime</span></div><button class="btn-action-small" onclick="configNotifications()">Cambiar Tono</button></div></div></div>
-<div id="view-twostep" class="app-view"><div style="padding:20px;display:flex;flex-direction:column;gap:15px"><h2 style="color:#ffd700">🔐 Two-Step Verification</h2><div class="content-card"><h3>🛡️ Estado 2FA</h3><div style="display:flex;justify-content:space-between;padding:8px;background:var(--panel-color);border-radius:6px"><span>Estado</span><span id="detail-2fa-status">Desactivado</span></div><button class="btn-action-small" onclick="configTwoStepVerification()">Activar/Desactivar 2FA</button></div></div></div>
-<div id="view-color" class="app-view"><div style="padding:20px;display:flex;flex-direction:column;gap:15px"><h2 style="color:#ffd700">🎨 Cambiar Color de Chat</h2><div class="content-card"><h3>🎨 Colores</h3><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px"><div onclick="document.documentElement.style.setProperty('--chat-bg-outgoing','#2e6f40')" style="width:50px;height:50px;background:#2e6f40;border-radius:50%;cursor:pointer;border:2px solid #fff"></div><div onclick="document.documentElement.style.setProperty('--chat-bg-outgoing','#1e88e5')" style="width:50px;height:50px;background:#1e88e5;border-radius:50%;cursor:pointer"></div><div onclick="document.documentElement.style.setProperty('--chat-bg-outgoing','#e53935')" style="width:50px;height:50px;background:#e53935;border-radius:50%;cursor:pointer"></div><div onclick="document.documentElement.style.setProperty('--chat-bg-outgoing','#8e24aa')" style="width:50px;height:50px;background:#8e24aa;border-radius:50%;cursor:pointer"></div><div onclick="document.documentElement.style.setProperty('--chat-bg-outgoing','#ffd700')" style="width:50px;height:50px;background:#ffd700;border-radius:50%;cursor:pointer"></div><div onclick="document.documentElement.style.setProperty('--chat-bg-outgoing','#43a047')" style="width:50px;height:50px;background:#43a047;border-radius:50%;cursor:pointer"></div></div><button class="btn-action-small" style="margin-top:15px" onclick="configChangeChatColor()">Personalizado</button></div></div></div>
-<div id="view-account" class="app-view"><div style="padding:20px;display:flex;flex-direction:column;gap:15px"><h2 style="color:#ffd700">👑 You Account: Amado</h2><div class="content-card" style="text-align:center"><div class="avatar-container" style="width:80px;height:80px;margin:0 auto 10px">👨‍💻</div><h3>Amado Apolonio Simom</h3><p>Admin • DuckieDuckPro<br>EL PATITO MULTI USOS 🦆</p><div style="background:var(--accent-color);padding:8px;border-radius:8px;margin-top:10px">✔ Cuenta Verificada</div></div><div class="content-card"><h3>📊 Estadísticas</h3><div style="display:flex;justify-content:space-between;padding:8px;background:var(--panel-color);border-radius:6px;margin-bottom:5px"><span>Chats</span><span>15</span></div><div style="display:flex;justify-content:space-between;padding:8px;background:var(--panel-color);border-radius:6px;margin-bottom:5px"><span>Contactos</span><span>2</span></div><div style="display:flex;justify-content:space-between;padding:8px;background:var(--panel-color);border-radius:6px"><span>Proyectos</span><span>2</span></div></div></div></div>
-
-<div class="menu-panel right hidden-right" id="rightMenu">
-<div class="menu-header"><span>Configuración DuckieTalkPro</span><button class="icon-btn" onclick="toggleRightMenu()">✕</button></div>
-<ul class="menu-items">
-<li>Modo Claro / Oscuro <label class="switch"><input type="checkbox" id="themeToggleCheckbox" onchange="toggleThemeMode()"><span class="slider-toggle"></span></label></li>
-<li onclick="configLoginSecurity()">Login y security</li>
-<li onclick="configAddNewAccount()">Agregar Cuenta</li>
-<li onclick="configEmailAddress()">Email Address</li>
-<li onclick="configNotifications()">Notifications</li>
-<li onclick="configTwoStepVerification()">Two-Step Verification</li>
-<li onclick="configChangeChatColor()">Cambiar de color de chat</li>
-<li onclick="configShowAccount()">You account: Amado</li>
-<li class="danger" onclick="configDeleteAccount()">Borrar cuenta y datos</li>
-</ul>
-</div>
-</div>
-<div class="chat-input-area" id="inputAreaContainer">
-<button type="button" class="btn-icon-left" id="plusMenuBtn" onclick="togglePlusPopover(event)" title="Adjuntar multimedia"><i class="fa-solid fa-plus"></i></button>
-<div class="chat-input-wrapper"><input type="text" id="chatInput" placeholder="Ask Duckie Guai-fai'v..." onkeypress="handleKeyPress(event)"></div>
-<div class="media-actions-right">
-<button type="button" class="btn-icon-right" id="cameraShortcutBtn" onclick="handlePlusAction('camera')" title="Cámara rápida"><i class="fa-solid fa-camera"></i></button>
-<button type="button" class="btn-icon-right" id="micBtn" onclick="triggerInstantVoice()" title="Instant / Voice Input"><i class="fa-solid fa-microphone"></i></button>
-<button type="button" class="send-btn-ios" onclick="sendUserMessage()" title="Enviar"><i class="fa-solid fa-paper-plane"></i></button>
-</div>
-</div>
-<nav class="bottom-nav">
-<button class="nav-item" onclick="switchView('contactos', this)"><span class="icon">👥</span><span>Contactos</span></button>
-<button class="nav-item" onclick="switchView('llamadas', this)"><span class="icon">📞</span><span>Llamadas</span></button>
-<button class="nav-item active" onclick="switchView('ai', this)"><span class="icon">🦆</span><span>AI Chat</span></button>
-<button class="nav-item" onclick="switchView('chats', this)"><span class="icon">💬</span><span>Chats</span></button>
-<button class="nav-item" onclick="switchView('status', this)"><span class="icon">📊</span><span>Status</span></button>
+</footer>
+<nav class="bottom-nav" id="bottomNav">
+<button class="nav-item" id="nav-contactos" onclick="switchView('contactos',this)"><span class="ico">👥</span><span>Contactos</span></button>
+<button class="nav-item" id="nav-llamadas" onclick="switchView('llamadas',this)"><span class="ico">📞</span><span>Llamadas</span></button>
+<button class="nav-item active" id="nav-ai" onclick="switchView('ai',this)"><span class="ico">🦆</span><span>AI Chat</span></button>
+<button class="nav-item" id="nav-chats" onclick="switchView('chats',this)"><span class="ico">💬</span><span>Chats</span></button>
+<button class="nav-item" id="nav-status" onclick="switchView('status',this)"><span class="ico">📊</span><span>Status</span></button>
 </nav>
 </div>
-<div id="activeCallOverlay">
-<div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">
-<div class="avatar-container" style="width: 80px; height: 80px;" id="callAvatarIcon"><img src="IMG_1101.png" alt="Logo"></div>
-<h2 id="callTargetName" style="font-size: 1.3rem; color: #ffffff;">Duckie Support Team</h2>
-<p id="callStatusTimer" style="color: var(--text-muted); font-size: 0.9rem; margin-top: 2px;">Iniciando WebRTC P2P...</p>
+<div id="overlayMenu" class="overlay" onclick="toggleMenu(false)"></div>
+<div id="menuPanel" class="side-panel left">
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="color:#00a884;font-weight:800">Menú Izquierdo 10 VIVO</span><button class="menu-btn" onclick="toggleMenu(false)">✕</button></div>
+<div style="display:flex;gap:10px;align-items:center;background:#202c33;padding:10px;border-radius:10px;border:1px solid #2a3942"><img src="./IMG_4685.png" style="width:40px;height:40px;border-radius:50%;border:2px solid #00a884" alt="Logo"><div><b>Logo Oficial VIVO</b><br><small>IMG_4685.png • Guai-Faiv • Barra 5 VIVA</small></div></div>
+<button class="panel-btn" onclick="switchView('chats',document.getElementById('nav-chats'));toggleMenu(false)"><span>💬 Chats</span><span style="background:#00a884;color:#fff;padding:2px 8px;border-radius:10px;font-size:11px">VIVO</span></button>
+<button class="panel-btn" onclick="switchView('ai',document.getElementById('nav-ai'));toggleMenu(false)"><span>🦆 New chat</span><span style="background:#ffd700;color:#000;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:900">AI</span></button>
+<button class="panel-btn" onclick="openFeature('media')"><span>🖼️ Media VIVO</span><span>›</span></button>
+<button class="panel-btn" onclick="openFeature('schedules')"><span>📅 Shedules VIVO</span><span>›</span></button>
+<button class="panel-btn" onclick="openFeature('library')"><span>📚 Library VIVO</span><span>›</span></button>
+<button class="panel-btn" onclick="openFeature('projects')"><span>📁 Projects VIVO</span><span>›</span></button>
+<button class="panel-btn" onclick="openFeature('tecnico')"><span>🛠 Tecnico TalkPro 24/7 VIVO</span><span>›</span></button>
+<button class="panel-btn" onclick="openFeature('privacidad')"><span>🔒 Servicios Y privacidad VIVO</span><span>›</span></button>
+<button class="panel-btn" onclick="openFeature('verificado')"><span>✅ Channel Verified VIVO</span><span>✔</span></button>
+<button class="panel-btn" onclick="openFeature('chatprivacy')"><span>🛡 Chat Privacy VIVO</span><span>›</span></button>
 </div>
-<div style="display: flex; gap: 15px; margin: 10px 0; justify-content: center; align-items: center;">
-<video id="localVideo" autoplay muted playsinline style="width: 140px; height: 100px; border-radius: 8px; border: 2px solid var(--accent-color); background: #000;"></video>
-<video id="remoteVideo" autoplay playsinline style="width: 140px; height: 100px; border-radius: 8px; border: 2px solid #ffd700; background: #000;"></video>
+<div id="overlayPro" class="overlay" onclick="toggleProSuite(false)"></div>
+<div id="proPanel" class="side-panel right">
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="color:#00a884;font-weight:800">Ajustes 8 EXACTO VIVO</span><button class="menu-btn" onclick="toggleProSuite(false)">✕</button></div>
+<div class="admin-card">
+<div class="admin-title">DuckieTalkPro Suite • Logo Oficial VIVO + Barra</div>
+<div class="admin-row"><span>Logo Oficial:</span><span class="admin-badge">IMG_4685.png VIVO</span></div>
+<div class="admin-row"><span>Owner:</span><b>Amado Apolonio</b></div>
+<div class="admin-row"><span>Ecosystem:</span><span class="admin-badge">Pro + Barra 5 VIVA + Voz 🔊 + 🛒</span></div>
+<div class="admin-row"><span>Server:</span><span style="color:#a5d6a7;font-weight:700">ONLINE VIVO</span></div>
+<div style="display:flex;gap:10px;align-items:center;margin-top:6px"><img src="./IMG_4685.png" style="width:36px;height:36px;border-radius:50%;border:2px solid #00a884"><small>Guai-Faiv Centro Avatar • Oficial VIVO • Barra VIVA</small></div>
 </div>
-<div style="display: flex; gap: 20px; margin-bottom: 20px;">
-<button onclick="toggleCallMute()" class="keypad-btn" style="background: #333; width: 55px; height: 55px;">🔇</button>
-<button onclick="toggleCallSpeaker()" class="keypad-btn" style="background: #333; width: 55px; height: 55px;">🔊</button>
-<button onclick="endActiveCall()" class="keypad-btn" style="background: var(--danger-color); border-color: #ff4d4d; width: 55px; height: 55px;">📴</button>
+<button class="panel-btn" onclick="toggleTheme()"><span>🌗 Modo Claro / Oscuro REAL</span><label class="switch"><input type="checkbox" id="themeSwitch" onchange="toggleTheme()"><span class="slider"></span></label></button>
+<button class="panel-btn" onclick="abrirModalPersonalizado('Login y Security VIVO','🔑 Login con Email Address VIVO + logo oficial IMG_4685.png + barra inferior 5 VIVA')"><span>🔑 Login Security / Email Adress</span><span>›</span></button>
+<button class="panel-btn" onclick="abrirModalPersonalizado('Agregar Cuenta VIVO','👤 Agregar cuenta + Email Address VIVO con voz 🔊 + barra VIVA')"><span>👤 Agregar cuenta</span><span>›</span></button>
+<button class="panel-btn" onclick="abrirModalPersonalizado('Email VIVO','📧 Email Adress VIVO - cambiar email oficial')"><span>📧 Email Adress VIVO</span><span>›</span></button>
+<button class="panel-btn" onclick="abrirModalPersonalizado('Notificaciones + Two-Step VIVO','🔔 Notificaciones Two-Step verification VIVO tiempo real + voz + barra')"><span>🔔 Notificaciones / Two-Step verification</span><span>›</span></button>
+<button class="panel-btn" onclick="abrirModalPersonalizado('Color Chat VIVO','🎨 Cambiar de color de chat VIVO con IMG_4685.png + barra 5 VIVA')"><span>🎨 Cambiar de color de Chat</span><span>›</span></button>
+<button class="panel-btn" onclick="abrirModalPersonalizado('Your Account VIVO','👑 Your Account con logo oficial IMG_4685.png • Admin Amado • 92105 • Barra 5 VIVA + Voz')"><span>👑 Your Account</span><span>›</span></button>
+<button class="panel-btn" style="color:#ff6b6b" onclick="if(confirm('¿Borrar cuenta y datos VIVO?')){localStorage.clear();speak('Datos borrados');location.reload()}"><span>🗑 Borrar Cuenta Y datos</span><span>›</span></button>
+<div style="padding:10px;border-top:1px solid #2a3942"><label style="display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#e9edef">🔊 Voz Duckie al contestar en vivo <label class="switch"><input type="checkbox" id="voiceToggle2" checked onchange="toggleVoice()"><span class="slider"></span></label></label></div>
+<button class="panel-btn" onclick="activarAudioVoIP('voice')">📞 Llamada de Voz VIVO + Voz 🔊 + Barra</button>
+<button class="panel-btn" onclick="activarAudioVoIP('video')">📹 Video Llamada VIVO + Voz 🔊 + Barra</button>
+<button class="panel-btn" style="background:#ffd700;color:#000;font-weight:800;justify-content:center" onclick="goMarket()">🛒 Abrir Duckie-Marketplace VIVO</button>
 </div>
-</div>
-<div id="storyViewerModal" onclick="closeStoryViewer(event)">
-<div class="story-progress-bar"><div class="story-progress-fill" id="storyProgressFill"></div></div>
-<div style="color: white; text-align: center; max-width: 90%; max-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center;" id="storyContentContainer">
-<h2 style="color: #ffd700; margin-bottom: 15px;" id="storyTitleIndicator">Historia Activa</h2>
-<div id="storyMediaDisplay" style="width: 100%; display: flex; justify-content: center; align-items: center;"></div>
-</div>
-<div style="position: absolute; bottom: 40px; display: flex; gap: 20px; z-index: 999;">
-<button class="btn-action-small" onclick="prevStory()">Anterior</button>
-<button class="btn-action-small" onclick="nextStory()">Siguiente</button>
-<button class="btn-action-small" style="background: var(--danger-color);" onclick="closeStoryViewerForce()">Cerrar</button>
-</div>
-</div>
-<div class="popover-menu" id="plusPopover">
-<div class="popover-item" onclick="handlePlusAction('camera')"><span>📷</span> Camera</div>
-<div class="popover-item" onclick="handlePlusAction('photos')"><span>🖼️</span> Photos</div>
-<div class="popover-item" onclick="handlePlusAction('files')"><span>📁</span> Files</div>
-<div class="popover-item" onclick="handlePlusAction('plugins')"><span>🧩</span> Plugins</div>
-</div>
-<div class="popover-menu" id="loginPopover" style="width: 180px; right: 20px; top: 60px;">
-<div class="popover-item" onclick="handleLoginAction('settings')"><span>⚙️</span> Settings</div>
-<div class="popover-item" onclick="handleLoginAction('terms')"><span>📄</span> Terms of Use</div>
-<div class="popover-item" onclick="handleLoginAction('privacy')"><span>🔒</span> Privacy Policy</div>
-</div>
-
-<div id="comingSoonTab" onclick="if(event.target.id==='comingSoonTab') closeComingSoonTab()">
-  <div style="background: var(--panel-color); border: 1px solid #284a32; border-radius: 20px; padding: 30px 24px; max-width: 360px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.6); display:flex; flex-direction:column; align-items:center;">
-    <div class="coming-soon-badge">COMING SOON</div>
-    <div class="avatar-container" style="width: 90px; height: 90px; border: 3px solid #ffc300; margin-bottom: 16px;">
-      <img src="IMG_4685.png" alt="Duckie Logo">
-    </div>
-    <h2 style="color: var(--text-main); font-size: 1.6rem; margin-bottom: 6px;">Duckie Marketplace</h2>
-    <h3 style="color: #ffc300; font-size: 1.1rem; margin-bottom: 14px; letter-spacing: 1px;">EL PATITO MULTI USOS</h3>
-    <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.4; margin-bottom: 18px;">
-      🛒 Estamos integrando tu tienda favorita dentro de DuckieTalkPro.<br>
-      <strong style="color: var(--text-main);">Todo en una sola plataforma</strong> - Chats, Llamadas, IA y ahora Marketplace.
-    </p>
-    <div style="display:flex; gap:10px; margin-bottom:18px; flex-wrap:wrap; justify-content:center;">
-      <span style="background: rgba(46,111,64,0.3); border:1px solid #335c3f; padding:6px 12px; border-radius:20px; font-size:0.8rem;">✓ Pago Protegido</span>
-      <span style="background: rgba(46,111,64,0.3); border:1px solid #335c3f; padding:6px 12px; border-radius:20px; font-size:0.8rem;">✓ Entrega 92105</span>
-      <span style="background: rgba(46,111,64,0.3); border:1px solid #335c3f; padding:6px 12px; border-radius:20px; font-size:0.8rem;">✓ Verificados</span>
-    </div>
-    <div style="font-size: 2rem; margin-bottom: 18px;">🦆🛍️✨</div>
-    <button onclick="closeComingSoonTab()" style="background: var(--accent-color); color: #fff; border: none; padding: 12px 28px; border-radius: 12px; font-weight: 700; cursor: pointer; width: 100%;">Entendido - Notificarme</button>
-    <p style="color: var(--text-muted); font-size: 0.7rem; margin-top: 12px;">Te avisaremos cuando esté activo</p>
-  </div>
-</div>
-
-<input type="file" id="hiddenFileInput" accept="image/*,video/*" capture="environment" onchange="processSelectedFile(this)">
-
+<div class="overlay" id="modalOverlay" onclick="cerrarModalPersonalizado()"></div>
+<div class="duckie-modal" id="duckieModalBox"><h3 id="modalTitle" style="color:#00a884;margin-bottom:8px"></h3><p id="modalDesc" style="color:#aebac1;font-size:14px;margin-bottom:12px"></p><button onclick="cerrarModalPersonalizado()" style="background:#00a884;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-weight:700">Aceptar VIVO + Voz 🔊 + Barra + 🛒</button></div>
 <script>
-async function askGuaiFai(text, onChunk) {
-    const backendUrl = "https://duckietalkpro.onrender.com/api/chat";
-    const response = await fetch(backendUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            messages: [
-                { role: "system", content: "Eres Duckie Guai-fai'v 🧠. El fiel asistente de Amado Apolonio Simom. Responde directo, empático, con tono norteño y servicial." },
-                { role: "user", content: text }
-            ]
-        })
-    });
-    if (!response.ok) throw new Error("Error al conectar con el servidor backend en Render.");
-    const data = await response.json();
-    const replyText = data.reply || data.choices?.[0]?.message?.content || "Respuesta recibida del backend.";
-    if (onChunk) onChunk(replyText);
-}
-let userApiKey = localStorage.getItem('duckie_api_key') || '';
-let savedContacts = JSON.parse(localStorage.getItem('duckie_contacts')) || [];
-let savedStatuses = JSON.parse(localStorage.getItem('duckie_statuses')) || [
-{ type: 'text', content: '🚀 DuckieTalkPro operando al 100% con vistas nativas.', bg: '#2e6f40' },
-{ type: 'text', content: '💡 Desarrollando interfaces móviles fluidas y limpias.', bg: '#1b2e20' }
-];
-let chatMessagesHistory = JSON.parse(localStorage.getItem('duckie_chat_history')) || [
-{ role: "system", content: "You are Duckie Guai-fai'v, attached to DuckieTalkPro, an expert AI assistant and digital wingman integrated directly into Duckie Duck Pro." },
-{ role: "assistant", content: "¡Hola Amado!\nSoy Duckie Guai-fai'v 🧠, ¿Qué desarrollamos, ajustamos o sincronizamos el día de hoy?" }
-];
-let userAccountData = JSON.parse(localStorage.getItem('duckie_account_data')) || {
-email: "amado.apolonio@duckieduckpro.net",
-password: "••••••••",
-firstName: "Amado",
-lastName: "Apolonio Simom",
-address: "México DF / Global Node",
-paymentMethod: "Visa ending in **** 8888",
-twoStepActive: false,
-notificationsSound: "Default Chime (WhatsApp Style)"
-};
-const currentTheme = localStorage.getItem('duckie_theme') || 'dark';
-document.body.setAttribute('data-theme', currentTheme);
-document.addEventListener('DOMContentLoaded', () => {
-if(currentTheme === 'light') {
-const cb = document.getElementById('themeToggleCheckbox');
-if(cb) cb.checked = true;
-}
-renderChatHistoryOnLoad();
-});
-function saveDataToLocalStorage() {
-localStorage.setItem('duckie_contacts', JSON.stringify(savedContacts));
-localStorage.setItem('duckie_statuses', JSON.stringify(savedStatuses));
-localStorage.setItem('duckie_chat_history', JSON.stringify(chatMessagesHistory));
-localStorage.setItem('duckie_account_data', JSON.stringify(userAccountData));
-}
-let buttonStateSequence = [];
-function registerButtonDependency(buttonName) {
-const timestamp = new Date().toLocaleTimeString();
-buttonStateSequence.push({ button: buttonName, time: timestamp, sequenceIndex: buttonStateSequence.length + 1 });
-console.log(`[Dependencia de Botón Secuencial] Paso #${buttonStateSequence.length} -> ${buttonName}`);
-}
-function openComingSoonTab(){
-  registerButtonDependency('Marketplace 🛒 -> Coming Soon');
-  document.getElementById('comingSoonTab').style.display = 'flex';
-  document.getElementById('plusPopover').style.display = 'none';
-  document.getElementById('loginPopover').style.display = 'none';
-}
-function closeComingSoonTab(){
-  document.getElementById('comingSoonTab').style.display = 'none';
-}
-function menuActionFile(actionName) {
-registerButtonDependency(`Menú Archivo -> ${actionName}`);
-toggleLeftMenu();
-if(actionName === 'Chats') {
-switchView('chats', document.querySelector('.bottom-nav .nav-item:nth-child(4)'));
-} else if(actionName === 'New chats') {
-switchView('ai', document.querySelector('.bottom-nav .nav-item:nth-child(3)'));
-document.getElementById('chatInput').focus();
-} else {
-alert(`📁 Módulo [${actionName}] seleccionado.`);
-}
-}
-function menuTecnicoTalkPro() { alert("🛠️ SOPORTE TÉCNICO 24/7 ACTIVO"); toggleLeftMenu(); }
-function menuServicioPrivacidad() { alert("🔒 PRIVACIDAD Y SEGURIDAD LOCAL"); toggleLeftMenu(); }
-function menuCanalVerificado() { alert("🛡️ CANAL OFICIAL VERIFICADO"); toggleLeftMenu(); }
-function menuChatPrivacidad() { alert("💬 CHAT PROTEGIDO"); toggleLeftMenu(); }
-function configLoginSecurity() {
-registerButtonDependency('Configuración: Login y security');
-const email = prompt("Ingrese su Correo Electrónico:", userAccountData.email);
-if(email === null) return;
-const pass = prompt("Ingrese su Password:", "");
-if(pass === null) return;
-userAccountData.email = email.trim();
-if(pass.trim() !== "") userAccountData.password = pass.trim();
-saveDataToLocalStorage();
-alert(`Credenciales actualizadas para: ${userAccountData.email}`);
-}
-function configAddNewAccount() {
-registerButtonDependency('Configuración: Agregar Cuenta');
-const fName = prompt("Ingrese su Nombre:", "");
-if(!fName) return;
-const lName = prompt("Ingrese su Apellido:", "");
-const addr = prompt("Ingrese su Dirección:", "");
-const pay = prompt("Ingrese método de pago:", "");
-userAccountData.firstName = fName;
-userAccountData.lastName = lName || "";
-userAccountData.address = addr || "";
-userAccountData.paymentMethod = pay || "No registrado";
-saveDataToLocalStorage();
-alert(`Cuenta de ${fName} agregada.`);
-}
-function configEmailAddress() { alert(`Correo activo: ${userAccountData.email}`); }
-function configNotifications() {
-const s = prompt("Seleccione tono de notificaciones:", userAccountData.notificationsSound);
-if(s) { userAccountData.notificationsSound = s; saveDataToLocalStorage(); }
-}
-function configTwoStepVerification() {
-userAccountData.twoStepActive = !userAccountData.twoStepActive;
-saveDataToLocalStorage();
-alert(`2FA Activo: ${userAccountData.twoStepActive ? 'Sí' : 'No'}`);
-}
-function configChangeChatColor() {
-const bg = prompt("Color de fondo saliente:", "#2e6f40");
-if(bg) document.documentElement.style.setProperty('--chat-bg-outgoing', bg);
-}
-function configShowAccount() { alert(`👤 ${userAccountData.firstName} ${userAccountData.lastName}\n📧 ${userAccountData.email}`); }
-function configDeleteAccount() { if(confirm("⚠️ ¿Borrar todos los datos locales?")) { localStorage.clear(); location.reload(); } }
-function toggleLeftMenu() { document.getElementById('leftMenu').classList.toggle('hidden-left'); }
-function toggleRightMenu() { document.getElementById('rightMenu').classList.toggle('hidden-right'); }
-function toggleLoginMenu() { openComingSoonTab(); }
-function togglePlusPopover(e) {
-e.stopPropagation();
-const p = document.getElementById('plusPopover');
-p.style.display = p.style.display === 'block' ? 'none' : 'block';
-}
-document.addEventListener('click', () => {
-document.getElementById('plusPopover').style.display = 'none';
-document.getElementById('loginPopover').style.display = 'none';
-});
-function switchView(viewName, btnElement) {
-document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
-document.getElementById('view-' + viewName).classList.add('active');
-document.querySelectorAll('.bottom-nav .nav-item').forEach(i => i.classList.remove('active'));
-if(btnElement) btnElement.classList.add('active');
-const headerTitle = document.getElementById('headerTitleText');
-if(viewName === 'ai') headerTitle.textContent = "DuckieDuckPro";
-else if(viewName === 'contactos') headerTitle.textContent = "Directorio de Contactos";
-else if(viewName === 'llamadas') headerTitle.textContent = "Centro de Llamadas";
-else if(viewName === 'chats') headerTitle.textContent = "Bandeja de Chats";
-else if(viewName === 'status') headerTitle.textContent = "Status Center";
-registerButtonDependency(`Vista -> ${viewName}`);
-}
-function handleKeyPress(e) { if(e.key === 'Enter') sendUserMessage(); }
-function sendUserMessage() {
-const input = document.getElementById('chatInput');
-const txt = input.value.trim();
-if(!txt) return;
-input.value = '';
-sendUserMessageToAI(txt);
-}
-function appendMessageBubble(text, type, containerId) {
-const list = document.getElementById(containerId);
-if(!list) return;
-const bubble = document.createElement('div');
-bubble.className = `message-bubble ${type}`;
-bubble.textContent = text;
-list.appendChild(bubble);
-list.scrollTop = list.scrollHeight;
-}
-async function sendUserMessageToAI(userText) {
-chatMessagesHistory.push({ role: "user", content: userText });
-appendMessageBubble(userText, 'outgoing', 'messagesList');
-saveDataToLocalStorage();
-const list = document.getElementById('messagesList');
-const bubble = document.createElement('div');
-bubble.className = 'message-bubble incoming';
-bubble.textContent = '🧠 Pensando...';
-list.appendChild(bubble);
-list.scrollTop = list.scrollHeight;
-try {
-    await askGuaiFai(userText, (streamedText) => {
-        bubble.textContent = streamedText;
-        list.scrollTop = list.scrollHeight;
-    });
-    chatMessagesHistory.push({ role: "assistant", content: bubble.textContent });
-    saveDataToLocalStorage();
-} catch (error) {
-    bubble.textContent = '¡Quack! Error al conectar con el cerebro neuronal.';
-}
-}
-function renderChatHistoryOnLoad() {
-const list = document.getElementById('messagesList');
-if(!list) return;
-list.innerHTML = '';
-chatMessagesHistory.forEach(msg => {
-if(msg.role === 'system') return;
-const type = msg.role === 'user' ? 'outgoing' : 'incoming';
-appendMessageBubble(msg.content, type, 'messagesList');
-});
-}
-let localStream = null;
-let remoteStream = null;
-let peerConnection = null;
-let signalingSocket = null;
-const rtcConfig = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' },{ urls: 'stun:stun1.l.google.com:19302' }] };
-function initWebRTCSignalingSocket() {
-    try {
-        signalingSocket = new WebSocket('wss://duckietalkpro.onrender.com');
-        signalingSocket.onopen = () => console.log("[WebRTC] Conectado al servidor de señalización WebSocket.");
-        signalingSocket.onmessage = async (event) => {
-            const data = JSON.parse(event.data);
-            if (!peerConnection) createPeerConnectionForIncoming();
-            if (data.type === 'offer') {
-                await peerConnection.setRemoteDescription(new RTCSessionDescription(data.payload));
-                const answer = await peerConnection.createAnswer();
-                await peerConnection.setLocalDescription(answer);
-                signalingSocket.send(JSON.stringify({ type: 'answer', target: data.from, payload: answer }));
-            } else if (data.type === 'answer') {
-                await peerConnection.setRemoteDescription(new RTCSessionDescription(data.payload));
-            } else if (data.type === 'candidate') {
-                await peerConnection.addIceCandidate(new RTCIceCandidate(data.payload));
-            }
-        };
-        alert("🌐 Conexión de señalización WebSocket establecida.");
-    } catch(e) { console.warn("Simulando canal local WebRTC"); }
-}
-async function startWebRTCWebCall(targetId, targetName) {
-    registerButtonDependency(`Llamada WebRTC VoIP -> ${targetName}`);
-    document.getElementById('callTargetName').textContent = targetName;
-    document.getElementById('activeCallOverlay').style.display = 'flex';
-    document.getElementById('callStatusTimer').textContent = "Solicitando cámara y micrófono...";
-    try {
-        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        document.getElementById('localVideo').srcObject = localStream;
-        peerConnection = new RTCPeerConnection(rtcConfig);
-        localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
-        peerConnection.ontrack = (event) => {
-            remoteStream = event.streams[0];
-            document.getElementById('remoteVideo').srcObject = remoteStream;
-            document.getElementById('callStatusTimer').textContent = "¡Videollamada VoIP P2P en curso!";
-        };
-        peerConnection.onicecandidate = (event) => {
-            if (event.candidate && signalingSocket && signalingSocket.readyState === WebSocket.OPEN) {
-                signalingSocket.send(JSON.stringify({ type: 'candidate', target: targetId, payload: event.candidate }));
-            }
-        };
-        const offer = await peerConnection.createOffer();
-        await peerConnection.setLocalDescription(offer);
-        document.getElementById('callStatusTimer').textContent = "Llamando por Internet (WebRTC STUN)...";
-        if (signalingSocket && signalingSocket.readyState === WebSocket.OPEN) {
-            signalingSocket.send(JSON.stringify({ type: 'offer', target: targetId, payload: offer }));
-        }
-    } catch (error) { alert("No se pudo iniciar el canal multimedia WebRTC. Revisa los permisos de cámara."); }
-}
-function createPeerConnectionForIncoming() {
-    peerConnection = new RTCPeerConnection(rtcConfig);
-    if(localStream) { localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream)); }
-    peerConnection.ontrack = (event) => {
-        remoteStream = event.streams[0];
-        document.getElementById('remoteVideo').srcObject = remoteStream;
-        document.getElementById('callStatusTimer').textContent = "¡Conectado!";
-    };
-}
-function endActiveCall() {
-    if(localStream) { localStream.getTracks().forEach(track => track.stop()); }
-    if(peerConnection) { peerConnection.close(); peerConnection = null; }
-    document.getElementById('activeCallOverlay').style.display = 'none';
-}
-function toggleCallMute() {
-    if(localStream) {
-        localStream.getAudioTracks()[0].enabled = !localStream.getAudioTracks()[0].enabled;
-        alert("Estado del micrófono alternado.");
-    }
-}
-function toggleCallSpeaker() { alert("Altavoz activo."); }
-function executeWebRTCCallFromKeypad() {
-    const val = document.getElementById('keypadDisplay').value;
-    if(!val) { alert("Ingresa un número o ID de destino."); return; }
-    startWebRTCWebCall(val, 'Marcación VoIP Directa');
-}
-let currentStoryIndex = 0;
-function triggerStatusMediaUpload() {
-    registerButtonDependency('Status -> Subir Multimedia');
-    const fileInput = document.getElementById('hiddenFileInput');
-    fileInput.setAttribute('data-target-mode', 'status');
-    fileInput.click();
-}
-function handlePlusAction(action) {
-    document.getElementById('plusPopover').style.display = 'none';
-    const fileInput = document.getElementById('hiddenFileInput');
-    fileInput.setAttribute('data-target-mode', 'chat');
-    if(action === 'camera') { alert("📷 Abriendo cámara nativa de dispositivo..."); fileInput.click(); }
-    else if(action === 'photos' || action === 'files') { fileInput.click(); }
-    else if(action === 'plugins') { console.log("Plugins cargados."); }
-}
-function processSelectedFile(input) {
-    if(input.files && input.files[0]) {
-        const file = input.files[0];
-        const fileUrl = URL.createObjectURL(file);
-        const isVideo = file.type.startsWith('video');
-        const mode = input.getAttribute('data-target-mode');
-        if(mode === 'status') {
-            savedStatuses.push({ type: isVideo ? 'video' : 'image', content: fileUrl, name: file.name, bg: '#1b2e20' });
-            saveDataToLocalStorage();
-            alert(`¡Multimedia "${file.name}" agregada exitosamente a tus Status!`);
-        } else {
-            appendMessageBubble(`[Archivo adjunto: ${file.name}]`, 'outgoing', 'messagesList');
-            alert(`Archivo listo para enviar: ${file.name}`);
-        }
-    }
-}
-function openStoryViewer() {
-    if(savedStatuses.length === 0) { alert("No hay historias activas."); return; }
-    currentStoryIndex = 0;
-    document.getElementById('storyViewerModal').style.display = 'flex';
-    renderCurrentStory();
-}
-function renderCurrentStory() {
-    const story = savedStatuses[currentStoryIndex];
-    const titleEl = document.getElementById('storyTitleIndicator');
-    const mediaContainer = document.getElementById('storyMediaDisplay');
-    titleEl.textContent = `Historia ${currentStoryIndex + 1} de ${savedStatuses.length}`;
-    mediaContainer.innerHTML = '';
-    if(story.type === 'video') {
-        const videoEl = document.createElement('video');
-        videoEl.src = story.content; videoEl.controls = true; videoEl.autoplay = true;
-        videoEl.style.maxWidth = '100%'; videoEl.style.maxHeight = '60vh';
-        mediaContainer.appendChild(videoEl);
-    } else if(story.type === 'image') {
-        const imgEl = document.createElement('img');
-        imgEl.src = story.content;
-        imgEl.style.maxWidth = '100%'; imgEl.style.maxHeight = '60vh'; imgEl.style.objectFit = 'contain';
-        mediaContainer.appendChild(imgEl);
-    } else {
-        const textEl = document.createElement('p');
-        textEl.textContent = story.content;
-        textEl.style.fontSize = '1.4rem'; textEl.style.color = '#ffffff';
-        mediaContainer.appendChild(textEl);
-    }
-}
-function nextStory() {
-    currentStoryIndex++;
-    if(currentStoryIndex >= savedStatuses.length) closeStoryViewerForce();
-    else renderCurrentStory();
-}
-function prevStory() {
-    currentStoryIndex--;
-    if(currentStoryIndex < 0) currentStoryIndex = 0;
-    renderCurrentStory();
-}
-function closeStoryViewer(e) { if(e.target.id === 'storyViewerModal') closeStoryViewerForce(); }
-function closeStoryViewerForce() { document.getElementById('storyViewerModal').style.display = 'none'; }
-function addStatusText() {
-    const txt = prompt("Ingrese el texto para su nuevo estado:");
-    if(!txt) return;
-    savedStatuses.push({ type: 'text', content: txt, bg: '#2e6f40' });
-    saveDataToLocalStorage();
-    alert("¡Estado de texto agregado con éxito!");
-}
-function generateAIImageStatus() {
-    registerButtonDependency('Status -> IA');
-    const p = prompt("Describe la imagen que deseas generar con Duckie Guai-fai'v:");
-    if(p) alert(`🤖 Generando imagen con Duckie Guai-fai'v: "${p}"`);
-}
-function appendKey(char) { document.getElementById('keypadDisplay').value += char; }
-function clearKeypad() { document.getElementById('keypadDisplay').value = ''; }
-function keypadSaveContact() { alert("Guardando contacto..."); }
-function keypadSendMessage() { switchView('chats', document.querySelector('.bottom-nav .nav-item:nth-child(4)')); }
-function filterContacts() {}
-function addNewContactModal() { alert("Nuevo contacto"); }
-function saveContactNative(n) { alert(`Guardado en sistema: ${n}`); }
-function replyToMessage(b) { alert("Respondiendo..."); }
-function sendMessageDirect(b) { alert("Enviando..."); }
-function deleteMessage(b) { b.closest('.message-bubble').remove(); }
-function triggerInstantVoice() { alert("🎙️ Grabando voz con Duckie Guai-fai'v..."); }
-function handleLoginAction(action){
-  registerButtonDependency('Login Action -> '+action);
-  document.getElementById('loginPopover').style.display='none';
-  if(action==='settings'){ toggleRightMenu(); }
-  else { openComingSoonTab(); }
-}
-function toggleThemeMode(){
-  const current = document.body.getAttribute('data-theme');
-  const next = current==='dark'?'light':'dark';
-  document.body.setAttribute('data-theme', next);
-  localStorage.setItem('duckie_theme', next);
-  const cb = document.getElementById('themeToggleCheckbox');
-  if(cb) cb.checked = next==='light';
-}
-
-// === INYECCION DE VIDA SIN BORRAR NADA - HAMBURGUESA Y ENGRANE ===
-function menuActionFile_ORIGINAL(actionName){ console.log('orig',actionName); }
-function menuActionFile(action){
-  registerButtonDependency('Hamburguesa -> '+action);
-  if(document.getElementById('leftMenu')) document.getElementById('leftMenu').classList.add('hidden-left');
-  const map={
-    'Chats':'chats',
-    'New chats':'newchats',
-    'Media':'media',
-    'Schedules':'schedules',
-    'Library':'library',
-    'Projects':'projects',
-    'Técnico TalkPro':'tecnico',
-    'Servicio y Privacidad':'privacidad',
-    'Channel Verified':'verificado',
-    'Chat Privacy':'chatprivacy',
-    'chats':'chats',
-    'newchats':'newchats',
-    'media':'media',
-    'schedules':'schedules',
-    'library':'library',
-    'projects':'projects',
-    'tecnico':'tecnico',
-    'privacidad':'privacidad',
-    'verificado':'verificado',
-    'chatprivacy':'chatprivacy'
-  };
-  let target = map[action] || action;
-  if(target==='newchats'){
-    switchView('ai', document.querySelector('.bottom-nav .nav-item:nth-child(3)'));
-    setTimeout(()=>{ const inp=document.getElementById('chatInput'); if(inp){inp.value=''; inp.focus();} appendMessageBubble('Nuevo chat iniciado 🦆','incoming','messagesList'); },300);
-    return;
-  }
-  // Si existe la vista, cambia a ella, si no usa lógica original
-  if(document.getElementById('view-'+target)){
-    switchView(target);
-  } else {
-    // fallback original
-    if(action==='Chats') switchView('chats', document.querySelector('.bottom-nav .nav-item:nth-child(4)'));
-    else if(action==='New chats'){ switchView('ai', document.querySelector('.bottom-nav .nav-item:nth-child(3)')); document.getElementById('chatInput')?.focus(); }
-    else alert('📁 Módulo ['+action+'] seleccionado.');
-  }
-}
-function menuTecnicoTalkPro(){ menuActionFile('tecnico'); }
-function menuServicioPrivacidad(){ menuActionFile('privacidad'); }
-function menuCanalVerificado(){ menuActionFile('verificado'); }
-function menuChatPrivacidad(){ menuActionFile('chatprivacy'); }
-function openRightDetail(which){
-  registerButtonDependency('Engrane -> '+which);
-  if(document.getElementById('rightMenu')) document.getElementById('rightMenu').classList.add('hidden-right');
-  const map={login:'login',addaccount:'addaccount',email:'email',notifications:'notifications',twostep:'twostep',color:'color',account:'account'};
-  let t = map[which]||which;
-  if(document.getElementById('view-'+t)) switchView(t);
-}
-// Mejora switchView para no borrar nada, solo agregar títulos
-const _origSwitchView = switchView;
-function switchViewEnhanced(viewName, btnElement){
-  // llama original si existe lógica previa
-  document.querySelectorAll('.app-view').forEach(v=>v.classList.remove('active'));
-  const target=document.getElementById('view-'+viewName);
-  if(target){ target.classList.add('active'); }
-  else { document.getElementById('view-ai')?.classList.add('active'); viewName='ai'; }
-  document.querySelectorAll('.bottom-nav .nav-item').forEach(i=>i.classList.remove('active'));
-  if(btnElement) btnElement.classList.add('active');
-  const titles={ai:'DuckieDuckPro',contactos:'Directorio de Contactos',llamadas:'Centro de Llamadas',chats:'Bandeja de Chats',status:'Status Center',media:'Media Gallery',schedules:'Schedules',library:'Library',projects:'Projects',tecnico:'Técnico TalkPro',privacidad:'Servicio y Privacidad',verificado:'Channel Verified',chatprivacy:'Chat Privacy',login:'Login y Security',addaccount:'Agregar Cuenta',email:'Email Address',notifications:'Notifications',twostep:'Two-Step Verification',color:'Cambiar Color de Chat',account:'You Account: Amado'};
-  const h=document.getElementById('headerTitleText'); if(h) h.textContent=titles[viewName]||'DuckieDuckPro';
-  registerButtonDependency('Vista -> '+viewName);
-}
-// Reemplaza switchView con versión mejorada que conserva todo
-switchView = switchViewEnhanced;
-function configLoginSecurity(){ const email=prompt('Nuevo Email:', userAccountData.email); if(email===null) return; const pass=prompt('Nuevo Password:',''); if(pass===null) return; userAccountData.email=email.trim(); if(pass.trim()!='') userAccountData.password=pass.trim(); saveDataToLocalStorage(); alert('Actualizado: '+userAccountData.email); switchView('login'); }
-function configAddNewAccount(){ const fName=document.getElementById('newAccName')?.value || prompt('Nombre:',''); if(!fName) return; const lName=prompt('Apellido:',''); const addr=prompt('Dirección:',''); const pay=prompt('Pago:',''); userAccountData.firstName=fName; userAccountData.lastName=lName||''; userAccountData.address=addr||''; userAccountData.paymentMethod=pay||'No registrado'; saveDataToLocalStorage(); alert('Cuenta '+fName+' agregada.'); switchView('addaccount'); }
-function configEmailAddress(){ switchView('email'); alert('Correo activo: '+userAccountData.email); }
-function configNotifications(){ const s=prompt('Tono:', userAccountData.notificationsSound); if(s){ userAccountData.notificationsSound=s; saveDataToLocalStorage(); } switchView('notifications'); }
-function configTwoStepVerification(){ userAccountData.twoStepActive=!userAccountData.twoStepActive; saveDataToLocalStorage(); alert('2FA: '+(userAccountData.twoStepActive?'Activado ✔':'Desactivado')); switchView('twostep'); }
-function configChangeChatColor(){ const bg=prompt('Color HEX (ej: #2e6f40):','#2e6f40'); if(bg){ document.documentElement.style.setProperty('--chat-bg-outgoing',bg); alert('Color cambiado a '+bg); } switchView('color'); }
-function configShowAccount(){ switchView('account'); }
-
+const SERVER_URL='https://duckietalkpro.onrender.com/api/chat';
+let voiceOn=true;
+function goMarket(){window.location.href='marketplace.html?v='+Date.now();}
+function openAttachmentMenu(){abrirModalPersonalizado('Adjuntos VIVO + Barra + 🛒','📎 Opciones VIVO:\n📷 Camara VIVO con acceso dispositivo\n🖼️ Photos VIVO galeria\n📁 Files VIVO documentos\n🔌 plugins VIVO activos');document.getElementById('fileInput').click();}
+function openFeature(k){let map={media:'Media VIVO - galeria fotos/videos',schedules:'Shedules VIVO - programar horarios',library:'Library VIVO - biblioteca',projects:'Projects VIVO',tecnico:'Tecnico TalkPro VIVO 24/7',privacidad:'Servicios Y privacidad VIVO',verificado:'Channel Verified VIVO',chatprivacy:'Chat Privacy VIVO'};abrirModalPersonalizado(k.toUpperCase()+' VIVO',map[k]||k);let box=document.getElementById('chatBox');let d=document.createElement('div');d.className='msg bot';d.innerHTML='<b>Duckie IA • Oficial VIVO + Barra + 🛒:</b> 📂 '+ (map[k]||k) +' - funcionando 100% VIVO';box.appendChild(d);box.scrollTop=box.scrollHeight;speak(map[k]||k);}
+function toggleVoice(){voiceOn=!voiceOn;let t2=document.getElementById('voiceToggle2');if(t2)t2.checked=voiceOn;let b=document.getElementById('voiceBtn');if(b)b.style.opacity=voiceOn?'1':'.35';if(voiceOn)speak('Voz Duckie activada en vivo con barra inferior cinco botones vivos, logo oficial y carrito arriba al lado del engrane');else speechSynthesis.cancel()}
+function speak(txt){if(!voiceOn)return;if('speechSynthesis' in window){speechSynthesis.cancel();let clean=txt.replace(/<[^>]*>/g,'').replace(/[*_#]/g,'');let u=new SpeechSynthesisUtterance(clean);u.lang='es-MX';u.rate=1;u.pitch=1.1;u.volume=1;let voices=speechSynthesis.getVoices();let es=voices.find(v=>v.lang.includes('es'))||voices[0];if(es)u.voice=es;speechSynthesis.speak(u)}}
+function startListen(){if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){abrirModalPersonalizado('Voz VIVO','🎙 Usa Chrome para hablar en vivo con logo oficial IMG_4685.png y barra inferior 5 VIVA + 🛒');return}let Rec=window.SpeechRecognition||window.webkitSpeechRecognition;let rec=new Rec();rec.lang='es-MX';rec.onstart=()=>{document.getElementById('userInput').placeholder='🎙 Escuchando en vivo con logo oficial + barra...'};rec.onresult=e=>{document.getElementById('userInput').value=e.results[0][0].transcript;sendTextMessage()};rec.onend=()=>{document.getElementById('userInput').placeholder='Ask Duckie Guai-fai\'v... + voz VIVO'};rec.start()}
+function toggleMenu(open){document.getElementById('menuPanel').classList.toggle('open',open);document.getElementById('overlayMenu').style.display=open?'block':'none'}
+function toggleProSuite(open){document.getElementById('proPanel').classList.toggle('open',open);document.getElementById('overlayPro').style.display=open?'block':'none'}
+function toggleTheme(){let nxt=localStorage.getItem('duckie_theme')==='light'?'dark':'light';localStorage.setItem('duckie_theme',nxt);let sw=document.getElementById('themeSwitch');if(sw)sw.checked=nxt==='light';if(nxt==='light'){document.body.style.background='#f0f4f1';document.body.style.color='#111b21'}else{document.body.style.background='#0b141a';document.body.style.color='#e9edef'};speak(nxt==='light'?'Modo claro oficial con barra inferior activado':'Modo oscuro oficial con barra inferior activado')}
+(function(){let t=localStorage.getItem('duckie_theme')||'dark';let sw=document.getElementById('themeSwitch');if(sw)sw.checked=t==='light';if(t==='light'){document.body.style.background='#f0f4f1';document.body.style.color='#111b21'};if('speechSynthesis' in window)speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices()})();
+function checkEnter(e){if(e.key==='Enter')sendTextMessage()}
+function insertEmoji(em){document.getElementById('userInput').value+=em}
+function openAttachment(){document.getElementById('fileInput').click()}
+function handleFileSelect(e){let f=e.target.files[0];if(!f)return;let box=document.getElementById('chatBox');let d=document.createElement('div');d.className='msg user';d.innerHTML='<b>Tú:</b> Archivo adjunto VIVO oficial: 📎 '+f.name+' • IMG_4685.png • Barra 5 VIVA + 🛒';box.appendChild(d);box.scrollTop=box.scrollHeight;speak('Archivo '+f.name+' adjunto en vivo con logo oficial y barra inferior viva y carrito')}
+function addBotMessage(text){let box=document.getElementById('chatBox');let d=document.createElement('div');d.className='msg bot';d.innerHTML='<b>DuckieTalk IA • Oficial VIVO + Barra + 🛒:</b> '+text;box.appendChild(d);box.scrollTop=box.scrollHeight;speak(text)}
+function abrirModalPersonalizado(tit,txt){document.getElementById('modalTitle').innerText=tit;document.getElementById('modalDesc').innerText=txt;document.getElementById('duckieModalBox').style.display='block';document.getElementById('modalOverlay').style.display='block';toggleProSuite(false);toggleMenu(false);speak(txt)}
+function cerrarModalPersonalizado(){document.getElementById('duckieModalBox').style.display='none';document.getElementById('modalOverlay').style.display='none'}
+async function activarAudioVoIP(tipo){try{let stream=await navigator.mediaDevices.getUserMedia({audio:true,video:tipo==='video'});abrirModalPersonalizado('VoIP '+tipo+' VIVO Oficial + Barra + 🛒','🎙 Conexión segura VIVO establecida con logo oficial IMG_4685.png\nCanal: DuckieTalkPro_Live Oficial VIVO\nBarra inferior 5 VIVA activa + 🛒 arriba\nTransmitiendo '+tipo+' en vivo con voz que contesta 🔊');addBotMessage('[Sesión VoIP '+tipo.toUpperCase()+' Oficial VIVO + Barra + 🛒 VIVA Iniciada] 🚀 IMG_4685.png')}catch(err){abrirModalPersonalizado('Permisos VIVO Oficial + Barra + 🛒','⚠ Permite micrófono y cámara para VoIP VIVO oficial con logo IMG_4685.png, barra 5 VIVA y voz 🔊 y carrito')}}
+function switchView(view,btn){if(btn){document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}let box=document.getElementById('chatBox');if(view==='contactos'){box.innerHTML='<div style="padding:10px"><div style="width:68px;height:68px;border-radius:50%;border:3px solid #00a884;overflow:hidden;margin:0 auto;background:#fff"><img src="./IMG_4685.png" style="width:100%;height:100%;object-fit:cover"></div><h3 style="text-align:center;margin:8px 0">👥 Contactos VIVO • IMG_4685.png + Barra VIVA + 🛒</h3><div style="background:#202c33;padding:12px;border-radius:10px;border:1px solid #2a3942;margin:6px 0">👥 Duckie Support<br><small>📞 +1 (800) DUCKIE-AI • VIVO + Voz 🔊 • Barra VIVA + 🛒</small></div><div style="background:#202c33;padding:12px;border-radius:10px;border:1px solid #2a3942">👑 Amado Apolonio<br><small>Admin 92105 • VIVO • Logo Oficial • Barra 5 VIVA + 🛒</small></div></div>';speak('Contactos en vivo con barra inferior cinco botones vivos y carrito arriba')}else if(view==='llamadas'){box.innerHTML='<div style="padding:10px"><h3 style="text-align:center">📞 Llamadas VIVO WebRTC + Barra VIVA + 🛒</h3><div style="background:#202c33;padding:14px;border-radius:10px;border:1px solid #2a3942;margin-top:10px"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"><button class="panel-btn" style="justify-content:center" onclick="addDial(1)">1</button><button class="panel-btn" style="justify-content:center" onclick="addDial(2)">2</button><button class="panel-btn" style="justify-content:center" onclick="addDial(3)">3</button><button class="panel-btn" style="justify-content:center" onclick="addDial(4)">4</button><button class="panel-btn" style="justify-content:center" onclick="addDial(5)">5</button><button class="panel-btn" style="justify-content:center" onclick="addDial(6)">6</button><button class="panel-btn" style="justify-content:center" onclick="addDial(7)">7</button><button class="panel-btn" style="justify-content:center" onclick="addDial(8)">8</button><button class="panel-btn" style="justify-content:center" onclick="addDial(9)">9</button><button class="panel-btn" style="justify-content:center" onclick="addDial(`*`)">*</button><button class="panel-btn" style="justify-content:center" onclick="addDial(0)">0</button><button class="panel-btn" style="justify-content:center" onclick="addDial(`#`)">#</button></div><input id="dialInput" placeholder="ID / Número VIVO + Barra + 🛒" style="width:100%;margin-top:10px;padding:10px;border-radius:8px;border:1px solid #2a3942;background:#0b141a;color:#e9edef"><button class="pro-suite-btn" style="width:100%;margin-top:8px;justify-content:center" onclick="abrirModalPersonalizado(`Llamada VIVO + Barra + 🛒`,`📞 Llamando VIVO con IMG_4685.png + barra 5 VIVA + voz 🔊 + carrito`)">🌐 Llamada VIVO + Voz + Barra + 🛒</button></div></div>';speak('Llamadas en vivo con marcador y barra inferior viva y carrito')}else if(view==='ai'){box.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;padding:10px;gap:6px"><div style="width:68px;height:68px;border-radius:50%;border:3px solid #00a884;overflow:hidden;background:#fff"><img src="./IMG_4685.png" style="width:100%;height:100%;object-fit:cover"></div><div style="font-weight:800">Duckie Guai-fai\'v • AI Chat VIVO • Barra 5 VIVA + 🛒</div></div><div class="msg bot"><b>Duckie IA • Oficial:</b> ¡Hola Amado! Soy Duckie Guai-fai\'v 🦆 ¿Qué desarrollamos, ajustamos o sincronizamos el día de hoy? Con logo oficial IMG_4685.png + barra inferior 5 VIVA + voz 🔊 + carrito 🛒 arriba</div>';speak('AI Chat en vivo con barra inferior cinco botones vivos y carrito arriba')}else if(view==='chats'){box.innerHTML='<div class="msg bot">💬 Chats VIVO • Entrantes / Salientes con voz + IMG_4685.png + Barra 5 VIVA + 🛒</div><div class="msg user">Saliente VIVO • Logo oficial • Barra VIVA + 🛒</div><div class="msg bot">Entrante VIVO • Responde con voz 🔊 • Barra VIVA + 🛒</div>';speak('Chats en vivo con barra inferior viva y carrito')}else if(view==='status'){box.innerHTML='<div style="padding:10px"><h3 style="text-align:center">📊 Status VIVO + Barra 5 VIVA + 🛒</h3><div style="background:#202c33;padding:12px;border-radius:10px;border:2px dashed #00a884;margin-top:10px;text-align:center;cursor:pointer" onclick="abrirModalPersonalizado(`Story VIVO + Barra + 🛒`,`⚡ Historias VIVO con IMG_4685.png + barra 5 VIVA + voz 🔊 + carrito`)"><h3>⚡ Historias VIVO</h3><p>IMG_4685.png • Tiempo Real + Voz • Barra 5 VIVA + 🛒</p></div><div style="background:#202c33;padding:12px;border-radius:10px;border:1px solid #2a3942;margin-top:10px"><h3>📝 Add Status Text VIVO</h3><input id="statusText" placeholder="Tu estado VIVO + Barra + 🛒..." style="width:100%;padding:8px;border-radius:8px;border:1px solid #2a3942;background:#0b141a;color:#e9edef;margin-top:6px"><button class="pro-suite-btn" style="margin-top:6px" onclick="addBotMessage(`Status VIVO: ${document.getElementById(`statusText`).value} • IMG_4685.png • Barra 5 VIVA + Voz + 🛒`)">Crear VIVO + Voz + Barra + 🛒</button></div></div>';speak('Status en vivo con barra inferior cinco botones vivos y carrito')}else if(view==='tecnico'){box.innerHTML='<div style="padding:14px"><h3>🛠 Tecnico TalkPro 24/7 VIVO + Barra + 🛒</h3><div style="background:#202c33;padding:12px;border-radius:10px;border:1px solid #2a3942;margin-top:8px">Soporte WebRTC + Firebase • IMG_4685.png + Barra 5 VIVA + Voz 🔊 + 🛒</div></div>';speak('Técnico TalkPro en vivo con carrito')}else if(view==='privacidad'){box.innerHTML='<div style="padding:14px"><h3>🔒 Servicio y Privacidad VIVO + Barra + 🛒</h3><div style="background:#202c33;padding:12px;border-radius:10px;border:1px solid #2a3942">Datos locales, P2P directo, BETA 0% • IMG_4685.png + Barra 5 VIVA + Voz 🔊 + 🛒</div></div>';speak('Servicio y privacidad en vivo con carrito')}else if(view==='verificado'){box.innerHTML='<div style="padding:14px;text-align:center"><h3>✅ Canal Verificado VIVO + Barra + 🛒</h3><div style="background:#202c33;padding:14px;border-radius:10px;border:2px solid #ffd700;margin-top:10px"><div style="font-size:3rem">✅</div><p>DuckieDuckPro AI<br>Amado Apolonio<br><span style="background:#ffd700;color:#000;padding:6px 12px;border-radius:8px;font-weight:900">VERIFICADO • IMG_4685.png • EL PATITO MULTI USOS • BARRA 5 VIVA + 🛒</span></p></div></div>';speak('Canal verificado en vivo con barra inferior viva y carrito')}else if(view==='chatprivacy'){box.innerHTML='<div style="padding:14px"><h3>🛡 Chat Privacidad VIVO + Barra + 🛒</h3><div style="background:#202c33;padding:12px;border-radius:10px;border:1px solid #2a3942">Mensajes localStorage + voz • IMG_4685.png + Barra 5 VIVA + 🛒</div></div>';speak('Chat privacidad en vivo con barra inferior viva y carrito')}}
+function addDial(c){let i=document.getElementById('dialInput');if(i)i.value+=c}
+async function sendTextMessage(){let inp=document.getElementById('userInput');let txt=inp.value.trim();if(!txt)return;let box=document.getElementById('chatBox');let u=document.createElement('div');u.className='msg user';u.innerHTML='<b>Tú:</b> '+txt;box.appendChild(u);inp.value='';box.scrollTop=box.scrollHeight;try{let r=await fetch(SERVER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:txt})});let d=await r.json();let reply=d.reply||'¡Quack! VIVO oficial con IMG_4685.png + barra 5 VIVA + voz 🔊 + carrito 🛒 arriba';let m=document.createElement('div');m.className='msg bot';m.innerHTML='<b>Duckie IA • Oficial VIVO + Barra + 🛒:</b> '+reply;box.appendChild(m);box.scrollTop=box.scrollHeight;speak(reply)}catch(e){let f='¡Quack! VIVO oficial con barra 5 VIVA y logo IMG_4685.png: '+txt+' recibido en tiempo real con voz 🔊 y carrito 🛒';let m=document.createElement('div');m.className='msg bot';m.innerHTML='<b>Duckie IA • Oficial VIVO + Barra + 🛒:</b> '+f;box.appendChild(m);box.scrollTop=box.scrollHeight;speak(f)}}
+if('speechSynthesis' in window)speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();
 </script>
 </body>
 </html>

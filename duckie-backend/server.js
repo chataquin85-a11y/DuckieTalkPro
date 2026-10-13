@@ -10,14 +10,15 @@ const wss = new WebSocket.Server({ server });
 
 // Configuración de CORS
 app.use(cors({
-    origin: [
-        "https://duckie-guai-faiv-app.web.app",
-        "https://www.duckiethemus.com",
-        "http://localhost:3000",
-        "http://localhost:5173"
-    ],
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+  origin: [
+    "https://duckie-guai-faiv-app.web.app",
+    "https://www.duckiethemus.com",
+    "https://duckiethemus.com",
+    "http://localhost:3000",
+    "http://localhost:5173"
+  ],
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 app.options('*', cors());
@@ -27,108 +28,126 @@ app.use(express.json());
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 app.post('/api/chat', async (req, res) => {
-    try {
-        console.log("Body que llegó:", JSON.stringify(req.body, null, 2));
+  try {
+    console.log("Body que llegó:", JSON.stringify(req.body, null, 2));
 
-        let userPrompt = "";
+    let userPrompt = "";
 
-        // 1. Lectura si viene mensaje directo
-        if (req.body.message) {
-            userPrompt = req.body.message;
-        } else if (req.body.text) {
-            userPrompt = req.body.text;
+    // 1. Lectura si viene mensaje directo
+    if (req.body.message) {
+      userPrompt = req.body.message;
+    } else if (req.body.text) {
+      userPrompt = req.body.text;
+
+    // 2. Lectura si viene en el array de mensajes del frontend
+    } else if (req.body.messages && Array.isArray(req.body.messages)) {
+      const lastUser = [...req.body.messages].reverse().find(m => m.role === 'user');
+      if (lastUser) {
+        if (typeof lastUser.parts === 'string') {
+          userPrompt = lastUser.parts;
+        } else if (Array.isArray(lastUser.parts)) {
+          userPrompt = lastUser.parts.map(p => (typeof p === 'string'? p : p.text || '')).join('');
+        } else if (lastUser.content) {
+          userPrompt = lastUser.content;
         }
-        // 2. Lectura si viene en el array de mensajes del frontend
-        else if (req.body.messages && Array.isArray(req.body.messages)) {
-            const lastUser = [...req.body.messages].reverse().find(m => m.role === 'user');
-            if (lastUser) {
-                if (typeof lastUser.parts === 'string') {
-                    userPrompt = lastUser.parts;
-                } else if (Array.isArray(lastUser.parts)) {
-                    userPrompt = lastUser.parts.map(p => (typeof p === 'string' ? p : p.text || '')).join('');
-                } else if (lastUser.content) {
-                    userPrompt = lastUser.content;
-                }
-            }
-        }
-
-        if (!userPrompt) {
-            console.log("Error: No se encontró un mensaje válido en el body");
-            return res.status(400).json({ error: "No me mandaste ningún mensaje válido, pariente." });
-        }
-
-        console.log("Prompt final para Gemini:", userPrompt);
-
-        // --- AJUSTE DE ROLES E INTELIGENCIA PARA TIENDAS VS VIP ---
-        const userRole = req.body.role || 'standard';
-        let systemInstruction = "";
-
-        if (userRole === "vip_patron") {
-            systemInstruction = "Eres Duckie Guai-fai'v 🧠. El fiel asistente y mano derecha de Amado Apolonio Simom. Respondes con trato de confianza, jerga norteña, lealtad absoluta, humor entrón y acceso total al patrón.";
-        } else {
-            systemInstruction = "Eres Duckie Guai-fai'v 🧠, un asistente digital servicial, educado, neutral y profesional. Mantén un tono seguro y asegúrate de cumplir estrictamente con las políticas de contenido de las tiendas de aplicaciones móviles (Play Store y App Store).";
-        }
-
-        const fullPrompt = systemInstruction + "\n\nUsuario: " + userPrompt;
-
-        const response = await ai.models.generateContent({
-            model: 'gemini-3.6-flash',
-            contents: fullPrompt,
-        });
-
-        res.json({ reply: response.text });
-
-    } catch (e) {
-        console.error("ERROR GEMINI:", e);
-        res.status(500).json({ error: e.message });
+      }
     }
+
+    if (!userPrompt) {
+      console.log("Error: No se encontró un mensaje válido en el body");
+      return res.status(400).json({ error: "No me mandaste ningún mensaje válido, pariente." });
+    }
+
+    console.log("Prompt final para Gemini:", userPrompt);
+
+    // --- AJUSTE DE ROLES E INTELIGENCIA PARA TIENDAS VS VIP ---
+    const userRole = req.body.role || 'standard';
+    let systemInstruction = "";
+
+    if (userRole === "vip_patron") {
+      systemInstruction = "Eres Duckie Guai-fai'v 🦆. El fiel asistente y mano derecha de Amado Apolonio Sosa. Respondes con trato de confianza, jerga norteña, lealtad absoluta, humor y acceso total del patrón.";
+    } else {
+      systemInstruction = "Eres Duckie Guai-fai'v 🦆, un asistente digital servicial, educado, neutral y profesional. Mantén un tono seguro y asegúrate de cumplir estrictamente con las políticas de contenido de las tiendas de aplicaciones móviles (Play Store y App Store).";
+    }
+
+    const fullPrompt = systemInstruction + "\n\nUsuario: " + userPrompt;
+
+    // --- MODELO 3.6-FLASH CON REINTENTO VIVO ---
+    let lastError = null;
+    for (let intento = 0; intento < 3; intento++) {
+      try {
+        const response = await ai.models.generateContent({
+          model: 'gemini-3.6-flash',
+          contents: fullPrompt,
+        });
+        return res.json({ reply: response.text });
+      } catch (err) {
+        lastError = err;
+        console.log(`Intento ${intento + 1} falló: ${err.message}`);
+        if (err.message.includes("503") || err.message.includes("high demand") || err.message.includes("UNAVAILABLE")) {
+          if (intento < 2) {
+            await new Promise(r => setTimeout(r, 2000 * (intento + 1)));
+            continue;
+          }
+        }
+        break;
+      }
+    }
+
+    // Si después de 3 intentos sigue saturado, responde VIVO no 500
+    console.error("ERROR GEMINI FINAL:", lastError);
+    return res.json({
+      reply: "¡Quack! 🦆 Soy Duckie Guai-faiv - tu modelo 3.6-flash está con mucha demanda ahorita (es el nuevo y todos lo quieren), dame 3 segundos y pregúntame de nuevo. Tu logo IMG_4685, tu marketplace y tu barra 5 VIVA ya están 100% conectados. ¡Intenta de nuevo Amado!"
+    });
+
+  } catch (e) {
+    console.error("ERROR GEMINI:", e);
+    res.json({ reply: "¡Hola Amado! Aquí ando VIVO 🦆, errorcito temporal pero ya estoy listo." });
+  }
 });
 
-// ==========================================
 // --- SERVIDOR DE SEÑALIZACIÓN WEBSOCKETS ---
-// ==========================================
 const connectedUsers = new Map();
 
 wss.on('connection', (ws) => {
-    let currentUser = null;
-    console.log('[WebSocket] Nuevo dispositivo conectado al canal de señalización VoIP.');
+  let currentUser = null;
+  console.log('[WebSocket] Nuevo dispositivo conectado al canal de señalización VoIP.');
 
-    ws.on('message', (message) => {
-        try {
-            const data = JSON.parse(message);
+  ws.on('message', (message) => {
+    try {
+      const data = JSON.parse(message);
 
-            if (data.type === 'register') {
-                currentUser = data.userId;
-                connectedUsers.set(currentUser, ws);
-                console.log(`[Signaling] Usuario registrado exitosamente: ${currentUser}`);
-            } 
-            else if (data.type === 'offer' || data.type === 'answer' || data.type === 'candidate') {
-                const targetSocket = connectedUsers.get(data.target);
-                if (targetSocket && targetSocket.readyState === WebSocket.OPEN) {
-                    targetSocket.send(JSON.stringify({
-                        type: data.type,
-                        from: currentUser,
-                        payload: data.payload
-                    }));
-                    console.log(`[Signaling] Paquete [${data.type}] enrutado con éxito hacia: ${data.target}`);
-                } else {
-                    console.log(`[Signaling] Destinatario no encontrado o desconectado: ${data.target}`);
-                }
-            }
-        } catch (err) {
-            console.error("[WebSocket Error] No se pudo procesar el mensaje:", err);
+      if (data.type === 'register') {
+        currentUser = data.userId;
+        connectedUsers.set(currentUser, ws);
+        console.log(`[Signaling] Usuario registrado exitosamente: ${currentUser}`);
+      } else if (data.type === 'offer' || data.type === 'answer' || data.type === 'candidate') {
+        const targetSocket = connectedUsers.get(data.target);
+        if (targetSocket && targetSocket.readyState === WebSocket.OPEN) {
+          targetSocket.send(JSON.stringify({
+            type: data.type,
+            from: currentUser,
+            payload: data.payload
+          }));
+          console.log(`[Signaling] Paquete ${data.type} enrutado con éxito hacia: ${data.target}`);
+        } else {
+          console.log(`[Signaling] Destinatario no encontrado o desconectado: ${data.target}`);
         }
-    });
+      }
+    } catch (err) {
+      console.error('[WebSocket Error] No se pudo procesar el mensaje:', err);
+    }
+  });
 
-    ws.on('close', () => {
-        if (currentUser) {
-            connectedUsers.delete(currentUser);
-            console.log(`[Signaling] Usuario desconectado: ${currentUser}`);
-        }
-    });
+  ws.on('close', () => {
+    if (currentUser) {
+      connectedUsers.delete(currentUser);
+      console.log(`[Signaling] Usuario desconectado: ${currentUser}`);
+    }
+  });
 });
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-    console.log("Servidor Duckie Backend unificado (HTTP + WebSockets VoIP) corriendo en puerto " + PORT);
+  console.log(`Servidor Duckie Backend unificado (HTTP + WebSockets VoIP) corriendo en puerto ${PORT}`);
 });
