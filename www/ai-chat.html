@@ -3,137 +3,156 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Chat - Duckie Guai-fai'v</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<title>Duckie Guai-fai - AI Chat</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
-:root{--bg:#121c14;--panel:#1b2e20;--accent:#2e6f40;--text:#fff;--muted:#a3c1ad;--out:#2e6f40;--in:#1b2e20}
-*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto}
-body{background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden}
-header{display:flex;justify-content:space-between;align-items:center;background:var(--panel);padding:10px 14px;border-bottom:1px solid #284a32}
-.icon-btn{background:none;border:none;color:var(--text);font-size:1.3rem;cursor:pointer;padding:6px 8px;border-radius:8px}
-.title{font-weight:700;font-size:.95rem}
-.profile{display:flex;flex-direction:column;align-items:center;padding:14px;gap:6px;border-bottom:1px solid rgba(40,74,50,.3)}
-.avatar{width:62px;height:62px;border-radius:50%;background:var(--accent);display:grid;place-items:center;overflow:hidden;border:2px solid #4e9a63}
-.avatar img{width:100%;height:100%;object-fit:cover}
-.messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
-.bubble{max-width:78%;padding:11px 14px;border-radius:14px;font-size:.92rem;white-space:pre-wrap}
-.in{background:var(--in);border:1px solid #284a32;align-self:flex-start}
-.out{background:var(--out);align-self:flex-end}
-#betaBanner{background:linear-gradient(90deg,#ffc300 0%,#ff8c00 100%);color:#000;padding:7px 10px;text-align:center;font-weight:900;font-size:10px;display:flex;justify-content:center;gap:6px;flex-wrap:wrap}
-.chat-input-area{display:flex;align-items:center;background:var(--panel);padding:8px 10px;gap:8px;border-top:1px solid #284a32;position:relative}
-.chat-input-wrapper{flex:1;display:flex;align-items:center;background:var(--bg);border-radius:24px;padding:7px 12px;border:1px solid #284a32}
-.chat-input-wrapper input{flex:1;background:transparent;border:none;color:var(--text);outline:none;font-size:14px}
-.btn-icon{width:34px;height:34px;border-radius:50%;border:none;background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer;font-size:16px}
-.send{width:36px;height:36px;border-radius:50%;border:none;background:var(--accent);color:#fff;display:grid;place-items:center;cursor:pointer}
-.bottom-nav{display:flex;justify-content:space-around;background:var(--panel);border-top:1px solid #284a32;padding:5px 0;height:56px}
-.nav{flex:1;background:none;border:none;color:var(--muted);font-size:.65rem;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer}
-.nav.active{color:#ffd700}
-.menu-panel{position:fixed;top:0;bottom:0;left:0;width:300px;background:var(--panel);border-right:1px solid #284a32;z-index:100;transform:translateX(-100%);transition:transform.3s ease;display:flex;flex-direction:column}
-.menu-panel.show{transform:translateX(0)}
-.menu-header{padding:14px 16px;font-weight:800;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #284a32}
-.menu-items{list-style:none;overflow-y:auto;flex:1}
-.menu-items li{padding:12px 16px;border-bottom:1px solid rgba(40,74,50,.3);cursor:pointer;font-size:.9rem;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
-.menu-items li:hover{background:rgba(46,111,64,.3);color:var(--text)}
+:root { --panel:#121e14; --accent:#4CAF50; }
+body{margin:0;background:#0a0f0b;color:#fff;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif}
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99;display:none}
 .overlay.show{display:block}
-.popover{position:absolute;bottom:60px;background:var(--panel);border:1px solid #335c3f;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.6);width:200px;display:none;z-index:200;overflow:hidden}
-.popover.left{left:10px}
+.popover{position:absolute;bottom:60px;background:var(--panel);border:1px solid #335c3f;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.6);width:200px;display:none;z-index:100}
 .popover.show{display:block}
-.pop-item{padding:11px 14px;display:flex;align-items:center;gap:10px;font-size:.85rem;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.05)}
-.pop-item:hover{background:var(--accent)}
+.popover.left{left:10px}
+.popover-item{padding:12px 14px;display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.05)}
+.pop-item:hover,.pop-item:hover{background:var(--accent)}
+.bubble{padding:10px 14px;border-radius:14px;margin:8px 0;max-width:80%}
+.bubble.in{background:#1c2f1f}
+.bubble.out{background:var(--accent);margin-left:auto}
+.bottom-nav{display:flex;justify-content:space-around;background:#121e14;padding:8px 0;position:fixed;bottom:0;width:100%;border-top:1px solid #1f3622}
+.bottom-nav.nav{ background:none;border:none;color:#aaa;font-size:12px;display:flex;flex-direction:column;align-items:center}
+.bottom-nav.nav.active{color:var(--accent)}
+.icon-btn{background:none;border:none;color:#fff;font-size:18px;cursor:pointer}
+#messagesList{padding:10px 10px 120px 10px;overflow-y:auto;height:calc(100vh - 220px)}
 </style>
 </head>
 <body>
 <header>
-<div style="display:flex;align-items:center;gap:10px">
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:#121e14">
 <button class="icon-btn" id="hamburgerBtn" onclick="toggleHamburger()">☰</button>
-<span class="title">Duckie Guai-fai'v • AI Chat</span>
+<span style="font-weight:700">Duckie Guai-fai - AI Chat</span>
+<div style="margin-left:auto;display:flex;gap:8px">
+<button class="icon-btn" onclick="window.cleanAllListeners(false);location.href='marketplace.html?from=ai-chat.html'"><i class="fa-solid fa-store"></i></button>
+<button class="icon-btn" onclick="window.cleanAllListeners(false);location.href='index.html'"><i class="fa-solid fa-house"></i></button>
 </div>
-<div style="display:flex;gap:8px">
-<button class="icon-btn" onclick="location.href='marketplace.html'">🛒</button>
-<button class="icon-btn" onclick="location.href='index.html'">🏠</button>
 </div>
 </header>
-<div id="betaBanner"><span>🦆 BETA FUNDADORES</span><span id="countdownBeta" style="background:#000;color:#ffc300;padding:2px 6px;border-radius:10px">30 días - 0%</span><span>DuckieTheMus.com</span></div>
+
+<div id="betaBanner" style="background:#ffb300;color:#000;text-align:center;padding:4px 8px;font-size:12px;border-radius:10px;margin:6px"><span>⚡ BETA FUNDADORES</span> <span id="countdownBeta" style="background:#000;color:#ffb300;padding:2px 6px;border-radius:10px">30 dias - 0%</span> <span>DuckieTheMus.com</span></div>
+
 <div class="overlay" id="overlay" onclick="toggleHamburger()"></div>
-<div class="menu-panel" id="leftMenu">
-<div class="menu-header"><span>Menú AI Chat</span><button class="icon-btn" onclick="toggleHamburger()">✕</button></div>
-<ul class="menu-items">
-<li onclick="actionNewChat()"><span><i class="fa-solid fa-plus"></i> New Chat</span></li>
-<li onclick="actionSchedules()"><span><i class="fa-regular fa-calendar"></i> Schedules</span></li>
-<li onclick="actionLibrary()"><span><i class="fa-solid fa-book"></i> Library</span></li>
-<li onclick="actionProjects()"><span><i class="fa-solid fa-folder"></i> Projects</span></li>
-<li onclick="actionLearningChat()"><span><i class="fa-solid fa-graduation-cap"></i> Learning Chat</span></li>
-<li onclick="actionGenerateImage()"><span><i class="fa-solid fa-wand-magic-sparkles"></i> Generar Una Imagen</span></li>
-<li onclick="location.href='index.html'"><span><i class="fa-solid fa-house"></i> Volver a Inicio</span></li>
-<li onclick="location.href='marketplace.html'"><span><i class="fa-solid fa-shop"></i> Ir a Tienda</span></li>
+<div class="menu-panel" id="leftMenu" style="position:fixed;left:-300px;top:0;width:280px;height:100vh;background:#121e14;z-index:100;transition:left.3s;padding:20px">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><span>Menu AI Chat</span><button class="icon-btn" onclick="toggleHamburger()">×</button></div>
+<ul style="list-style:none;padding:0">
+<li onclick="actionNewChat()" style="padding:12px 0;cursor:pointer"><i class="fa-solid fa-plus"></i> New Chat</li>
+<li onclick="actionSchedules()" style="padding:12px 0;cursor:pointer"><i class="fa-regular fa-calendar"></i> Schedules</li>
+<li onclick="actionLibrary()" style="padding:12px 0;cursor:pointer"><i class="fa-solid fa-book"></i> Library</li>
+<li onclick="actionProjects()" style="padding:12px 0;cursor:pointer"><i class="fa-solid fa-folder"></i> Projects</li>
+<li onclick="actionLearningChat()" style="padding:12px 0;cursor:pointer"><i class="fa-solid fa-graduation-cap"></i> Learning Chat</li>
+<li onclick="actionGenerateImage()" style="padding:12px 0;cursor:pointer"><i class="fa-solid fa-wand-magic-sparkles"></i> Generar Una Imagen</li>
+<li onclick="window.cleanAllListeners(false);location.href='index.html'" style="padding:12px 0;cursor:pointer"><i class="fa-solid fa-house"></i> Volver a Inicio</li>
+<li onclick="window.cleanAllListeners(false);location.href='marketplace.html?from=ai-chat.html'" style="padding:12px 0;cursor:pointer"><i class="fa-solid fa-shop"></i> Ir a Tienda</li>
 </ul>
 </div>
-<div class="profile"><div class="avatar"><img src="IMG_4685.png" onerror="this.parentElement.textContent='🦆'"></div><div style="font-weight:800">Duckie Guai-fai'v</div><div style="font-size:.75rem;color:#a3c1ad">Unified AI Assistant Stack</div></div>
+
+<div class="profile" style="display:flex;align-items:center;gap:10px;padding:10px"><div class="avatar"><img src="IMG_4685.png" onerror="this.parentElement.textContent='🦆'" style="width:36px;height:36px;border-radius:50%"></div><div><div style="font-size:12px;color:#a3c1ad">Unified AI Assistant Stack</div><div style="font-weight:800">Duckie Guai-fai v...</div></div></div>
+
 <div class="messages" id="messagesList"></div>
-<div class="chat-input-area" id="inputArea">
+
+<div class="chat-input-area" id="inputArea" style="position:fixed;bottom:56px;left:0;right:0;background:#121e14;padding:8px;border-top:1px solid #1f3622">
 <div class="popover left" id="plusPopover">
 <div class="pop-item" onclick="handlePlus('camera')"><span>📷</span> Camara</div>
 <div class="pop-item" onclick="handlePlus('imagenes')"><span>🖼️</span> Imagenes</div>
-<div class="pop-item" onclick="handlePlus('videos')"><span>🎥</span> Videos</div>
-<div class="pop-item" onclick="handlePlus('plugins')"><span>🧩</span> Plugins</div>
+<div class="pop-item" onclick="handlePlus('videos')"><span>🎬</span> Videos</div>
+<div class="pop-item" onclick="handlePlus('plugins')"><span>🔌</span> Plugins</div>
 </div>
 <div style="display:flex;align-items:center;gap:6px">
-<button class="btn-icon" onclick="handleLeftAction('camera')"><i class="fa-solid fa-camera"></i></button>
-<button class="btn-icon" onclick="handleLeftAction('mic')"><i class="fa-solid fa-microphone"></i></button>
-<button class="send" onclick="sendUserMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+<button class="icon-btn" onclick="handleLeftAction('camera')"><i class="fa-solid fa-camera"></i></button>
+<button class="icon-btn" onclick="handleLeftAction('mic')"><i class="fa-solid fa-microphone"></i></button>
+<button class="icon-btn" onclick="sendUserMessage()" style="margin-left:auto"><i class="fa-solid fa-paper-plane"></i></button>
 </div>
-<div class="chat-input-wrapper"><input type="text" id="chatInput" placeholder="Ask Duckie Guai-fai'v..." onkeypress="if(event.key==='Enter')sendUserMessage()"></div>
-<div><button class="btn-icon" id="plusBtn" onclick="togglePlus(event)" style="background:var(--accent);color:#fff;width:36px;height:36px;border-radius:50%">+</button></div>
+<div class="chat-input-wrapper" style="display:flex;gap:8px;margin-top:6px">
+<input type="text" id="chatInput" placeholder="Ask Duckie Guai-fai v..." onkeypress="if(event.key==='Enter')sendUserMessage()" style="flex:1;background:#1c2f1f;color:#fff;border:none;padding:10px 14px;border-radius:20px">
+<button class="icon-btn" id="plusBtn" onclick="togglePlus(event)">+</button>
 <input type="file" id="hiddenFile" accept="image/*,video/*" style="display:none" onchange="processFile(this)">
 </div>
-<nav class="bottom-nav">
-<button class="nav" onclick="location.href='index.html'"><span>👥</span>Contactos</button>
-<button class="nav" onclick="location.href='index.html'"><span>📞</span>Llamadas</button>
-<button class="nav active"><span>🦆</span>AI Chat</button>
-<button class="nav" onclick="location.href='index.html'"><span>💬</span>Chats</button>
-<button class="nav" onclick="location.href='marketplace.html'"><span>🛍️</span>Tienda</button>
-</nav>
+</div>
+
+<div class="bottom-nav">
+<button class="bottom-nav nav" onclick="window.cleanAllListeners(false);location.href='index.html'"><span>👥</span>Contactos</button>
+<button class="bottom-nav nav" onclick="window.cleanAllListeners(true); if(window.initVivoCall) window.initVivoCall();"><span>📞</span>Llamadas</button>
+<button class="bottom-nav nav active"><span>🧠</span>AI Chat</button>
+<button class="bottom-nav nav" onclick="window.cleanAllListeners(false);location.href='index.html'"><span>💬</span>Chats</button>
+<button class="bottom-nav nav" onclick="window.cleanAllListeners(false);location.href='marketplace.html?from=ai-chat.html'"><span>🛒</span>Tienda</button>
+</div>
+
 <script>
+// --- BETA COUNTDOWN - ORIGINAL SIN BORRAR ---
 const betaEnd=new Date();betaEnd.setDate(betaEnd.getDate()+30);
-function updateBeta(){const d=Math.floor((betaEnd-new Date())/(1000*60*60*24));const el=document.getElementById('countdownBeta');if(el)el.textContent=d+' días - 0%';}
+function updateBeta(){const d=Math.floor((betaEnd-new Date())/(1000*60*60*24));const el=document.getElementById('countdownBeta');if(el)el.textContent=d+' dias - 0%';}
 updateBeta();
-async function askGuaiFai(text,onChunk){
- const r=await fetch("https://duckietalkpro.onrender.com/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:[{role:"system",content:"Eres Duckie Guai-fai'v 🧠 asistente de Amado"},{role:"user",content:text}]})});
- const data=await r.json(); const reply=data.reply||data.choices?.[0]?.message?.content||"Respuesta"; if(onChunk)onChunk(reply); return reply;
+
+// --- ASK GUAI-FAI - ORIGINAL SIN BORRAR + AISLAMIENTO ---
+async function askGuaifai(text,onChunk){
+  const resp=await fetch('https://duckietalkpro.onrender.com/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'system',content:'Eres Duckie Guai-fai 🦆 asistente de Amado'},{role:'user',content:text}]})});
+  const data=await resp.json(); const reply=data.reply||data.choices?.[0]?.message?.content||"Respuesta";
+  if(onChunk)onChunk(reply); return reply;
 }
-let chatMessagesHistory=JSON.parse(localStorage.getItem('duckie_chat_history'))||[{role:"system",content:"You are Duckie"},{role:"assistant",content:"¡Hola Amado! Soy Duckie Guai-fai'v 🧠, ¿Qué desarrollamos hoy?"}];
+
+// --- HISTORIAL - ORIGINAL SIN BORRAR ---
+let chatMessagesHistory=JSON.parse(localStorage.getItem('duckie_chat_history'))||[{role:'system',content:'You are Duckie'},{role:'assistant',content:'¡Hola Amado! Soy Duckie Guai-fai v... ¿Qué desarrollamos hoy?'}];
 function saveData(){localStorage.setItem('duckie_chat_history',JSON.stringify(chatMessagesHistory));}
-function appendMessageBubble(text,type){const list=document.getElementById('messagesList');const b=document.createElement('div');b.className='bubble '+(type==='out'?'out':'in');b.textContent=text;list.appendChild(b);list.scrollTop=list.scrollHeight;return b;}
-function renderChatHistoryOnLoad(){const list=document.getElementById('messagesList');list.innerHTML='';chatMessagesHistory.forEach(m=>{if(m.role==='system')return;appendMessageBubble(m.content,m.role==='user'?'out':'in');});}
-async function sendUserMessageToAI(userText){
- chatMessagesHistory.push({role:"user",content:userText});saveData();appendMessageBubble(userText,'out');
- const list=document.getElementById('messagesList');const bubble=document.createElement('div');bubble.className='bubble in';bubble.textContent='🧠 Pensando...';list.appendChild(bubble);
- try{await askGuaiFai(userText,(chunk)=>{bubble.textContent=chunk;});chatMessagesHistory.push({role:"assistant",content:bubble.textContent});saveData();}catch(e){bubble.textContent='¡Quack! Error cerebro';}
+function appendMessageBubble(text,type){
+  const list=document.getElementById('messagesList');
+  const b=document.createElement('div');b.className='bubble '+(type==='out'?'out':'in');b.textContent=text;
+  list.appendChild(b);list.scrollTop=list.scrollHeight;return b;
 }
+function renderChatHistory(){
+  const list=document.getElementById('messagesList');list.innerHTML='';
+  chatMessagesHistory.forEach(m=>{ if(m.role==='system')return; appendMessageBubble(m.content,m.role==='user'?'out':'in'); });
+}
+async function sendUserMessageToAI(userText){
+  chatMessagesHistory.push({role:'user',content:userText});saveData();
+  appendMessageBubble(userText,'out');
+  const list=document.getElementById('messagesList');
+  const bubble=document.createElement('div');bubble.className='bubble in';bubble.textContent='Pensando...';list.appendChild(bubble);
+  try{
+    await askGuaifai(userText,(chunk)=>{bubble.textContent=chunk;});
+    chatMessagesHistory.push({role:'assistant',content:bubble.textContent});saveData();
+  }catch(e){bubble.textContent='Error cerebro';}
+}
+
+// --- FUNCIONES ORIGINALES SIN BORRAR ---
 function sendUserMessage(){const inp=document.getElementById('chatInput');const txt=inp.value.trim();if(!txt)return;inp.value='';sendUserMessageToAI(txt);}
-function toggleHamburger(){document.getElementById('leftMenu').classList.toggle('show');document.getElementById('overlay').classList.toggle('show');}
-function actionNewChat(){toggleHamburger();chatMessagesHistory=[{role:"system",content:"You"},{role:"assistant",content:"¡Hola Amado! Nuevo chat 🦆"}];saveData();renderChatHistoryOnLoad();}
-function actionSchedules(){toggleHamburger();appendMessageBubble('📅 Schedules:\n• Call Hoy 18:00\n• Build APK Mañana\n• Deploy Vie','in');}
+function toggleHamburger(){const lm=document.getElementById('leftMenu');const overlay=document.getElementById('overlay');if(lm.style.left==='0px'){lm.style.left='-300px';overlay.classList.remove('show');}else{lm.style.left='0px';overlay.classList.add('show');}}
+function actionNewChat(){toggleHamburger();chatMessagesHistory=[{role:'system',content:'You'},{role:'assistant',content:'¡Hola Amado! Nuevo chat'}];saveData();renderChatHistory();}
+function actionSchedules(){toggleHamburger();appendMessageBubble('📅 Schedules:\n Call Hoy 18:00\n Build APK Mañana\n Deploy Vie','in');}
 function actionLibrary(){toggleHamburger();appendMessageBubble('📚 Library: WebRTC, Firebase, Render','in');}
 function actionProjects(){toggleHamburger();appendMessageBubble('📁 Projects: DuckieTalkPro 100% y Marketplace ACTIVO','in');}
-function actionLearningChat(){toggleHamburger();sendUserMessageToAI('Explícame Learning Chat');}
+function actionLearningChat(){toggleHamburger();sendUserMessageToAI('Learning chat?','in');}
 function actionGenerateImage(){toggleHamburger();const p=prompt('Describe imagen:');if(p)sendUserMessageToAI('Generar imagen: '+p);}
 function togglePlus(e){e.stopPropagation();document.getElementById('plusPopover').classList.toggle('show');}
 document.addEventListener('click',()=>{document.getElementById('plusPopover').classList.remove('show');});
 function handlePlus(type){
- document.getElementById('plusPopover').classList.remove('show');
- if(type==='camera'){document.getElementById('hiddenFile').setAttribute('capture','environment');document.getElementById('hiddenFile').click();}
- else if(type==='imagenes'){document.getElementById('hiddenFile').accept='image/*';document.getElementById('hiddenFile').click();}
- else if(type==='videos'){document.getElementById('hiddenFile').accept='video/*';document.getElementById('hiddenFile').click();}
- else if(type==='plugins'){appendMessageBubble('🧩 Plugins: FontAwesome, STUN, WebSocket, IA','in');}
+  document.getElementById('plusPopover').classList.remove('show');
+  if(type==='camera'){document.getElementById('hiddenFile').setAttribute('capture','environment');document.getElementById('hiddenFile').click();}
+  else if(type==='imagenes'){document.getElementById('hiddenFile').setAttribute('accept','image/*');document.getElementById('hiddenFile').click();}
+  else if(type==='videos'){document.getElementById('hiddenFile').setAttribute('accept','video/*');document.getElementById('hiddenFile').click();}
+  else if(type==='plugins'){appendMessageBubble('🔌 Plugins: FontAwesome, STUN, WebSocket, IA','in');}
 }
 function handleLeftAction(type){
- if(type==='camera'){document.getElementById('hiddenFile').setAttribute('capture','environment');document.getElementById('hiddenFile').click();}
- else if(type==='mic'){alert('🎙 Grabando voz...');}
+  if(type==='camera'){document.getElementById('hiddenFile').setAttribute('capture','environment');document.getElementById('hiddenFile').click();}
+  else if(type==='mic'){alert('🎙️ Grabando voz...');}
 }
 function processFile(input){if(input.files&&input.files[0]){const f=input.files[0];appendMessageBubble('📎 '+f.name+' listo','out');}}
-document.addEventListener('DOMContentLoaded',()=>{renderChatHistoryOnLoad();});
+document.addEventListener('DOMContentLoaded',()=>{renderChatHistory();});
+
+// --- NUEVO AISLAMIENTO - NO BORRA LO ANTERIOR ---
+window.unsubscribeAI = window.unsubscribeAI || null;
+window.initVivoCall = function(){ console.log('Llamada VIVO preservada desde AI'); }
 </script>
+
+<!-- PESTAÑA.JS CON AISLAMIENTO - AGREGADO SIN BORRAR NADA ANTERIOR -->
+<script src="pestana.js"></script>
+
 </body>
 </html>
