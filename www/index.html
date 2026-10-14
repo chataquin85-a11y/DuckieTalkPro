@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>DuckieTalkPro - Index Completo Contactos Mensaje Llamada 3Way Chats Status Filtros</title>
+<title>DuckieTalkPro - Index Cuaderno VIVO</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
 body,html{width:100%;height:100%;background:#0e2e1f;color:#e8f5eb;overflow:hidden}
@@ -59,27 +59,23 @@ input:checked+.slider:before{transform:translateX(22px)}
 <div style="display:flex;align-items:center;gap:12px">
 <button class="menu-btn" onclick="toggleMenu(true)">☰</button>
 <img src="./IMG_4685.png" class="brand-logo" alt="IMG_4685">
-<div><div style="font-size:16px;font-weight:700;color:#ffd700">DuckieTalkPro</div><div style="font-size:10px;color:#a3c9a8">Index sin bocina + Contactos msg/llamar + Llamadas 3way + Chats + Status filtros luz</div></div>
+<div><div style="font-size:16px;font-weight:700;color:#ffd700">DuckieTalkPro</div><div style="font-size:10px;color:#a3c9a8">Index cuaderno VIVO sin bocina header</div></div>
 </div>
 <div style="display:flex;gap:8px;align-items:center">
 <button class="cart-top-btn" onclick="window.location.href='marketplace.html?v='+Date.now()">🛒<span class="cart-badge">3</span></button>
 <button class="menu-btn" onclick="toggleProSuite(true)">⚙</button>
 </div>
 </header>
-<div id="betaBanner">🦆 CONTACTOS MSG/LLAMAR • LLAMADAS ALTAVOZ COLGAR 3WAY KEYPAD • CHATS HISTORIAL NO LEIDOS AUDIO VIDEO FOTO • STATUS FOTO VIDEO TEXTO FILTROS LUZ FRONTAL</div>
+<div id="betaBanner">🦆 CONTACTOS LISTA+LLAMAR • LLAMADAS RECIBIDAS/PERDIDAS • AI CHAT -> ai-chat.html • CHATS NATIVO TELEFONO A TELEFONO • STATUS FOTO/VIDEO/MUSICA/TEXT</div>
 <main class="chat-box" id="chatBox">
-<div class="msg bot"><b>Index VIVO Completo:</b> Barra inferior exacta foto DC2125A1 - Sin cruces - Contactos con mensaje y llamar, Llamadas con altavoz/colgar/3way/keypad, Chats historial no leídos + contestar mensaje/audio/video/foto, Status foto/video/texto + filtros + luz frontal 🦆</div>
+<div class="msg bot"><b>Index Cuaderno VIVO:</b> Menu Izq 4, Barra Abajo 5 exacta tu foto D2C3BA72, Header sin bocina, Chat nativo, AI Chat abre ai-chat.html propia pestaña, Menu Derecho 8 VIVO 🦆</div>
 </main>
-<footer class="input-panel">
-<button class="action-icon" onclick="document.getElementById('fileInput').click()">📎</button>
-<input type="text" id="userInput" class="text-input-field" placeholder="Mensaje nativo telefono a telefono..." onkeypress="if(event.key==='Enter')sendTextMessage()">
-<button class="action-icon" onclick="requestMessagePermission()">🎙️</button>
-<button class="action-icon" style="color:#2ecc71" onclick="sendTextMessage()">🚀</button>
-</footer>
+<!-- INPUT-PANEL REMOVIDO VIVO segun cuaderno - sin 📎🎙️🚀 - solo chat nativo telefono a telefono limpio -->
+
 <nav class="bottom-nav" id="bottomNav">
 <button class="nav-item active" id="nav-contactos" onclick="saltarPestana('contactos',this)"><span style="font-size:18px">👥</span><span>Contactos</span></button>
 <button class="nav-item" id="nav-llamadas" onclick="saltarPestana('llamadas',this)"><span style="font-size:18px">📞</span><span>Llamadas</span></button>
-<button class="nav-item" id="nav-ai" onclick="saltarPestana('ai',this)"><span style="font-size:18px">🦆</span><span>AI Chat</span></button>
+<button class="nav-item" id="nav-ai" onclick="saltarPestana('ai',this)"><span style="font-size:18px">🦆</span><span>AI Chats</span></button>
 <button class="nav-item" id="nav-chats" onclick="saltarPestana('chats',this)"><span style="font-size:18px">💬</span><span>Chats</span></button>
 <button class="nav-item" id="nav-status" onclick="saltarPestana('status',this)"><span style="font-size:18px">📊</span><span>Status</span></button>
 </nav>
@@ -87,7 +83,7 @@ input:checked+.slider:before{transform:translateX(22px)}
 
 <div id="overlayMenu" class="overlay" onclick="toggleMenu(false)"></div>
 <div id="menuPanel" class="side-panel left">
-<div style="display:flex;justify-content:space-between"><span style="color:#2ecc71;font-weight:800">Menú Izquierdo 4 VIVO</span><button class="menu-btn" onclick="toggleMenu(false)">✕</button></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#2ecc71;font-weight:800">Menu Izq 4 VIVO - Tu cuaderno</span><button class="menu-btn" onclick="toggleMenu(false)">✕</button></div>
 <button class="panel-btn" onclick="openFeature('tecnico')"><span>🛠 Tecnico TalkPro 24/7</span><span>›</span></button>
 <button class="panel-btn" onclick="openFeature('privacidad')"><span>🔒 Servicios y privacidad</span><span>›</span></button>
 <button class="panel-btn" onclick="openFeature('verificado')"><span>✅ Canal Verificado</span><span>✔</span></button>
@@ -96,15 +92,15 @@ input:checked+.slider:before{transform:translateX(22px)}
 
 <div id="overlayPro" class="overlay" onclick="toggleProSuite(false)"></div>
 <div id="proPanel" class="side-panel right">
-<div style="display:flex;justify-content:space-between"><span style="color:#2ecc71;font-weight:800">Menú Derecha 7 VIVO</span><button class="menu-btn" onclick="toggleProSuite(false)">✕</button></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#2ecc71;font-weight:800">Menu Derecho 8 VIVO - Tu cuaderno</span><button class="menu-btn" onclick="toggleProSuite(false)">✕</button></div>
 <button class="panel-btn" onclick="toggleTheme()"><span>🌗 Modo claro/obscuro - toggleTheme</span><label class="switch"><input type="checkbox" id="themeSwitch" onchange="toggleTheme()"><span class="slider"></span></label></button>
 <button class="panel-btn" onclick="abrirModal('Login Security / Email Adress')"><span>🔑 Login Security / Email Adress</span><span>›</span></button>
 <button class="panel-btn" onclick="abrirModal('Agregar Cuenta')"><span>👤 Agregar Cuenta</span><span>›</span></button>
 <button class="panel-btn" onclick="abrirModal('Notificaciones')"><span>🔔 Notificaciones</span><span>›</span></button>
-<button class="panel-btn" onclick="abrirModal('Two-step Verification')"><span>🔐 Two-step Verification</span><span>›</span></button>
+<button class="panel-btn" onclick="abrirModal('Two-step Verificacion')"><span>🔐 Two-step Verificacion</span><span>›</span></button>
 <button class="panel-btn" onclick="abrirModal('Cambiar Color chat')"><span>🎨 Cambiar Color chat</span><span>›</span></button>
 <button class="panel-btn" onclick="abrirModal('Your Account')"><span>👑 Your Account</span><span>›</span></button>
-<button class="panel-btn" style="color:#ff6b6b" onclick="abrirModal('Borrar Cuenta y datos')"><span>🗑 Borrar Cuenta y datos</span><span>›</span></button>
+<button class="panel-btn" style="color:#ff6b6b" onclick="abrirModal('Borrar Cuenta y Datos')"><span>🗑 Borrar Cuenta y Datos</span><span>›</span></button>
 </div>
 
 <div class="overlay" id="modalOverlay" onclick="cerrarModal()"></div>
@@ -132,26 +128,12 @@ function saltarPestana(view,btn){
   if(view==='contactos'){
     box.innerHTML=`
     <div style="padding:4px">
-      <h3 style="margin-bottom:8px">👥 Contactos - mandar mensaje, llamarles VIVO</h3>
+      <h3 style="margin-bottom:8px">👥 Contactos - mostrar lista opcion de llamar VIVO cuaderno</h3>
       <div class="contact-card">
         <div style="display:flex;justify-content:space-between;align-items:center"><b>👑 Amado Apolonio</b><small>Admin 92105</small></div>
         <div style="display:flex;gap:8px">
           <button class="perm-btn" onclick="mandarMensajeContacto('Amado Apolonio')">💬 Mandar mensaje</button>
-          <button class="perm-btn" onclick="llamarContacto('Amado Apolonio')">📞 Llamarles</button>
-        </div>
-      </div>
-      <div class="contact-card">
-        <div style="display:flex;justify-content:space-between;align-items:center"><b>👥 Duckie Support</b><small>+1 (800) DUCKIE-AI</small></div>
-        <div style="display:flex;gap:8px">
-          <button class="perm-btn" onclick="mandarMensajeContacto('Duckie Support')">💬 Mensaje</button>
-          <button class="perm-btn" onclick="llamarContacto('Duckie Support')">📞 Llamar</button>
-        </div>
-      </div>
-      <div class="contact-card">
-        <div style="display:flex;justify-content:space-between;align-items:center"><b>🦆 Guai-Faiv</b><small>Centro Avatar</small></div>
-        <div style="display:flex;gap:8px">
-          <button class="perm-btn" onclick="mandarMensajeContacto('Guai-Faiv')">💬 Mensaje</button>
-          <button class="perm-btn" onclick="llamarContacto('Guai-Faiv')">📞 Llamar</button>
+          <button class="perm-btn" onclick="llamarContacto('Amado Apolonio')">📞 Llamar</button>
         </div>
       </div>
     </div>`;
@@ -159,7 +141,7 @@ function saltarPestana(view,btn){
   else if(view==='llamadas'){
     box.innerHTML=`
     <div style="padding:4px">
-      <h3>📞 Llamadas - altavoz, colgar, 3-way, Keypad VIVO</h3>
+      <h3>📞 Llamadas - mostrar llamadas recibidas, perdidos VIVO cuaderno</h3>
       <div style="background:#1c4a33;padding:12px;border-radius:10px;margin:8px 0">
         <div style="display:flex;justify-content:space-between"><b>📞 Recibida</b><small>hoy 10:30am</small></div>
         <small>Amado - 2:15 WebRTC</small>
@@ -173,7 +155,7 @@ function saltarPestana(view,btn){
         <div style="display:flex;justify-content:space-between"><b>📵 Perdida</b><small>ayer 8pm</small></div>
         <small>Duckie Support - 2 perdidas</small>
       </div>
-      <input id="dialInput" placeholder="Keypad numeral - ID / Número Web VIVO" style="width:100%;padding:10px;border-radius:8px;border:1px solid #2a6040;background:#0a2015;color:#e8f5eb;margin:8px 0">
+      <input id="dialInput" placeholder="Keypad numeral - ID / Numero Web VIVO" style="width:100%;padding:10px;border-radius:8px;border:1px solid #2a6040;background:#0a2015;color:#e8f5eb;margin:8px 0">
       <div class="keypad">
         <button class="panel-btn" style="justify-content:center" onclick="addDial('1')">1</button>
         <button class="panel-btn" style="justify-content:center" onclick="addDial('2')">2<br><small>ABC</small></button>
@@ -188,12 +170,7 @@ function saltarPestana(view,btn){
         <button class="panel-btn" style="justify-content:center" onclick="addDial('0')">0<br><small>+</small></button>
         <button class="panel-btn" style="justify-content:center" onclick="addDial('#')">#</button>
       </div>
-      <div class="call-controls">
-        <button class="perm-btn" onclick="requestCallPermission()">🔐 Permiso Llamada Web</button>
-        <button class="perm-btn yellow" onclick="llamarDesdeKeypad()">📞 Llamar</button>
-      </div>
     </div>`;
-    requestCallPermission();
   }
   else if(view==='ai'){
     window.location.href='ai-chat.html?v='+Date.now();
@@ -201,7 +178,7 @@ function saltarPestana(view,btn){
   else if(view==='chats'){
     box.innerHTML=`
     <div style="padding:4px">
-      <h3>💬 Chats - historial entrantes, nuevos sin leer, contestar mensaje, audio, video, foto VIVO</h3>
+      <h3>💬 Chats - mostrar chats del Cell-native - nativo telefono a telefono VIVO</h3>
       <div style="background:#1c4a33;padding:12px;border-radius:10px;margin:8px 0;border-left:4px solid #ff1a1a">
         <div style="display:flex;justify-content:space-between;align-items:center"><b>📩 Nuevo entrante sin leer (3)</b><div class="chat-unread">3</div></div>
         <small>Amado: ¿Cuando subimos marketplace?</small>
@@ -212,11 +189,8 @@ function saltarPestana(view,btn){
           <button class="perm-btn" onclick="enviarFoto()">🖼️ Foto</button>
         </div>
       </div>
-      <div class="msg bot">Historial entrante: Hola Amado, ¿viste mi status? VIVO<br><small>10:15am</small></div>
-      <div class="msg user">Si, ya lo vi VIVO<br><small>10:16am ✓✓ leído</small></div>
-      <div class="msg bot">Entrante: Te mando video del patito<br><small>10:20am</small></div>
       <div style="margin-top:10px;display:flex;gap:6px">
-        <input id="chatReplyInput" placeholder="Contestar enviando mensaje, audio, video, foto..." style="flex:1;padding:10px;border-radius:20px;border:1px solid #2a6040;background:#0a2015;color:#e8f5eb">
+        <input id="chatReplyInput" placeholder="Chat nativo telefono a telefono VIVO..." style="flex:1;padding:10px;border-radius:20px;border:1px solid #2a6040;background:#0a2015;color:#e8f5eb">
         <button class="action-icon" onclick="enviarMensajeChat()">🚀</button>
         <button class="action-icon" onclick="document.getElementById('chatFileInput').click()">📎</button>
       </div>
@@ -225,11 +199,10 @@ function saltarPestana(view,btn){
   else if(view==='status'){
     box.innerHTML=`
     <div style="padding:4px">
-      <h3>📊 Status - subir foto, video, texto + filtros + luz frontal VIVO</h3>
+      <h3>📊 Status - subir historial, foto, video, musica, text VIVO cuaderno</h3>
       <div style="background:#1c4a33;padding:14px;border-radius:10px;border:2px dashed #2ecc71;text-align:center;cursor:pointer;margin:8px 0" onclick="document.getElementById('statusFileInput').click()">
         <div style="font-size:30px">📸</div>
-        <p>Subir foto, video VIVO</p>
-        <small>Toca para cámara/galería</small>
+        <p>Subir foto, video, musica, texto VIVO</p>
       </div>
       <input id="statusTextInput" placeholder="Escribe texto status VIVO..." style="width:100%;padding:10px;border-radius:8px;border:1px solid #2a6040;background:#0a2015;color:#e8f5eb;margin:6px 0">
       <div style="background:#0e2e1f;padding:10px;border-radius:10px;border:1px solid #2a6040;margin:6px 0">
@@ -239,46 +212,36 @@ function saltarPestana(view,btn){
           <button class="filter-btn" onclick="aplicarFiltro(this,'bw')">B&W</button>
           <button class="filter-btn" onclick="aplicarFiltro(this,'sepia')">Sepia</button>
           <button class="filter-btn" onclick="aplicarFiltro(this,'vivid')">Vivid</button>
-          <button class="filter-btn" onclick="aplicarFiltro(this,'cool')">Cool</button>
-          <button class="filter-btn" onclick="aplicarFiltro(this,'warm')">Warm</button>
           <button class="filter-btn" onclick="aplicarFiltro(this,'duckie')">Duckie 🦆</button>
         </div>
       </div>
-      <button class="perm-btn" onclick="subirStatus()" style="width:100%;margin-top:6px">📤 Subir Status foto/video/texto con filtros + luz frontal VIVO</button>
-      <button class="perm-btn" onclick="requestStatusPermission()" style="width:100%;margin-top:6px;background:#143524">🔐 Permiso Cámara + Galería + Mic para Status</button>
-      <div id="statusPreview" style="margin-top:10px"></div>
+      <button class="perm-btn" onclick="subirStatus()" style="width:100%">📤 Subir Status historial foto/video/musica/text VIVO</button>
     </div>`;
-    requestStatusPermission();
   }
 }
 function toggleMenu(o){if(o){cerrarTodoSinCruces();document.getElementById('menuPanel').classList.add('open');document.getElementById('overlayMenu').style.display='block'}else cerrarTodoSinCruces()}
 function toggleProSuite(o){if(o){cerrarTodoSinCruces();document.getElementById('proPanel').classList.add('open');document.getElementById('overlayPro').style.display='block'}else cerrarTodoSinCruces()}
-function toggleTheme(){let nxt=localStorage.getItem('duckie_theme')==='light'?'dark':'light';localStorage.setItem('duckie_theme',nxt);let sw=document.getElementById('themeSwitch');if(sw)sw.checked=nxt==='light';if(nxt==='light'){document.body.style.background='#f0f4f1';document.body.style.color='#111b21'}else{document.body.style.background='#0a2015';document.body.style.color='#e8f5eb'}}
-function abrirModal(t){document.getElementById('modalTitle').innerText=t;document.getElementById('modalDesc').innerText=t+' VIVO sin cruces';document.getElementById('modalExtra').innerHTML='';document.getElementById('duckieModalBox').style.display='block';document.getElementById('modalOverlay').style.display='block'}
+function abrirModal(t){document.getElementById('modalTitle').innerText=t;document.getElementById('modalDesc').innerText=t+' VIVO cuaderno';document.getElementById('duckieModalBox').style.display='block';document.getElementById('modalOverlay').style.display='block'}
 function cerrarModal(){cerrarTodoSinCruces()}
 function addDial(c){let i=document.getElementById('dialInput');if(i)i.value+=c}
-function mandarMensajeContacto(nombre){let box=document.getElementById('chatBox');let d=document.createElement('div');d.className='msg user';d.textContent='💬 Mensaje a '+nombre+': Hola VIVO';box.appendChild(d);abrirModal('Mensaje a '+nombre);document.getElementById('modalDesc').innerText='Opción mandar mensaje a '+nombre+' VIVO telefono a telefono'}
-function llamarContacto(nombre){abrirModal('Llamando a '+nombre+' VIVO');document.getElementById('modalDesc').innerText='📞 Llamando a '+nombre+' con permisos Web VIVO - altavoz, colgar, 3-way, keypad';requestCallPermission()}
-function toggleAltavoz(){isSpeaker=!isSpeaker;let b=document.getElementById('speakerBtn');if(b)b.textContent='🔊 Altavoz: '+(isSpeaker?'ON':'OFF');if(currentStream){let audio=document.createElement('audio');}abrirModal('Altavoz '+(isSpeaker?'ON':'OFF')+' VIVO')}
-function colgarLlamada(){if(currentStream){currentStream.getTracks().forEach(t=>t.stop());currentStream=null}abrirModal('Llamada colgada VIVO');document.getElementById('modalDesc').innerText='🔴 Llamada colgada - WebRTC detenido VIVO'}
-function integrarLlamada(){abrirModal('Integrar llamada 3-way VIVO');document.getElementById('modalDesc').innerText='🔗 Integrando llamada 3-way VIVO - 2 llamadas en una';document.getElementById('modalExtra').innerHTML='<button class="perm-btn yellow" onclick="abrirModal(\'3-way Conectado\')">Aceptar 3-way</button>'}
-function llamarDesdeKeypad(){let num=document.getElementById('dialInput').value;if(!num)return;abrirModal('Llamando Web VIVO a '+num);requestCallPermission()}
-async function requestCallPermission(){try{currentStream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});console.log('Call perm OK')}catch(e){console.log('Call perm pendiente')}}
-async function requestMessagePermission(){try{if('Notification' in window) await Notification.requestPermission();let s=await navigator.mediaDevices.getUserMedia({audio:true});s.getTracks().forEach(t=>t.stop())}catch(e){}}
-async function requestStatusPermission(){try{let s=await navigator.mediaDevices.getUserMedia({audio:true,video:true});s.getTracks().forEach(t=>t.stop())}catch(e){}}
-function contestarChat(nombre){document.getElementById('chatReplyInput').focus();abrirModal('Contestar a '+nombre+' VIVO')}
-function enviarMensajeChat(){let inp=document.getElementById('chatReplyInput');let t=inp.value.trim();if(!t)return;let box=document.getElementById('chatBox');let m=document.createElement('div');m.className='msg user';m.textContent=t+' (mensaje, audio voz, video, foto VIVO)';box.appendChild(m);inp.value='';box.scrollTop=box.scrollHeight}
-function enviarAudio(){abrirModal('Audio de voz VIVO');requestMessagePermission();document.getElementById('modalDesc').innerText='🎙️ Grabando audio de voz VIVO para enviar en chat'}
-function enviarVideo(){document.getElementById('chatFileInput').setAttribute('accept','video/*');document.getElementById('chatFileInput').click()}
-function enviarFoto(){document.getElementById('chatFileInput').setAttribute('accept','image/*');document.getElementById('chatFileInput').click()}
-function handleChatFile(e){let f=e.target.files[0];if(!f)return;let box=document.getElementById('chatBox');let d=document.createElement('div');d.className='msg user';d.textContent='📎 Chat archivo: '+f.name+' (mensaje/audio/video/foto VIVO)';box.appendChild(d)}
-function toggleLuzFrontal(){isFrontLight=!isFrontLight;let b=document.getElementById('frontLightBtn');if(b)b.textContent='💡 Luz frontal: '+(isFrontLight?'ON':'OFF');abrirModal('Luz frontal '+(isFrontLight?'ON':'OFF')+' VIVO');document.getElementById('modalDesc').innerText=(isFrontLight?'💡 Luz frontal encendida para foto/video status VIVO':'💡 Luz frontal apagada')}
-function aplicarFiltro(btn,filtro){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');let preview=document.getElementById('statusPreview');if(preview)preview.innerHTML='<div style="background:#1c4a33;padding:10px;border-radius:8px;margin-top:6px">🎨 Filtro aplicado: '+filtro.toUpperCase()+' VIVO + luz frontal '+(isFrontLight?'ON':'OFF')+'</div>';abrirModal('Filtro '+filtro+' aplicado VIVO')}
-function subirStatus(){let txt=document.getElementById('statusTextInput').value;let box=document.getElementById('chatBox');let d=document.createElement('div');d.className='msg bot';d.innerHTML='<b>Status subido VIVO:</b> '+(txt||'foto/video')+' con filtros + luz frontal '+(isFrontLight?'ON':'OFF')+' 🦆';box.appendChild(d);document.getElementById('statusTextInput').value='';abrirModal('Status subido VIVO');document.getElementById('modalDesc').innerText='📊 Status foto/video/texto con filtros '+document.querySelector('.filter-btn.active')?.textContent+' + luz frontal VIVO subido'}
+function mandarMensajeContacto(nombre){abrirModal('Mensaje a '+nombre); document.getElementById('modalDesc').innerText='💬 Mensaje nativo telefono a telefono a '+nombre+' VIVO'}
+function llamarContacto(nombre){abrirModal('Llamando a '+nombre+' VIVO')}
+function toggleAltavoz(){isSpeaker=!isSpeaker;let b=document.getElementById('speakerBtn');if(b)b.textContent='🔊 Altavoz: '+(isSpeaker?'ON':'OFF')}
+function colgarLlamada(){abrirModal('Llamada colgada VIVO')}
+function integrarLlamada(){abrirModal('Integrar llamada 3-way VIVO')}
+function contestarChat(nombre){document.getElementById('chatReplyInput')?.focus()}
+function enviarMensajeChat(){let inp=document.getElementById('chatReplyInput');if(!inp||!inp.value.trim())return;let box=document.getElementById('chatBox');let m=document.createElement('div');m.className='msg user';m.textContent=inp.value+' (nativo telefono a telefono)';box.appendChild(m);inp.value=''}
+function enviarAudio(){abrirModal('Audio de voz VIVO nativo')}
+function enviarVideo(){document.getElementById('chatFileInput').click()}
+function enviarFoto(){document.getElementById('chatFileInput').click()}
+function handleChatFile(e){let f=e.target.files[0];if(!f)return;let box=document.getElementById('chatBox');let d=document.createElement('div');d.className='msg user';d.textContent='📎 '+f.name+' nativo';box.appendChild(d)}
+function toggleLuzFrontal(){isFrontLight=!isFrontLight;let b=document.getElementById('frontLightBtn');if(b)b.textContent='💡 Luz frontal: '+(isFrontLight?'ON':'OFF')}
+function aplicarFiltro(btn,f){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
+function subirStatus(){abrirModal('Status subido VIVO foto/video/musica/text')}
 function handleFileSelect(e){let f=e.target.files[0];if(!f)return;let box=document.getElementById('chatBox');let d=document.createElement('div');d.className='msg user';d.textContent='📎 '+f.name;box.appendChild(d)}
-function handleStatusUpload(e){let f=e.target.files[0];if(!f)return;let box=document.getElementById('chatBox');let d=document.createElement('div');d.className='msg bot';d.textContent='📊 Status archivo: '+f.name+' con filtros + luz frontal VIVO';box.appendChild(d)}
+function handleStatusUpload(e){let f=e.target.files[0];if(!f)return;let box=document.getElementById('chatBox');let d=document.createElement('div');d.className='msg bot';d.textContent='📊 Status: '+f.name+' VIVO';box.appendChild(d)}
 function openFeature(k){abrirModal(k)}
-function sendTextMessage(){let inp=document.getElementById('userInput');let t=inp.value.trim();if(!t)return;let box=document.getElementById('chatBox');let u=document.createElement('div');u.className='msg user';u.textContent=t;box.appendChild(u);inp.value='';box.scrollTop=box.scrollHeight}
+function sendTextMessage(){let inp=document.getElementById('userInput');let t=inp.value.trim();if(!t)return;let box=document.getElementById('chatBox');let u=document.createElement('div');u.className='msg user';u.textContent=t+' (nativo telefono a telefono)';box.appendChild(u);inp.value='';box.scrollTop=box.scrollHeight}
 </script>
 </body>
 </html>

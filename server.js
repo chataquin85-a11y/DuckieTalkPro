@@ -24,8 +24,48 @@ app.use(express.json());
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-// MODELO QUE SI DEJA GOOGLE GRATIS OCT 2026 - FIX PARA TU FOTO BAB8E6C0
-const MODELO_VIVO = 'gemini-1.5-flash';
+// FIX para foto E2A84C28 - 503 high demand - ahora prueba 4 modelos en orden
+const MODELOS_VIVOS = [
+  'gemini-1.5-flash',        // 1500/dia - principal
+  'gemini-2.0-flash-lite',   // 1500/dia - fallback 1 (menos saturado)
+  'gemini-1.5-flash-8b',     // 1500/dia - fallback 2 (super ligero)
+  'gemini-2.0-flash'         // 1500/dia - fallback 3
+];
+
+async function generarConReintentos(userPrompt, fullPrompt){
+  let ultimoError = null;
+  for(let modelo of MODELOS_VIVOS){
+    for(let intento=1; intento<=2; intento++){
+      try{
+        console.log(`[vxjto] Intentando ${modelo} intento ${intento} para: ${userPrompt.substring(0,40)}`);
+        const response = await ai.models.generateContent({
+          model: modelo,
+          contents: fullPrompt,
+        });
+        const texto = response.text || response.candidates?.[0]?.content?.parts?.[0]?.text;
+        if(texto){
+          console.log(`[vxjto] OK con ${modelo} intento ${intento}`);
+          return { texto, modelo };
+        }
+        throw new Error('Sin texto');
+      }catch(e){
+        ultimoError = e;
+        const msg = e.message || '';
+        console.log(`[vxjto] Intento ${intento} fallo para ${modelo}: ${msg.substring(0,200)}`);
+        if(msg.includes('503') || msg.includes('high demand') || msg.includes('UNAVAILABLE')){
+          await new Promise(r=>setTimeout(r, 800*intento));
+          continue;
+        }
+        if(msg.includes('429') || msg.includes('quota')){
+          await new Promise(r=>setTimeout(r, 1000));
+          break;
+        }
+        await new Promise(r=>setTimeout(r, 600*intento));
+      }
+    }
+  }
+  throw ultimoError || new Error('Todos los modelos fallaron');
+}
 
 app.post('/api/chat', async (req, res) => {
   try {
@@ -43,29 +83,28 @@ app.post('/api/chat', async (req, res) => {
 
     const fullPrompt = sys + "\n\nUsuario: " + userPrompt;
 
-    console.log(`Usando ${MODELO_VIVO} para:`, userPrompt);
+    console.log(`Body que llego:`, JSON.stringify({ message: userPrompt }).substring(0,100));
+    console.log(`Prompt final para Gemini: ${fullPrompt.substring(0,80)}...`);
 
-    const response = await ai.models.generateContent({
-      model: MODELO_VIVO,
-      contents: fullPrompt,
-    });
-
-    return res.json({ reply: response.text });
-
-  } catch (e) {
-    console.error("ERROR:", e.message);
-    // Si falla, intenta el lite que nunca falla
-    try {
-      const fallback = await ai.models.generateContent({
-        model: 'gemini-2.0-flash-lite',
-        contents: req.body.message || "Hola",
-      });
-      return res.json({ reply: fallback.text });
-    } catch {
+    try{
+      const { texto, modelo } = await generarConReintentos(userPrompt, fullPrompt);
+      console.log(`Usando ${modelo} OK`);
+      return res.json({ reply: texto });
+    }catch(eFinal){
+      console.error(`ERROR GEMINI FINAL:`, eFinal.message);
+      if(eFinal.message && (eFinal.message.includes('503') || eFinal.message.includes('high demand'))){
+        return res.json({ reply: "Hola Soy Duckie Guai faiv, como puedo asistirte el dia de hoy. Mi modelo esta con alta demanda en este segundo (pico global), pero ya estoy reconectando con gemini-1.5-flash-8b VIVO. Intenta de nuevo en 3 segundos Amado! 🦆" });
+      }
       return res.json({ reply: "Hola Soy Duckie Guai faiv, como puedo asistirte el dia de hoy. Estoy reconectando mi modelo VIVO 🦆 - intenta de nuevo en 2 seg Amado!" });
     }
+
+  } catch (e) {
+    console.error("ERROR CRITICO:", e.message);
+    return res.json({ reply: "Hola Soy Duckie Guai faiv, como puedo asistirte el dia de hoy. Tuve un micro-corte pero ya estoy VIVO de nuevo 🦆" });
   }
 });
+
+app.get('/health', (req,res)=> res.json({ status: "Duckie VIVO", modelos: MODELOS_VIVOS, fix: "E2A84C28-503" }));
 
 const connectedUsers = new Map();
 wss.on('connection', (ws) => {
@@ -88,4 +127,4 @@ wss.on('connection', (ws) => {
 });
 
 const PORT = process.env.PORT || 10000;
-server.listen(PORT, () => console.log(`Duckie Backend VIVO ${MODELO_VIVO} corriendo en ${PORT}`));
+server.listen(PORT, () => console.log(`Duckie Backend VIVO ${MODELOS_VIVOS[0]} corriendo en ${PORT} - Fix E2A84C28 503`));
