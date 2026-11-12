@@ -40,15 +40,40 @@ const MODELOS_VIVOS = [
   'gemini-2.0-flash'         // tu fallback antes
 ];
 
-// === FAST: TU MISMA FUNCION generarConReintentos, SOLO SIN ESPERAS LARGAS ===
-async function generarConReintentos(userPrompt, fullPrompt){
+// === SEARCH WEB NUEVO - MODELOS QUE SI SOPORTAN BUSQUEDA EN GOOGLE ===
+const MODELOS_SEARCH = [
+  'gemini-2.0-flash',
+  'gemini-1.5-flash',
+  'gemini-2.0-flash-lite'
+];
+
+// === SEARCH WEB NUEVO - DETECTOR AUTOMATICO ===
+function necesitaBusquedaWeb(texto) {
+  const t = (texto || "").toLowerCase();
+  const palabras = [
+    'hoy', 'actualmente', 'ahora mismo', 'en este momento',
+    'en cines', 'cartelera', 'estreno', 'estrenos', 'peliculas hay',
+    'noticias', 'noticia', 'ultima hora', 'que paso',
+    'clima', 'temperatura', 'va a llover',
+    'precio', 'cuanto cuesta', 'dolar', 'tipo de cambio',
+    '2026', '2025', 'esta semana', 'este mes', 'este año',
+    'quien gano', 'resultado', 'partido de hoy', 'marcador',
+    'que hay', 'hay en', 'abierto hoy', 'horario de hoy'
+  ];
+  return palabras.some(p => t.includes(p));
+}
+
+// === FAST + SEARCH WEB: TU MISMA FUNCION, SOLO CON PARAMETRO usarBusqueda ===
+async function generarConReintentos(userPrompt, fullPrompt, usarBusqueda){
   let ultimoError = null;
   const ai = getAI();
-  for(let modelo of MODELOS_VIVOS){
+  // Si es busqueda web usa modelos con Search, si no usa FAST 8b
+  const lista = usarBusqueda ? MODELOS_SEARCH : MODELOS_VIVOS;
+  for(let modelo of lista){
     // FAST: 1 intento por modelo, no 2 - asi no sumas 8 intentos lentos
     for(let intento=1; intento<=1; intento++){
       try{
-        console.log(`[FAST] Intentando ${modelo} intento ${intento} para: ${userPrompt.substring(0,40)}`);
+        console.log(`[${usarBusqueda ? 'SEARCH-WEB' : 'FAST'}] Intentando ${modelo} intento ${intento} para: ${userPrompt.substring(0,40)}`);
         const response = await ai.models.generateContent({
           model: modelo,
           contents: fullPrompt,
@@ -57,7 +82,9 @@ async function generarConReintentos(userPrompt, fullPrompt){
             temperature: 0.6,
             maxOutputTokens: 700,
             topP: 0.9,
-            topK: 32
+            topK: 32,
+            // === SEARCH WEB PRENDIDO SOLO CUANDO SE NECESITA ===
+            ...(usarBusqueda ? { tools: [{ googleSearch: {} }] } : {})
           }
         });
         // extraccion segura sin borrar tu logica - soporta text como funcion o propiedad
@@ -65,14 +92,14 @@ async function generarConReintentos(userPrompt, fullPrompt){
         if (typeof response.text === 'function') texto = response.text();
         else texto = response.text || response.candidates?.[0]?.content?.parts?.[0]?.text;
         if(texto){
-          console.log(`[FAST] OK con ${modelo} intento ${intento}`);
-          return { texto, modelo };
+          console.log(`[${usarBusqueda ? 'SEARCH-WEB' : 'FAST'}] OK con ${modelo} intento ${intento}`);
+          return { texto, modelo, busquedaWeb: usarBusqueda };
         }
         throw new Error('Sin texto');
       }catch(e){
         ultimoError = e;
         const msg = e.message || '';
-        console.log(`[FAST] Intento ${intento} fallo para ${modelo}: ${msg.substring(0,300)}`);
+        console.log(`[${usarBusqueda ? 'SEARCH-WEB' : 'FAST'}] Intento ${intento} fallo para ${modelo}: ${msg.substring(0,300)}`);
         // FAST: SIN ESPERA - directo al siguiente modelo, antes tenias 800ms / 1000ms / 600ms aqui
         continue;
       }
@@ -96,15 +123,22 @@ app.post('/api/chat', async (req, res) => {
       ? "Eres Duckie Guai-fai'v 🦆 mano derecha de Amado Apolonio Sosa. Saludo: Hola Soy Duckie Guai faiv, como puedo asistirte el dia de hoy. Jerga norteña."
       : "Eres Duckie Guai-fai'v 🦆 servicial, profesional. Saludo: Hola Soy Duckie Guai faiv, como puedo asistirte el dia de hoy. Responde RAPIDO, directo y util. Si piden receta da ingredientes y pasos corto. Si capital solo capital.";
 
-    const fullPrompt = sys + "\n\nUsuario: " + userPrompt;
+    // === SEARCH WEB: si pregunta de HOY, usa busqueda ===
+    const usarBusqueda = necesitaBusquedaWeb(userPrompt) || req.body.searchWeb === true || req.body.web === true;
+    const sysFinal = usarBusqueda
+      ? sys + " Usa la busqueda web para dar informacion ACTUALIZADA de hoy. Si es de cines, da cartelera actual de 2026 con fechas y cines. Cita la fecha actual."
+      : sys;
+
+    const fullPrompt = sysFinal + "\n\nUsuario: " + userPrompt;
 
     console.log(`Body que llego:`, JSON.stringify({ message: userPrompt }).substring(0,100));
     console.log(`Prompt final para Gemini: ${fullPrompt.substring(0,80)}...`);
+    console.log(`Modo: ${usarBusqueda ? 'SEARCH-WEB' : 'FAST'}`);
 
     try{
-      const { texto, modelo } = await generarConReintentos(userPrompt, fullPrompt);
-      console.log(`Usando ${modelo} OK`);
-      return res.json({ reply: texto, modelo: modelo, fast: true });
+      const { texto, modelo, busquedaWeb } = await generarConReintentos(userPrompt, fullPrompt, usarBusqueda);
+      console.log(`Usando ${modelo} OK busquedaWeb=${busquedaWeb}`);
+      return res.json({ reply: texto, modelo: modelo, fast: !busquedaWeb, searchWeb: busquedaWeb });
     }catch(eFinal){
       console.error(`ERROR GEMINI FINAL:`, eFinal.message);
       if(eFinal.message && eFinal.message.includes('GEMINI_API_KEY no configurada')){
@@ -122,13 +156,13 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
-// TU HEALTH ORIGINAL + FAST
+// TU HEALTH ORIGINAL + FAST + SEARCH WEB
 app.get('/health', (req,res)=> {
   const hasKey = !!process.env.GEMINI_API_KEY;
-  res.json({ status: "Duckie FAST VIVO", keyConfigurada: hasKey, modelos: MODELOS_VIVOS, fix: "FAST-COMPLETO-8b-sin-borrar", mode: "FAST-8b" });
+  res.json({ status: "Duckie FAST VIVO + SEARCH WEB", keyConfigurada: hasKey, modelos: MODELOS_VIVOS, modelosSearch: MODELOS_SEARCH, fix: "FAST-COMPLETO-8b-search-web", mode: "FAST-8b + SEARCH-WEB" });
 });
 
-app.get('/', (req,res)=> res.json({ status: "DuckieTalkPro VIVO FAST", endpoint: "/api/chat", health: "/health" }));
+app.get('/', (req,res)=> res.json({ status: "DuckieTalkPro VIVO FAST + SEARCH WEB", endpoint: "/api/chat", health: "/health" }));
 
 // === TU WEBSOCKET VoIP ORIGINAL SIN BORRAR NADA ===
 const connectedUsers = new Map();
@@ -152,4 +186,4 @@ wss.on('connection', (ws) => {
 });
 
 const PORT = process.env.PORT || 10000;
-server.listen(PORT, () => console.log(`🦆 Duckie FAST COMPLETO ${MODELOS_VIVOS[0]} corriendo en ${PORT} - FAST sin borrar nada - 8b primero`));
+server.listen(PORT, () => console.log(`🦆 Duckie FAST COMPLETO ${MODELOS_VIVOS[0]} + SEARCH WEB corriendo en ${PORT} - FAST sin borrar nada - 8b primero`));
