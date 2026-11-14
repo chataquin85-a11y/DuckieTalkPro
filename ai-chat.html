@@ -3,10 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Duckie Guai-fai - AI Chat VIVO - Cuaderno 9 Botones + Atrás + Plus - FIX 114A0D35 + REAL BRAIN</title>
+<title>DuckieTalkPro</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
 body,html{width:100%;height:100%;background:#0e2e1f;color:#e8f5eb;overflow:hidden}
+body.modo-claro{background:#f2f2f2;color:#111}
+body.modo-claro .chat-box{background:#fff}
+body.modo-claro .app-header,body.modo-claro .bottom-nav,body.modo-claro .input-panel{background:#fff;border-color:#ddd}
+body.modo-claro .contact-card{background:#eef7f0;color:#111}
 #app-container{display:flex;flex-direction:column;width:100%;height:100%}
 .app-header{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#0e2e1f;height:65px;border-bottom:1px solid #2a6040;z-index:10}
 .menu-btn{font-size:24px;cursor:pointer;color:#a3c9a8;background:none;border:none;padding:4px}
@@ -14,9 +18,8 @@ body,html{width:100%;height:100%;background:#0e2e1f;color:#e8f5eb;overflow:hidde
 .brand-zone{display:flex;align-items:center;gap:10px}
 .brand-logo{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#fff;border:2px solid #2ecc71}
 .brand-title{font-size:16px;font-weight:700;line-height:1.2;color:#ffd700}
-.brand-subtitle{font-size:11px;color:#a3c9a8}
 .chat-box{flex:1;padding:12px 10px;overflow-y:auto;background:#0a2015;display:flex;flex-direction:column;gap:8px;padding-bottom:12px}
-.msg{max-width:75%;padding:10px 12px;border-radius:14px;font-size:14px;line-height:1.35;word-wrap:break-word;width:fit-content;white-space:pre-wrap}
+.msg{max-width:85%;padding:10px 12px;border-radius:14px;font-size:14px;line-height:1.35;word-wrap:break-word;white-space:pre-wrap}
 .msg.user{background:#2a7a4b;color:#fff;align-self:flex-end;margin-left:auto;border-bottom-right-radius:3px}
 .msg.bot{background:#1c4a33;color:#e8f5eb;align-self:flex-start;border:1px solid #2a6040;border-bottom-left-radius:3px;margin-right:auto}
 .input-panel{background:#0e2e1f;padding:10px 12px;display:flex;align-items:center;gap:8px;border-top:1px solid #2a6040}
@@ -26,25 +29,31 @@ body,html{width:100%;height:100%;background:#0e2e1f;color:#e8f5eb;overflow:hidde
 .send-btn{background:#2ecc71!important;color:#000!important;font-weight:900}
 .bottom-nav{display:flex;justify-content:space-around;align-items:center;background:#0e2e1f;border-top:1px solid #2a6040;height:68px;padding:6px 0;z-index:15}
 .nav-item{background:none;border:none;color:#a3c9a8;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;flex:1;padding:6px 2px}
-.nav-item.active{color:#ffd700;transform:scale(1.08);font-weight:700}
+.nav-item.active{color:#ffd700;font-weight:700}
 .nav-item.ico{font-size:20px}
-.side-panel{position:fixed;top:0;bottom:0;width:320px;background:#0a2015;z-index:100;transition:transform.3s ease;box-shadow:-4px 0 15px rgba(0,0,0,.6);padding:20px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;border-left:1px solid #2a6040;border-right:1px solid #2a6040}
+.side-panel{position:fixed;top:0;bottom:0;width:320px;background:#0a2015;z-index:100;transition:transform.3s ease;padding:20px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;border-left:1px solid #2a6040;border-right:1px solid #2a6040}
 .side-panel.left{left:0;transform:translateX(-100%)}
 .side-panel.right{right:0;transform:translateX(100%)}
 .side-panel.open{transform:translateX(0)!important}
 .panel-btn{background:#1c4a33;color:#e8f5eb;border:1px solid #2a6040;padding:12px 14px;border-radius:10px;text-align:left;cursor:pointer;width:100%;display:flex;align-items:center;gap:10px;font-size:14px}
-.panel-btn:hover{background:#204e36}
 .duckie-modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#0e2e1f;border:2px solid #2ecc71;border-radius:12px;padding:20px;z-index:200;width:85%;max-width:340px;text-align:center}
 .overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:90;display:none}
-#betaBanner{background:linear-gradient(90deg,#ffd700,#ff8c00);color:#000;padding:7px 10px;text-align:center;font-weight:900;font-size:11px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
-.avatar-center{width:72px;height:72px;border-radius:50%;border:3px solid #2ecc71;overflow:hidden;background:#fff;margin:0 auto;display:flex;align-items:center;justify-content:center}
-.avatar-center img{width:100%;height:100%;object-fit:cover}
+.switch{position:relative;display:inline-block;width:46px;height:24px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;top:0;left:0;right:0;bottom:0;background:#143524;border-radius:24px;transition:.3s}
+.slider:before{content:"";position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s}
+input:checked+.slider{background:#2a7a4b}
+input:checked+.slider:before{transform:translateX(22px)}
 #fileInput{display:none}
 .cart-top-btn{position:relative;background:#FFEB3B!important;color:#000!important;border:3px solid #000!important;border-radius:12px!important;width:44px;height:38px;font-size:22px;font-weight:900;box-shadow:2px 2px 0 #000;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .cart-badge{position:absolute;top:-8px;right:-8px;background:#ff1a1a;color:#fff;border:2px solid #000;border-radius:50%;width:18px;height:18px;font-size:10px;display:flex;align-items:center;justify-content:center}
-.attach-menu{display:none;position:fixed;bottom:90px;left:10px;background:#1c4a33;border:1px solid #2a6040;border-radius:12px;padding:10px;z-index:50;flex-direction:column;gap:8px;box-shadow:0 4px 12px rgba(0,0,0,.5)}
+.attach-menu{display:none;position:fixed;bottom:90px;left:10px;background:#1c4a33;border:1px solid #2a6040;border-radius:12px;padding:10px;z-index:50;flex-direction:column;gap:8px}
 .attach-menu.open{display:flex}
 .attach-option{background:#143524;border:1px solid #2a6040;color:#e8f5eb;padding:10px 14px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:13px}
+.contact-card{background:#1c4a33;border:1px solid #2a6040;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;margin:8px 0}
+.perm-btn{background:#2a7a4b;color:#fff;border:none;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer}
+.perm-btn.red{background:#c0392b}
+.duckie-search-input{width:100%;padding:12px;border-radius:12px;border:1px solid #2a6040;background:#0a2015;color:#e8f5eb;margin:6px 0;outline:none}
 @keyframes blink{0%{opacity:.2}50%{opacity:1}100%{opacity:.2}}
 </style>
 </head>
@@ -53,36 +62,27 @@ body,html{width:100%;height:100%;background:#0e2e1f;color:#e8f5eb;overflow:hidde
 <div id="app-container">
 <header class="app-header">
 <div style="display:flex;align-items:center;gap:8px">
-<button class="back-btn" onclick="window.location.href='index.html?v='+Date.now()" title="Atrás al menú principal - al lado izquierdo del logo">←</button>
+<button class="back-btn" onclick="window.location.href='index.html?v='+Date.now()">←</button>
 <button class="menu-btn" onclick="toggleMenu(true)">☰</button>
 <div class="brand-zone">
-<img src="./IMG_4685.png" class="brand-logo" alt="Logo IMG_4685">
-<div class="brand-info">
-<span class="brand-title">DuckieTalkPro</span>
-<span class="brand-subtitle">AI Chat VIVO • IMG_4685 • FIX 114A0D35 + 🧠 REAL</span>
-</div>
+<img src="./IMG_4685.png" class="brand-logo" alt="Logo">
+<div class="brand-info"><span class="brand-title">DuckieTalkPro</span></div>
 </div>
 </div>
 <div style="display:flex;gap:8px;align-items:center">
 <button class="cart-top-btn" onclick="window.location.href='marketplace.html?v='+Date.now()">🛒<span class="cart-badge">3</span></button>
-<button class="menu-btn" onclick="toggleProSuite(true)" title="Pestaña derecha 3 líneas hamburguesa">☰</button>
+<button class="menu-btn" onclick="toggleProSuite(true)">☰</button>
 </div>
 </header>
-<div id="betaBanner"><span>🦆 BETA FUNDADORES 30 DÍAS</span><span style="background:#000;color:#2ecc71;padding:3px 10px;border-radius:20px">🧠 REAL BRAIN VIVO • 0% COMISIÓN • 4 MODELOS + ATRÁS + PLUS</span></div>
 <main class="chat-box" id="chatBox">
-<div style="display:flex;flex-direction:column;align-items:center;padding:10px;gap:8px">
-<div class="avatar-center"><img src="./IMG_4685.png" alt="Logo Centro"></div>
-<div style="font-weight:800">Duckie Guai-fai'v • AI Chat REAL 🧠</div>
-<div style="font-size:12px;color:#a3c9a8;text-align:center">← Atrás al lado izq del logo • ≡ Derecha 9 botones • + Camara/Files/Photo • Ask Duckie • 🔊🎙️➤ • 🧠 REAL BRAIN</div>
-</div>
-<div class="msg bot"><b>Duckie IA:</b> ¡Hola Amado! Ya con tu cuaderno VIVO + 🧠 REAL BRAIN: Todo lo que me preguntes va directo a mi cerebro real en Render. Respuesta genérica y en vivo, no local. ¿Qué creamos hoy? 🦆🧠</div>
+<div class="msg bot">Hola Amado 🦆 ¿Qué creamos hoy?</div>
 </main>
 <footer class="input-panel">
-<button class="plus-btn" onclick="toggleAttachMenu()" title="Izquierda (+) abre Cámara, Files, Photo library">+</button>
-<input type="text" id="userInput" class="text-input-field" placeholder="Pregúntale al 🧠 real..." onkeypress="checkEnter(event)">
-<button class="action-icon" onclick="toggleVoice()" id="audioBtn" title="Audio - al lado derecho">🔊</button>
-<button class="action-icon" onclick="startListen()" id="micBtn" title="Micrófono - al lado derecho">🎙️</button>
-<button class="action-icon send-btn" onclick="sendTextMessage()" title="Botón de enviar - al lado derecho">➤</button>
+<button class="plus-btn" onclick="toggleAttachMenu()">+</button>
+<input type="text" id="userInput" class="text-input-field" placeholder="Pregúntale a Duckie..." onkeypress="checkEnter(event)">
+<button class="action-icon" onclick="toggleVoice()" id="audioBtn">🔊</button>
+<button class="action-icon" onclick="startListen()" id="micBtn">🎙️</button>
+<button class="action-icon send-btn" onclick="sendTextMessage()">➤</button>
 </footer>
 <nav class="bottom-nav">
 <button class="nav-item" onclick="window.location.href='index.html?v='+Date.now()"><span class="ico">👥</span><span>Contactos</span></button>
@@ -97,16 +97,28 @@ body,html{width:100%;height:100%;background:#0e2e1f;color:#e8f5eb;overflow:hidde
 <div class="attach-option" onclick="openFiles()"><span>📁</span> Files</div>
 <div class="attach-option" onclick="openPhotoLibrary()"><span>🖼️</span> Photo Library</div>
 </div>
+
+<!-- MENÚ IZQUIERDO - REAL -->
 <div id="overlayMenu" class="overlay" onclick="toggleMenu(false)"></div>
 <div id="menuPanel" class="side-panel left">
 <div style="display:flex;justify-content:space-between;align-items:center"><span style="color:#2ecc71;font-weight:800">Menú Izquierdo</span><button class="menu-btn" onclick="toggleMenu(false)">✕</button></div>
 <button class="panel-btn" onclick="window.location.href='index.html?v='+Date.now()"><span>←</span> Volver a Menú principal</button>
-<button class="panel-btn" onclick="window.location.href='ai-chat.html?v='+Date.now()"><span>🧠</span> New Chat Real</button>
+<button class="panel-btn" onclick="newChatVivo();toggleMenu(false)"><span>🧠</span> New Chat Real</button>
+<button class="panel-btn" onclick="openFeature('chats');toggleMenu(false)"><span>💭</span> Chats</button>
+<button class="panel-btn" onclick="openFeature('shedule');toggleMenu(false)"><span>📅</span> Shedule</button>
+<button class="panel-btn" onclick="openFeature('library');toggleMenu(false)"><span>📚</span> Library</button>
+<button class="panel-btn" onclick="openFeature('projects');toggleMenu(false)"><span>📁</span> Projects</button>
+<button class="panel-btn" onclick="openFeature('create-image');toggleMenu(false)"><span>🎨</span> Create an Image</button>
+<button class="panel-btn" onclick="openFeature('search-web');toggleMenu(false)"><span>🌐</span> Search web</button>
+<button class="panel-btn" onclick="openFeature('create-video');toggleMenu(false)"><span>🎬</span> Create a Video</button>
+<button class="panel-btn" onclick="openFeature('learning');toggleMenu(false)"><span>🎓</span> Learning</button>
 </div>
+
+<!-- MENÚ DERECHO - REAL -->
 <div id="overlayPro" class="overlay" onclick="toggleProSuite(false)"></div>
 <div id="proPanel" class="side-panel right">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="color:#2ecc71;font-weight:800">Pestaña derecha 3 líneas VIVO - 9 botones</span><button class="menu-btn" onclick="toggleProSuite(false)">✕</button></div>
-<button class="panel-btn" onclick="newChatVivo();toggleProSuite(false)"><span>💬</span> New Chat Real 🧠</button>
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="color:#2ecc71;font-weight:800">Menú Derecho</span><button class="menu-btn" onclick="toggleProSuite(false)">✕</button></div>
+<button class="panel-btn" onclick="newChatVivo();toggleProSuite(false)"><span>💬</span> New Chat Real</button>
 <button class="panel-btn" onclick="openFeature('chats');toggleProSuite(false)"><span>💭</span> Chats</button>
 <button class="panel-btn" onclick="openFeature('shedule');toggleProSuite(false)"><span>📅</span> Shedule</button>
 <button class="panel-btn" onclick="openFeature('library');toggleProSuite(false)"><span>📚</span> Library</button>
@@ -115,79 +127,115 @@ body,html{width:100%;height:100%;background:#0e2e1f;color:#e8f5eb;overflow:hidde
 <button class="panel-btn" onclick="openFeature('search-web');toggleProSuite(false)"><span>🌐</span> Search web</button>
 <button class="panel-btn" onclick="openFeature('create-video');toggleProSuite(false)"><span>🎬</span> Create a Video</button>
 <button class="panel-btn" onclick="openFeature('learning');toggleProSuite(false)"><span>🎓</span> Learning</button>
+<div style="height:1px;background:#2a6040;margin:6px 0"></div>
+<button class="panel-btn" onclick="cambiarTemaReal()"><span>🌗 Modo claro / obscuro</span><label class="switch"><input type="checkbox" id="themeSwitch"><span class="slider"></span></label></button>
+<button class="panel-btn" onclick="cambiarNotifReal()"><span>🔔 Notificaciones</span><label class="switch"><input type="checkbox" id="notifSwitch" checked><span class="slider"></span></label></button>
+<button class="panel-btn" onclick="verColorReal()"><span>🎨 Cambiar Color chat</span><span>›</span></button>
+<button class="panel-btn" onclick="verCuentaReal()"><span>👑 Your Account</span><span>›</span></button>
 </div>
+
 <div class="overlay" id="modalOverlay" onclick="cerrarModal()"></div>
-<div class="duckie-modal" id="duckieModalBox"><h3 id="modalTitle" style="color:#2ecc71;margin-bottom:8px"></h3><p id="modalDesc" style="color:#a3c9a8;font-size:14px;margin-bottom:12px"></p><button onclick="cerrarModal()" style="background:#2a7a4b;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-weight:700">Aceptar VIVO</button></div>
+<div class="duckie-modal" id="duckieModalBox"><h3 id="modalTitle" style="color:#2ecc71;margin-bottom:8px"></h3><p id="modalDesc" style="color:#a3c9a8;font-size:14px;margin-bottom:12px;white-space:pre-line"></p><div id="modalExtra"></div><button onclick="cerrarModal()" style="background:#2a7a4b;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-weight:700">Aceptar</button></div>
+
 <script>
 var SERVER_URL='https://duckietalkpro.onrender.com/api/chat';
 var voiceOn=true;
+var chatActual='chat-1';
+var chats=JSON.parse(localStorage.getItem('duckieAIChats')||'{"chat-1":[]}');
+var learning=JSON.parse(localStorage.getItem('duckieLearning')||'[]');
+var library=JSON.parse(localStorage.getItem('duckieLibrary')||'[]');
+var projects=JSON.parse(localStorage.getItem('duckieProjects')||'[]');
+var schedule=JSON.parse(localStorage.getItem('duckieSchedule')||'[]');
+function guardarTodo(){localStorage.setItem('duckieAIChats',JSON.stringify(chats));localStorage.setItem('duckieLearning',JSON.stringify(learning));localStorage.setItem('duckieLibrary',JSON.stringify(library));localStorage.setItem('duckieProjects',JSON.stringify(projects));localStorage.setItem('duckieSchedule',JSON.stringify(schedule));}
 function toggleMenu(open){document.getElementById('menuPanel').classList.toggle('open',open);document.getElementById('overlayMenu').style.display=open?'block':'none'}
 function toggleProSuite(open){document.getElementById('proPanel').classList.toggle('open',open);document.getElementById('overlayPro').style.display=open?'block':'none'}
 function toggleAttachMenu(){var m=document.getElementById('attachMenu');m.classList.toggle('open')}
-function openCamera(){toggleAttachMenu();abrirModal('Cámara VIVO','📷 Abriendo cámara...');document.getElementById('fileInput').setAttribute('capture','environment');document.getElementById('fileInput').click()}
+function openCamera(){toggleAttachMenu();document.getElementById('fileInput').setAttribute('capture','environment');document.getElementById('fileInput').click()}
 function openFiles(){toggleAttachMenu();document.getElementById('fileInput').removeAttribute('capture');document.getElementById('fileInput').click()}
 function openPhotoLibrary(){toggleAttachMenu();document.getElementById('fileInput').removeAttribute('capture');document.getElementById('fileInput').click()}
-function handleFileSelect(e){var f=e.target.files[0];if(!f)return;var box=document.getElementById('chatBox');var d=document.createElement('div');d.className='msg user';d.textContent='📎 '+f.name+' (Cámara/Files/Photo Library VIVO)';box.appendChild(d);box.scrollTop=box.scrollHeight}
+function handleFileSelect(e){var f=e.target.files[0];if(!f)return;var box=document.getElementById('chatBox');var d=document.createElement('div');d.className='msg user';d.textContent='📎 '+f.name;box.appendChild(d);box.scrollTop=box.scrollHeight;library.push({titulo:f.name,fecha:new Date().toLocaleString()});guardarTodo();}
 function checkEnter(e){if(e.key==='Enter')sendTextMessage()}
 function toggleVoice(){voiceOn=!voiceOn;var b=document.getElementById('audioBtn');if(b)b.style.opacity=voiceOn?'1':'0.4';if(voiceOn)speak('Audio activado');else speechSynthesis.cancel()}
 function speak(txt){if(!voiceOn)return;if('speechSynthesis' in window){speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(txt.replace(/<[^>]*>/g,''));u.lang='es-MX';speechSynthesis.speak(u)}}
-function startListen(){if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){abrirModal('Micrófono VIVO','🎙️ Usa Chrome para micrófono');return}var Rec=window.SpeechRecognition||window.webkitSpeechRecognition;var rec=new Rec();rec.lang='es-MX';rec.onstart=function(){document.getElementById('userInput').placeholder='🎙️ Escuchando...'};rec.onresult=function(e){document.getElementById('userInput').value=e.results[0][0].transcript;sendTextMessage()};rec.onend=function(){document.getElementById('userInput').placeholder='Pregúntale al 🧠 real...'};rec.start()}
-function newChatVivo(){var box=document.getElementById('chatBox');box.innerHTML='<div class="msg bot">🧠 Nuevo chat REAL iniciado - Cerebro VIVO en tiempo real, respuesta genérica no local 🦆</div>';speak('Nuevo chat real iniciado')}
-function openFeature(k){var map={chats:'Chats VIVO',shedule:'Shedule VIVO - horarios',library:'Library VIVO - biblioteca',projects:'Projects VIVO', 'create-image':'Create an Image VIVO 🎨', 'search-web':'Search web VIVO 🌐', 'create-video':'Create a Video VIVO 🎬', learning:'Learning VIVO 🎓'};var box=document.getElementById('chatBox');var d=document.createElement('div');d.className='msg bot';d.textContent='📂 '+(map[k]||k)+' - funcionando 100% VIVO REAL BRAIN 🧠';box.appendChild(d);box.scrollTop=box.scrollHeight;speak(map[k]||k)}
-function abrirModal(tit,txt){document.getElementById('modalTitle').innerText=tit;document.getElementById('modalDesc').innerText=txt;document.getElementById('duckieModalBox').style.display='block';document.getElementById('modalOverlay').style.display='block'}
+function startListen(){if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){abrirModal('Micrófono','Usa Chrome para micrófono');return}var Rec=window.SpeechRecognition||window.webkitSpeechRecognition;var rec=new Rec();rec.lang='es-MX';rec.onstart=function(){document.getElementById('userInput').placeholder='Escuchando...'};rec.onresult=function(e){document.getElementById('userInput').value=e.results[0][0].transcript;sendTextMessage()};rec.onend=function(){document.getElementById('userInput').placeholder='Pregúntale a Duckie...'};rec.start()}
+function abrirModal(tit,txt,extra){document.getElementById('modalTitle').innerText=tit;document.getElementById('modalDesc').innerText=txt||'';document.getElementById('modalExtra').innerHTML=extra||'';document.getElementById('duckieModalBox').style.display='block';document.getElementById('modalOverlay').style.display='block'}
 function cerrarModal(){document.getElementById('duckieModalBox').style.display='none';document.getElementById('modalOverlay').style.display='none'}
-function esMensajeViejo(t){
-  if(!t) return false;
-  var low = t.toLowerCase();
-  return (low.includes('mucha demanda') && t.includes('3.6-flash')) ||
-         low.includes('es el nuevo y todos lo quieren') ||
-         (low.includes('dame 3 segundos') && t.includes('3.6-flash')) ||
-         t.includes('Tu logo IMG_4685, tu marketplace y tu barra 5 VIVA ya están 100% conectados, ¡Intenta de nuevo');
+function pintarChat(){var box=document.getElementById('chatBox');var h=chats[chatActual]||[];if(!h.length){box.innerHTML='<div class="msg bot">Hola Amado 🦆 ¿Qué creamos hoy?</div>';return;}box.innerHTML=h.map(function(m){return '<div class="msg '+(m.de==='yo'?'user':'bot')+'">'+m.texto+'</div>'}).join('');box.scrollTop=box.scrollHeight;}
+function newChatVivo(){chatActual='chat-'+Date.now();chats[chatActual]=[];guardarTodo();pintarChat();document.getElementById('userInput').focus();speak('Nuevo chat');}
+// === FUNCIONES REALES - SIN POPUP FALSO ===
+function openFeature(k){
+var box=document.getElementById('chatBox');
+if(k==='chats'){
+var keys=Object.keys(chats);
+box.innerHTML='<h3>💭 Chats</h3>'+(keys.length?keys.map(function(key){var ultimo=(chats[key][chats[key].length-1]||{}).texto||'Chat nuevo';return '<div class="contact-card"><b>'+key+'</b><small>'+ultimo+'</small><button class="perm-btn" onclick="abrirChatReal(\''+key+'\')">Abrir Chat</button></div>'}).join(''):'<div class="contact-card">Sin chats</div>');
+return;}
+if(k==='shedule'){
+box.innerHTML='<h3>📅 Shedule</h3><div class="contact-card"><input id="schTitulo" class="duckie-search-input" placeholder="¿Qué quieres agendar?"><input id="schFecha" type="datetime-local" class="duckie-search-input"><button class="perm-btn" style="width:100%;padding:12px" onclick="guardarScheduleReal()">Guardar</button></div><div id="listaSchedule"></div>';pintarSchedule();return;}
+if(k==='library'){
+box.innerHTML='<h3>📚 Library</h3>'+(library.length?library.map(function(l){return '<div class="contact-card"><b>'+l.titulo+'</b><small>'+(l.fecha||'')+'</small></div>'}).join(''):'<div class="contact-card">Sin nada guardado</div>');return;}
+if(k==='projects'){
+box.innerHTML='<h3>📁 Projects</h3><div class="contact-card"><input id="projNombre" class="duckie-search-input" placeholder="Nombre del proyecto"><button class="perm-btn" style="width:100%;padding:12px" onclick="guardarProjectReal()">Guardar Proyecto</button></div><div id="listaProjects"></div>';pintarProjects();return;}
+if(k==='create-image'){box.innerHTML='<h3>🎨 Create an Image</h3><div class="contact-card"><input id="imgPrompt" class="duckie-search-input" placeholder="¿Qué imagen quieres?"><button class="perm-btn" style="width:100%;padding:12px" onclick="pedirImagenReal()">Crear</button></div>';return;}
+if(k==='search-web'){document.getElementById('userInput').value='';document.getElementById('userInput').placeholder='Search web general / mundial...';document.getElementById('userInput').focus();var d=document.createElement('div');d.className='msg bot';d.textContent='🌐 Search web activado - pregúntame de cualquier país o tema.';box.appendChild(d);box.scrollTop=box.scrollHeight;return;}
+if(k==='create-video'){box.innerHTML='<h3>🎬 Create a Video</h3><div class="contact-card"><input id="vidPrompt" class="duckie-search-input" placeholder="¿Qué video quieres?"><button class="perm-btn" style="width:100%;padding:12px" onclick="pedirVideoReal()">Crear</button></div>';return;}
+if(k==='learning'){box.innerHTML='<h3>🎓 Learning</h3>'+(learning.length?learning.slice(-20).reverse().map(function(l){return '<div class="contact-card"><b>Q: '+l.pregunta+'</b><small>'+(l.fecha||'')+'</small><div>'+l.respuesta+'</div></div>'}).join(''):'<div class="contact-card">Aún no hay Learning - pregúntale algo a Duckie</div>');return;}
 }
-function getSmartReply(t){
-  return '🧠 Procesando "'+t+'" con mi cerebro REAL VIVO en tiempo real... Estoy conectado a Render con Gemini, dame 1 segundo Amado 🦆';
+function abrirChatReal(k){chatActual=k;pintarChat();}
+function pintarSchedule(){var b=document.getElementById('listaSchedule');if(!b)return;b.innerHTML=schedule.length?schedule.map(function(s,i){return '<div class="contact-card"><b>📅 '+s.titulo+'</b><small>'+s.fecha+'</small><button class="perm-btn red" onclick="borrarSchedule('+i+')">Borrar</button></div>'}).join(''):'<div class="contact-card">Sin citas</div>';}
+function guardarScheduleReal(){var t=document.getElementById('schTitulo').value.trim();var f=document.getElementById('schFecha').value;if(!t)return;schedule.unshift({titulo:t,fecha:f});guardarTodo();pintarSchedule();}
+function borrarSchedule(i){schedule.splice(i,1);guardarTodo();pintarSchedule();}
+function pintarProjects(){var b=document.getElementById('listaProjects');if(!b)return;b.innerHTML=projects.length?projects.map(function(p,i){return '<div class="contact-card"><b>📁 '+p.nombre+'</b><small>'+p.fecha+'</small><button class="perm-btn red" onclick="borrarProject('+i+')">Borrar</button></div>'}).join(''):'<div class="contact-card">Sin proyectos</div>';}
+function guardarProjectReal(){var n=document.getElementById('projNombre').value.trim();if(!n)return;projects.unshift({nombre:n,fecha:new Date().toLocaleString()});guardarTodo();pintarProjects();}
+function borrarProject(i){projects.splice(i,1);guardarTodo();pintarProjects();}
+function pedirImagenReal(){var p=document.getElementById('imgPrompt').value.trim();if(!p)return;document.getElementById('userInput').value='Crea una imagen de: '+p;sendTextMessage();}
+function pedirVideoReal(){var p=document.getElementById('vidPrompt').value.trim();if(!p)return;document.getElementById('userInput').value='Crea un video de: '+p;sendTextMessage();}
+// === AJUSTES REALES ===
+function cambiarTemaReal(){var claro=document.body.classList.toggle('modo-claro');document.getElementById('themeSwitch').checked=claro;localStorage.setItem('duckieTema',claro?'claro':'obscuro');}
+function cambiarNotifReal(){var on=document.getElementById('notifSwitch').checked;localStorage.setItem('duckieNotif',on?'on':'off');}
+function verColorReal(){abrirModal('🎨 Cambiar Color chat','Elige un color.','<div style="display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap"><button class="perm-btn" style="background:#25D366;color:#000" onclick="cambiarColorReal(\'#25D366\')">Verde</button><button class="perm-btn" style="background:#ffd700;color:#000" onclick="cambiarColorReal(\'#ffd700\')">Oro</button><button class="perm-btn" style="background:#2196F3" onclick="cambiarColorReal(\'#2196F3\')">Azul</button><button class="perm-btn" style="background:#E91E63" onclick="cambiarColorReal(\'#E91E63\')">Rosa</button></div>');}
+function cambiarColorReal(c){localStorage.setItem('duckieColorChat',c);cerrarModal();abrirModal('🎨 Listo','Color cambiado.');}
+function verCuentaReal(){abrirModal('👑 Your Account','Nombre: Amado Apolonio\nID: 92105\nPlan: Fundador\nApp: DuckieTalkPro');}
+function esMensajeViejo(t){
+if(!t) return false;
+var low=t.toLowerCase();
+return (low.includes('mucha demanda') && t.includes('3.6-flash')) || low.includes('es el nuevo y todos lo quieren') || (low.includes('dame 3 segundos') && t.includes('3.6-flash')) || t.includes('Tu logo IMG_4685, tu marketplace y tu barra 5 VIVA ya están 100% conectados');
 }
 async function sendTextMessage(){
-  var inp=document.getElementById('userInput');
-  var txt=inp.value.trim();
-  if(!txt) return;
-  var box=document.getElementById('chatBox');
-  var u=document.createElement('div');u.className='msg user';u.textContent=txt;box.appendChild(u);
-  inp.value='';box.scrollTop=box.scrollHeight;
-  var thinking=document.createElement('div');thinking.className='msg bot';thinking.id='thinking';thinking.innerHTML='🧠 Duckie REAL BRAIN pensando en tiempo real... <span style="animation:blink 1s infinite">•••</span>';box.appendChild(thinking);box.scrollTop=box.scrollHeight;
-  let intentos=0;
-  async function intentar(){
-    intentos++;
-    try{
-      const r=await fetch(SERVER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:txt, role:'standard'})});
-      let d=await r.json();
-      let reply=d.reply||d.text||'';
-      if(esMensajeViejo(reply)){
-        if(intentos < 8){
-          thinking.innerHTML='🧠 Filtrando respuesta antigua... reconectando a cerebro REAL VIVO ('+intentos+'/8) 🔄';
-          await new Promise(res=>setTimeout(res, 1000));
-          return intentar();
-        } else {
-          reply='Hola Soy Duckie Guai faiv, como puedo asistirte el dia de hoy 🦆🧠 - Cerebro REAL VIVO respondiendo en tiempo real';
-        }
-      }
-      if(!reply || reply.trim().length<2){
-        reply='Hola Soy Duckie Guai faiv, como puedo asistirte el dia de hoy 🦆🧠';
-      }
-      let th=document.getElementById('thinking'); if(th) th.remove();
-      let m=document.createElement('div');m.className='msg bot';m.textContent=reply;box.appendChild(m);box.scrollTop=box.scrollHeight;speak(reply);
-    }catch(e){
-      if(intentos < 8){
-        thinking.innerHTML='🧠 Reconectando a cerebro REAL VIVO genérico... ('+intentos+'/8) 🔄';
-        await new Promise(res=>setTimeout(res, 900*intentos));
-        return intentar();
-      }
-      let th=document.getElementById('thinking'); if(th) th.remove();
-      let m=document.createElement('div');m.className='msg bot';m.textContent='🧠 Estoy reconectando mi cerebro REAL VIVO en tiempo real... Intenta de nuevo en 2 segundos Amado, cada pregunta va a mi cerebro genérico real, no local 🦆';box.appendChild(m);box.scrollTop=box.scrollHeight;speak(m.textContent);
-    }
-  }
-  intentar();
+var inp=document.getElementById('userInput');
+var txt=inp.value.trim();
+if(!txt) return;
+var box=document.getElementById('chatBox');
+if(!chats[chatActual])chats[chatActual]=[];
+chats[chatActual].push({de:'yo',texto:txt});guardarTodo();
+var u=document.createElement('div');u.className='msg user';u.textContent=txt;box.appendChild(u);
+inp.value='';box.scrollTop=box.scrollHeight;
+var thinking=document.createElement('div');thinking.className='msg bot';thinking.id='thinking';thinking.innerHTML='Pensando... <span style="animation:blink 1s infinite">•••</span>';box.appendChild(thinking);box.scrollTop=box.scrollHeight;
+let intentos=0;
+async function intentar(){
+intentos++;
+try{
+const r=await fetch(SERVER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:txt, role:'standard'})});
+let d=await r.json();
+let reply=d.reply||d.text||'';
+if(esMensajeViejo(reply)){
+if(intentos < 8){await new Promise(res=>setTimeout(res,1000));return intentar();}
+else{reply='Hola Soy Duckie, ¿cómo puedo asistirte hoy? 🦆';}
 }
+if(!reply || reply.trim().length<2){reply='Hola Soy Duckie, ¿cómo puedo asistirte hoy? 🦆';}
+let th=document.getElementById('thinking'); if(th) th.remove();
+let m=document.createElement('div');m.className='msg bot';m.textContent=reply;box.appendChild(m);box.scrollTop=box.scrollHeight;
+chats[chatActual].push({de:'ai',texto:reply});learning.push({pregunta:txt,respuesta:reply,fecha:new Date().toLocaleString()});library.push({titulo:txt,fecha:new Date().toLocaleString()});guardarTodo();speak(reply);
+}catch(e){
+if(intentos < 8){await new Promise(res=>setTimeout(res,900*intentos));return intentar();}
+let th=document.getElementById('thinking'); if(th) th.remove();
+let m=document.createElement('div');m.className='msg bot';m.textContent='Intenta de nuevo en 2 segundos Amado 🦆';box.appendChild(m);box.scrollTop=box.scrollHeight;
+}
+}
+intentar();
+}
+if(localStorage.getItem('duckieTema')==='claro'){document.body.classList.add('modo-claro');document.getElementById('themeSwitch').checked=true;}
+if(localStorage.getItem('duckieNotif')==='off'){document.getElementById('notifSwitch').checked=false;}
+pintarChat();
 </script>
 </body>
 </html>
