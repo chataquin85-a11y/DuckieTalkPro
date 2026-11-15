@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mensajes - DuckieTalkPro</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+body,html{width:100%;height:100%;background:#0e2e1f;color:#e8f5eb;overflow:hidden}
+#app-container{display:flex;flex-direction:column;width:100%;height:100%}
+.app-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#0e2e1f;height:65px;border-bottom:1px solid #2a6040}
+.menu-btn{font-size:24px;cursor:pointer;color:#a3c9a8;background:none;border:none;padding:4px}
+.brand-logo{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#fff;border:2px solid #2ecc71}
+.chat-box{flex:1;padding:12px;overflow-y:auto;background:#0a2015;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:85%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.35}
+.msg.mio{background:#2a7a4b;color:#fff;align-self:flex-end;border-bottom-right-radius:3px}
+.msg.otro{background:#1c4a33;color:#e8f5eb;align-self:flex-start;border:1px solid #2a6040;border-bottom-left-radius:3px}
+.contact-card{background:#1c4a33;border:1px solid #2a6040;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;margin:8px 0}
+.perm-btn{background:#2a7a4b;color:#fff;border:none;padding:8px 12px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer}
+.perm-btn.red{background:#c0392b}.perm-btn.yellow{background:#ffd700;color:#000}.perm-btn.gray{background:#333}
+.duckie-search-input{width:100%;padding:12px;border-radius:12px;border:1px solid #2a6040;background:#0a2015;color:#e8f5eb;margin:6px 0;outline:none}
+.filter-btn{background:#143524;border:1px solid #2a6040;color:#a3c9a8;padding:7px 14px;border-radius:20px;font-size:12px;cursor:pointer;white-space:nowrap}
+.filter-btn.active{background:#2a7a4b;color:#fff}
+.bottom-nav{display:flex;justify-content:flex-start;align-items:center;background:#0e2e1f;border-top:1px solid #1a3d2a;height:74px;padding:8px 4px;overflow-x:auto;scrollbar-width:none}
+.bottom-nav::-webkit-scrollbar{display:none}
+.nav-item{background:none;border:none;color:#8da89a;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;flex-shrink:0;min-width:62px;padding:8px 4px}
+.nav-item.active{color:#ffd700!important;font-weight:800}
+.top-tabs{display:flex;gap:8px;overflow-x:auto;padding:6px 0;scrollbar-width:none}
+.top-tabs button{background:#143524;border:1px solid #2a6040;color:#a3c9a8;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap}
+.top-tabs button.activo{background:#FFD700;color:#000;border-color:#FFD700}
+#toastReal{position:fixed;bottom:86px;left:12px;right:12px;background:#25D366;color:#000;padding:12px 14px;border-radius:12px;font-weight:800;font-size:13px;text-align:center;z-index:2000;display:none}
+#ventanaFlotante{position:fixed;right:10px;bottom:84px;width:210px;background:#0e2e1f;border:2px solid #25D366;border-radius:14px;padding:10px;z-index:500;display:none;cursor:grab;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.chat-bubble{cursor:pointer}
+</style>
+</head>
+<body>
+<div id="toastReal"></div>
+<div id="ventanaFlotante" onmousedown="empezarArrastrarFlotante(event)" ontouchstart="empezarArrastrarFlotante(event)">
+<div style="display:flex;justify-content:space-between"><b id="flotanteTitulo">💬 Mensaje</b><button onclick="cerrarFlotante()" style="background:#333;color:#fff;border:none;width:26px;height:26px;border-radius:50%">✕</button></div>
+<div id="flotanteTexto" style="font-size:12px;color:#a3c9a8;margin:6px 0">Arrastra esta ventana</div>
+<div style="display:flex;gap:6px"><button class="perm-btn" onclick="abrirFlotanteCompleto()" style="flex:1">Abrir</button><button class="perm-btn red" onclick="cerrarFlotante()" style="flex:1">Cerrar</button></div>
+</div>
+
+<div id="app-container">
+<header class="app-header">
+<div style="display:flex;align-items:center;gap:12px">
+<button class="menu-btn" onclick="window.location.href='index.html'">🏠</button>
+<img src="./IMG_4685.png" class="brand-logo">
+<div style="font-size:16px;font-weight:700;color:#ffd700">DuckieTalkPro</div>
+</div>
+<div style="display:flex;gap:8px">
+<button class="menu-btn" onclick="saltarVista('chats')">🔍</button>
+<button class="menu-btn" onclick="window.location.href='marketplace.html?v='+Date.now()">🛒</button>
+</div>
+</header>
+
+<!-- BOTONES PRESS - MENSAJES / CHATS -->
+<div style="padding:10px 12px 0;background:#0a2015">
+<div class="top-tabs">
+<button id="tab-chats" class="activo" onclick="saltarVista('chats')">💬 Chats</button>
+<button id="tab-nuevo" onclick="saltarVista('nuevo')">✍️ Nuevo Mensaje</button>
+<button id="tab-voicemail" onclick="saltarVista('voicemail')">🎙️ Voicemails</button>
+</div>
+</div>
+
+<main class="chat-box" id="chatBox"></main>
+
+<nav class="bottom-nav">
+<button class="nav-item" onclick="window.location.href='index.html'"><span style="font-size:18px">🏠</span><span>Home</span></button>
+<button class="nav-item" onclick="window.location.href='Contactos.html'"><span style="font-size:18px">👥</span><span>Contactos</span></button>
+<button class="nav-item" onclick="window.location.href='Contactos.html'"><span style="font-size:18px">📞</span><span>Llamadas</span></button>
+<button class="nav-item" onclick="window.location.href='Contactos.html'"><span style="font-size:18px">⌨️</span><span>Keypad</span></button>
+<button class="nav-item active" id="nav-chats" onclick="saltarVista('chats')"><span style="font-size:18px">💬</span><span>Mensajes</span></button>
+<button class="nav-item" onclick="window.location.href='ai-chat.html'"><span style="font-size:18px">🦆</span><span>AI Chats</span></button>
+<button class="nav-item" onclick="window.location.href='index.html'"><span style="font-size:18px">📊</span><span>Status</span></button>
+</nav>
+</div>
+
+<script>
+let duckieChatsGuardados=JSON.parse(localStorage.getItem('duckieChatsReales')||'[]');
+let duckieContactosGuardados=JSON.parse(localStorage.getItem('duckieContactos')||'[]');
+let duckieVoicemailsGuardados=JSON.parse(localStorage.getItem('duckieVoicemails')||'[{"nombre":"Amado Apolonio","numero":"92105","fecha":"hoy 9am","texto":"Hola Amado, te dejé un voicemail 🦆"}]');
+let filtroChatsActual='todos';
+let chatAbiertoNombre='';
+
+function duckieGuardarTodo(){localStorage.setItem('duckieChatsReales',JSON.stringify(duckieChatsGuardados));localStorage.setItem('duckieVoicemails',JSON.stringify(duckieVoicemailsGuardados));}
+function toastReal(m){let t=document.getElementById('toastReal');t.textContent=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>{t.style.display='none'},2500);}
+function miId(){return localStorage.getItem('duckieMiId')||'92105';}
+function mostrarFlotante(tit,txt){document.getElementById('flotanteTitulo').textContent=tit;document.getElementById('flotanteTexto').textContent=txt;document.getElementById('ventanaFlotante').style.display='block';}
+function cerrarFlotante(){document.getElementById('ventanaFlotante').style.display='none';}
+function abrirFlotanteCompleto(){cerrarFlotante();saltarVista('chats');}
+let dxFlot=0,dyFlot=0,arrastrandoFlotante=false;
+function empezarArrastrarFlotante(e){let el=document.getElementById('ventanaFlotante');let cx=e.touches?e.touches[0].clientX:e.clientX;let cy=e.touches?e.touches[0].clientY:e.clientY;dxFlot=cx-el.offsetLeft;dyFlot=cy-el.offsetTop;arrastrandoFlotante=true;function mover(ev){if(!arrastrandoFlotante)return;let x=(ev.touches?ev.touches[0].clientX:ev.clientX)-dxFlot;let y=(ev.touches?ev.touches[0].clientY:ev.clientY)-dyFlot;el.style.left=x+'px';el.style.top=y+'px';el.style.right='auto';el.style.bottom='auto';}function soltar(){arrastrandoFlotante=false;document.removeEventListener('mousemove',mover);document.removeEventListener('mouseup',soltar);document.removeEventListener('touchmove',mover);document.removeEventListener('touchend',soltar);}document.addEventListener('mousemove',mover);document.addEventListener('mouseup',soltar);document.addEventListener('touchmove',mover);document.addEventListener('touchend',soltar);}
+
+// ===== MANDAR MENSAJE REAL =====
+function mandarMensajeChatReal(){
+  let n=document.getElementById('chatNombreInput')?.value.trim()||chatAbiertoNombre||'Amado';
+  let t=document.getElementById('chatTextoInput')?.value.trim();
+  if(!t){toastReal('⚠️ Escribe un mensaje primero');return;}
+  duckieChatsGuardados.unshift({nombre:n,texto:t,fecha:new Date().toLocaleString(),tipo:'mio'});
+  duckieGuardarTodo();
+  document.getElementById('chatTextoInput').value='';
+  pintarChats();
+  toastReal('✅ Mensaje enviado a '+n);
+  // Sonido de mensaje
+  try{let ctx=new (window.AudioContext||window.webkitAudioContext)();let o=ctx.createOscillator();let g=ctx.createGain();o.frequency.value=880;g.gain.value=0.2;o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+0.15);}catch(e){}
+}
+function mandarMensajeRapido(nombre){
+  chatAbiertoNombre=nombre;
+  saltarVista('nuevo');
+  setTimeout(()=>{let i=document.getElementById('chatNombreInput');if(i)i.value=nombre;document.getElementById('chatTextoInput')?.focus();},100);
+}
+function borrarChat(i){
+  let nom=duckieChatsGuardados[i]?.nombre||'';
+  duckieChatsGuardados.splice(i,1);duckieGuardarTodo();pintarChats();
+  toastReal('🗑️ Mensaje borrado de '+nom);
+}
+function filtrarChats(t,btn){
+  filtroChatsActual=t;
+  document.querySelectorAll('.filter-chat').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  pintarChats();
+}
+function pintarChats(){
+  let box=document.getElementById('listaChatsReales');if(!box)return;
+  let q=(document.getElementById('searchChats')?.value||'').toLowerCase();
+  let lista=duckieChatsGuardados.filter(c=>{
+    if(filtroChatsActual!=='todos' && c.tipo!==filtroChatsActual) return false;
+    if(q && !(c.nombre+' '+c.texto).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  if(!lista.length){box.innerHTML='<div class="contact-card">Sin mensajes - manda el primero abajo 👇<br><small>Tip: pícale a un contacto en Contactos → 💬 Mensaje y te trae aquí con el nombre ya puesto</small></div>';return;}
+  box.innerHTML=lista.map((c)=>{
+    let idx=duckieChatsGuardados.indexOf(c);
+    let clase=c.tipo==='mio'?'mio':'otro';
+    let quien=c.tipo==='mio'?'Tú':'💬 '+c.nombre;
+    return '<div class="msg '+clase+' chat-bubble" onclick="mostrarFlotante(\'💬 '+c.nombre.replace(/'/g,'')+'\',\''+c.texto.replace(/'/g,'').substring(0,40)+'\')"><b>'+quien+':</b> '+c.texto+'<br><small style="opacity:.7">'+c.fecha+'</small><div style="display:flex;gap:6px;margin-top:8px"><button class="perm-btn" onclick="event.stopPropagation();mandarMensajeRapido(\''+c.nombre.replace(/'/g,'')+'\')">↩️ Responder</button><button class="perm-btn yellow" onclick="event.stopPropagation();window.location.href=\'Contactos.html\'">📞 Llamar</button><button class="perm-btn red" onclick="event.stopPropagation();borrarChat('+idx+')">🗑️</button></div></div>';
+  }).join('');
+}
+function buscarChats(){pintarChats();}
+
+// ===== VOICEMAILS =====
+function agregarVoicemail(){
+  let n=document.getElementById('voicemailNombre')?.value.trim()||'Yo';
+  let t=document.getElementById('voicemailTexto')?.value.trim();
+  if(!t){toastReal('⚠️ Escribe tu voicemail primero');return;}
+  duckieVoicemailsGuardados.unshift({nombre:n,numero:'',fecha:new Date().toLocaleString(),texto:t});
+  duckieGuardarTodo();
+  document.getElementById('voicemailTexto').value='';
+  pintarVoicemails();
+  toastReal('🎙️ Voicemail guardado');
+}
+function pintarVoicemails(){
+  let box=document.getElementById('listaVoicemails');if(!box)return;
+  if(!duckieVoicemailsGuardados.length){box.innerHTML='<div class="contact-card">Sin voicemails</div>';return;}
+  box.innerHTML=duckieVoicemailsGuardados.map((v,i)=>'<div class="contact-card"><b>🎙️ Voicemail - '+v.nombre+'</b><small>'+(v.fecha||'')+'</small><div>'+(v.texto||'')+'</div><div style="display:flex;gap:8px"><button class="perm-btn" onclick="toastReal(\'▶️ Reproduciendo voicemail de '+v.nombre.replace(/'/g,'')+'\')">▶️ Escuchar</button><button class="perm-btn" onclick="mandarMensajeRapido(\''+v.nombre.replace(/'/g,'')+'\')">💬 Responder</button></div></div>').join('');
+}
+
+// ===== VISTAS =====
+function saltarVista(vista){
+  document.querySelectorAll('.top-tabs button').forEach(b=>b.classList.remove('activo'));
+  let mapa={chats:'tab-chats',nuevo:'tab-nuevo',voicemail:'tab-voicemail'};
+  if(mapa[vista])document.getElementById(mapa[vista])?.classList.add('activo');
+  let box=document.getElementById('chatBox');if(!box)return;
+  if(vista==='chats'){
+    box.innerHTML='<div style="padding:4px"><h3>💬 Mensajes ('+duckieChatsGuardados.length+')</h3><input id="searchChats" class="duckie-search-input" placeholder="🔍 Buscar mensaje por nombre..." oninput="buscarChats()"><div style="display:flex;gap:8px;overflow-x:auto;padding:6px 0"><button class="filter-btn filter-chat active" onclick="filtrarChats(\'todos\',this)">Todos</button><button class="filter-btn filter-chat" onclick="filtrarChats(\'mio\',this)">📤 Míos</button><button class="filter-btn filter-chat" onclick="filtrarChats(\'otro\',this)">📥 Recibidos</button></div><div id="listaChatsReales" style="display:flex;flex-direction:column;gap:10px"></div><div class="contact-card"><b>✍️ Mandar Mensaje Rápido</b><input id="chatNombreInput" class="duckie-search-input" placeholder="Nombre"><input id="chatTextoInput" class="duckie-search-input" placeholder="Escribe tu mensaje..."><button class="perm-btn" style="width:100%;padding:12px" onclick="mandarMensajeChatReal()">💬 Mandar Mensaje</button></div><button class="perm-btn" style="width:100%;padding:12px" onclick="mostrarFlotante(\'🦆 DuckieTalkPro\',\'Ventana flotante - arrástrame\')">🪟 Probar Ventana Flotante</button><button class="perm-btn gray" style="width:100%;padding:12px" onclick="window.location.href=\'index.html\'">🏠 Home</button></div>';
+    pintarChats();
+    // Si vienes desde Contactos, trae el nombre ya puesto
+    let para=localStorage.getItem('duckieChatPara');
+    if(para){let inp=document.getElementById('chatNombreInput');if(inp)inp.value=para;localStorage.removeItem('duckieChatPara');}
+  }
+  if(vista==='nuevo'){
+    box.innerHTML='<div style="padding:4px"><h3>✍️ Nuevo Mensaje</h3><div class="contact-card"><b>👥 Elige un contacto</b><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">'+(duckieContactosGuardados.length?duckieContactosGuardados.map(c=>'<button class="perm-btn" onclick="document.getElementById(\'chatNombreInput\').value=\''+c.nombre.replace(/'/g,'')+'\'">👤 '+c.nombre+'</button>').join(''):'<small>Sin contactos - agrega uno en Contactos primero</small>')+'</div></div><div class="contact-card"><b>💬 Mandar Mensaje</b><input id="chatNombreInput" class="duckie-search-input" placeholder="Nombre" value="'+(chatAbiertoNombre||'')+'"><input id="chatTextoInput" class="duckie-search-input" placeholder="Escribe tu mensaje..."><button class="perm-btn" style="width:100%;padding:12px" onclick="mandarMensajeChatReal()">💬 Mandar Mensaje</button><button class="perm-btn yellow" style="width:100%;padding:12px;margin-top:8px" onclick="window.location.href=\'Contactos.html\'">👥 Ir a Contactos</button></div><button class="perm-btn gray" style="width:100%;padding:12px" onclick="window.location.href=\'index.html\'">🏠 Home</button></div>';
+  }
+  if(vista==='voicemail'){
+    box.innerHTML='<div style="padding:4px"><h3>🎙️ Voicemails</h3><div id="listaVoicemails"></div><div class="contact-card"><b>🎙️ Agregar Voicemail</b><input id="voicemailNombre" class="duckie-search-input" placeholder="Nombre"><input id="voicemailTexto" class="duckie-search-input" placeholder="Mensaje de voicemail..."><button class="perm-btn" style="width:100%;padding:12px" onclick="agregarVoicemail()">🎙️ Guardar Voicemail</button></div><button class="perm-btn gray" style="width:100%;padding:12px" onclick="window.location.href=\'index.html\'">🏠 Home</button></div>';
+    pintarVoicemails();
+  }
+}
+saltarVista('chats');
+</script>
+</body>
+</html>

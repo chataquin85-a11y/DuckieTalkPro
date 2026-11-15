@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Contactos - DuckieTalkPro</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+body,html{width:100%;height:100%;background:#0e2e1f;color:#e8f5eb;overflow:hidden}
+#app-container{display:flex;flex-direction:column;width:100%;height:100%}
+.app-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#0e2e1f;height:65px;border-bottom:1px solid #2a6040}
+.menu-btn{font-size:24px;cursor:pointer;color:#a3c9a8;background:none;border:none;padding:4px}
+.brand-logo{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#fff;border:2px solid #2ecc71}
+.chat-box{flex:1;padding:12px;overflow-y:auto;background:#0a2015;display:flex;flex-direction:column;gap:10px}
+.contact-card{background:#1c4a33;border:1px solid #2a6040;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;margin:8px 0}
+.perm-btn{background:#2a7a4b;color:#fff;border:none;padding:8px 12px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer}
+.perm-btn.red{background:#c0392b}.perm-btn.yellow{background:#ffd700;color:#000}.perm-btn.gray{background:#333}
+.duckie-search-input{width:100%;padding:12px;border-radius:12px;border:1px solid #2a6040;background:#0a2015;color:#e8f5eb;margin:6px 0;outline:none}
+.filter-btn{background:#143524;border:1px solid #2a6040;color:#a3c9a8;padding:7px 14px;border-radius:20px;font-size:12px;cursor:pointer;white-space:nowrap}
+.filter-btn.active{background:#2a7a4b;color:#fff}
+.duckie-green-call{width:100%;padding:16px;border-radius:999px;background:#25D366;color:#000;font-weight:900;font-size:18px;border:none;margin-top:10px;cursor:pointer}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.keypad button{background:#1c4a33;border:1px solid #2a6040;color:#fff;padding:14px 6px;border-radius:50%;font-size:22px;font-weight:800;cursor:pointer;line-height:1}
+.keypad button small{display:block;font-size:9px;letter-spacing:2px;color:#a3c9a8}
+.bottom-nav{display:flex;justify-content:flex-start;align-items:center;background:#0e2e1f;border-top:1px solid #1a3d2a;height:74px;padding:8px 4px;overflow-x:auto;scrollbar-width:none}
+.bottom-nav::-webkit-scrollbar{display:none}
+.nav-item{background:none;border:none;color:#8da89a;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;flex-shrink:0;min-width:62px;padding:8px 4px}
+.nav-item.active{color:#ffd700!important;font-weight:800}
+.top-tabs{display:flex;gap:8px;overflow-x:auto;padding:6px 0;scrollbar-width:none}
+.top-tabs button{background:#143524;border:1px solid #2a6040;color:#a3c9a8;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap}
+.top-tabs button.activo{background:#FFD700;color:#000;border-color:#FFD700}
+#toastReal{position:fixed;bottom:86px;left:12px;right:12px;background:#25D366;color:#000;padding:12px 14px;border-radius:12px;font-weight:800;font-size:13px;text-align:center;z-index:2000;display:none}
+#ventanaFlotante{position:fixed;right:10px;bottom:84px;width:210px;background:#0e2e1f;border:2px solid #25D366;border-radius:14px;padding:10px;z-index:500;display:none;cursor:grab;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+#llamadaRealPantalla{position:fixed;inset:0;background:#000;z-index:400;display:none;flex-direction:column}
+#llamadaRealPantalla.mostrar{display:flex}
+#remoteVideo{flex:1;width:100%;background:#000;object-fit:cover}
+#localVideo{position:absolute;right:12px;top:12px;width:110px;height:150px;border:2px solid #25D366;border-radius:12px;object-fit:cover;background:#222}
+</style>
+</head>
+<body>
+<div id="toastReal"></div>
+<div id="ventanaFlotante" onmousedown="empezarArrastrarFlotante(event)" ontouchstart="empezarArrastrarFlotante(event)">
+<div style="display:flex;justify-content:space-between"><b id="flotanteTitulo">📞 Llamada</b><button onclick="cerrarFlotante()" style="background:#333;color:#fff;border:none;width:26px;height:26px;border-radius:50%">✕</button></div>
+<div id="flotanteTexto" style="font-size:12px;color:#a3c9a8;margin:6px 0">Arrastra esta ventana</div>
+<div style="display:flex;gap:6px"><button class="perm-btn" onclick="abrirFlotanteCompleto()" style="flex:1">Abrir</button><button class="perm-btn red" onclick="cerrarFlotante()" style="flex:1">Cerrar</button></div>
+</div>
+
+<div id="app-container">
+<header class="app-header">
+<div style="display:flex;align-items:center;gap:12px">
+<button class="menu-btn" onclick="window.location.href='index.html'">🏠</button>
+<img src="./IMG_4685.png" class="brand-logo">
+<div style="font-size:16px;font-weight:700;color:#ffd700">DuckieTalkPro</div>
+</div>
+<div style="display:flex;gap:8px">
+<button class="menu-btn" onclick="saltarVista('contactos')">🔍</button>
+<button class="menu-btn" onclick="window.location.href='marketplace.html?v='+Date.now()">🛒</button>
+</div>
+</header>
+
+<!-- BOTONES PRESS - CONTACTOS / LLAMADAS / KEYPAD -->
+<div style="padding:10px 12px 0;background:#0a2015">
+<div class="top-tabs">
+<button id="tab-contactos" class="activo" onclick="saltarVista('contactos')">👥 Contactos</button>
+<button id="tab-llamadas" onclick="saltarVista('llamadas')">📞 Llamadas</button>
+<button id="tab-keypad" onclick="saltarVista('keypad')">⌨️ Keypad</button>
+</div>
+</div>
+
+<main class="chat-box" id="chatBox"></main>
+
+<nav class="bottom-nav">
+<button class="nav-item" onclick="window.location.href='index.html'"><span style="font-size:18px">🏠</span><span>Home</span></button>
+<button class="nav-item active" id="nav-contactos" onclick="saltarVista('contactos')"><span style="font-size:18px">👥</span><span>Contactos</span></button>
+<button class="nav-item" id="nav-llamadas" onclick="saltarVista('llamadas')"><span style="font-size:18px">📞</span><span>Llamadas</span></button>
+<button class="nav-item" id="nav-keypad" onclick="saltarVista('keypad')"><span style="font-size:18px">⌨️</span><span>Keypad</span></button>
+<button class="nav-item" onclick="window.location.href='index.html'"><span style="font-size:18px">🔍</span><span>Search</span></button>
+<button class="nav-item" onclick="window.location.href='ai-chat.html'"><span style="font-size:18px">🦆</span><span>AI Chats</span></button>
+<button class="nav-item" onclick="window.location.href='index.html'"><span style="font-size:18px">💬</span><span>Chats</span></button>
+<button class="nav-item" onclick="window.location.href='index.html'"><span style="font-size:18px">📊</span><span>Status</span></button>
+</nav>
+</div>
+
+<div id="llamadaRealPantalla">
+<div style="padding:12px;display:flex;justify-content:space-between;background:#0e2e1f"><b id="llamadaRealTitulo">📞 Llamada</b><span id="llamadaRealTiempo">00:00</span></div>
+<div style="position:relative;flex:1;background:#000"><video id="remoteVideo" autoplay playsinline></video><video id="localVideo" autoplay playsinline muted></video><div id="llamadaRealEstado" style="position:absolute;left:12px;bottom:12px;background:rgba(0,0,0,.7);padding:8px 12px;border-radius:999px;font-size:12px">Conectando...</div></div>
+<div style="background:#0e2e1f;padding:14px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="perm-btn" onclick="toggleMuteLlamada()" id="btnMute">🔊 Sonido</button><button class="perm-btn" onclick="toggleCamaraLlamada()" id="btnCamara">📹 Cámara</button><button class="perm-btn" onclick="minimizarLlamadaFlotante()">🪟 Flotante</button><button class="perm-btn red" onclick="colgarLlamadaReal()">🔴 Colgar</button></div>
+</div>
+
+<script>
+let duckieContactosGuardados=JSON.parse(localStorage.getItem('duckieContactos')||'[]');
+let duckieLlamadasGuardadas=JSON.parse(localStorage.getItem('duckieLlamadasReales')||'[]');
+let duckieLlamadasPerdidasGuardadas=JSON.parse(localStorage.getItem('duckieLlamadasPerdidas')||'[{"nombre":"Duckie Support","numero":"000","fecha":"ayer 8pm","motivo":"2 perdidas"}]');
+let duckieVoicemailsGuardados=JSON.parse(localStorage.getItem('duckieVoicemails')||'[{"nombre":"Amado Apolonio","numero":"92105","fecha":"hoy 9am"}]');
+let filtroLlamadasActual='todas';
+function duckieGuardarTodo(){localStorage.setItem('duckieContactos',JSON.stringify(duckieContactosGuardados));localStorage.setItem('duckieLlamadasReales',JSON.stringify(duckieLlamadasGuardadas));localStorage.setItem('duckieLlamadasPerdidas',JSON.stringify(duckieLlamadasPerdidasGuardadas));localStorage.setItem('duckieVoicemails',JSON.stringify(duckieVoicemailsGuardados));}
+function toastReal(m){let t=document.getElementById('toastReal');t.textContent=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>{t.style.display='none'},2500);}
+function miId(){return localStorage.getItem('duckieMiId')||'92105';}
+function mostrarFlotante(tit,txt){document.getElementById('flotanteTitulo').textContent=tit;document.getElementById('flotanteTexto').textContent=txt;document.getElementById('ventanaFlotante').style.display='block';}
+function cerrarFlotante(){document.getElementById('ventanaFlotante').style.display='none';}
+function abrirFlotanteCompleto(){cerrarFlotante();saltarVista('llamadas');}
+let arrastrandoFlotante=false,dxFlot=0,dyFlot=0;
+function empezarArrastrarFlotante(e){let el=document.getElementById('ventanaFlotante');let cx=e.touches?e.touches[0].clientX:e.clientX;let cy=e.touches?e.touches[0].clientY:e.clientY;dxFlot=cx-el.offsetLeft;dyFlot=cy-el.offsetTop;arrastrandoFlotante=true;function mover(ev){if(!arrastrandoFlotante)return;let x=(ev.touches?ev.touches[0].clientX:ev.clientX)-dxFlot;let y=(ev.touches?ev.touches[0].clientY:ev.clientY)-dyFlot;el.style.left=x+'px';el.style.top=y+'px';el.style.right='auto';el.style.bottom='auto';}function soltar(){arrastrandoFlotante=false;document.removeEventListener('mousemove',mover);document.removeEventListener('mouseup',soltar);document.removeEventListener('touchmove',mover);document.removeEventListener('touchend',soltar);}document.addEventListener('mousemove',mover);document.addEventListener('mouseup',soltar);document.addEventListener('touchmove',mover);document.addEventListener('touchend',soltar);}
+
+// ===== CONTACTOS =====
+function duckieHtmlContacto(c,i){return '<div class="contact-card"><div style="display:flex;justify-content:space-between"><b>👤 '+c.nombre+'</b><small>'+c.numero+'</small></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="perm-btn" onclick="mandarMensajeContacto(\''+c.nombre.replace(/'/g,'')+'\')">💬 Mensaje</button><button class="perm-btn" onclick="llamarAContacto(\''+c.numero+'\')">📞 Llamar</button><button class="perm-btn yellow" onclick="llamarAContacto(\''+c.numero+'\')">📹 Video</button><button class="perm-btn" onclick="mostrarFlotante(\'👤 '+c.nombre.replace(/'/g,'')+'\',\'Contacto: '+c.numero+'\')">🪟 Flotante</button><button class="perm-btn red" onclick="duckieBorrarContacto('+i+')">🗑️ Borrar</button></div></div>';}
+function duckiePintarContactos(){let b=document.getElementById('listaContactosGuardados');if(!b)return;b.innerHTML=duckieContactosGuardados.length?duckieContactosGuardados.map((c,i)=>duckieHtmlContacto(c,i)).join(''):'<div class="contact-card">Aún no hay contactos - agrega uno abajo 👇</div>';}
+function duckieAgregarNuevoContacto(){let n=document.getElementById('nuevoNombreContacto');let num=document.getElementById('nuevoNumeroContacto');let nombre=n.value.trim();let numero=num.value.trim();if(!nombre||!numero){toastReal('⚠️ Pon nombre y número');return;}duckieContactosGuardados.push({nombre,numero});duckieGuardarTodo();n.value='';num.value='';duckiePintarContactos();toastReal('✅ Contacto agregado: '+nombre);}
+function duckieBorrarContacto(i){let nom=duckieContactosGuardados[i]?.nombre||'';duckieContactosGuardados.splice(i,1);duckieGuardarTodo();duckiePintarContactos();toastReal('🗑️ Borrado: '+nom);}
+function filtrarContactos(){let q=(document.getElementById('searchContactos')?.value||'').toLowerCase();document.querySelectorAll('#listaContactosGuardados .contact-card').forEach(c=>{c.style.display=c.textContent.toLowerCase().includes(q)?'':'none';});}
+function mandarMensajeContacto(n){localStorage.setItem('duckieChatPara',n);window.location.href='index.html';toastReal('💬 Abriendo chat con '+n);}
+function llamarAContacto(num){saltarVista('keypad');setTimeout(()=>{let d=document.getElementById('dialInput');if(d)d.value=num;llamarBotonVerde();},150);}
+
+// ===== LLAMADAS =====
+function registrarLlamada(nombre,numero,tipo){duckieLlamadasGuardadas.unshift({nombre,numero,tipo,fecha:new Date().toLocaleString()});duckieGuardarTodo();pintarLlamadas();}
+function pintarLlamadas(){let box=document.getElementById('listaLlamadasReales');if(!box)return;let lista=duckieLlamadasGuardadas.filter(l=>filtroLlamadasActual==='todas'||l.tipo===filtroLlamadasActual);if(!lista.length){box.innerHTML='<div class="contact-card">Sin llamadas en '+filtroLlamadasActual+'</div>';return;}box.innerHTML=lista.map((l)=>'<div class="contact-card"><div style="display:flex;justify-content:space-between"><b>'+(l.tipo==='Perdida'?'❌ ':l.tipo==='Entrante'?'📥 ':'📤 ')+l.nombre+'</b><small>'+l.numero+'</small></div><small>'+l.tipo+' • '+l.fecha+'</small><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="perm-btn" onclick="llamarAContacto(\''+l.numero+'\')">📞 Llamar</button><button class="perm-btn" onclick="mandarMensajeContacto(\''+l.nombre.replace(/'/g,'')+'\')">💬 Mensaje</button><button class="perm-btn yellow" onclick="llamarAContacto(\''+l.numero+'\')">📹 Video</button><button class="perm-btn red" onclick="borrarLlamada('+duckieLlamadasGuardadas.indexOf(l)+')">🗑️</button></div></div>').join('');}
+function filtrarLlamadas(t,btn){filtroLlamadasActual=t;document.querySelectorAll('.filter-llamada').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');pintarLlamadas();}
+function borrarLlamada(idx){duckieLlamadasGuardadas.splice(idx,1);duckieGuardarTodo();pintarLlamadas();toastReal('🗑️ Llamada borrada');}
+function simularLlamadaPerdida(){registrarLlamada('Desconocido','555-'+Math.floor(100+Math.random()*900),'Perdida');toastReal('❌ Llamada perdida registrada');}
+
+// ===== KEYPAD + LLAMADA REAL =====
+let streamLlamada=null,timerLlamada=null,segLlamada=0,muteLlamada=false,camLlamada=true;
+function borrarDial(){let i=document.getElementById('dialInput');if(i)i.value=i.value.slice(0,-1);}
+function marcarTecla(v){let i=document.getElementById('dialInput');if(i)i.value+=v;}
+function llamarBotonVerde(){let num=document.getElementById('dialInput')?.value.trim()||'';if(!num){toastReal('⚠️ Marca un número primero');return;}registrarLlamada(num,num,'Saliente');document.getElementById('llamadaRealTitulo').textContent='📞 Llamando a '+num;document.getElementById('llamadaRealPantalla').classList.add('mostrar');document.getElementById('llamadaRealEstado').textContent='📞 Llamando...';segLlamada=0;clearInterval(timerLlamada);timerLlamada=setInterval(()=>{segLlamada++;let m=String(Math.floor(segLlamada/60)).padStart(2,'0');let s=String(segLlamada%60).padStart(2,'0');document.getElementById('llamadaRealTiempo').textContent=m+':'+s;},1000);if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){navigator.mediaDevices.getUserMedia({audio:true,video:true}).then(s=>{streamLlamada=s;document.getElementById('localVideo').srcObject=s;document.getElementById('llamadaRealEstado').textContent='✅ En llamada - '+num;}).catch(()=>{document.getElementById('llamadaRealEstado').textContent='🔊 En llamada de voz - '+num;});}}
+function toggleMuteLlamada(){muteLlamada=!muteLlamada;if(streamLlamada)streamLlamada.getAudioTracks().forEach(t=>t.enabled=!muteLlamada);document.getElementById('btnMute').textContent=muteLlamada?'🔇 Silenciado':'🔊 Sonido';}
+function toggleCamaraLlamada(){camLlamada=!camLlamada;if(streamLlamada)streamLlamada.getVideoTracks().forEach(t=>t.enabled=camLlamada);document.getElementById('btnCamara').textContent=camLlamada?'📹 Cámara':'📷 Cámara apagada';}
+function minimizarLlamadaFlotante(){let t=document.getElementById('llamadaRealTitulo').textContent;document.getElementById('llamadaRealPantalla').classList.remove('mostrar');mostrarFlotante(t,'Llamada en curso - pícale Abrir');toastReal('🪟 Llamada en ventana flotante');}
+function colgarLlamadaReal(){clearInterval(timerLlamada);if(streamLlamada)streamLlamada.getTracks().forEach(t=>t.stop());streamLlamada=null;document.getElementById('llamadaRealPantalla').classList.remove('mostrar');document.getElementById('llamadaRealTiempo').textContent='00:00';cerrarFlotante();toastReal('📞 Llamada terminada');}
+
+// ===== VISTAS DENTRO DE CONTACTOS.HTML =====
+function saltarVista(vista){
+  document.querySelectorAll('.top-tabs button').forEach(b=>b.classList.remove('activo'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  let mapaTop={contactos:'tab-contactos',llamadas:'tab-llamadas',keypad:'tab-keypad'};
+  let mapaNav={contactos:'nav-contactos',llamadas:'nav-llamadas',keypad:'nav-keypad'};
+  if(mapaTop[vista])document.getElementById(mapaTop[vista])?.classList.add('activo');
+  if(mapaNav[vista])document.getElementById(mapaNav[vista])?.classList.add('active');
+  let box=document.getElementById('chatBox');if(!box)return;
+  if(vista==='contactos'){
+    box.innerHTML='<div style="padding:4px"><h3>👥 Contactos ('+duckieContactosGuardados.length+')</h3><input id="searchContactos" class="duckie-search-input" placeholder="🔍 Buscar contacto por nombre o número..." oninput="filtrarContactos()"><div id="listaContactosGuardados"></div><div class="contact-card"><b>➕ Agregar Nuevo Contacto</b><input id="nuevoNombreContacto" class="duckie-search-input" placeholder="Nombre"><input id="nuevoNumeroContacto" class="duckie-search-input" placeholder="Número / ID"><button class="perm-btn" style="width:100%;padding:12px" onclick="duckieAgregarNuevoContacto()">➕ Agregar</button></div><button class="perm-btn gray" style="width:100%;padding:12px" onclick="window.location.href=\'index.html\'">🏠 Home</button></div>';
+    duckiePintarContactos();
+  }
+  if(vista==='llamadas'){
+    box.innerHTML='<div style="padding:4px"><h3>📞 Llamadas</h3><small>Tu ID: '+miId()+'</small><div style="display:flex;gap:8px;overflow-x:auto;padding:6px 0"><button class="filter-btn filter-llamada active" onclick="filtrarLlamadas(\'todas\',this)">Todas</button><button class="filter-btn filter-llamada" onclick="filtrarLlamadas(\'Entrante\',this)">📥 Entrantes</button><button class="filter-btn filter-llamada" onclick="filtrarLlamadas(\'Perdida\',this)">❌ Perdidas</button><button class="filter-btn filter-llamada" onclick="filtrarLlamadas(\'Saliente\',this)">📤 Salientes</button></div><div id="listaLlamadasReales"></div><button class="perm-btn" style="width:100%;padding:12px" onclick="simularLlamadaPerdida()">❌ Simular Llamada Perdida</button><button class="perm-btn yellow" style="width:100%;padding:12px" onclick="saltarVista(\'keypad\')">⌨️ Ir a Keypad</button><button class="perm-btn gray" style="width:100%;padding:12px" onclick="window.location.href=\'index.html\'">🏠 Home</button></div>';
+    pintarLlamadas();
+  }
+  if(vista==='keypad'){
+    box.innerHTML='<div style="padding:4px"><h3>⌨️ Keypad</h3><div class="contact-card"><b>📞 Llamada Real App a App</b><small>Tu ID: '+miId()+'</small><input id="miIdLlamada" class="duckie-search-input" value="'+miId()+'"><button class="perm-btn" style="width:100%;padding:12px" onclick="localStorage.setItem(\'duckieMiId\',document.getElementById(\'miIdLlamada\').value);toastReal(\'✅ ID guardado\')">Guardar mi ID</button></div><div class="contact-card"><input id="dialInput" class="duckie-search-input" placeholder="Marca número..." style="text-align:center;font-size:22px;font-weight:800"><div class="keypad"><button onclick="marcarTecla(\'1\')">1<small>•</small></button><button onclick="marcarTecla(\'2\')">2<small>ABC</small></button><button onclick="marcarTecla(\'3\')">3<small>DEF</small></button><button onclick="marcarTecla(\'4\')">4<small>GHI</small></button><button onclick="marcarTecla(\'5\')">5<small>JKL</small></button><button onclick="marcarTecla(\'6\')">6<small>MNO</small></button><button onclick="marcarTecla(\'7\')">7<small>PQRS</small></button><button onclick="marcarTecla(\'8\')">8<small>TUV</small></button><button onclick="marcarTecla(\'9\')">9<small>WXYZ</small></button><button onclick="marcarTecla(\'*\')">*</button><button onclick="marcarTecla(\'0\')">0<small>+</small></button><button onclick="marcarTecla(\'#\')">#</button></div><div style="display:flex;gap:8px;margin-top:10px"><button class="perm-btn yellow" style="flex:1;padding:14px;font-size:16px" onclick="borrarDial()">C ⌫</button><button class="duckie-green-call" style="flex:2;margin-top:0" onclick="llamarBotonVerde()">📞 Llamar</button></div></div><button class="perm-btn gray" style="width:100%;padding:12px" onclick="window.location.href=\'index.html\'">🏠 Home</button></div>';
+  }
+}
+saltarVista('contactos');
+</script>
+</body>
+</html>

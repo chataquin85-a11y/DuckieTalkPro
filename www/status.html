@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Status - DuckieTalkPro - Foto + Video Corto</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+body,html{width:100%;height:100%;background:#0e2e1f;color:#e8f5eb;overflow:hidden}
+#app-container{display:flex;flex-direction:column;width:100%;height:100%}
+.app-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#0e2e1f;height:65px;border-bottom:1px solid #2a6040}
+.menu-btn{font-size:24px;cursor:pointer;color:#a3c9a8;background:none;border:none;padding:4px}
+.brand-logo{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#fff;border:2px solid #2ecc71}
+.chat-box{flex:1;padding:12px;overflow-y:auto;background:#0a2015;display:flex;flex-direction:column;gap:10px}
+.contact-card{background:#1c4a33;border:1px solid #2a6040;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;margin:8px 0}
+.perm-btn{background:#2a7a4b;color:#fff;border:none;padding:8px 12px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer}
+.perm-btn.red{background:#c0392b}.perm-btn.yellow{background:#ffd700;color:#000}.perm-btn.gray{background:#333}
+.duckie-search-input{width:100%;padding:12px;border-radius:12px;border:1px solid #2a6040;background:#0a2015;color:#e8f5eb;margin:6px 0;outline:none}
+.bottom-nav{display:flex;justify-content:flex-start;align-items:center;background:#0e2e1f;border-top:1px solid #1a3d2a;height:74px;padding:8px 4px;overflow-x:auto;scrollbar-width:none}
+.bottom-nav::-webkit-scrollbar{display:none}
+.nav-item{background:none;border:none;color:#8da89a;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;flex-shrink:0;min-width:62px;padding:8px 4px}
+.nav-item.active{color:#ffd700!important;font-weight:800}
+.top-tabs{display:flex;gap:8px;overflow-x:auto;padding:6px 0;scrollbar-width:none}
+.top-tabs button{background:#143524;border:1px solid #2a6040;color:#a3c9a8;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap}
+.top-tabs button.activo{background:#FFD700;color:#000;border-color:#FFD700}
+#toastReal{position:fixed;bottom:86px;left:12px;right:12px;background:#25D366;color:#000;padding:12px 14px;border-radius:12px;font-weight:800;font-size:13px;text-align:center;z-index:2000;display:none}
+.status-anillo-row{display:flex;gap:14px;overflow-x:auto;padding:10px 2px;scrollbar-width:none}
+.status-anillo-row::-webkit-scrollbar{display:none}
+.story-circle{flex-shrink:0;width:74px;text-align:center;cursor:pointer}
+.story-ring{width:70px;height:70px;border-radius:50%;padding:3px;background:conic-gradient(#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);display:flex;align-items:center;justify-content:center;position:relative}
+.story-ring.mio{background:conic-gradient(#2ecc71,#25D366,#2ecc71)}
+.story-ring img{width:62px;height:62px;border-radius:50%;object-fit:cover;background:#fff;border:3px solid #0e2e1f}
+.story-plus{position:absolute;bottom:0;right:0;background:#25D366;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;border:2px solid #0e2e1f}
+.story-name{font-size:11px;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.story-time{font-size:10px;color:#a3c9a8}
+.status-add-cards{display:flex;gap:12px;overflow-x:auto;padding:6px 2px;scrollbar-width:none}
+.status-add-cards::-webkit-scrollbar{display:none}
+.add-status-card{flex-shrink:0;width:112px;height:172px;border-radius:16px;position:relative;overflow:hidden;cursor:pointer;background:#1c4a33;border:1px solid #2a6040}
+.add-status-card img.bg{width:100%;height:100%;object-fit:cover}
+.add-status-card video.bg{width:100%;height:100%;object-fit:cover}
+.add-status-card .add-plus{position:absolute;top:8px;left:8px;width:38px;height:38px;border-radius:50%;background:#25D366;color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900}
+.add-status-card .add-label{position:absolute;bottom:8px;left:8px;right:8px;color:#fff;font-size:12px;font-weight:700;text-shadow:0 1px 4px #000}
+#visorAnillo{position:fixed;inset:0;background:#000;z-index:999;display:none;flex-direction:column}
+#visorAnillo.mostrar{display:flex}
+#camaraVivoBox{position:fixed;inset:0;background:#000;z-index:1200;display:none;flex-direction:column}
+#camaraVivoBox.mostrar{display:flex}
+#videoCamaraVivo{flex:1;width:100%;object-fit:cover;background:#000}
+#luzFrontalSimulada{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .2s}
+.lens-btn{background:#222;border:2px solid #333;color:#fff;padding:8px 12px;border-radius:999px;font-size:12px;cursor:pointer;white-space:nowrap}
+.lens-btn.activo{background:#FFD700;color:#000;border-color:#FFD700}
+.duracion-btn{background:#222;border:2px solid #333;color:#fff;padding:8px 14px;border-radius:999px;font-size:12px;font-weight:800;cursor:pointer}
+.duracion-btn.activo{background:#FFD700;color:#000;border-color:#FFD700}
+.modo-btn{flex:1;background:#222;color:#fff;border:none;padding:12px;border-radius:12px;font-weight:800;cursor:pointer}
+.modo-btn.activo{background:#25D366;color:#000}
+input[type=range]{width:100%;accent-color:#25D366}
+.grabando{animation:parpadea 1s infinite}
+@keyframes parpadea{0%{opacity:1}50%{opacity:.4}100%{opacity:1}}
+</style>
+</head>
+<body>
+<div id="toastReal"></div>
+<input type="file" id="statusFileAdd" accept="image/*,video/*" style="display:none" onchange="subirStatusAnillo(event)">
+<input type="file" id="musicaFileInput" accept="audio/*" style="display:none" onchange="subirMusicaStatus(event)">
+
+<div id="app-container">
+<header class="app-header">
+<div style="display:flex;align-items:center;gap:12px">
+<button class="menu-btn" onclick="window.location.href='index.html'">🏠</button>
+<img src="./IMG_4685.png" class="brand-logo">
+<div style="font-size:16px;font-weight:700;color:#ffd700">DuckieTalkPro</div>
+</div>
+<div style="display:flex;gap:8px">
+<button class="menu-btn" onclick="abrirCamaraVivo()">📸</button>
+<button class="menu-btn" onclick="window.location.href='marketplace.html?v='+Date.now()">🛒</button>
+</div>
+</header>
+<div style="padding:10px 12px 0;background:#0a2015">
+<div class="top-tabs">
+<button id="tab-todos" class="activo" onclick="saltarVista('todos')">📊 Todos los Status</button>
+<button onclick="abrirCamaraVivo()">📷 Cámara en vivo</button>
+<button onclick="abrirCamaraVivoVideo()">🎥 Grabar Video Corto</button>
+<button onclick="document.getElementById('statusFileAdd').click()">🖼️ Subir Foto / Video</button>
+<button onclick="saltarVista('texto')">✍️ Texto</button>
+<button onclick="abrirSelectorMusica()">🎵 Música</button>
+</div>
+</div>
+<main class="chat-box" id="chatBox"></main>
+<nav class="bottom-nav">
+<button class="nav-item" onclick="window.location.href='index.html'"><span style="font-size:18px">🏠</span><span>Home</span></button>
+<button class="nav-item" onclick="window.location.href='Contactos.html'"><span style="font-size:18px">👥</span><span>Contactos</span></button>
+<button class="nav-item" onclick="window.location.href='Contactos.html'"><span style="font-size:18px">📞</span><span>Llamadas</span></button>
+<button class="nav-item" onclick="window.location.href='Contactos.html'"><span style="font-size:18px">⌨️</span><span>Keypad</span></button>
+<button class="nav-item" onclick="window.location.href='Mensajes.html'"><span style="font-size:18px">💬</span><span>Mensajes</span></button>
+<button class="nav-item" onclick="window.location.href='ai-chat.html'"><span style="font-size:18px">🦆</span><span>AI Chats</span></button>
+<button class="nav-item active" onclick="saltarVista('todos')"><span style="font-size:18px">📊</span><span>Status</span></button>
+</nav>
+</div>
+
+<!-- VISOR -->
+<div id="visorAnillo">
+<div style="height:4px;background:#333"><div id="barraAnillo" style="height:100%;background:#fff;width:0%"></div></div>
+<div style="display:flex;justify-content:space-between;align-items:center;padding:12px;color:#fff"><div style="display:flex;gap:10px;align-items:center"><img src="./IMG_4685.png" style="width:36px;height:36px;border-radius:50%;object-fit:cover"><b id="visorAnilloNombre">Your Story</b></div><button onclick="cerrarVisorAnillo()" style="background:#333;color:#fff;border:none;width:36px;height:36px;border-radius:50%;font-size:18px">✕</button></div>
+<div style="flex:1;display:flex;align-items:center;justify-content:center;padding:12px;overflow:hidden;position:relative"><img id="visorAnilloImg" style="max-width:100%;max-height:100%;border-radius:12px;display:none"><video id="visorAnilloVideo" controls autoplay style="max-width:100%;max-height:100%;border-radius:12px;display:none"></video><div id="visorAnilloTexto" style="position:absolute;left:0;right:0;top:40%;color:#fff;font-size:28px;font-weight:900;text-align:center;padding:20px;display:none;white-space:pre-wrap;text-shadow:0 2px 8px #000"></div><div id="visorAnilloMusica" style="position:absolute;bottom:12px;left:0;right:0;text-align:center;color:#FFD700;font-size:12px;font-weight:800;display:none"></div></div>
+<div style="display:flex;gap:8px;padding:12px"><button onclick="borrarStatusActual()" style="flex:1;background:#c0392b;color:#fff;border:none;padding:12px;border-radius:12px;font-weight:800">🗑️ Borrar este Status</button><button onclick="cerrarVisorAnillo()" style="flex:1;background:#25D366;color:#000;border:none;padding:12px;border-radius:12px;font-weight:800">Cerrar</button></div>
+</div>
+
+<!-- CAMARA EN VIVO - FOTO + VIDEO CORTO -->
+<div id="camaraVivoBox">
+<div style="display:flex;justify-content:space-between;align-items:center;padding:12px;color:#fff;background:#0e2e1f"><button onclick="cerrarCamaraVivo()" style="background:#333;color:#fff;border:none;padding:8px 14px;border-radius:999px">✕ Cerrar</button><b id="tituloCamaraVivo">📷 Cámara en vivo</b><button onclick="cambiarCamaraVivo()" style="background:#FFD700;color:#000;border:none;padding:8px 14px;border-radius:999px;font-weight:800">🔄 Voltear</button></div>
+
+<!-- MODO FOTO / VIDEO -->
+<div style="display:flex;gap:8px;padding:10px;background:#0e2e1f">
+<button id="modoFotoBtn" class="modo-btn activo" onclick="cambiarModoCamara('foto')">📸 Foto</button>
+<button id="modoVideoBtn" class="modo-btn" onclick="cambiarModoCamara('video')">🎥 Video Corto</button>
+</div>
+
+<!-- DURACION VIDEO - SOLO SE VE EN MODO VIDEO -->
+<div id="duracionVideoBox" style="display:none;gap:8px;padding:0 10px 10px;background:#0e2e1f;align-items:center">
+<span style="color:#fff;font-size:12px;font-weight:800">⏱️ Duración:</span>
+<button class="duracion-btn activo" onclick="elegirDuracionVideo(15,this)">15 seg</button>
+<button class="duracion-btn" onclick="elegirDuracionVideo(30,this)">30 seg</button>
+<button class="duracion-btn" onclick="elegirDuracionVideo(60,this)">60 seg</button>
+</div>
+
+<div style="position:relative;flex:1;background:#000;overflow:hidden">
+<video id="videoCamaraVivo" autoplay playsinline muted></video>
+<div id="luzFrontalSimulada"></div>
+<div style="position:absolute;top:12px;left:0;right:0;text-align:center"><span id="zoomEtiquetaVivo" style="background:rgba(0,0,0,.6);color:#fff;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:800">🔍 Zoom: 1.0x</span></div>
+<div id="indicadorGrabando" style="position:absolute;top:12px;right:12px;background:#c0392b;color:#fff;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:900;display:none" class="grabando">● REC 0:00 / 0:15</div>
+<div style="position:absolute;bottom:12px;left:0;right:0;text-align:center"><span id="lensEtiquetaVivo" style="background:rgba(0,0,0,.6);color:#FFD700;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:800">👓 Lens: Normal</span></div>
+<div id="barraProgresoVideo" style="position:absolute;bottom:0;left:0;height:4px;background:#25D366;width:0%"></div>
+</div>
+
+<div style="background:#0e2e1f;padding:12px;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;gap:8px;align-items:center;color:#fff;font-size:12px"><span>🔍 1x</span><input id="zoomSliderVivo" type="range" min="1" max="3" step="0.1" value="1" oninput="cambiarZoomVivo(this.value)"><span>3x</span></div>
+<div style="display:flex;gap:8px;overflow-x:auto">
+<button class="lens-btn activo" onclick="cambiarLensVivo('none','Normal',this)">Normal</button>
+<button class="lens-btn" onclick="cambiarLensVivo('grayscale(1)','B/N',this)">B/N</button>
+<button class="lens-btn" onclick="cambiarLensVivo('sepia(0.8)','Sepia',this)">Sepia</button>
+<button class="lens-btn" onclick="cambiarLensVivo('saturate(1.8) contrast(1.2)','Vivid',this)">Vivid</button>
+<button class="lens-btn" onclick="cambiarLensVivo('brightness(1.25) saturate(1.3)','Brillante',this)">Brillante</button>
+<button class="lens-btn" onclick="cambiarLensVivo('hue-rotate(90deg)','Color',this)">Color</button>
+<button class="lens-btn" onclick="cambiarLensVivo('contrast(1.3) brightness(1.1) saturate(1.4)','Retro',this)">Retro</button>
+</div>
+<div style="display:flex;gap:8px">
+<button id="btnLuzFrontal" onclick="toggleLuzFrontalVivo()" style="flex:1;background:#333;color:#fff;border:none;padding:14px;border-radius:12px;font-weight:800">🔦 Luz Frontal: OFF</button>
+<button id="btnCapturarVivo" onclick="accionCapturarVivo()" style="flex:2;background:#25D366;color:#000;border:none;padding:14px;border-radius:999px;font-weight:900;font-size:16px">📸 Tomar Foto</button>
+</div>
+<small id="ayudaCamaraVivo" style="color:#a3c9a8;text-align:center">📸 Foto: pica Tomar Foto • 🎥 Video: cambia a Video Corto, escoge 15 / 30 / 60 seg y pica Grabar</small>
+</div>
+</div>
+
+<!-- EDITOR -->
+<div id="editorStatusBox" style="display:none;position:fixed;inset:0;background:#000;z-index:1000;flex-direction:column">
+<div style="display:flex;justify-content:space-between;align-items:center;padding:12px;color:#fff"><button onclick="cerrarEditorStatus()" style="background:#333;color:#fff;border:none;padding:8px 14px;border-radius:999px">✕ Cancelar</button><b>Editar Status</b><button onclick="publicarStatusEditado()" style="background:#25D366;color:#000;border:none;padding:8px 16px;border-radius:999px;font-weight:900">Publicar →</button></div>
+<div style="flex:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:10px"><img id="editorStatusImg" style="max-width:100%;max-height:100%;border-radius:12px;display:none"><video id="editorStatusVideo" controls style="max-width:100%;max-height:100%;border-radius:12px;display:none"></video><div id="editorStatusTextoOverlay" style="position:absolute;left:0;right:0;top:45%;text-align:center;color:#fff;font-size:28px;font-weight:900;text-shadow:0 2px 8px #000;padding:10px;pointer-events:none;white-space:pre-wrap"></div></div>
+<div style="background:#0e2e1f;padding:12px;display:flex;flex-direction:column;gap:10px">
+<input id="editorStatusTexto" placeholder="✍️ Escribe algo sobre la foto / video..." oninput="document.getElementById('editorStatusTextoOverlay').textContent=this.value" style="width:100%;padding:12px;border-radius:12px;border:1px solid #2a6040;background:#143524;color:#fff;outline:none">
+<div style="display:flex;gap:8px;overflow-x:auto"><button class="perm-btn" onclick="aplicarFiltroStatus('none')">Original</button><button class="perm-btn" onclick="aplicarFiltroStatus('grayscale(1)')">B/N</button><button class="perm-btn" onclick="aplicarFiltroStatus('sepia(0.8)')">Sepia</button><button class="perm-btn" onclick="aplicarFiltroStatus('saturate(1.8) contrast(1.2)')">Vivid</button><button class="perm-btn" onclick="aplicarFiltroStatus('brightness(1.2) saturate(1.3)')">Brillante</button></div>
+<button onclick="abrirSelectorMusica()" style="width:100%;padding:14px;border-radius:12px;background:#FFD700;color:#000;font-weight:900;border:none">🎵 Escoger Música</button>
+<small id="musicaElegidaTexto" style="color:#2ecc71;font-size:12px">Sin música</small>
+</div>
+</div>
+
+<!-- MUSICA -->
+<div id="selectorMusicaBox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:1100;flex-direction:column">
+<div style="display:flex;justify-content:space-between;align-items:center;padding:14px;color:#fff"><button onclick="cerrarSelectorMusica()" style="background:#333;color:#fff;border:none;padding:8px 14px;border-radius:999px">✕ Cerrar</button><b>🎵 Escoge tu Música</b><span style="width:60px"></span></div>
+<div style="padding:0 14px"><input id="buscarMusicaInput" placeholder="🔍 Buscar música..." oninput="filtrarMusicaUsuario()" style="width:100%;padding:12px;border-radius:12px;border:1px solid #2a6040;background:#143524;color:#fff;outline:none"></div>
+<div style="padding:12px 14px"><button onclick="document.getElementById('musicaFileInput').click()" style="width:100%;padding:14px;border-radius:12px;background:#25D366;color:#000;font-weight:900;border:none">📂 Subir MI música / corto MP3</button><small style="color:#a3c9a8;display:block;margin-top:6px;text-align:center">Tu música es tuya, solo suena en TU Status</small></div>
+<div id="listaMusicaUsuario" style="flex:1;overflow-y:auto;padding:0 14px 14px;display:flex;flex-direction:column;gap:10px"></div>
+</div>
+
+<script>
+let duckieStatusGuardados=JSON.parse(localStorage.getItem('duckieStatusReales')||'[]');
+function duckieGuardarTodo(){localStorage.setItem('duckieStatusReales',JSON.stringify(duckieStatusGuardados));}
+function toastReal(m){let t=document.getElementById('toastReal');t.textContent=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>{t.style.display='none'},2500);}
+
+// ===== CAMARA EN VIVO - FOTO + VIDEO CORTO =====
+let streamCamaraVivo=null, trackCamaraVivo=null, camaraFrontalVivo=true, zoomActualVivo=1, lensActualVivo='none', lensNombreVivo='Normal', luzFrontalOn=false;
+let modoCamaraVivo='foto', duracionVideoElegida=15, mediaRecorderVivo=null, chunksVideoVivo=[], grabandoVideo=false, timerGrabando=null, segundosGrabados=0;
+
+async function abrirCamaraVivo(){document.getElementById('camaraVivoBox').classList.add('mostrar');await iniciarStreamCamara();}
+async function abrirCamaraVivoVideo(){cambiarModoCamara('video');document.getElementById('camaraVivoBox').classList.add('mostrar');await iniciarStreamCamara();}
+async function iniciarStreamCamara(){
+  try{
+    if(streamCamaraVivo) streamCamaraVivo.getTracks().forEach(t=>t.stop());
+    streamCamaraVivo=await navigator.mediaDevices.getUserMedia({video:{facingMode:camaraFrontalVivo?'user':'environment',width:{ideal:1280},height:{ideal:720}},audio:true});
+    let v=document.getElementById('videoCamaraVivo');v.srcObject=streamCamaraVivo;v.play().catch(()=>{});
+    trackCamaraVivo=streamCamaraVivo.getVideoTracks()[0];
+    aplicarLensVivo();
+  }catch(e){toastReal('⚠️ No se pudo abrir la cámara: '+e.message);}
+}
+function cerrarCamaraVivo(){
+  if(grabandoVideo) detenerGrabacionVideo(true);
+  if(streamCamaraVivo) streamCamaraVivo.getTracks().forEach(t=>t.stop());
+  streamCamaraVivo=null;trackCamaraVivo=null;
+  if(luzFrontalOn) apagarLuzFrontalVisual();
+  document.getElementById('camaraVivoBox').classList.remove('mostrar');
+}
+async function cambiarCamaraVivo(){camaraFrontalVivo=!camaraFrontalVivo;await iniciarStreamCamara();}
+function cambiarModoCamara(modo){
+  modoCamaraVivo=modo;
+  document.getElementById('modoFotoBtn').classList.toggle('activo',modo==='foto');
+  document.getElementById('modoVideoBtn').classList.toggle('activo',modo==='video');
+  document.getElementById('duracionVideoBox').style.display=modo==='video'?'flex':'none';
+  document.getElementById('tituloCamaraVivo').textContent=modo==='video'?'🎥 Grabar Video Corto':'📷 Cámara en vivo';
+  document.getElementById('btnCapturarVivo').textContent=modo==='video'?'● Grabar Video Corto':'📸 Tomar Foto';
+  document.getElementById('btnCapturarVivo').style.background=modo==='video'?'#c0392b':'#25D366';
+  document.getElementById('btnCapturarVivo').style.color='#fff';
+  if(modo==='video')document.getElementById('btnCapturarVivo').style.color='#fff';
+  if(modo==='foto')document.getElementById('btnCapturarVivo').style.color='#000';
+  document.getElementById('ayudaCamaraVivo').textContent=modo==='video'?'🎥 Pica Grabar, habla / baila / saluda - se corta solo a los '+duracionVideoElegida+' seg':'📸 Foto: pica Tomar Foto';
+}
+function elegirDuracionVideo(seg,btn){
+  duracionVideoElegida=seg;
+  document.querySelectorAll('.duracion-btn').forEach(b=>b.classList.remove('activo'));
+  if(btn)btn.classList.add('activo');
+  document.getElementById('ayudaCamaraVivo').textContent='🎥 Video de '+seg+' seg - Pica Grabar';
+}
+function cambiarZoomVivo(val){
+  zoomActualVivo=parseFloat(val);
+  document.getElementById('zoomEtiquetaVivo').textContent='🔍 Zoom: '+zoomActualVivo.toFixed(1)+'x';
+  let v=document.getElementById('videoCamaraVivo');
+  if(trackCamaraVivo){try{let caps=trackCamaraVivo.getCapabilities();if(caps.zoom){trackCamaraVivo.applyConstraints({advanced:[{zoom:zoomActualVivo}]});v.style.transform='scale(1)';return;}}catch(e){}}
+  v.style.transform='scale('+zoomActualVivo+')';
+}
+function cambiarLensVivo(filtro,nombre,btn){
+  lensActualVivo=filtro;lensNombreVivo=nombre;
+  document.querySelectorAll('.lens-btn').forEach(b=>b.classList.remove('activo'));
+  if(btn)btn.classList.add('activo');
+  document.getElementById('lensEtiquetaVivo').textContent='👓 Lens: '+nombre;
+  aplicarLensVivo();
+}
+function aplicarLensVivo(){let v=document.getElementById('videoCamaraVivo');if(v)v.style.filter=lensActualVivo;}
+async function toggleLuzFrontalVivo(){
+  luzFrontalOn=!luzFrontalOn;
+  let btn=document.getElementById('btnLuzFrontal');
+  if(luzFrontalOn){btn.textContent='🔦 Luz Frontal: ON';btn.style.background='#FFD700';btn.style.color='#000';
+    if(trackCamaraVivo){try{await trackCamaraVivo.applyConstraints({advanced:[{torch:true}]});toastReal('🔦 Flash frontal real prendido');return;}catch(e){}}
+    document.getElementById('luzFrontalSimulada').style.opacity='0.85';toastReal('🔦 Luz frontal en pantalla ON');
+  }else{apagarLuzFrontalVisual();}
+}
+async function apagarLuzFrontalVisual(){
+  luzFrontalOn=false;
+  let btn=document.getElementById('btnLuzFrontal');
+  if(btn){btn.textContent='🔦 Luz Frontal: OFF';btn.style.background='#333';btn.style.color='#fff';}
+  document.getElementById('luzFrontalSimulada').style.opacity='0';
+  if(trackCamaraVivo){try{await trackCamaraVivo.applyConstraints({advanced:[{torch:false}]});}catch(e){}}
+}
+function accionCapturarVivo(){
+  if(modoCamaraVivo==='foto'){tomarFotoVivo();}
+  else{
+    if(!grabandoVideo) iniciarGrabacionVideo();
+    else detenerGrabacionVideo(false);
+  }
+}
+function tomarFotoVivo(){
+  let v=document.getElementById('videoCamaraVivo');
+  if(!v||!v.videoWidth){toastReal('⚠️ Espera a que cargue la cámara');return;}
+  let luz=document.getElementById('luzFrontalSimulada');luz.style.opacity='0.9';setTimeout(()=>{if(!luzFrontalOn)luz.style.opacity='0';},150);
+  let canvas=document.createElement('canvas');canvas.width=v.videoWidth;canvas.height=v.videoHeight;
+  let ctx=canvas.getContext('2d');ctx.filter=lensActualVivo==='none'?'none':lensActualVivo;
+  if(camaraFrontalVivo){ctx.translate(canvas.width,0);ctx.scale(-1,1);}
+  if(zoomActualVivo>1){let w=v.videoWidth/zoomActualVivo;let h=v.videoHeight/zoomActualVivo;let x=(v.videoWidth-w)/2;let y=(v.videoHeight-h)/2;ctx.drawImage(v,x,y,w,h,0,0,canvas.width,canvas.height);}
+  else{ctx.drawImage(v,0,0,canvas.width,canvas.height);}
+  let dataUrl=canvas.toDataURL('image/jpeg',0.9);
+  cerrarCamaraVivo();
+  statusPendiente={id:Date.now(),nombre:'Foto Cámara en vivo - Lens '+lensNombreVivo,tipo:'image/jpeg',datos:dataUrl,fecha:new Date().toLocaleString(),texto:''};
+  abrirEditorConStatusPendiente(dataUrl,'image');
+  toastReal('📸 Foto tomada con Lens '+lensNombreVivo+' - Ahora edítala');
+}
+// ===== VIDEO CORTO - GRABAR EN VIVO =====
+function iniciarGrabacionVideo(){
+  if(!streamCamaraVivo){toastReal('⚠️ Espera a que cargue la cámara');return;}
+  chunksVideoVivo=[];segundosGrabados=0;grabandoVideo=true;
+  try{mediaRecorderVivo=new MediaRecorder(streamCamaraVivo,{mimeType:'video/webm'});}
+  catch(e){mediaRecorderVivo=new MediaRecorder(streamCamaraVivo);}
+  mediaRecorderVivo.ondataavailable=function(e){if(e.data.size>0)chunksVideoVivo.push(e.data);};
+  mediaRecorderVivo.onstop=function(){terminarVideoCortoGrabado();};
+  mediaRecorderVivo.start(200);
+  document.getElementById('indicadorGrabando').style.display='block';
+  document.getElementById('btnCapturarVivo').textContent='⏹️ Detener y Guardar';
+  document.getElementById('btnCapturarVivo').style.background='#333';
+  actualizarIndicadorGrabando();
+  timerGrabando=setInterval(function(){
+    segundosGrabados++;
+    actualizarIndicadorGrabando();
+    if(segundosGrabados>=duracionVideoElegida){detenerGrabacionVideo(false);}
+  },1000);
+  toastReal('🎥 Grabando video corto de '+duracionVideoElegida+' seg - Lens '+lensNombreVivo);
+}
+function actualizarIndicadorGrabando(){
+  let m=Math.floor(segundosGrabados/60);let s=segundosGrabados%60;
+  let mm=Math.floor(duracionVideoElegida/60);let ss=duracionVideoElegida%60;
+  document.getElementById('indicadorGrabando').textContent='● REC '+m+':'+String(s).padStart(2,'0')+' / '+mm+':'+String(ss).padStart(2,'0');
+  document.getElementById('barraProgresoVideo').style.width=Math.min(100,(segundosGrabados/duracionVideoElegida)*100)+'%';
+}
+function detenerGrabacionVideo(cancelar){
+  if(!grabandoVideo)return;
+  grabandoVideo=false;clearInterval(timerGrabando);
+  document.getElementById('indicadorGrabando').style.display='none';
+  document.getElementById('barraProgresoVideo').style.width='0%';
+  document.getElementById('btnCapturarVivo').textContent='● Grabar Video Corto';
+  document.getElementById('btnCapturarVivo').style.background='#c0392b';
+  if(mediaRecorderVivo && mediaRecorderVivo.state!=='inactive'){
+    if(cancelar){mediaRecorderVivo.onstop=null;}
+    mediaRecorderVivo.stop();
+  }
+  if(cancelar)toastReal('❌ Grabación cancelada');
+}
+function terminarVideoCortoGrabado(){
+  if(!chunksVideoVivo.length)return;
+  let blob=new Blob(chunksVideoVivo,{type:'video/webm'});
+  let r=new FileReader();
+  r.onload=function(ev){
+    cerrarCamaraVivo();
+    statusPendiente={id:Date.now(),nombre:'Video Corto '+duracionVideoElegida+'s - Lens '+lensNombreVivo,tipo:'video/webm',datos:ev.target.result,fecha:new Date().toLocaleString(),texto:''};
+    abrirEditorConStatusPendiente(ev.target.result,'video');
+    toastReal('🎥 Video corto de '+duracionVideoElegida+' seg listo - Ahora edítalo y publícalo');
+  };
+  r.readAsDataURL(blob);
+}
+function abrirEditorConStatusPendiente(dataUrl,tipo){
+  filtroStatusActual=lensActualVivo;
+  musicaStatusElegida=null;musicaSeleccionadaNombre='Sin música';
+  document.getElementById('editorStatusTexto').value='';
+  document.getElementById('editorStatusTextoOverlay').textContent='';
+  document.getElementById('musicaElegidaTexto').textContent='Sin música';
+  let img=document.getElementById('editorStatusImg');let vid=document.getElementById('editorStatusVideo');
+  img.style.display='none';vid.style.display='none';vid.pause();
+  if(tipo==='image'){img.style.display='block';img.src=dataUrl;img.style.filter=lensActualVivo;}
+  else{vid.style.display='block';vid.src=dataUrl;vid.style.filter=lensActualVivo;}
+  document.getElementById('editorStatusBox').style.display='flex';
+}
+
+// ===== STATUS NORMAL =====
+let statusPendiente=null,filtroStatusActual='none',musicaStatusElegida=null,musicaSeleccionadaNombre='Sin música',statusActualId=null,statusAnilloTimer=null;
+let bibliotecaMusica=[{nombre:'Alegre - Mañana Feliz',categoria:'alegre fiesta',url:''},{nombre:'Suave - Atardecer',categoria:'suave romantico',url:''},{nombre:'Fiesta - Baila',categoria:'fiesta alegre',url:''},{nombre:'Romántico - Corazón',categoria:'romantico suave',url:''},{nombre:'Duckie - Quack Quack',categoria:'duckie divertido',url:''},{nombre:'Tranquilo - Noche',categoria:'suave tranquilo',url:''},{nombre:'Energía - Gym',categoria:'fiesta energia',url:''}];
+function htmlStatusAnillo(){
+  let lista=duckieStatusGuardados||[];
+  let otros=lista.map(function(s){let foto=(s.datos&&s.tipo&&s.tipo.indexOf('image')!==-1)?s.datos:'./IMG_4685.png';let txtMini=s.texto?'<div style="font-size:10px;color:#fff;background:rgba(0,0,0,.6);border-radius:8px;padding:2px 4px;margin-top:2px">'+s.texto.substring(0,18)+'</div>':'';let musMini=s.musicaNombre?'<div style="font-size:9px;color:#FFD700">🎵 '+s.musicaNombre.substring(0,14)+'</div>':'';let videoMini=(s.tipo&&s.tipo.indexOf('video')!==-1)?'<div style="font-size:9px;color:#fff;background:#c0392b;border-radius:8px;padding:1px 4px;margin-top:2px">🎥 Video Corto</div>':'';return '<div class="story-circle" onclick="verStatusAnillo(\''+s.id+'\')"><div class="story-ring"><img src="'+foto+'"></div><div class="story-name">Mi Status</div><div class="story-time">'+(s.fecha||'')+'</div>'+txtMini+videoMini+musMini+'</div>';}).join('');
+  let cards=lista.map(function(s){if(s.tipo&&s.tipo.indexOf('image')!==-1)return '<div class="add-status-card" onclick="verStatusAnillo(\''+s.id+'\')"><img class="bg" src="'+s.datos+'" style="filter:'+(s.filtro||'none')+'"><span class="add-label">'+(s.texto||s.nombre||'Status')+'</span></div>';if(s.tipo&&s.tipo.indexOf('video')!==-1)return '<div class="add-status-card" onclick="verStatusAnillo(\''+s.id+'\')"><video class="bg" src="'+s.datos+'"></video><span class="add-label">🎥 '+(s.texto||s.nombre||'Video Corto')+'</span></div>';return '<div class="add-status-card" onclick="verStatusAnillo(\''+s.id+'\')"><div class="bg" style="background:#25D366;display:flex;align-items:center;justify-content:center;font-size:30px">💬</div><span class="add-label">'+(s.texto||s.nombre||'Status')+'</span></div>';}).join('');
+  return '<div class="status-anillo-row"><div class="story-circle" onclick="abrirCamaraVivo()"><div class="story-ring mio"><img src="./IMG_4685.png"><span class="story-plus">+</span></div><div class="story-name">Your Story</div><div class="story-time">Add status</div></div>'+otros+'</div><div class="status-add-cards"><div class="add-status-card" onclick="abrirCamaraVivo()"><img class="bg" src="./IMG_4685.png"><span class="add-plus">+</span><span class="add-label">📷 Cámara en vivo</span></div><div class="add-status-card" onclick="abrirCamaraVivoVideo()" style="background:#c0392b"><div class="bg" style="background:#c0392b;display:flex;align-items:center;justify-content:center;font-size:40px">🎥</div><span class="add-label">🎥 Grabar Video Corto</span></div>'+cards+'</div>';
+}
+function pintarStatusAnilloEnPantalla(){let h=document.getElementById('holderStatusAnillo');if(h)h.innerHTML=htmlStatusAnillo();}
+function subirStatusAnillo(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=function(ev){statusPendiente={id:Date.now(),nombre:f.name,tipo:f.type,datos:ev.target.result,fecha:new Date().toLocaleString(),texto:''};filtroStatusActual='none';musicaStatusElegida=null;musicaSeleccionadaNombre='Sin música';document.getElementById('editorStatusTexto').value='';document.getElementById('editorStatusTextoOverlay').textContent='';document.getElementById('musicaElegidaTexto').textContent='Sin música';let img=document.getElementById('editorStatusImg');let vid=document.getElementById('editorStatusVideo');img.style.display='none';vid.style.display='none';vid.pause();if(f.type.indexOf('image')!==-1){img.style.display='block';img.src=ev.target.result;img.style.filter='none';}else if(f.type.indexOf('video')!==-1){vid.style.display='block';vid.src=ev.target.result;vid.style.filter='none';}document.getElementById('editorStatusBox').style.display='flex';};r.readAsDataURL(f);e.target.value='';}
+function aplicarFiltroStatus(f){filtroStatusActual=f;let img=document.getElementById('editorStatusImg');let vid=document.getElementById('editorStatusVideo');if(img)img.style.filter=f;if(vid)vid.style.filter=f;}
+function cerrarEditorStatus(){document.getElementById('editorStatusBox').style.display='none';statusPendiente=null;}
+function publicarStatusEditado(){if(!statusPendiente)return;statusPendiente.texto=document.getElementById('editorStatusTexto').value||'';statusPendiente.filtro=filtroStatusActual;statusPendiente.musica=musicaSeleccionadaNombre||'Sin música';if(musicaStatusElegida){statusPendiente.musicaDatos=musicaStatusElegida.datos;statusPendiente.musicaNombre=musicaStatusElegida.nombre;}duckieStatusGuardados.unshift(statusPendiente);duckieGuardarTodo();document.getElementById('editorStatusBox').style.display='none';pintarStatusAnilloEnPantalla();verStatusAnillo(statusPendiente.id);musicaStatusElegida=null;musicaSeleccionadaNombre='Sin música';statusPendiente=null;toastReal('✅ Status publicado');}
+function publicarStatusTextoReal(){let texto=document.getElementById('inputStatusTextoReal')?.value.trim();if(!texto){toastReal('⚠️ Escribe algo primero');return;}let n={id:Date.now(),nombre:'Status Texto',tipo:'text',datos:'',fecha:new Date().toLocaleString(),texto:texto,filtro:'none'};if(musicaStatusElegida){n.musicaDatos=musicaStatusElegida.datos;n.musicaNombre=musicaStatusElegida.nombre;}duckieStatusGuardados.unshift(n);duckieGuardarTodo();pintarStatusAnilloEnPantalla();document.getElementById('inputStatusTextoReal').value='';document.getElementById('boxStatusTextoReal').style.display='none';verStatusAnillo(n.id);toastReal('✅ Status de texto publicado');}
+function abrirSelectorMusica(){document.getElementById('selectorMusicaBox').style.display='flex';pintarMusicaUsuario('');}
+function cerrarSelectorMusica(){document.getElementById('selectorMusicaBox').style.display='none';}
+function pintarMusicaUsuario(q){q=(q||'').toLowerCase();let box=document.getElementById('listaMusicaUsuario');let lista=bibliotecaMusica.filter(m=>(m.nombre+' '+m.categoria).toLowerCase().includes(q));if(!lista.length){box.innerHTML='<div style="color:#fff;text-align:center;padding:20px">No encontré esa música.<br>Sube tu propio MP3 arriba 👆</div>';return;}box.innerHTML=lista.map((m)=>'<div style="background:#0e2e1f;border:1px solid #2a6040;border-radius:12px;padding:12px;display:flex;justify-content:space-between;align-items:center"><div><b style="color:#fff">'+m.nombre+'</b><br><small style="color:#a3c9a8">'+m.categoria+'</small></div><button onclick="elegirMusicaUsuario('+bibliotecaMusica.indexOf(m)+')" style="background:#25D366;color:#000;border:none;padding:8px 14px;border-radius:999px;font-weight:800">Usar</button></div>').join('');}
+function filtrarMusicaUsuario(){pintarMusicaUsuario(document.getElementById('buscarMusicaInput').value);}
+function elegirMusicaUsuario(idx){let m=bibliotecaMusica[idx];musicaStatusElegida={nombre:m.nombre,datos:m.url};musicaSeleccionadaNombre=m.nombre;document.getElementById('musicaElegidaTexto').textContent='🎵 Música elegida: '+m.nombre;cerrarSelectorMusica();toastReal('🎵 Música: '+m.nombre);}
+function subirMusicaStatus(e){let f=e.target.files[0];if(!f)return;if(f.size>8*1024*1024){toastReal('⚠️ Usa un corto de 15-30 seg, menos de 8MB');return;}let r=new FileReader();r.onload=function(ev){musicaStatusElegida={nombre:f.name,datos:ev.target.result};musicaSeleccionadaNombre=f.name;document.getElementById('musicaElegidaTexto').textContent='🎵 Tu música: '+f.name;cerrarSelectorMusica();toastReal('🎵 Tu música: '+f.name);};r.readAsDataURL(f);e.target.value='';}
+function verStatusAnillo(id){let s=(duckieStatusGuardados||[]).find(x=>String(x.id)===String(id));if(!s)return;statusActualId=id;let img=document.getElementById('visorAnilloImg');let vid=document.getElementById('visorAnilloVideo');let txt=document.getElementById('visorAnilloTexto');let mus=document.getElementById('visorAnilloMusica');document.getElementById('visorAnilloNombre').textContent='Your Story - '+(s.fecha||'');img.style.display='none';vid.style.display='none';txt.style.display='none';mus.style.display='none';vid.pause();img.style.filter=s.filtro||'none';if(s.tipo&&s.tipo.indexOf('image')!==-1){img.style.display='block';img.src=s.datos;}else if(s.tipo&&s.tipo.indexOf('video')!==-1){vid.style.display='block';vid.src=s.datos;vid.play().catch(()=>{});}if(s.texto){txt.style.display='block';txt.textContent=s.texto;}if(s.musicaNombre){mus.style.display='block';mus.textContent='🎵 '+s.musicaNombre;}document.getElementById('visorAnillo').classList.add('mostrar');let barra=document.getElementById('barraAnillo');barra.style.width='0%';clearInterval(statusAnilloTimer);let p=0;statusAnilloTimer=setInterval(function(){p+=1;barra.style.width=p+'%';if(p>=100){clearInterval(statusAnilloTimer);cerrarVisorAnillo();}},150);}
+function cerrarVisorAnillo(){clearInterval(statusAnilloTimer);document.getElementById('visorAnillo').classList.remove('mostrar');document.getElementById('visorAnilloVideo').pause();}
+function borrarStatusActual(){if(!statusActualId)return;duckieStatusGuardados=duckieStatusGuardados.filter(s=>String(s.id)!==String(statusActualId));duckieGuardarTodo();cerrarVisorAnillo();pintarStatusAnilloEnPantalla();toastReal('🗑️ Status borrado');}
+function saltarVista(vista){
+  document.querySelectorAll('.top-tabs button').forEach(b=>b.classList.remove('activo'));
+  let mapa={todos:'tab-todos',texto:'tab-texto'};
+  if(mapa[vista])document.getElementById(mapa[vista])?.classList.add('activo');
+  let box=document.getElementById('chatBox');if(!box)return;
+  if(vista==='todos'){box.innerHTML='<div style="padding:4px"><h3>📊 Status ('+duckieStatusGuardados.length+')</h3><div id="holderStatusAnillo"></div><div id="boxStatusTextoReal" class="contact-card" style="display:none"><b>✍️ Escribe tu Status de texto</b><input id="inputStatusTextoReal" class="duckie-search-input" placeholder="Escribe aquí tu Status..."><button class="perm-btn" style="width:100%;padding:12px" onclick="publicarStatusTextoReal()">✅ Publicar Status de texto</button></div><div class="contact-card"><b>📸 Subir Status</b><small>Foto / Video Corto / Música / Texto - con editor antes de publicar</small><button class="perm-btn" style="width:100%;padding:12px;margin-top:8px" onclick="abrirCamaraVivo()">📷 Cámara en vivo - Foto + Zoom + Luz + Lens</button><button class="perm-btn red" style="width:100%;padding:12px;margin-top:8px" onclick="abrirCamaraVivoVideo()">🎥 Grabar Video Corto - 15 / 30 / 60 seg</button><button class="perm-btn" style="width:100%;padding:12px;margin-top:8px" onclick="document.getElementById(\'statusFileAdd\').click()">🖼️ Subir foto / video de galería</button><button class="perm-btn yellow" style="width:100%;padding:12px;margin-top:8px" onclick="saltarVista(\'texto\')">✍️ Escribir Texto</button><button class="perm-btn" style="width:100%;padding:12px;margin-top:8px" onclick="abrirSelectorMusica()">🎵 Escoger Música</button></div><button class="perm-btn gray" style="width:100%;padding:12px" onclick="window.location.href=\'index.html\'">🏠 Home</button></div>';pintarStatusAnilloEnPantalla();}
+  if(vista==='texto'){box.innerHTML='<div style="padding:4px"><h3>✍️ Status de Texto</h3><div id="holderStatusAnillo"></div><div class="contact-card"><b>✍️ Escribe tu Status</b><input id="inputStatusTextoReal" class="duckie-search-input" placeholder="Escribe aquí tu Status..."><button class="perm-btn" style="width:100%;padding:12px" onclick="publicarStatusTextoReal()">✅ Publicar Status de texto</button><button class="perm-btn" style="width:100%;padding:12px;margin-top:8px" onclick="abrirSelectorMusica()">🎵 Escoger Música para este Status</button></div><button class="perm-btn gray" style="width:100%;padding:12px" onclick="window.location.href=\'index.html\'">🏠 Home</button></div>';pintarStatusAnilloEnPantalla();}
+}
+saltarVista('todos');
+</script>
+</body>
+</html>
